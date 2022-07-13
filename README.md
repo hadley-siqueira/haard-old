@@ -109,6 +109,30 @@ def main : int
     return 0
 ```
 
+#### What about those @?
+
+I care about presentation. Did you already came by a C++/Java/Alike code such as:
+
+```C
+GArray*
+g_array_sized_new (gboolean zero_terminated,
+                   gboolean clear,
+                   guint    elt_size,
+                   guint    reserved_size)
+{
+```
+
+The example is from glib. Do you see how there is one parameter per line? Well, its awkward
+to me to see a '(' on one line and then '{' on next line. So I decided to use:
+
+```python
+def g_array_sized_new : GArray*
+    @zero_terminated : gboolean
+    @clear           : gboolean
+    @elt_size        : guint
+    @reserved_size   : guint
+```
+
 ### Control flow
 
 A sample program that shows some control flow
