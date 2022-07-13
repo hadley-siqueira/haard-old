@@ -19,6 +19,7 @@ std::vector<Token> Scanner::read(std::string path) {
         get_token();
     }
 
+    start_token();
     create_token(TK_EOF);
     return tokens;
 }
@@ -113,6 +114,8 @@ void Scanner::get_token() {
         count_leading_whitespace();
     } else if (lookahead(' ')) {
         skip_whitespace();
+    } else if (lookahead('"')) {
+        get_double_quote_string();
     } else if (is_alpha()) {
         get_keyword_or_identifier();
     } else if (is_operator()) {
@@ -136,6 +139,7 @@ void Scanner::get_keyword_or_identifier() {
     } 
 
     create_token(kind);
+    advance();
 }
 
 void Scanner::get_operator() {
@@ -166,6 +170,22 @@ void Scanner::get_operator() {
     }
 
     // handle invalid operator
+}
+
+void Scanner::get_double_quote_string() {
+    start_token();
+    advance();
+
+    while (!lookahead('"')) {
+        if (lookahead('\\')) {
+            advance();
+        }
+
+        advance();
+    }
+
+    advance();
+    create_token(TK_LITERAL_STRING);
 }
 
 void Scanner::create_token(int kind) {

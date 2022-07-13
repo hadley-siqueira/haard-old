@@ -25,6 +25,7 @@ namespace haard {
             void get_token();
             void get_keyword_or_identifier();
             void get_operator();
+            void get_double_quote_string();
             void create_token(int kind);
             void count_leading_whitespace();
 
