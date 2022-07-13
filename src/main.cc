@@ -5,6 +5,7 @@
 #include "parser/parser.h"
 #include "defs.h"
 #include "ast/ast.h"
+#include "printer/printer.h"
 
 using namespace haard;
 
@@ -20,12 +21,11 @@ void test_scanner(std::string path) {
 
 void test_parser(std::string path) {
     Parser parser;
+    Printer printer;
     Source* src = parser.read(path);
+    printer.print_source(src);
 
-    std::cout << "#imports = " << src->import_count() << std::endl;
-    for (int i = 0; i < src->import_count(); ++i) {
-        std::cout << src->get_import(i)->to_str() << std::endl;
-    }
+    std::cout << printer.to_str();
 
     delete src;
 }

@@ -22,6 +22,10 @@ set(AST_SRC
     src/ast/import.cc
 )
 
+set(PRINTER_SRC
+    src/printer/printer.cc
+)
+
 set(DRIVER_SRC
     src/driver/driver.cc
 )
@@ -32,6 +36,7 @@ set(SOURCES
     ${SCANNER_SRC}
     ${PARSER_SRC}
     ${AST_SRC}
+    ${PRINTER_SRC}
     ${DRIVER_SRC}
 )
 

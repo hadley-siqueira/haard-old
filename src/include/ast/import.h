@@ -12,6 +12,7 @@ namespace haard {
             int get_column();
             std::string get_alias();
             std::vector<std::string> get_path();
+            std::string get_path(int idx);
 
             void set_line(int line);
             void set_column(int column);
@@ -21,7 +22,7 @@ namespace haard {
 
             void add_to_path(std::string s);
             bool has_alias();
-            std::string to_str();
+            int path_count();
 
         private:
             int line;

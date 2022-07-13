@@ -18,6 +18,10 @@ std::string Import::get_alias() {
 std::vector<std::string> Import::get_path() {
     return path;
 }
+            
+std::string Import::get_path(int idx) {
+    return path[idx];
+}
 
 void Import::set_line(int line) {
     this->line = line;
@@ -48,23 +52,6 @@ bool Import::has_alias() {
     return alias.size() > 0;
 }
             
-std::string Import::to_str() {
-    int i;
-    std::stringstream ss;
-
-    ss << "import ";
-
-    if (path.size() > 0) {
-        for (i = 0; i < path.size() - 1; ++i) {
-            ss << path[i] << '.';
-        }
-
-        ss << path[i];
-    }
-
-    if (has_alias()) {
-        ss << " as " << alias;
-    }
-
-    return ss.str();
+int Import::path_count() {
+    return path.size();
 }
