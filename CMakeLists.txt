@@ -9,9 +9,14 @@ set(TOKEN_SRC
     src/token/token.cc
 )
 
+set(SCANNER_SRC
+    src/scanner/scanner.cc
+)
+
 set(SOURCES
     src/main.cc
     ${TOKEN_SRC}
+    ${SCANNER_SRC}
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
