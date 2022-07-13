@@ -18,6 +18,8 @@ namespace haard {
             void set_whitespace(int whitespace);
             void set_lexeme(std::string lexeme);
 
+            std::string to_str();
+
         private:
             int kind;
             int line;

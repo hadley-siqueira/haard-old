@@ -1,4 +1,6 @@
+#include <sstream>
 #include "token/token.h"
+#include "defs.h"
 
 using namespace haard;
 
@@ -40,4 +42,17 @@ void Token::set_whitespace(int whitespace) {
 
 void Token::set_lexeme(std::string lexeme) {
     this->lexeme = lexeme;
+}
+
+std::string Token::to_str() {
+    std::stringstream ss;
+
+    ss << "(";
+    ss << token_kind_to_str_map.at(kind) << ", ";
+    ss << "'" << lexeme << "', ";
+    ss << line << ", ";
+    ss << column << ", ";
+    ss << whitespace << ")";
+
+    return ss.str();
 }
