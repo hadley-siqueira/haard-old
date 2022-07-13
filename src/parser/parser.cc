@@ -25,6 +25,8 @@ Source* Parser::parse_source() {
     while (true) {
         if (lookahead(TK_IMPORT)) {
             source->add_import(parse_import());
+        } else if (lookahead(TK_DEF)) {
+            source->add_function(parse_function());
         } else {
             break;
         }
@@ -59,6 +61,37 @@ Import* Parser::parse_import() {
 
     return import;
 }
+            
+Function* Parser::parse_function() {
+    Function* function = new Function();
+
+    expect(TK_DEF);
+    expect(TK_ID);
+    function->set_from_token(matched);
+
+    expect(TK_COLON);
+    expect(TK_ID);
+
+    if (has_parameters()) {
+        parse_parameters(function);
+    }
+
+    return function;
+}
+
+void Parser::parse_parameters(Function* function) {
+    Variable* param = nullptr;
+
+    while (has_parameters()) {
+        expect(TK_AT);
+        expect(TK_ID);
+        param = new Variable(matched);
+        expect(TK_COLON);
+        expect(TK_INT);
+        // param->set_type(parse_type());
+        function->add_parameter(param);
+    }
+}
 
 void Parser::advance() {
     if (idx < tokens.size()) {
@@ -87,4 +120,16 @@ bool Parser::match(int kind) {
 
 bool Parser::lookahead(int kind) {
     return tokens[idx].get_kind() == kind;
+}
+
+bool Parser::lookahead(int kind, int offset) {
+    if (idx + offset < tokens.size()) {
+        return tokens[idx + offset].get_kind() == kind;
+    }
+
+    return false;
+}
+
+bool Parser::has_parameters() {
+    return lookahead(TK_AT) && lookahead(TK_ID, 1) && lookahead(TK_COLON, 2);
 }

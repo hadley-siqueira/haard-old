@@ -18,11 +18,15 @@ namespace haard {
         private:
             Source* parse_source();
             Import* parse_import();
+            Function* parse_function();
+            void parse_parameters(Function* function);
 
             void advance();
             void expect(int kind);
             bool match(int kind);
             bool lookahead(int kind);
+            bool lookahead(int kind, int offset);
+            bool has_parameters();
 
         private:
             int idx;
