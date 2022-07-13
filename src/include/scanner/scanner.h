@@ -13,10 +13,14 @@ namespace haard {
         private:
             bool has_next();
             bool lookahead(char c);
+            bool is_binary_digit();
+            bool is_octal_digit();
+            bool is_hex_digit();
             bool is_alpha();
             bool is_num();
             bool is_alphanum();
             bool is_operator();
+            bool has_base();
             void start_token();
             void advance();
             void skip_whitespace();
@@ -26,6 +30,8 @@ namespace haard {
             void get_keyword_or_identifier();
             void get_operator();
             void get_double_quote_string();
+            void get_single_quote_string();
+            void get_number();
             void create_token(int kind);
             void count_leading_whitespace();
 

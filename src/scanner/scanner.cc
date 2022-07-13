@@ -45,6 +45,20 @@ bool Scanner::lookahead(char c) {
     return has_next() && buffer[idx] == c;
 }
 
+bool Scanner::is_binary_digit() {
+    return buffer[idx] == '0' || buffer[idx] == '1';
+}
+
+bool Scanner::is_octal_digit() {
+    return buffer[idx] >= '0' && buffer[idx] <= '7';
+}
+
+bool Scanner::is_hex_digit() {
+    return buffer[idx] >= '0' && buffer[idx] <= '9' ||
+           buffer[idx] >= 'a' && buffer[idx] <= 'f' ||
+           buffer[idx] >= 'A' && buffer[idx] <= 'F';
+}
+
 bool Scanner::is_alpha() {
     return buffer[idx] >= 'a' && buffer[idx] <= 'z' ||
            buffer[idx] >= 'A' && buffer[idx] <= 'Z' ||
@@ -69,6 +83,18 @@ bool Scanner::is_operator() {
         || c == '>' || c == '<' || c == '^' || c == '.'
         || c == '$' || c == ':' || c == '?' || c == '@'
         || c == ',' || c == ';'; 
+}
+
+bool Scanner::has_base() {
+    bool flag;
+    bool flag2;
+
+    if (idx + 2 >= buffer.size()) return false;
+
+    flag = buffer[idx + 1] == 'o' || buffer[idx + 1] == 'b' || buffer[idx + 1] == 'x';
+    flag2 = buffer[idx + 1] >= '0' && buffer[idx + 1] <= '7';
+
+    return buffer[idx] == '0' && (flag || flag2);
 }
 
 void Scanner::start_token() {
@@ -116,10 +142,14 @@ void Scanner::get_token() {
         skip_whitespace();
     } else if (lookahead('"')) {
         get_double_quote_string();
+    } else if (lookahead('\'')) {
+        get_single_quote_string();
     } else if (is_alpha()) {
         get_keyword_or_identifier();
     } else if (is_operator()) {
         get_operator();
+    } else if (is_num()) {
+        get_number();
     }
 }
 
@@ -186,6 +216,98 @@ void Scanner::get_double_quote_string() {
 
     advance();
     create_token(TK_LITERAL_STRING);
+}
+
+void Scanner::get_single_quote_string() {
+    int steps = 0;
+
+    start_token();
+    advance();
+
+    while (!lookahead('\'')) {
+        if (lookahead('\\')) {
+            advance();
+        }
+
+        advance();
+        steps++;
+    }
+
+    advance();
+
+    if (steps > 1) {
+        create_token(TK_LITERAL_STRING);
+    } else {
+        create_token(TK_LITERAL_CHAR);
+    }
+}
+
+void Scanner::get_number() {
+    int kind = TK_LITERAL_INTEGER;
+
+    start_token();
+
+    if (has_base()) {
+        advance();
+
+        if (lookahead('b')) {
+            advance();
+
+            while (is_binary_digit()) {
+                advance();
+            }
+        } else if (lookahead('o')) {
+            advance();
+
+            while (is_octal_digit()) {
+                advance();
+            }
+        } else if (lookahead('x')) {
+            advance(); 
+
+            while (is_hex_digit()) {
+                advance();
+            }
+        } else {
+            while (is_octal_digit()) {
+                advance();
+            }
+        }
+    } else {
+        while (is_num()) {
+            advance();
+        }
+
+        if (lookahead('.')) {
+            advance();
+            kind = TK_LITERAL_DOUBLE;
+
+            while (is_num()) {
+                advance();
+            }
+        }
+
+        if (lookahead('e') || lookahead('E')) {
+            kind = TK_LITERAL_DOUBLE;
+            advance();
+
+            if (lookahead('-') || lookahead('+')) {
+                advance();
+            }
+
+            while (is_num()) {
+                advance();
+            }
+        }
+
+        if (lookahead('f') || lookahead('F')) {
+            advance();
+            kind = TK_LITERAL_FLOAT;
+        }
+    }
+
+    create_token(kind);
+    advance();
 }
 
 void Scanner::create_token(int kind) {
