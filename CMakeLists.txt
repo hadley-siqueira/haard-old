@@ -13,10 +13,25 @@ set(SCANNER_SRC
     src/scanner/scanner.cc
 )
 
+set(PARSER_SRC
+    src/parser/parser.cc
+)
+
+set(AST_SRC
+    src/ast/source.cc
+)
+
+set(DRIVER_SRC
+    src/driver/driver.cc
+)
+
 set(SOURCES
     src/main.cc
     ${TOKEN_SRC}
     ${SCANNER_SRC}
+    ${PARSER_SRC}
+    ${AST_SRC}
+    ${DRIVER_SRC}
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
