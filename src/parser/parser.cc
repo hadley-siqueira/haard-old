@@ -22,7 +22,42 @@ Source* Parser::read(std::string path) {
 Source* Parser::parse_source() {
     Source* source = new Source();
 
+    while (true) {
+        if (lookahead(TK_IMPORT)) {
+            source->add_import(parse_import());
+        } else {
+            break;
+        }
+    }
+
     return source;
+}
+
+Import* Parser::parse_import() {
+    Import* import = new Import();
+
+    expect(TK_IMPORT);
+    import->set_from_token(matched);
+
+    expect(TK_ID);
+    import->add_to_path(matched.get_lexeme());
+
+    while (match(TK_DOT)) {
+        if (match(TK_TIMES)) {
+            import->add_to_path(matched.get_lexeme());
+            break;
+        }
+
+        expect(TK_ID);
+        import->add_to_path(matched.get_lexeme());
+    }
+
+    if (match(TK_AS)) {
+        expect(TK_ID);
+        import->set_alias(matched.get_lexeme());
+    }
+
+    return import;
 }
 
 void Parser::advance() {

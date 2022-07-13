@@ -169,7 +169,6 @@ void Scanner::get_keyword_or_identifier() {
     } 
 
     create_token(kind);
-    advance();
 }
 
 void Scanner::get_operator() {

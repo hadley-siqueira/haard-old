@@ -2,6 +2,7 @@
 #define HAARD_PARSER_H
 
 #include <vector>
+#include "defs.h"
 #include "token/token.h"
 #include "scanner/scanner.h"
 #include "ast/ast.h"
@@ -16,6 +17,7 @@ namespace haard {
 
         private:
             Source* parse_source();
+            Import* parse_import();
 
             void advance();
             void expect(int kind);
