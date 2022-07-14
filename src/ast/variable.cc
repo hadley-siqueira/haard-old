@@ -25,6 +25,10 @@ std::string Variable::get_name() {
     return name;
 }
 
+Type* Variable::get_type() {
+    return type;
+}
+
 void Variable::set_line(int line) {
     this->line = line;
 }
@@ -37,3 +41,6 @@ void Variable::set_name(std::string name) {
     this->name = name;
 }
 
+void Variable::set_type(Type* type) {
+    this->type = type;
+}

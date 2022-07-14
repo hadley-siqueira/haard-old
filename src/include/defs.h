@@ -531,6 +531,37 @@ namespace haard {
         {"@tend", TK_END_TEMPLATE},
         {"@unknown", TK_UNKNOWN},
     };
+
+    typedef enum TypeKind {
+        TYPE_U8,
+        TYPE_U16,
+        TYPE_U32,
+        TYPE_U64,
+        TYPE_I8,
+        TYPE_I16,
+        TYPE_I32,
+        TYPE_I64,
+        TYPE_VOID,
+        TYPE_SYMBOL,
+        TYPE_BOOL,
+        TYPE_UCHAR,
+        TYPE_CHAR,
+        TYPE_USHORT,
+        TYPE_SHORT,
+        TYPE_UINT,
+        TYPE_INT,
+        TYPE_ULONG,
+        TYPE_LONG,
+        TYPE_FLOAT,
+        TYPE_DOUBLE,
+        TYPE_STR,
+        TYPE_NAMED,
+        TYPE_POINTER,
+        TYPE_REFERENCE,
+        TYPE_ARRAY,
+        TYPE_HASH,
+        TYPE_FUNCTION
+    } TypeKind;
 }
 
 #endif

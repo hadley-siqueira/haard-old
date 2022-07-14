@@ -70,7 +70,7 @@ Function* Parser::parse_function() {
     function->set_from_token(matched);
 
     expect(TK_COLON);
-    expect(TK_ID);
+    function->set_return_type(parse_type());
 
     if (has_parameters()) {
         parse_parameters(function);
@@ -87,10 +87,59 @@ void Parser::parse_parameters(Function* function) {
         expect(TK_ID);
         param = new Variable(matched);
         expect(TK_COLON);
-        expect(TK_INT);
-        // param->set_type(parse_type());
+        param->set_type(parse_type());
         function->add_parameter(param);
     }
+}
+
+Type* Parser::parse_type() {
+    Type* type = nullptr;
+
+    if (match(TK_INT)) {
+        type = new Type(TYPE_INT, matched);
+    } else if (match(TK_UINT)) {
+        type = new Type(TYPE_UINT, matched);
+    } else if (match(TK_FLOAT)) {
+        type = new Type(TYPE_FLOAT, matched);
+    } else if (match(TK_DOUBLE)) {
+        type = new Type(TYPE_DOUBLE, matched);
+    } /*else if (match(TK_SHORT)) {
+        type = new Type(AST_SHORT_TYPE, matched_token);
+    } else if (match(TK_USHORT)) {
+        type = new Type(AST_USHORT_TYPE, matched_token);
+    } else if (match(TK_LONG)) {
+        type = new Type(AST_LONG_TYPE, matched_token);
+    } else if (match(TK_ULONG)) {
+        type = new Type(AST_ULONG_TYPE, matched_token);
+    } else if (match(TK_CHAR)) {
+        type = new Type(AST_CHAR_TYPE, matched_token);
+    } else if (match(TK_UCHAR)) {
+        type = new Type(AST_UCHAR_TYPE, matched_token);
+    } else if (match(TK_SYMBOL)) {
+        type = new Type(AST_SYMBOL_TYPE, matched_token);
+    } else if (match(TK_VOID)) {
+        type = new Type(AST_VOID_TYPE, matched_token);
+    } else if (match(TK_BOOL)) {
+        type = new Type(AST_BOOL_TYPE, matched_token);
+    } else if (match(TK_I8)) {
+        type = new Type(AST_I8_TYPE, matched_token);
+    } else if (match(TK_I16)) {
+        type = new Type(AST_I16_TYPE, matched_token);
+    } else if (match(TK_I32)) {
+        type = new Type(AST_I32_TYPE, matched_token);
+    } else if (match(TK_I64)) {
+        type = new Type(AST_I64_TYPE, matched_token);
+    } else if (match(TK_U8)) {
+        type = new Type(AST_U8_TYPE, matched_token);
+    } else if (match(TK_U16)) {
+        type = new Type(AST_U16_TYPE, matched_token);
+    } else if (match(TK_U32)) {
+        type = new Type(AST_U32_TYPE, matched_token);
+    } else if (match(TK_U64)) {
+        type = new Type(AST_U64_TYPE, matched_token);
+    }*/
+
+    return type;
 }
 
 void Parser::advance() {

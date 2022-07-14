@@ -22,6 +22,7 @@ set(AST_SRC
     src/ast/import.cc
     src/ast/function.cc
     src/ast/variable.cc
+    src/ast/type.cc
 )
 
 set(PRINTER_SRC

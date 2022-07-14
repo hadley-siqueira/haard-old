@@ -15,6 +15,7 @@ namespace haard {
             void print_import(Import* import);
             void print_function(Function* function);
             void print_parameters(Function* function);
+            void print_type(Type* type);
 
         private:
             void indent();

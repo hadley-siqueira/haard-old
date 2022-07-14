@@ -20,6 +20,7 @@ namespace haard {
             Import* parse_import();
             Function* parse_function();
             void parse_parameters(Function* function);
+            Type* parse_type();
 
             void advance();
             void expect(int kind);

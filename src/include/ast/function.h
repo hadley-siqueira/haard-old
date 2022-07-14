@@ -5,19 +5,26 @@
 #include <string>
 #include "token/token.h"
 #include "ast/variable.h"
+#include "ast/type.h"
 
 namespace haard {
     class Function {
+        public:
+            Function();
+            ~Function();
+
         public:
             int get_line();
             int get_column();
             std::string get_name();
             Variable* get_parameter(int idx);
+            Type* get_return_type();
 
             void set_line(int line);
             void set_column(int column);
             void set_name(std::string name);
             void set_from_token(Token& token);
+            void set_return_type(Type* type);
 
             int parameters_count();
 
@@ -28,6 +35,7 @@ namespace haard {
             int column;
             std::string name;
             std::vector<Variable*> parameters;
+            Type* return_type;
             
     };
 }
