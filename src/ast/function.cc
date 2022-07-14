@@ -8,6 +8,10 @@ Function::Function() {
 
 Function::~Function() {
     delete return_type;
+    
+    for (int i = 0; i < parameters.size(); ++i) {
+        delete parameters[i];
+    }
 }
 
 int Function::get_line() {

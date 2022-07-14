@@ -10,6 +10,7 @@ namespace haard {
         public:
             Variable();
             Variable(Token& token);
+            ~Variable();
 
         public:
             int get_line();

@@ -13,6 +13,10 @@ Variable::Variable(Token& token) {
     column = token.get_column();
 }
 
+Variable::~Variable() {
+    delete type;
+}
+
 int Variable::get_line() {
     return line;
 }
