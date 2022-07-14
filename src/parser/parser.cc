@@ -103,41 +103,43 @@ Type* Parser::parse_type() {
         type = new Type(TYPE_FLOAT, matched);
     } else if (match(TK_DOUBLE)) {
         type = new Type(TYPE_DOUBLE, matched);
-    } /*else if (match(TK_SHORT)) {
-        type = new Type(AST_SHORT_TYPE, matched_token);
+    } else if (match(TK_SHORT)) {
+        type = new Type(TYPE_SHORT, matched);
     } else if (match(TK_USHORT)) {
-        type = new Type(AST_USHORT_TYPE, matched_token);
+        type = new Type(TYPE_USHORT, matched);
     } else if (match(TK_LONG)) {
-        type = new Type(AST_LONG_TYPE, matched_token);
+        type = new Type(TYPE_LONG, matched);
     } else if (match(TK_ULONG)) {
-        type = new Type(AST_ULONG_TYPE, matched_token);
+        type = new Type(TYPE_ULONG, matched);
     } else if (match(TK_CHAR)) {
-        type = new Type(AST_CHAR_TYPE, matched_token);
+        type = new Type(TYPE_CHAR, matched);
     } else if (match(TK_UCHAR)) {
-        type = new Type(AST_UCHAR_TYPE, matched_token);
+        type = new Type(TYPE_UCHAR, matched);
     } else if (match(TK_SYMBOL)) {
-        type = new Type(AST_SYMBOL_TYPE, matched_token);
+        type = new Type(TYPE_SYMBOL, matched);
     } else if (match(TK_VOID)) {
-        type = new Type(AST_VOID_TYPE, matched_token);
+        type = new Type(TYPE_VOID, matched);
     } else if (match(TK_BOOL)) {
-        type = new Type(AST_BOOL_TYPE, matched_token);
+        type = new Type(TYPE_BOOL, matched);
+    } else if (match(TK_STR)) {
+        type = new Type(TYPE_STR, matched);
     } else if (match(TK_I8)) {
-        type = new Type(AST_I8_TYPE, matched_token);
+        type = new Type(TYPE_I8, matched);
     } else if (match(TK_I16)) {
-        type = new Type(AST_I16_TYPE, matched_token);
+        type = new Type(TYPE_I16, matched);
     } else if (match(TK_I32)) {
-        type = new Type(AST_I32_TYPE, matched_token);
+        type = new Type(TYPE_I32, matched);
     } else if (match(TK_I64)) {
-        type = new Type(AST_I64_TYPE, matched_token);
+        type = new Type(TYPE_I64, matched);
     } else if (match(TK_U8)) {
-        type = new Type(AST_U8_TYPE, matched_token);
+        type = new Type(TYPE_U8, matched);
     } else if (match(TK_U16)) {
-        type = new Type(AST_U16_TYPE, matched_token);
+        type = new Type(TYPE_U16, matched);
     } else if (match(TK_U32)) {
-        type = new Type(AST_U32_TYPE, matched_token);
+        type = new Type(TYPE_U32, matched);
     } else if (match(TK_U64)) {
-        type = new Type(AST_U64_TYPE, matched_token);
-    }*/
+        type = new Type(TYPE_U64, matched);
+    }
 
     return type;
 }

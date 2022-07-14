@@ -442,7 +442,7 @@ namespace haard {
         {"i32", TK_I32},
         {"i64", TK_I64},
         {"void", TK_VOID},
-        {"symbol", TK_SYMBOL},
+        {"sym", TK_SYMBOL},
         {"bool", TK_BOOL},
         {"uchar", TK_UCHAR},
         {"char", TK_CHAR},
