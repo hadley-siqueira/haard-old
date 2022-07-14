@@ -59,18 +59,18 @@ bool Scanner::is_hex_digit() {
            buffer[idx] >= 'A' && buffer[idx] <= 'F';
 }
 
-bool Scanner::is_alpha() {
-    return buffer[idx] >= 'a' && buffer[idx] <= 'z' ||
-           buffer[idx] >= 'A' && buffer[idx] <= 'Z' ||
-           buffer[idx] == '_';
+bool Scanner::is_alpha(int offset) {
+    return buffer[idx + offset] >= 'a' && buffer[idx + offset] <= 'z' ||
+           buffer[idx + offset] >= 'A' && buffer[idx + offset] <= 'Z' ||
+           buffer[idx + offset] == '_';
 }
 
-bool Scanner::is_num() {
-    return buffer[idx] >= '0' && buffer[idx] <= '9';
+bool Scanner::is_num(int offset) {
+    return buffer[idx + offset] >= '0' && buffer[idx + offset] <= '9';
 }
 
-bool Scanner::is_alphanum() {
-    return is_alpha() || is_num();
+bool Scanner::is_alphanum(int offset) {
+    return is_alpha(offset) || is_num(offset);
 }
 
 bool Scanner::is_operator() {
@@ -95,6 +95,10 @@ bool Scanner::has_base() {
     flag2 = buffer[idx + 1] >= '0' && buffer[idx + 1] <= '7';
 
     return buffer[idx] == '0' && (flag || flag2);
+}
+
+bool Scanner::is_symbol() {
+    return lookahead(':') && is_alphanum(1);
 }
 
 void Scanner::start_token() {
@@ -144,6 +148,8 @@ void Scanner::get_token() {
         get_double_quote_string();
     } else if (lookahead('\'')) {
         get_single_quote_string();
+    } else if (is_symbol()) {
+        get_symbol();
     } else if (is_alpha()) {
         get_keyword_or_identifier();
     } else if (is_operator()) {
@@ -306,7 +312,17 @@ void Scanner::get_number() {
     }
 
     create_token(kind);
+}
+
+void Scanner::get_symbol() {
+    start_token();
     advance();
+
+    while (is_alphanum()) {
+        advance();
+    }
+
+    create_token(TK_LITERAL_SYMBOL);
 }
 
 void Scanner::create_token(int kind) {

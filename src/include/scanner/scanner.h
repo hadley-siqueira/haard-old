@@ -16,11 +16,12 @@ namespace haard {
             bool is_binary_digit();
             bool is_octal_digit();
             bool is_hex_digit();
-            bool is_alpha();
-            bool is_num();
-            bool is_alphanum();
+            bool is_alpha(int offset=0);
+            bool is_num(int offset=0);
+            bool is_alphanum(int offset=0);
             bool is_operator();
             bool has_base();
+            bool is_symbol();
             void start_token();
             void advance();
             void skip_whitespace();
@@ -32,6 +33,7 @@ namespace haard {
             void get_double_quote_string();
             void get_single_quote_string();
             void get_number();
+            void get_symbol();
             void create_token(int kind);
             void count_leading_whitespace();
 
