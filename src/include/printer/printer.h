@@ -17,6 +17,13 @@ namespace haard {
             void print_parameters(Function* function);
             void print_type(Type* type);
 
+            void print_statement(Statement* statement);
+            void print_compound_statement(CompoundStatement* statement);
+            void print_expression_statement(ExpressionStatement* statement);
+
+            void print_expression(Expression* expression);
+            void print_binop(std::string oper, BinOp* bin);
+
         private:
             void indent();
             void dedent();

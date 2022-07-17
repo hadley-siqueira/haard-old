@@ -23,6 +23,12 @@ set(AST_SRC
     src/ast/function.cc
     src/ast/variable.cc
     src/ast/type.cc
+    src/ast/expression.cc
+    src/ast/identifier.cc
+    src/ast/binop.cc
+    src/ast/statement.cc
+    src/ast/compound_statement.cc
+    src/ast/expression_statement.cc
 )
 
 set(PRINTER_SRC

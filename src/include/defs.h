@@ -562,6 +562,22 @@ namespace haard {
         TYPE_HASH,
         TYPE_FUNCTION
     } TypeKind;
+
+    typedef enum ExpressionKind {
+        EXPR_UNKNOWN,
+        EXPR_ID,
+        EXPR_SCOPE,
+        EXPR_PLUS,
+        EXPR_MINUS,
+        EXPR_ASSIGN
+    } ExpressionKind;
+
+    typedef enum StatementKind {
+        STMT_UNKNOWN,
+        STMT_EXPRESSION,
+        STMT_WHILE,
+        STMT_COMPOUND
+    } StatementKind;
 }
 
 #endif

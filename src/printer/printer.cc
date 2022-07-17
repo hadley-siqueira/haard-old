@@ -55,6 +55,7 @@ void Printer::print_function(Function* function) {
     indent();
 
     print_parameters(function);
+    print_compound_statement(function->get_statements());
 
     dedent();
 }
@@ -191,6 +192,57 @@ void Printer::print_type(Type* type) {
     default:
         break;
     }
+}
+
+void Printer::print_statement(Statement* statement) {
+    int kind = statement->get_kind();
+
+    switch (kind) {
+    case STMT_COMPOUND:
+        print_compound_statement((CompoundStatement*) statement);
+        break;
+
+    case STMT_EXPRESSION:
+        print_expression_statement((ExpressionStatement*) statement);
+        break;
+    }
+}
+
+void Printer::print_compound_statement(CompoundStatement* statement) {
+    for (int i = 0; i < statement->statements_count(); ++i) {
+        print_statement(statement->get_statement(i));
+    }
+}
+
+void Printer::print_expression_statement(ExpressionStatement* statement) {
+    print_indentation();
+    print_expression(statement->get_expression());
+    out << "\n";
+}
+
+void Printer::print_expression(Expression* expression) {
+    int kind = expression->get_kind();
+    BinOp* bin = (BinOp*) expression;
+
+    switch (kind) {
+    case EXPR_ASSIGN:
+        print_binop("=", bin);
+        break;
+
+    case EXPR_PLUS:
+        print_binop("+", bin);
+        break;
+
+    case EXPR_MINUS:
+        print_binop("-", bin);
+        break;
+    }
+}
+
+void Printer::print_binop(std::string oper, BinOp* bin) {
+    print_expression(bin->get_left());
+    out << " " << oper << " ";
+    print_expression(bin->get_right());
 }
 
 void Printer::indent() {

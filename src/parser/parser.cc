@@ -70,11 +70,15 @@ Function* Parser::parse_function() {
     function->set_from_token(matched);
 
     expect(TK_COLON);
+    indent();
     function->set_return_type(parse_type());
 
     if (has_parameters()) {
         parse_parameters(function);
     }
+
+    function->set_statements(parse_compound_statement());
+    dedent();
 
     return function;
 }
@@ -144,6 +148,75 @@ Type* Parser::parse_type() {
     return type;
 }
 
+Statement* Parser::parse_statement() {
+    Statement* stmt = nullptr;
+
+    if (lookahead(TK_WHILE)) {
+
+    } else {
+        stmt = new ExpressionStatement(parse_expression());
+    }
+
+    return stmt;
+}
+
+CompoundStatement* Parser::parse_compound_statement() {
+    CompoundStatement* statements = new CompoundStatement();
+
+    while (is_indentend()) {
+        statements->add_statement(parse_statement());
+    }
+
+    return statements;
+}
+
+Expression* Parser::parse_expression() {
+    Expression* expr = nullptr;
+
+    expr = parse_assignment_expression();
+
+    return expr;
+}
+
+Expression* Parser::parse_assignment_expression() {
+    Expression* expr = parse_arith_expression();
+
+    while (true) {
+        if (match(TK_ASSIGNMENT)) {
+            expr = new BinOp(EXPR_ASSIGN, expr, parse_arith_expression());
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_arith_expression() {
+    Expression* expr = parse_identifier_expression();
+
+    while (true) {
+        if (match(TK_PLUS)) {
+            expr = new BinOp(EXPR_PLUS, expr, parse_identifier_expression());
+        } else if (match(TK_MINUS)) {
+            expr = new BinOp(EXPR_MINUS, expr, parse_identifier_expression());
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_identifier_expression() {
+    Expression* expr;
+
+    expect(TK_ID);
+    expr = new Identifier(matched);
+
+    return expr;
+}
+
 void Parser::advance() {
     if (idx < tokens.size()) {
         ++idx;
@@ -181,6 +254,18 @@ bool Parser::lookahead(int kind, int offset) {
     return false;
 }
 
+bool Parser::is_indentend() {
+    return tokens[idx].get_whitespace() > indent_stack.top();
+}
+
 bool Parser::has_parameters() {
     return lookahead(TK_AT) && lookahead(TK_ID, 1) && lookahead(TK_COLON, 2);
+}
+
+void Parser::indent() {
+    indent_stack.push(matched.get_whitespace());
+}
+
+void Parser::dedent() {
+    indent_stack.pop();
 }

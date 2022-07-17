@@ -8,6 +8,7 @@ Function::Function() {
 
 Function::~Function() {
     delete return_type;
+    delete statements;
     
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];
@@ -38,6 +39,10 @@ Type* Function::get_return_type() {
     return return_type;
 }
 
+CompoundStatement* Function::get_statements() {
+    return statements;
+}
+
 void Function::set_line(int line) {
     this->line = line;
 }
@@ -52,6 +57,10 @@ void Function::set_name(std::string name) {
 
 void Function::set_return_type(Type* type) {
     return_type = type;
+}
+
+void Function::set_statements(CompoundStatement* statements) {
+    this->statements = statements;
 }
 
 int Function::parameters_count() {
