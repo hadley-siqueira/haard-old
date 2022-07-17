@@ -3,10 +3,11 @@
 using namespace haard;
 
 Identifier::Identifier() {
-    
+    kind = EXPR_ID;
 }
 
 Identifier::Identifier(Token& token) {
+    kind = EXPR_ID;
     line = token.get_line();
     column = token.get_column();
     lexeme = token.get_lexeme();

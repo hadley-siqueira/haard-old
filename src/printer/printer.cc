@@ -63,13 +63,17 @@ void Printer::print_function(Function* function) {
 void Printer::print_parameters(Function* function) {
     Variable* param = nullptr;
 
-    for (int i = 0; i < function->parameters_count(); ++i) {
-        param = function->get_parameter(i);
+    if (function->parameters_count() > 0) {
+        for (int i = 0; i < function->parameters_count(); ++i) {
+            param = function->get_parameter(i);
 
-        print_indentation();
-        out << "@" << param->get_name() << " : ";
-        print_type(param->get_type());
-        out << "\n";
+            print_indentation();
+            out << "@" << param->get_name() << " : ";
+            print_type(param->get_type());
+            out << "\n";
+        }
+
+        out << '\n';
     }
 }
 
@@ -202,10 +206,24 @@ void Printer::print_statement(Statement* statement) {
         print_compound_statement((CompoundStatement*) statement);
         break;
 
+    case STMT_WHILE:
+        print_while_statement((WhileStatement*) statement);
+        break;
+
     case STMT_EXPRESSION:
         print_expression_statement((ExpressionStatement*) statement);
         break;
     }
+}
+
+void Printer::print_while_statement(WhileStatement* statement) {
+    print_indentation();
+    out << "while ";
+    print_expression(statement->get_condition());
+    out << ":\n";
+    indent();
+    print_compound_statement(statement->get_statements());
+    dedent();
 }
 
 void Printer::print_compound_statement(CompoundStatement* statement) {
@@ -225,6 +243,10 @@ void Printer::print_expression(Expression* expression) {
     BinOp* bin = (BinOp*) expression;
 
     switch (kind) {
+    case EXPR_ID:
+        print_identifier((Identifier*) expression);
+        break;
+
     case EXPR_ASSIGN:
         print_binop("=", bin);
         break;
@@ -243,6 +265,10 @@ void Printer::print_binop(std::string oper, BinOp* bin) {
     print_expression(bin->get_left());
     out << " " << oper << " ";
     print_expression(bin->get_right());
+}
+
+void Printer::print_identifier(Identifier* id) {
+    out << id->get_lexeme();
 }
 
 void Printer::indent() {

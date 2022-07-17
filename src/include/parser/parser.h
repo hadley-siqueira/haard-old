@@ -23,6 +23,7 @@ namespace haard {
             void parse_parameters(Function* function);
             Type* parse_type();
             Statement* parse_statement();
+            WhileStatement* parse_while_statement();
             CompoundStatement* parse_compound_statement();
 
             Expression* parse_expression();

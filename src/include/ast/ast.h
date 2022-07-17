@@ -14,6 +14,7 @@
 
 // Statements
 #include "ast/statement.h"
+#include "ast/while_statement.h"
 #include "ast/expression_statement.h"
 #include "ast/compound_statement.h"
 

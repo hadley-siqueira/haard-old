@@ -27,6 +27,7 @@ set(AST_SRC
     src/ast/identifier.cc
     src/ast/binop.cc
     src/ast/statement.cc
+    src/ast/while_statement.cc
     src/ast/compound_statement.cc
     src/ast/expression_statement.cc
 )

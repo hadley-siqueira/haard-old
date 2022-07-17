@@ -152,10 +152,23 @@ Statement* Parser::parse_statement() {
     Statement* stmt = nullptr;
 
     if (lookahead(TK_WHILE)) {
-
+        stmt = parse_while_statement();
     } else {
         stmt = new ExpressionStatement(parse_expression());
     }
+
+    return stmt;
+}
+
+WhileStatement* Parser::parse_while_statement() {
+    WhileStatement* stmt = new WhileStatement();
+
+    expect(TK_WHILE);
+    stmt->set_condition(parse_expression());
+    expect(TK_COLON);
+    indent();
+    stmt->set_statements(parse_compound_statement());
+    dedent();
 
     return stmt;
 }
