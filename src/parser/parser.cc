@@ -192,11 +192,12 @@ Expression* Parser::parse_expression() {
 }
 
 Expression* Parser::parse_assignment_expression() {
+    Token oper;
     Expression* expr = parse_arith_expression();
 
     while (true) {
         if (match(TK_ASSIGNMENT)) {
-            expr = new BinOp(EXPR_ASSIGN, expr, parse_arith_expression());
+            expr = new BinOp(EXPR_ASSIGN, oper, expr, parse_arith_expression());
         } else {
             break;
         }
@@ -206,13 +207,16 @@ Expression* Parser::parse_assignment_expression() {
 }
 
 Expression* Parser::parse_arith_expression() {
+    Token oper;
     Expression* expr = parse_term_expression();
 
     while (true) {
         if (match(TK_PLUS)) {
-            expr = new BinOp(EXPR_PLUS, expr, parse_term_expression());
+            oper = matched;
+            expr = new BinOp(EXPR_PLUS, oper, expr, parse_term_expression());
         } else if (match(TK_MINUS)) {
-            expr = new BinOp(EXPR_MINUS, expr, parse_term_expression());
+            oper = matched;
+            expr = new BinOp(EXPR_MINUS, oper, expr, parse_term_expression());
         } else {
             break;
         }
@@ -272,6 +276,8 @@ Expression* Parser::parse_primary_expression() {
         expr = new Literal(EXPR_LITERAL_BOOL, matched);
     } else if (match(TK_FALSE)) {
         expr = new Literal(EXPR_LITERAL_BOOL, matched);
+    } else if (match(TK_NULL)) {
+        expr = new Literal(EXPR_LITERAL_NULL, matched);
     } else {
         expr = parse_identifier_expression();
     }

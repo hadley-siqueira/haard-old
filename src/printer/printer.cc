@@ -289,6 +289,10 @@ void Printer::print_expression(Expression* expression) {
     case EXPR_LITERAL_SYMBOL:
         print_literal(literal);
         break;
+
+    case EXPR_LITERAL_NULL:
+        out << "null";
+        break;
     }
 }
 
