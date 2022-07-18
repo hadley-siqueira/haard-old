@@ -241,6 +241,7 @@ void Printer::print_expression_statement(ExpressionStatement* statement) {
 void Printer::print_expression(Expression* expression) {
     int kind = expression->get_kind();
     BinOp* bin = (BinOp*) expression;
+    Literal* literal = (Literal*) expression;
 
     switch (kind) {
     case EXPR_ID:
@@ -258,6 +259,16 @@ void Printer::print_expression(Expression* expression) {
     case EXPR_MINUS:
         print_binop("-", bin);
         break;
+
+    case EXPR_LITERAL_BOOL:
+    case EXPR_LITERAL_INTEGER:
+    case EXPR_LITERAL_FLOAT:
+    case EXPR_LITERAL_DOUBLE:
+    case EXPR_LITERAL_CHAR:
+    case EXPR_LITERAL_STRING:
+    case EXPR_LITERAL_SYMBOL:
+        print_literal(literal);
+        break;
     }
 }
 
@@ -269,6 +280,10 @@ void Printer::print_binop(std::string oper, BinOp* bin) {
 
 void Printer::print_identifier(Identifier* id) {
     out << id->get_lexeme();
+}
+
+void Printer::print_literal(Literal* literal) {
+    out << literal->get_lexeme();
 }
 
 void Printer::indent() {

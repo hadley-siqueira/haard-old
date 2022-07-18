@@ -569,7 +569,14 @@ namespace haard {
         EXPR_SCOPE,
         EXPR_PLUS,
         EXPR_MINUS,
-        EXPR_ASSIGN
+        EXPR_ASSIGN,
+        EXPR_LITERAL_BOOL,
+        EXPR_LITERAL_INTEGER,
+        EXPR_LITERAL_FLOAT,
+        EXPR_LITERAL_DOUBLE,
+        EXPR_LITERAL_CHAR,
+        EXPR_LITERAL_STRING,
+        EXPR_LITERAL_SYMBOL
     } ExpressionKind;
 
     typedef enum StatementKind {

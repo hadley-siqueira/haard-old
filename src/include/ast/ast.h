@@ -11,6 +11,7 @@
 #include "ast/expression.h"
 #include "ast/identifier.h"
 #include "ast/binop.h"
+#include "ast/literal.h"
 
 // Statements
 #include "ast/statement.h"

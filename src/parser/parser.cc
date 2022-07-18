@@ -206,16 +206,42 @@ Expression* Parser::parse_assignment_expression() {
 }
 
 Expression* Parser::parse_arith_expression() {
-    Expression* expr = parse_identifier_expression();
+    Expression* expr = parse_primary_expression();
 
     while (true) {
         if (match(TK_PLUS)) {
-            expr = new BinOp(EXPR_PLUS, expr, parse_identifier_expression());
+            expr = new BinOp(EXPR_PLUS, expr, parse_primary_expression());
         } else if (match(TK_MINUS)) {
-            expr = new BinOp(EXPR_MINUS, expr, parse_identifier_expression());
+            expr = new BinOp(EXPR_MINUS, expr, parse_primary_expression());
         } else {
             break;
         }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_primary_expression() {
+    Expression* expr = nullptr;
+
+    if (match(TK_LITERAL_INTEGER)) {
+        expr = new Literal(EXPR_LITERAL_INTEGER, matched);
+    } else if (match(TK_LITERAL_FLOAT)) {
+        expr = new Literal(EXPR_LITERAL_FLOAT, matched);
+    } else if (match(TK_LITERAL_DOUBLE)) {
+        expr = new Literal(EXPR_LITERAL_DOUBLE, matched);
+    } else if (match(TK_LITERAL_CHAR)) {
+        expr = new Literal(EXPR_LITERAL_CHAR, matched);
+    } else if (match(TK_LITERAL_STRING)) {
+        expr = new Literal(EXPR_LITERAL_STRING, matched);
+    } else if (match(TK_LITERAL_SYMBOL)) {
+        expr = new Literal(EXPR_LITERAL_SYMBOL, matched);
+    } else if (match(TK_TRUE)) {
+        expr = new Literal(EXPR_LITERAL_BOOL, matched);
+    } else if (match(TK_FALSE)) {
+        expr = new Literal(EXPR_LITERAL_BOOL, matched);
+    } else {
+        expr = parse_identifier_expression();
     }
 
     return expr;

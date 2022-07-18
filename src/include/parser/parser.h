@@ -29,6 +29,7 @@ namespace haard {
             Expression* parse_expression();
             Expression* parse_assignment_expression();
             Expression* parse_arith_expression();
+            Expression* parse_primary_expression();
             Expression* parse_identifier_expression();
 
             void advance();
