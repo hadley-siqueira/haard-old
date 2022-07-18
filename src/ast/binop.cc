@@ -15,6 +15,14 @@ BinOp::BinOp(int kind, Expression* left, Expression* right) {
     this->right = right;
 }
 
+BinOp::BinOp(int kind, Token& token, Expression* left, Expression* right) {
+    this->kind = kind;
+    this->left = left;
+    this->right = right;
+    line = token.get_line();
+    column = token.get_column();
+}
+
 BinOp::~BinOp() {
     delete left;
     delete right;

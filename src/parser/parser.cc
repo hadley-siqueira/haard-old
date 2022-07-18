@@ -206,19 +206,51 @@ Expression* Parser::parse_assignment_expression() {
 }
 
 Expression* Parser::parse_arith_expression() {
-    Expression* expr = parse_primary_expression();
+    Expression* expr = parse_term_expression();
 
     while (true) {
         if (match(TK_PLUS)) {
-            expr = new BinOp(EXPR_PLUS, expr, parse_primary_expression());
+            expr = new BinOp(EXPR_PLUS, expr, parse_term_expression());
         } else if (match(TK_MINUS)) {
-            expr = new BinOp(EXPR_MINUS, expr, parse_primary_expression());
+            expr = new BinOp(EXPR_MINUS, expr, parse_term_expression());
         } else {
             break;
         }
     }
 
     return expr;
+}
+
+Expression* Parser::parse_term_expression() {
+    Token oper;
+    Expression* expr = parse_primary_expression();
+
+    while (true) {
+        if (match(TK_TIMES)) {
+            oper = matched;
+            expr = new BinOp(EXPR_TIMES, oper, expr, parse_bitwise_or_expression());
+        } else if (match(TK_DIVISION)) {
+            oper = matched;
+            expr = new BinOp(EXPR_DIVISION, oper, expr, parse_bitwise_or_expression());
+        } else if (match(TK_INTEGER_DIVISION)) {
+            oper = matched;
+            expr = new BinOp(EXPR_INTEGER_DIVISION, oper, expr, parse_bitwise_or_expression());
+        } else if (match(TK_MODULO)) {
+            oper = matched;
+            expr = new BinOp(EXPR_MODULO, oper, expr, parse_bitwise_or_expression());
+        } else if (match(TK_POWER)) {
+            oper = matched;
+            expr = new BinOp(EXPR_MODULO, oper, expr, parse_bitwise_or_expression());
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_bitwise_or_expression() {
+    return parse_primary_expression();
 }
 
 Expression* Parser::parse_primary_expression() {

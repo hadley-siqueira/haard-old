@@ -260,6 +260,26 @@ void Printer::print_expression(Expression* expression) {
         print_binop("-", bin);
         break;
 
+    case EXPR_TIMES:
+        print_binop("*", bin);
+        break;
+
+    case EXPR_DIVISION:
+        print_binop("/", bin);
+        break;
+
+    case EXPR_INTEGER_DIVISION:
+        print_binop("//", bin);
+        break;
+
+    case EXPR_MODULO:
+        print_binop("%", bin);
+        break;
+
+    case EXPR_POWER:
+        print_binop("**", bin);
+        break;
+
     case EXPR_LITERAL_BOOL:
     case EXPR_LITERAL_INTEGER:
     case EXPR_LITERAL_FLOAT:
