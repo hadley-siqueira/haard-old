@@ -138,6 +138,9 @@ def sum : int
                             }
                         }
 
+                    v = 0
+                i = 0
+
             }
         ).success(|a| {
             print('success')
