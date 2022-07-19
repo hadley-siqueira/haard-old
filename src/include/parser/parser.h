@@ -42,6 +42,7 @@ namespace haard {
             Expression* parse_unary_expression();
             Expression* parse_postfix_expression();
             Expression* parse_primary_expression();
+            Expression* parse_parenthesis_or_tuple();
             Expression* parse_identifier_expression();
 
             void advance();

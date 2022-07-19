@@ -389,9 +389,15 @@ void Printer::print_expression(Expression* expression) {
         print_unop("--", un);
         break;
 
-case EXPR_SIZEOF:
-    print_unop("!", un);
-    break;
+    case EXPR_SIZEOF:
+        print_unop("!", un);
+        break;
+
+    case EXPR_PARENTHESIS:
+        out << "(";
+        print_expression(un->get_expression());
+        out << ")";
+        break;
 
     case EXPR_LITERAL_BOOL:
     case EXPR_LITERAL_INTEGER:

@@ -478,7 +478,9 @@ Expression* Parser::parse_postfix_expression() {
 Expression* Parser::parse_primary_expression() {
     Expression* expr = nullptr;
 
-    if (match(TK_LITERAL_INTEGER)) {
+    if (lookahead(TK_LEFT_PARENTHESIS)) {
+        expr = parse_parenthesis_or_tuple();
+    } else if (match(TK_LITERAL_INTEGER)) {
         expr = new Literal(EXPR_LITERAL_INTEGER, matched);
     } else if (match(TK_LITERAL_FLOAT)) {
         expr = new Literal(EXPR_LITERAL_FLOAT, matched);
@@ -499,6 +501,18 @@ Expression* Parser::parse_primary_expression() {
     } else {
         expr = parse_identifier_expression();
     }
+
+    return expr;
+}
+
+Expression* Parser::parse_parenthesis_or_tuple() {
+    Token oper;
+    Expression* expr = nullptr;
+
+    expect(TK_LEFT_PARENTHESIS);
+    oper = matched;
+    expr = new UnOp(EXPR_PARENTHESIS, oper, parse_expression());
+    expect(TK_RIGHT_PARENTHESIS);
 
     return expr;
 }
