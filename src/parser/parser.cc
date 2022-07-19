@@ -480,6 +480,8 @@ Expression* Parser::parse_primary_expression() {
 
     if (lookahead(TK_LEFT_PARENTHESIS)) {
         expr = parse_parenthesis_or_tuple();
+    } else if (lookahead(TK_LEFT_SQUARE_BRACKET)) {
+        expr = parse_list_expression();
     } else if (match(TK_LITERAL_INTEGER)) {
         expr = new Literal(EXPR_LITERAL_INTEGER, matched);
     } else if (match(TK_LITERAL_FLOAT)) {
@@ -529,6 +531,23 @@ Expression* Parser::parse_parenthesis_or_tuple() {
     expect(TK_RIGHT_PARENTHESIS);
 
     return expr;
+}
+
+Expression* Parser::parse_list_expression() {
+    ExpressionList* list = new ExpressionList(EXPR_LIST);
+
+    expect(TK_LEFT_SQUARE_BRACKET);
+
+    if (!lookahead(TK_RIGHT_SQUARE_BRACKET)) {
+        list = new ExpressionList(EXPR_LIST, parse_expression());
+
+        while (match(TK_COMMA)) {
+            list->add_expression(parse_expression());
+        }
+    }
+
+    expect(TK_RIGHT_SQUARE_BRACKET);
+    return list;
 }
 
 Expression* Parser::parse_identifier_expression() {

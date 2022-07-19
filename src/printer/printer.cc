@@ -245,6 +245,7 @@ void Printer::print_expression(Expression* expression) {
     BinOp* bin = (BinOp*) expression;
     UnOp* un = (UnOp*) expression;
     Literal* literal = (Literal*) expression;
+    ExpressionList* exprlist = (ExpressionList*) expression;
 
     switch (kind) {
     case EXPR_ID:
@@ -416,7 +417,11 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_TUPLE:
-        print_tuple((ExpressionList*) expression);
+        print_expression_list("(", ")", exprlist);
+        break;
+
+    case EXPR_LIST:
+        print_expression_list("[", "]", exprlist);
         break;
     }
 }
@@ -440,9 +445,9 @@ void Printer::print_literal(Literal* literal) {
     out << literal->get_lexeme();
 }
 
-void Printer::print_tuple(ExpressionList* tuple) {
+void Printer::print_expression_list(std::string begin, std::string end, ExpressionList* tuple) {
     int i;
-    out << "(";
+    out << begin;
 
     for (i = 0; i < tuple->expressions_count() - 1; ++i) {
         print_expression(tuple->get_expression(i));
@@ -450,7 +455,7 @@ void Printer::print_tuple(ExpressionList* tuple) {
     }
         
     print_expression(tuple->get_expression(i));
-    out << ")";
+    out << end;
 }
 
 void Printer::indent() {

@@ -27,7 +27,7 @@ namespace haard {
             void print_unop(std::string oper, UnOp* un);
             void print_identifier(Identifier* id);
             void print_literal(Literal* literal);
-            void print_tuple(ExpressionList* tuple);
+            void print_expression_list(std::string begin, std::string end, ExpressionList* tuple);
 
         private:
             void indent();

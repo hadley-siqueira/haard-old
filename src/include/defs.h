@@ -612,7 +612,8 @@ namespace haard {
         EXPR_LITERAL_STRING,
         EXPR_LITERAL_SYMBOL,
         EXPR_LITERAL_NULL,
-        EXPR_TUPLE
+        EXPR_TUPLE,
+        EXPR_LIST
     } ExpressionKind;
 
     typedef enum StatementKind {
