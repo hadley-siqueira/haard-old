@@ -520,7 +520,9 @@ Expression* Parser::parse_parenthesis_or_tuple() {
         list = new ExpressionList(EXPR_TUPLE, expr);
 
         while (match(TK_COMMA)) {
-            list->add_expression(parse_expression());
+            if (!lookahead(TK_RIGHT_PARENTHESIS)) {
+                list->add_expression(parse_expression());
+            }
         }
 
         expr = list;
@@ -542,7 +544,9 @@ Expression* Parser::parse_list_expression() {
         list = new ExpressionList(EXPR_LIST, parse_expression());
 
         while (match(TK_COMMA)) {
-            list->add_expression(parse_expression());
+            if (!lookahead(TK_RIGHT_SQUARE_BRACKET)) {
+                list->add_expression(parse_expression());
+            }
         }
     }
 
