@@ -1,0 +1,157 @@
+import std.io
+import std.system
+import std.array as array
+
+def main : double
+    while true:
+        b = a
+        while true:
+           a = a + b
+            a = a +
+             a +
+            b
+    + d
+                + e + f
+        +g + h
+
+        a = a +
+            a +
+            b
+    + d
+                + e + f
+        +g + h
+    while false:
+        a = a + b
+        a = a +
+        a +
+        b
++ d
+            + e + f
+    +g + h
+
+    a = a +
+        a +
+        b
++ d
+            + e + f
+    +g + h
+
+def main : float
+    @argc : int
+      @argv : float
+    @argd : int
+
+    a = a + a
+    a = a + a
+    a = a +
+        a +
+        b
++ d
+            + e + f
+    +g + h
+
+def sum : int
+    @a : int
+    @b : uint
+    @c : i8
+    @d : u32
+    @e : str
+    @f : sym
+    @f : bool
+    @g : char
+
+    f = a - b + d a = x + y
+    s = 'hello, world!'
+    s2 = "Hello, world!"
+    a = 123
+    b = 'a'
+    c = :get
+    a = 1 + 2 * 3 // 4 ** 3
+    ptr = null
+    a = 1 << 2 & a ^ b | c >> a >>> b
+
+    while a > b or a < b and a == b and c != d:
+        v = 2 ... 3
+        v = 2 .. 3
+        p = &a
+        p1 = *p + ~2 + !flag
+
+    while not true:
+        v = ++2 + (2 - 3) * 5
+        t = (1, 2, 3)
+        t = (true, 1 + 2, (true, 0.4), 'done')
+        t = ( )
+        l = [1, 2, 3]
+        l = [(1, 2), (2, 3), (3, 4), ]
+        l = []
+        t = (1, 2, 3, )
+        t = (1,)
+        array = {1, 2, 3, 4}
+        array = {1, 2, 3, 4, }
+        hash = {name: 'a name', age: 10, method: :post}
+        obj.method(2, 3)->other[2 + 1]
+        while true:
+            func({name: 'name', age: 10}, :post)
+            a := 2
+            a += 2
+            a -= 3
+            array::foo()
+            array::func({name: 'name', age: 10}, :post, array::baz())
+
+            ::sum(2, 3)
+            v = ::sum(2, 3)
+            v = 2...3
+        v = 2..3
+        v = | | { 
+            a = 0 
+            b = a + 1
+
+            while i < N:
+                print('hello')
+        }
+
+        obj.m(
+            'name',
+            foobar,
+            this.get_ptr(),
+            |err| {
+                f = true
+
+                v = {
+                    10,  100, 1000, 10000, 
+                     0,    1,    2,     3, 
+                  5000, 4000, 3000,  2000  
+                }
+
+                while true:
+                    while true:
+                        v = {
+                            id: 'name',
+                            lst: [
+                                1, 2, 3, 4,
+                            ],
+                            func: |x, y| -> int {
+                                while x > y:
+                                    a = x - y
+
+                                a = x + y
+                            }
+                        }
+
+            }
+        ).success(|a| {
+            print('success')
+        }).error(|a| {
+            print('failure')
+        })
+
+        v = |a : int, b : int| -> float { a + b }
+        v = {
+            |x, y| { print('Hello') },
+            |x, y| { print('Done') },
+            | | { print('None') },
+            |x, y| { print('Done') }(2, 3)
+        }
+
+
+
