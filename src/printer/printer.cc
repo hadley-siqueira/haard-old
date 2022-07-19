@@ -304,6 +304,54 @@ void Printer::print_expression(Expression* expression) {
         print_binop(">>", bin);
         break;
 
+    case EXPR_INCLUSIVE_RANGE:
+        print_binop("..", bin);
+        break;
+
+    case EXPR_EXCLUSIVE_RANGE:
+        print_binop("...", bin);
+        break;
+
+    case EXPR_LOGICAL_OR:
+        print_binop("or", bin);
+        break;
+
+    case EXPR_LOGICAL_OR_OPER:
+        print_binop("||", bin);
+        break;
+
+    case EXPR_LOGICAL_AND:
+        print_binop("and", bin);
+        break;
+
+    case EXPR_LOGICAL_AND_OPER:
+        print_binop("&&", bin);
+        break;
+
+    case EXPR_EQ:
+        print_binop("==", bin);
+        break;
+
+    case EXPR_NE:
+        print_binop("!=", bin);
+        break;
+
+    case EXPR_LT:
+        print_binop("<", bin);
+        break;
+
+    case EXPR_GT:
+        print_binop(">", bin);
+        break;
+
+    case EXPR_LE:
+        print_binop("<=", bin);
+        break;
+
+    case EXPR_GE:
+        print_binop(">=", bin);
+        break;
+
     case EXPR_LITERAL_BOOL:
     case EXPR_LITERAL_INTEGER:
     case EXPR_LITERAL_FLOAT:
