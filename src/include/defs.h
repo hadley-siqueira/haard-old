@@ -604,6 +604,10 @@ namespace haard {
         EXPR_PRE_DEC,
         EXPR_SIZEOF,
         EXPR_PARENTHESIS,
+EXPR_CALL,
+EXPR_INDEX,
+EXPR_ARROW,
+EXPR_DOT,
         EXPR_LITERAL_BOOL,
         EXPR_LITERAL_INTEGER,
         EXPR_LITERAL_FLOAT,
@@ -613,9 +617,11 @@ namespace haard {
         EXPR_LITERAL_SYMBOL,
         EXPR_LITERAL_NULL,
         EXPR_TUPLE,
+        EXPR_ARGS,
         EXPR_LIST,
         EXPR_ARRAY,
         EXPR_HASH,
+        EXPR_HASH_RAW,
         EXPR_HASH_PAIR
     } ExpressionKind;
 

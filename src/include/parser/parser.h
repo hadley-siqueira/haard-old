@@ -45,8 +45,9 @@ namespace haard {
             Expression* parse_parenthesis_or_tuple();
             Expression* parse_list_expression();
             Expression* parse_array_or_hash();
-            ExpressionList* parse_hash(Expression* key);
             Expression* parse_identifier_expression();
+            ExpressionList* parse_argument_list();
+            ExpressionList* parse_hash(Expression* key);
 
             void advance();
             void expect(int kind);

@@ -402,6 +402,30 @@ void Printer::print_expression(Expression* expression) {
         out << ")";
         break;
 
+    case EXPR_CALL:
+        print_expression(bin->get_left());
+        print_expression(bin->get_right());
+        break;
+
+    case EXPR_INDEX:
+        print_expression(bin->get_left());
+        out << "[";
+        print_expression(bin->get_right());
+        out << "]";
+        break;
+
+    case EXPR_ARROW:
+        print_expression(bin->get_left());
+        out << "->";
+        print_expression(bin->get_right());
+        break;
+        
+    case EXPR_DOT:
+        print_expression(bin->get_left());
+        out << ".";
+        print_expression(bin->get_right());
+        break;
+
     case EXPR_LITERAL_BOOL:
     case EXPR_LITERAL_INTEGER:
     case EXPR_LITERAL_FLOAT:
@@ -428,7 +452,12 @@ void Printer::print_expression(Expression* expression) {
         print_expression_list("{", "}", exprlist);
         break;
 
+    case EXPR_ARGS:
+        print_expression_list("(", ")", exprlist);
+        break;
+
     case EXPR_HASH:
+    case EXPR_HASH_RAW:
         print_hash(exprlist);
         break;
     }
@@ -470,7 +499,9 @@ void Printer::print_hash(ExpressionList* hash) {
     BinOp* pair;
     int i;
 
-    out << "{";
+    if (hash->get_kind() == EXPR_HASH) {
+        out << "{";
+    }
 
     for (i = 0; i < hash->expressions_count() - 1; ++i) {
         pair = (BinOp*) hash->get_expression(i);
@@ -485,7 +516,9 @@ void Printer::print_hash(ExpressionList* hash) {
     out << ": ";
     print_expression(pair->get_right());
 
-    out << "}";
+    if (hash->get_kind() == EXPR_HASH) {
+        out << "}";
+    }
 }
 
 void Printer::indent() {
