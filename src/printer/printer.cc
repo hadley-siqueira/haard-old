@@ -256,6 +256,62 @@ void Printer::print_expression(Expression* expression) {
         print_binop("=", bin);
         break;
 
+    case EXPR_SPECIAL_ASSIGN:
+        print_binop(":=", bin);
+        break;
+
+    case EXPR_SRL_ASSIGN:
+        print_binop(">>>=", bin);
+        break;
+
+    case EXPR_SRA_ASSIGN:
+        print_binop(">>=", bin);
+        break;
+
+    case EXPR_SLL_ASSIGN:
+        print_binop("<<=", bin);
+        break;
+
+    case EXPR_TIMES_ASSIGN:
+        print_binop("*=", bin);
+        break;
+
+    case EXPR_PLUS_ASSIGN:
+        print_binop("+=", bin);
+        break;
+
+    case EXPR_MODULO_ASSIGN:
+        print_binop("%=", bin);
+        break;
+
+    case EXPR_MINUS_ASSIGN:
+        print_binop("-=", bin);
+        break;
+
+    case EXPR_INTEGER_DIVISIO_ASSIGN:
+        print_binop("//=", bin);
+        break;
+
+    case EXPR_DIVISION_ASSIGN:
+        print_binop("/=", bin);
+        break;
+
+    case EXPR_BITWISE_NOT_ASSIGN:
+        print_binop("~=", bin);
+        break;
+
+    case EXPR_BITWISE_OR_ASSIGN:
+        print_binop("|=", bin);
+        break;
+
+    case EXPR_BITWISE_XOR_ASSIGN:
+        print_binop("^=", bin);
+        break;
+
+    case EXPR_BITWISE_AND_ASSIGN:
+        print_binop("&=", bin);
+        break;
+
     case EXPR_PLUS:
         print_binop("+", bin);
         break;
