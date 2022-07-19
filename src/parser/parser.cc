@@ -595,7 +595,7 @@ Expression* Parser::parse_list_expression() {
 
 Expression* Parser::parse_array_or_hash() {
     Expression* expr = nullptr;
-    ExpressionList* list = new ExpressionList(EXPR_ARRAY);
+    ExpressionList* list = nullptr;
 
     expect(TK_LEFT_CURLY_BRACKET);
 
@@ -606,7 +606,7 @@ Expression* Parser::parse_array_or_hash() {
             list = parse_hash(expr);
             list->set_kind(EXPR_HASH);
         } else {
-            list->add_expression(expr);
+            list = new ExpressionList(EXPR_ARRAY, expr);
 
             while (match(TK_COMMA)) {
                 if (!lookahead(TK_RIGHT_CURLY_BRACKET)) {

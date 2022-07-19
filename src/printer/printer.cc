@@ -419,7 +419,7 @@ void Printer::print_expression(Expression* expression) {
         out << "->";
         print_expression(bin->get_right());
         break;
-        
+
     case EXPR_DOT:
         print_expression(bin->get_left());
         out << ".";
