@@ -425,6 +425,53 @@ Expression* Parser::parse_shift_expression() {
 }
 
 Expression* Parser::parse_unary_expression() {
+    Token oper;
+    Expression* expr = nullptr;
+
+    if (match(TK_LOGICAL_NOT)) {
+        oper = matched;
+        expr = new UnOp(EXPR_LOGICAL_NOT_OPER, oper, parse_unary_expression());
+    } else if (match(TK_NOT)) {
+        oper = matched;
+        expr = new UnOp(EXPR_LOGICAL_NOT, oper, parse_unary_expression());
+    } else if (match(TK_BITWISE_AND)) {
+        oper = matched;
+        expr = new UnOp(EXPR_ADDRESS_OF, oper, parse_unary_expression());
+    } else if (match(TK_TIMES)) {
+        oper = matched;
+        expr = new UnOp(EXPR_DEREFERENCE, oper, parse_unary_expression());
+    } else if (match(TK_POWER)) {
+        oper = matched;
+        expr = new UnOp(EXPR_DEREFERENCE, oper, parse_unary_expression());
+        expr = new UnOp(EXPR_DEREFERENCE, oper, expr);
+    } else if (match(TK_BITWISE_NOT)) {
+        oper = matched;
+        expr = new UnOp(EXPR_BITWISE_NOT, oper, parse_unary_expression());
+    } else if (match(TK_MINUS)) {
+        oper = matched;
+        expr = new UnOp(EXPR_UNARY_MINUS, oper, parse_unary_expression());
+    } else if (match(TK_PLUS)) {
+        oper = matched;
+        expr = new UnOp(EXPR_UNARY_PLUS, oper, parse_unary_expression());
+    } else if (match(TK_INC)) {
+        oper = matched;
+        expr = new UnOp(EXPR_PRE_INC, oper, parse_unary_expression());
+    } else if (match(TK_DEC)) {
+        oper = matched;
+        expr = new UnOp(EXPR_PRE_DEC, oper, parse_unary_expression());
+    } else if (match(TK_SIZEOF)) {
+        oper = matched;
+        expect(TK_LEFT_PARENTHESIS);
+        expr = new UnOp(EXPR_SIZEOF, oper, parse_unary_expression());
+        expect(TK_RIGHT_PARENTHESIS);
+    } else {
+        expr = parse_postfix_expression();
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_postfix_expression() {
     return parse_primary_expression();
 }
 

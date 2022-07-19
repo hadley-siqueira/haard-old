@@ -1,4 +1,3 @@
-
 #include "ast/binop.h"
 
 using namespace haard;

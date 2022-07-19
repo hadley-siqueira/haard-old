@@ -241,6 +241,7 @@ void Printer::print_expression_statement(ExpressionStatement* statement) {
 void Printer::print_expression(Expression* expression) {
     int kind = expression->get_kind();
     BinOp* bin = (BinOp*) expression;
+    UnOp* un = (UnOp*) expression;
     Literal* literal = (Literal*) expression;
 
     switch (kind) {
@@ -352,6 +353,46 @@ void Printer::print_expression(Expression* expression) {
         print_binop(">=", bin);
         break;
 
+    case EXPR_LOGICAL_NOT_OPER:
+        print_unop("!", un);
+        break;
+
+    case EXPR_LOGICAL_NOT:
+        print_unop("not ", un);
+        break;
+
+    case EXPR_ADDRESS_OF:
+        print_unop("&", un);
+        break;
+
+    case EXPR_DEREFERENCE:
+        print_unop("*", un);
+        break;
+
+    case EXPR_BITWISE_NOT:
+        print_unop("~", un);
+        break;
+
+    case EXPR_UNARY_MINUS:
+        print_unop("-", un);
+        break;
+
+    case EXPR_UNARY_PLUS:
+        print_unop("+", un);
+        break;
+
+    case EXPR_PRE_INC:
+        print_unop("++", un);
+        break;
+
+    case EXPR_PRE_DEC:
+        print_unop("--", un);
+        break;
+
+case EXPR_SIZEOF:
+    print_unop("!", un);
+    break;
+
     case EXPR_LITERAL_BOOL:
     case EXPR_LITERAL_INTEGER:
     case EXPR_LITERAL_FLOAT:
@@ -372,6 +413,11 @@ void Printer::print_binop(std::string oper, BinOp* bin) {
     print_expression(bin->get_left());
     out << " " << oper << " ";
     print_expression(bin->get_right());
+}
+
+void Printer::print_unop(std::string oper, UnOp* un) {
+    out << oper;
+    print_expression(un->get_expression());
 }
 
 void Printer::print_identifier(Identifier* id) {

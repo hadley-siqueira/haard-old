@@ -10,6 +10,7 @@
 // Expressions
 #include "ast/expression.h"
 #include "ast/identifier.h"
+#include "ast/unop.h"
 #include "ast/binop.h"
 #include "ast/literal.h"
 

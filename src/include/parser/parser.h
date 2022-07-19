@@ -40,6 +40,7 @@ namespace haard {
             Expression* parse_bitwise_and_expression();
             Expression* parse_shift_expression();
             Expression* parse_unary_expression();
+            Expression* parse_postfix_expression();
             Expression* parse_primary_expression();
             Expression* parse_identifier_expression();
 

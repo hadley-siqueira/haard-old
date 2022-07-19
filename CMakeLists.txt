@@ -25,6 +25,7 @@ set(AST_SRC
     src/ast/type.cc
     src/ast/expression.cc
     src/ast/identifier.cc
+    src/ast/unop.cc
     src/ast/binop.cc
     src/ast/literal.cc
     src/ast/statement.cc
