@@ -583,7 +583,9 @@ Expression* Parser::parse_primary_expression() {
     } else if (match(TK_NULL)) {
         expr = new Literal(EXPR_LITERAL_NULL, matched);
     } else if (lookahead(TK_ID)) {
-        expr = parse_identifier_expression();
+        expr = parse_scope_expression();
+    } else if (match(TK_SCOPE)) {
+        expr = new UnOp(EXPR_GLOBAL_SCOPE, parse_identifier_expression());
     }
 
     return expr;
@@ -679,6 +681,18 @@ ExpressionList* Parser::parse_hash(Expression* key) {
     }
 
     return hash;
+}
+
+Expression* Parser::parse_scope_expression() {
+    Token oper;
+    Expression* expr = parse_identifier_expression();
+
+    if (match(TK_SCOPE)) {
+        oper = matched;
+        expr = new BinOp(EXPR_SCOPE, oper, expr, parse_identifier_expression());
+    }
+
+    return expr;
 }
 
 Expression* Parser::parse_identifier_expression() {

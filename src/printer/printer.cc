@@ -252,6 +252,17 @@ void Printer::print_expression(Expression* expression) {
         print_identifier((Identifier*) expression);
         break;
 
+    case EXPR_SCOPE:
+        print_expression(bin->get_left());
+        out << "::";
+        print_expression(bin->get_right());
+        break;
+
+    case EXPR_GLOBAL_SCOPE:
+        out << "::";
+        print_expression(un->get_expression());
+        break;
+
     case EXPR_ASSIGN:
         print_binop("=", bin);
         break;
