@@ -508,10 +508,24 @@ Expression* Parser::parse_primary_expression() {
 Expression* Parser::parse_parenthesis_or_tuple() {
     Token oper;
     Expression* expr = nullptr;
+    ExpressionList* list = nullptr;
 
     expect(TK_LEFT_PARENTHESIS);
     oper = matched;
-    expr = new UnOp(EXPR_PARENTHESIS, oper, parse_expression());
+    expr = parse_expression();
+
+    if (lookahead(TK_COMMA)) {
+        list = new ExpressionList(EXPR_TUPLE, expr);
+
+        while (match(TK_COMMA)) {
+            list->add_expression(parse_expression());
+        }
+
+        expr = list;
+    } else if (lookahead(TK_RIGHT_PARENTHESIS)) {
+        expr = new UnOp(EXPR_PARENTHESIS, oper, expr);
+    }
+
     expect(TK_RIGHT_PARENTHESIS);
 
     return expr;

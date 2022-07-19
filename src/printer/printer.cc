@@ -239,6 +239,8 @@ void Printer::print_expression_statement(ExpressionStatement* statement) {
 }
 
 void Printer::print_expression(Expression* expression) {
+    if (expression == nullptr) return;
+
     int kind = expression->get_kind();
     BinOp* bin = (BinOp*) expression;
     UnOp* un = (UnOp*) expression;
@@ -412,6 +414,10 @@ void Printer::print_expression(Expression* expression) {
     case EXPR_LITERAL_NULL:
         out << "null";
         break;
+
+    case EXPR_TUPLE:
+        print_tuple((ExpressionList*) expression);
+        break;
     }
 }
 
@@ -432,6 +438,19 @@ void Printer::print_identifier(Identifier* id) {
 
 void Printer::print_literal(Literal* literal) {
     out << literal->get_lexeme();
+}
+
+void Printer::print_tuple(ExpressionList* tuple) {
+    int i;
+    out << "(";
+
+    for (i = 0; i < tuple->expressions_count() - 1; ++i) {
+        print_expression(tuple->get_expression(i));
+        out << ", ";
+    }
+        
+    print_expression(tuple->get_expression(i));
+    out << ")";
 }
 
 void Printer::indent() {

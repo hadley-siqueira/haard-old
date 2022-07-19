@@ -13,6 +13,7 @@
 #include "ast/unop.h"
 #include "ast/binop.h"
 #include "ast/literal.h"
+#include "ast/expression_list.h"
 
 // Statements
 #include "ast/statement.h"
