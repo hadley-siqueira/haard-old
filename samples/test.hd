@@ -157,4 +157,9 @@ def sum : int
         }
 
 
-
+        sql::query()
+            .execute(transaction)
+            .await
+            .map_err(|e| {
+                tracing::error('Failed to execute query', e)
+            })
