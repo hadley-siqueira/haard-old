@@ -498,7 +498,7 @@ Expression* Parser::parse_primary_expression() {
         expr = new Literal(EXPR_LITERAL_BOOL, matched);
     } else if (match(TK_NULL)) {
         expr = new Literal(EXPR_LITERAL_NULL, matched);
-    } else {
+    } else if (lookahead(TK_ID)) {
         expr = parse_identifier_expression();
     }
 
@@ -551,7 +551,10 @@ void Parser::expect(int kind) {
         return;
     }
 
+    Token token;
+    token.set_kind(kind);
     std::cout << "parser error\n";
+    std::cout << token.to_str() << std::endl;
     exit(0);
 }
 
