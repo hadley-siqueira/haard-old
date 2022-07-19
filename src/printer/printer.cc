@@ -280,6 +280,30 @@ void Printer::print_expression(Expression* expression) {
         print_binop("**", bin);
         break;
 
+    case EXPR_BITWISE_OR:
+        print_binop("|", bin);
+        break;
+
+    case EXPR_BITWISE_XOR:
+        print_binop("^", bin);
+        break;
+
+    case EXPR_BITWISE_AND:
+        print_binop("&", bin);
+        break;
+
+    case EXPR_SLL:
+        print_binop("<<", bin);
+        break;
+
+    case EXPR_SRL:
+        print_binop(">>>", bin);
+        break;
+
+    case EXPR_SRA:
+        print_binop(">>", bin);
+        break;
+
     case EXPR_LITERAL_BOOL:
     case EXPR_LITERAL_INTEGER:
     case EXPR_LITERAL_FLOAT:

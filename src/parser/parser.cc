@@ -227,7 +227,7 @@ Expression* Parser::parse_arith_expression() {
 
 Expression* Parser::parse_term_expression() {
     Token oper;
-    Expression* expr = parse_primary_expression();
+    Expression* expr = parse_bitwise_or_expression();
 
     while (true) {
         if (match(TK_TIMES)) {
@@ -254,6 +254,76 @@ Expression* Parser::parse_term_expression() {
 }
 
 Expression* Parser::parse_bitwise_or_expression() {
+    Token oper;
+    Expression* expr = parse_bitwise_xor_expression();
+
+    while (true) {
+        if (match(TK_BITWISE_OR)) {
+            oper = matched;
+            expr = new BinOp(EXPR_BITWISE_OR, oper, expr, parse_bitwise_xor_expression()); 
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_bitwise_xor_expression() {
+    Token oper;
+    Expression* expr = parse_bitwise_and_expression();
+
+    while (true) {
+        if (match(TK_BITWISE_XOR)) {
+            oper = matched;
+            expr = new BinOp(EXPR_BITWISE_XOR, oper, expr, parse_bitwise_and_expression()); 
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_bitwise_and_expression() {
+    Token oper;
+    Expression* expr = parse_shift_expression();
+
+    while (true) {
+        if (match(TK_BITWISE_AND)) {
+            oper = matched;
+            expr = new BinOp(EXPR_BITWISE_AND, oper, expr, parse_shift_expression()); 
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_shift_expression() {
+    Token oper;
+    Expression* expr = parse_unary_expression();
+
+    while (true) {
+        if (match(TK_SLL)) {
+            oper = matched;
+            expr = new BinOp(EXPR_SLL, oper, expr, parse_unary_expression()); 
+        } else if (match(TK_SRL)) {
+            oper = matched;
+            expr = new BinOp(EXPR_SRL, oper, expr, parse_unary_expression()); 
+        } else if (match(TK_SRA)) {
+            oper = matched;
+            expr = new BinOp(EXPR_SRA, oper, expr, parse_unary_expression()); 
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_unary_expression() {
     return parse_primary_expression();
 }
 
