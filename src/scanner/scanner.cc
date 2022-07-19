@@ -45,6 +45,10 @@ bool Scanner::lookahead(char c) {
     return has_next() && buffer[idx] == c;
 }
 
+bool Scanner::lookahead(char c, int offset) {
+    return has_next() && buffer[idx + offset] == c;
+}
+
 bool Scanner::is_binary_digit() {
     return buffer[idx] == '0' || buffer[idx] == '1';
 }
@@ -283,7 +287,7 @@ void Scanner::get_number() {
             advance();
         }
 
-        if (lookahead('.')) {
+        if (lookahead('.') && !lookahead('.', 1)) {
             advance();
             kind = TK_LITERAL_DOUBLE;
 

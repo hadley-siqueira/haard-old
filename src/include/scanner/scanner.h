@@ -13,6 +13,7 @@ namespace haard {
         private:
             bool has_next();
             bool lookahead(char c);
+            bool lookahead(char c, int offset);
             bool is_binary_digit();
             bool is_octal_digit();
             bool is_hex_digit();
