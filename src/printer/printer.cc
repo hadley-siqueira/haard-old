@@ -527,6 +527,10 @@ void Printer::print_expression(Expression* expression) {
     case EXPR_HASH_RAW:
         print_hash(exprlist);
         break;
+
+    case EXPR_FUNCTION:
+        print_function_expression((FunctionExpression*) expression);
+        break;
     }
 }
 
@@ -586,6 +590,31 @@ void Printer::print_hash(ExpressionList* hash) {
     if (hash->get_kind() == EXPR_HASH) {
         out << "}";
     }
+}
+
+void Printer::print_function_expression(FunctionExpression* function) {
+    int i;
+    Function* f = function->get_function();
+
+    out << "|";
+
+    if (f->parameters_count() > 0) {
+        for (i = 0; i < f->parameters_count() - 1; ++i) {
+            out << f->get_parameter(i)->get_name();
+            out << ", ";
+        }
+
+        out << f->get_parameter(i)->get_name();
+    }
+
+    out << "| {\n";
+
+    indent();
+    print_compound_statement(f->get_statements());
+    dedent();
+
+    print_indentation();
+    out << "}";
 }
 
 void Printer::indent() {

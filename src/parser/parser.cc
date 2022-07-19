@@ -176,7 +176,7 @@ WhileStatement* Parser::parse_while_statement() {
 CompoundStatement* Parser::parse_compound_statement() {
     CompoundStatement* statements = new CompoundStatement();
 
-    while (is_indentend()) {
+    while (is_indentend() && !lookahead(TK_RIGHT_CURLY_BRACKET)) {
         statements->add_statement(parse_statement());
     }
 
@@ -541,6 +541,49 @@ Expression* Parser::parse_postfix_expression() {
     return expr;
 }
 
+Expression* Parser::parse_anonymous_function() {
+    Token name;
+    Type* type;
+    Variable* var;
+    Function* func = new Function();
+
+    expect(TK_BITWISE_OR);
+
+    if (!lookahead(TK_BITWISE_OR)) {
+        expect(TK_ID);
+        var = new Variable(matched);
+
+        if (match(TK_COLON)) {
+            var->set_type(parse_type());
+        }
+
+        func->add_parameter(var);
+
+        while (match(TK_COMMA)) {
+            expect(TK_ID);
+            var = new Variable(matched);
+
+            if (match(TK_COLON)) {
+                var->set_type(parse_type());
+            }
+
+            func->add_parameter(var);
+        }
+    }
+
+    expect(TK_BITWISE_OR);
+
+    if (match(TK_ARROW)) {
+        func->set_return_type(parse_type());
+    }
+
+    expect(TK_LEFT_CURLY_BRACKET);
+    func->set_statements(parse_compound_statement());
+    expect(TK_RIGHT_CURLY_BRACKET);
+
+    return new FunctionExpression(func);
+}
+
 ExpressionList* Parser::parse_argument_list() {
     ExpressionList* arguments = new ExpressionList(EXPR_ARGS);
 
@@ -586,6 +629,8 @@ Expression* Parser::parse_primary_expression() {
         expr = parse_scope_expression();
     } else if (match(TK_SCOPE)) {
         expr = new UnOp(EXPR_GLOBAL_SCOPE, parse_identifier_expression());
+    } else if (lookahead(TK_BITWISE_OR)) {
+        expr = parse_anonymous_function();
     }
 
     return expr;

@@ -5,12 +5,14 @@ using namespace haard;
 Variable::Variable() {
     line = 0;
     column = 0;
+    type = nullptr;
 }
 
 Variable::Variable(Token& token) {
     name = token.get_lexeme();
     line = token.get_line();
     column = token.get_column();
+    type = nullptr;
 }
 
 Variable::~Variable() {

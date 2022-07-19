@@ -637,7 +637,8 @@ namespace haard {
         EXPR_ARRAY,
         EXPR_HASH,
         EXPR_HASH_RAW,
-        EXPR_HASH_PAIR
+        EXPR_HASH_PAIR,
+        EXPR_FUNCTION
     } ExpressionKind;
 
     typedef enum StatementKind {
