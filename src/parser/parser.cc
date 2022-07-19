@@ -482,6 +482,8 @@ Expression* Parser::parse_primary_expression() {
         expr = parse_parenthesis_or_tuple();
     } else if (lookahead(TK_LEFT_SQUARE_BRACKET)) {
         expr = parse_list_expression();
+    } else if (lookahead(TK_LEFT_CURLY_BRACKET)) {
+        expr = parse_array_or_hash();
     } else if (match(TK_LITERAL_INTEGER)) {
         expr = new Literal(EXPR_LITERAL_INTEGER, matched);
     } else if (match(TK_LITERAL_FLOAT)) {
@@ -541,7 +543,7 @@ Expression* Parser::parse_list_expression() {
     expect(TK_LEFT_SQUARE_BRACKET);
 
     if (!lookahead(TK_RIGHT_SQUARE_BRACKET)) {
-        list = new ExpressionList(EXPR_LIST, parse_expression());
+        list->add_expression(parse_expression());
 
         while (match(TK_COMMA)) {
             if (!lookahead(TK_RIGHT_SQUARE_BRACKET)) {
@@ -551,6 +553,32 @@ Expression* Parser::parse_list_expression() {
     }
 
     expect(TK_RIGHT_SQUARE_BRACKET);
+    return list;
+}
+
+Expression* Parser::parse_array_or_hash() {
+    Expression* expr = nullptr;
+    ExpressionList* list = new ExpressionList(EXPR_ARRAY);
+
+    expect(TK_LEFT_CURLY_BRACKET);
+
+    if (!lookahead(TK_RIGHT_CURLY_BRACKET)) {
+        expr = parse_expression();
+
+        if (expr->get_kind() == EXPR_ID && match(TK_COLON)) {
+            expr = new BinOp(EXPR_HASH_PAIR, matched, expr, parse_expression());
+        } else {
+            list->add_expression(expr);
+
+            while (match(TK_COMMA)) {
+                if (!lookahead(TK_RIGHT_CURLY_BRACKET)) {
+                    list->add_expression(parse_expression());
+                }
+            }
+        }
+    }
+
+    expect(TK_RIGHT_CURLY_BRACKET);
     return list;
 }
 

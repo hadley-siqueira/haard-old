@@ -613,7 +613,10 @@ namespace haard {
         EXPR_LITERAL_SYMBOL,
         EXPR_LITERAL_NULL,
         EXPR_TUPLE,
-        EXPR_LIST
+        EXPR_LIST,
+        EXPR_ARRAY,
+        EXPR_HASH,
+        EXPR_HASH_PAIR
     } ExpressionKind;
 
     typedef enum StatementKind {

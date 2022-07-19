@@ -423,6 +423,10 @@ void Printer::print_expression(Expression* expression) {
     case EXPR_LIST:
         print_expression_list("[", "]", exprlist);
         break;
+
+    case EXPR_ARRAY:
+        print_expression_list("{", "}", exprlist);
+        break;
     }
 }
 
