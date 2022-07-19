@@ -565,8 +565,8 @@ Expression* Parser::parse_array_or_hash() {
     if (!lookahead(TK_RIGHT_CURLY_BRACKET)) {
         expr = parse_expression();
 
-        if (expr->get_kind() == EXPR_ID && match(TK_COLON)) {
-            expr = new BinOp(EXPR_HASH_PAIR, matched, expr, parse_expression());
+        if (expr->get_kind() == EXPR_ID && lookahead(TK_COLON)) {
+            list = parse_hash(expr);
         } else {
             list->add_expression(expr);
 
@@ -580,6 +580,24 @@ Expression* Parser::parse_array_or_hash() {
 
     expect(TK_RIGHT_CURLY_BRACKET);
     return list;
+}
+
+ExpressionList* Parser::parse_hash(Expression* key) {
+    Expression* expr = nullptr;
+    ExpressionList* hash = new ExpressionList(EXPR_HASH);
+
+    expect(TK_COLON);
+    expr = new BinOp(EXPR_HASH_PAIR, key, parse_expression());
+    hash->add_expression(expr);
+
+    while (match(TK_COMMA)) {
+        key = parse_identifier_expression();
+        expect(TK_COLON);
+        expr = new BinOp(EXPR_HASH_PAIR, key, parse_expression());
+        hash->add_expression(expr);
+    }
+
+    return hash;
 }
 
 Expression* Parser::parse_identifier_expression() {

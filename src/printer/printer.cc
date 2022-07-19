@@ -427,6 +427,10 @@ void Printer::print_expression(Expression* expression) {
     case EXPR_ARRAY:
         print_expression_list("{", "}", exprlist);
         break;
+
+    case EXPR_HASH:
+        print_hash(exprlist);
+        break;
     }
 }
 
@@ -460,6 +464,28 @@ void Printer::print_expression_list(std::string begin, std::string end, Expressi
         
     print_expression(tuple->get_expression(i));
     out << end;
+}
+
+void Printer::print_hash(ExpressionList* hash) {
+    BinOp* pair;
+    int i;
+
+    out << "{";
+
+    for (i = 0; i < hash->expressions_count() - 1; ++i) {
+        pair = (BinOp*) hash->get_expression(i);
+        print_expression(pair->get_left());
+        out << ": ";
+        print_expression(pair->get_right());
+        out << ", ";
+    }
+
+    pair = (BinOp*) hash->get_expression(i);
+    print_expression(pair->get_left());
+    out << ": ";
+    print_expression(pair->get_right());
+
+    out << "}";
 }
 
 void Printer::indent() {
