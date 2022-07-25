@@ -19,6 +19,8 @@ namespace haard {
         private:
             Source* parse_source();
             Import* parse_import();
+            Class* parse_class();
+            Variable* parse_class_variable();
             Function* parse_function();
             void parse_parameters(Function* function);
             Type* parse_type();

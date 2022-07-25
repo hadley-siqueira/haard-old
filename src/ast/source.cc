@@ -14,6 +14,10 @@ Source::~Source() {
     for (int i = 0; i < functions.size(); ++i) {
         delete functions[i];
     }
+
+    for (int i = 0; i < classes.size(); ++i) {
+        delete classes[i];
+    }
 }
 
 std::string Source::get_path() {
@@ -36,6 +40,14 @@ Function* Source::get_function(int idx) {
     return nullptr;
 }
 
+Class* Source::get_class(int idx) {
+    if (idx < classes_count()) {
+        return classes[idx];
+    }
+
+    return nullptr;
+}
+
 void Source::set_path(std::string path) {
     this->path = path;
 }
@@ -48,10 +60,18 @@ void Source::add_function(Function* function) {
     functions.push_back(function);
 }
 
+void Source::add_class(Class* klass) {
+    classes.push_back(klass);
+}
+
 int Source::import_count() {
     return imports.size();
 }
 
 int Source::function_count() {
     return functions.size();
+}
+
+int Source::classes_count() {
+    return classes.size();
 }

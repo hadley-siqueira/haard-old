@@ -13,6 +13,7 @@ namespace haard {
             std::string to_str();
             void print_source(Source* source);
             void print_import(Import* import);
+            void print_class(Class* klass);
             void print_function(Function* function);
             void print_parameters(Function* function);
             void print_type(Type* type);

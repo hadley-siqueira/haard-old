@@ -163,3 +163,32 @@ def sum : int
             .map_err(|e| {
                 tracing::error('Failed to execute query', e)
             })
+
+class Player:
+    name : str
+    x    : int
+    y    : int
+
+    def move : void
+        @a : int
+        @b : int
+
+        x = a
+        y = b
+
+    def baz : int
+        v = |a : int, b : int| -> float { a + b }
+        v = {
+            |x, y| { print('Hello') },
+            |x, y| { print('Done') },
+            | | { print('None') },
+            |x, y| { print('Done') }(2, 3)
+        }
+
+
+        sql::query()
+            .execute(transaction)
+            .await
+            .map_err(|e| {
+                tracing::error('Failed to execute query', e)
+            })

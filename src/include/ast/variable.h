@@ -22,6 +22,7 @@ namespace haard {
             void set_column(int column);
             void set_name(std::string name);
             void set_type(Type* type);
+            void set_from_token(Token& token);
 
         private:
             int line;

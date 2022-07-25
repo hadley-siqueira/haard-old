@@ -26,6 +26,11 @@ void Printer::print_source(Source* source) {
         print_function(source->get_function(i));
         out << '\n';
     }
+
+    for (int i = 0;i < source->classes_count(); ++i) {
+        print_class(source->get_class(i));
+        out << '\n';
+    }
 }
             
 void Printer::print_import(Import* import) {
@@ -45,7 +50,39 @@ void Printer::print_import(Import* import) {
         out << " as " << import->get_alias();
     }
 }
-            
+
+void Printer::print_class(Class* klass) {
+    Variable* var;
+
+    print_indentation();
+
+    out << "class " << klass->get_name() << ":\n";
+    indent();
+
+    if (klass->variables_count() > 0) {
+        for (int i = 0; i < klass->variables_count(); ++i) {
+            print_indentation();
+            var = klass->get_variable(i);
+            out << var->get_name() << " : ";
+            print_type(var->get_type());
+            out << '\n';        
+        }
+
+        out << '\n';
+    }
+
+    if (klass->methods_count() > 0) {
+        for (int i = 0; i < klass->methods_count(); ++i) {
+            print_function(klass->get_method(i));
+            out << '\n';
+        }
+
+        out << '\n';
+    }
+
+    dedent();
+}
+
 void Printer::print_function(Function* function) {
     print_indentation();
 

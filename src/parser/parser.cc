@@ -27,6 +27,8 @@ Source* Parser::parse_source() {
             source->add_import(parse_import());
         } else if (lookahead(TK_DEF)) {
             source->add_function(parse_function());
+        } else if (lookahead(TK_CLASS)) {
+            source->add_class(parse_class());
         } else {
             break;
         }
@@ -61,7 +63,55 @@ Import* Parser::parse_import() {
 
     return import;
 }
-            
+
+Class* Parser::parse_class() {
+    Token name;
+    Class* klass = new Class();
+
+    expect(TK_CLASS);
+    expect(TK_ID);
+    klass->set_from_token(matched);
+
+    /*if (lookahead(TK_BEGIN_TEMPLATE)) {
+        klass->set_template_list(parse_template_list());
+    }*/
+
+    if (match(TK_LEFT_PARENTHESIS)) {
+        klass->set_parent(parse_type());
+        expect(TK_RIGHT_PARENTHESIS);
+    }
+
+    expect(TK_COLON);
+    indent();
+
+    while (is_indentend()) {
+        if (lookahead(TK_DEF)) {
+            klass->add_method(parse_function());
+        } else if (lookahead(TK_ID)){
+            klass->add_variable(parse_class_variable());
+        } else {
+            break;
+        }
+    }
+
+    dedent();
+
+    return klass;
+
+}
+
+Variable* Parser::parse_class_variable() {
+    Variable* var = new Variable();
+
+    expect(TK_ID);
+    var->set_from_token(matched);
+
+    expect(TK_COLON);
+    var->set_type(parse_type());
+
+    return var;
+}
+
 Function* Parser::parse_function() {
     Function* function = new Function();
 

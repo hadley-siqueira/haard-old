@@ -50,3 +50,9 @@ void Variable::set_name(std::string name) {
 void Variable::set_type(Type* type) {
     this->type = type;
 }
+
+void Variable::set_from_token(Token& token) {
+    line = token.get_line();
+    column = token.get_column();
+    name = token.get_lexeme();
+}

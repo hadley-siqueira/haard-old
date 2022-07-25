@@ -1,0 +1,46 @@
+#ifndef HAARD_AST_CLASS_H
+#define HAARD_AST_CLASS_H
+
+#include <vector>
+#include "token/token.h"
+#include "ast/function.h"
+#include "ast/variable.h"
+#include "ast/type.h"
+
+namespace haard {
+    class Class {
+        public:
+            Class();
+            ~Class();
+
+        public:
+            std::string get_name();
+            int get_line();
+            int get_column();
+            Function* get_method(int idx);
+            Variable* get_variable(int idx);
+            Type* get_parent();
+
+            void set_from_token(Token& token);
+            void set_name(std::string name);
+            void set_line(int line);
+            void set_column(int column);
+            void set_parent(Type* type);
+
+            void add_method(Function* method);
+            void add_variable(Variable* var);
+
+            int methods_count();
+            int variables_count();
+
+        private:
+            std::string name;
+            int line;
+            int column;
+            Type* parent;
+            std::vector<Function*> methods;
+            std::vector<Variable*> variables;
+    };
+}
+
+#endif
