@@ -262,28 +262,28 @@ void Scanner::get_number() {
         if (lookahead('b')) {
             advance();
 
-            while (is_binary_digit()) {
+            while (is_binary_digit() || lookahead('_')) {
                 advance();
             }
         } else if (lookahead('o')) {
             advance();
 
-            while (is_octal_digit()) {
+            while (is_octal_digit() || lookahead('_')) {
                 advance();
             }
         } else if (lookahead('x')) {
             advance(); 
 
-            while (is_hex_digit()) {
+            while (is_hex_digit() || lookahead('_')) {
                 advance();
             }
         } else {
-            while (is_octal_digit()) {
+            while (is_octal_digit() || lookahead('_')) {
                 advance();
             }
         }
     } else {
-        while (is_num()) {
+        while (is_num() || lookahead('_')) {
             advance();
         }
 

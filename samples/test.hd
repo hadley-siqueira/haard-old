@@ -192,3 +192,5 @@ class Player:
             .map_err(|e| {
                 tracing::error('Failed to execute query', e)
             })
+
+        f = 1000_0001_2201

@@ -1,0 +1,10 @@
+def main : void
+    mask = 0011_1101_0010
+    mask = 0b0011_1101_0010
+    mstr = 'Hello, world!'
+    mflag = true
+    mflag = false
+    mch = 'a'
+    mptr = null
+    msym = :post
+    mip = 10_163_1_83
