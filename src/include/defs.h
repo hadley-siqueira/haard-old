@@ -645,7 +645,10 @@ namespace haard {
         STMT_UNKNOWN,
         STMT_EXPRESSION,
         STMT_WHILE,
-        STMT_COMPOUND
+        STMT_COMPOUND,
+        STMT_IF,
+        STMT_ELIF,
+        STMT_ELSE
     } StatementKind;
 }
 

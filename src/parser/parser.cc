@@ -203,6 +203,8 @@ Statement* Parser::parse_statement() {
 
     if (lookahead(TK_WHILE)) {
         stmt = parse_while_statement();
+    } else if (lookahead(TK_IF)) {
+        stmt = parse_if_statement();
     } else {
         stmt = new ExpressionStatement(parse_expression());
     }
@@ -218,6 +220,69 @@ WhileStatement* Parser::parse_while_statement() {
     expect(TK_COLON);
     indent();
     stmt->set_statements(parse_compound_statement());
+    dedent();
+
+    return stmt;
+}
+
+BranchStatement* Parser::parse_if_statement() {
+    Token token;
+    Expression* expression;
+    CompoundStatement* statements;
+    BranchStatement* stmt = new BranchStatement(STMT_IF);
+
+    expect(TK_IF);
+    stmt->set_condition(parse_expression());
+
+    expect(TK_COLON);
+    indent();
+    stmt->set_true_statements(parse_compound_statement());
+    dedent();
+
+    if (lookahead(TK_ELIF)) {
+        stmt->set_false_statements(parse_elif_statement());
+    } else if (lookahead(TK_ELSE)) {
+        stmt->set_false_statements(parse_else_statement());
+    }
+
+    return stmt;
+}
+
+BranchStatement* Parser::parse_elif_statement() {
+    Token token;
+    Expression* expression;
+    CompoundStatement* statements;
+    BranchStatement* stmt = new BranchStatement(STMT_ELIF);
+
+    expect(TK_ELIF);
+    token = matched;
+    expression = parse_expression();
+
+    expect(TK_COLON);
+    indent();
+    stmt->set_true_statements(parse_compound_statement());
+    dedent();
+
+    if (lookahead(TK_ELIF)) {
+        stmt->set_false_statements(parse_elif_statement());
+    } else if (lookahead(TK_ELSE)) {
+        stmt->set_false_statements(parse_else_statement());
+    }
+
+    return stmt;
+}
+
+BranchStatement* Parser::parse_else_statement() {
+    Token token;
+    CompoundStatement* statements;
+    BranchStatement* stmt = new BranchStatement(STMT_ELSE);
+
+    expect(TK_ELSE);
+    token = matched;
+
+    expect(TK_COLON);
+    indent();
+    stmt->set_true_statements(parse_compound_statement());
     dedent();
 
     return stmt;

@@ -26,6 +26,9 @@ namespace haard {
             Type* parse_type();
             Statement* parse_statement();
             WhileStatement* parse_while_statement();
+            BranchStatement* parse_if_statement();
+            BranchStatement* parse_elif_statement();
+            BranchStatement* parse_else_statement();
             CompoundStatement* parse_compound_statement();
 
             Expression* parse_expression();
