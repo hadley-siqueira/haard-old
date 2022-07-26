@@ -1,0 +1,64 @@
+def main : void
+    args.each do (arg):
+        print(arg)
+
+    args.each do |arg|:
+        print(arg)
+
+    args.each do |arg|
+        print(arg)
+
+    scope "(:locale") do:
+        resources :exams
+        get 'exams/new/:schedule_id', to: 'exams#new', as: 'create_exame'
+
+    def show : void
+        parts = params[:id].split('-')
+        @user = User.find(Exam.decode(parts[0])
+
+        respond_to do (ttype):
+            ttype.html { redirect_to 'errors/errors_404', status: 404 }
+            ttype.json { render nothing: true, status: 404 }
+
+            ttype.html -> redirect_to 'errors/errors_404', status: 404
+            ttype.json -> render nothing: true, status: 404
+
+        @exam_apply = ExamApply.new
+
+        respond_to do (format):
+            if @exam.save:
+                format.html { redirect_to exams_url, notice: 'Exam...' }
+                format.json { render :show, status: :created, location: @exam }
+                format.html {
+                    if ...
+                        while ...
+                }
+
+                format.html -> |a, b| {
+
+                }
+            else:
+                format.html { render :new, status: :unprocessable_entity }
+                format.json { render :json, @exam.errors, status: :unprocessable_entity }
+                v.foo {1, 2, 3}          # v.foo({1, 2, 3})
+                v.foo {key: value}, :sym # v.foo({key: value}, :sym)
+                v.foo { print() }        # v.foo(| | { print() })
+
+
+class MyApp
+  # ...
+
+  class << self
+    def config
+      @config ||= Configuration.new
+    end
+
+    def configure
+      yield config
+    end
+  end
+
+  class Configuration
+    attr_accessor :app_id, :title, :cookie_name
+  end
+end

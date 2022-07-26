@@ -3,3 +3,50 @@ def main : void
         print('a > 0')
     else:
         print('!(a > 0)')
+
+        while flag:
+            if cond:
+                a = 0
+
+                obj.success(|a| {
+                    print('done!')
+                }).error(|err| {
+                    if err.kind == NONE:
+                        print('no error! my mistake')
+                })
+            if cond2:
+                print('cond2')
+                a = a + 1
+            a = 0
+   
+    if a > 0:
+        print('a > 0')
+    elif a == 0:
+        obj.success(|a| {
+            print('done!')
+        }).error(|err| {
+            if err.kind == NONE:
+                print('no error! my mistake')
+
+                while true:
+                    exit()
+            else:
+                exit()
+        })
+    else:
+        print('!(a > 0)')
+
+        while flag:
+            if cond:
+                a = 0
+
+                obj.success(|a| {
+                    print('done!')
+                }).error(|err| {
+                    if err.kind == NONE:
+                        print('no error! my mistake')
+                })
+            if cond2:
+                print('cond2')
+                a = a + 1
+            a = 0

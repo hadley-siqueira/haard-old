@@ -256,6 +256,12 @@ void Printer::print_statement(Statement* statement) {
     case STMT_EXPRESSION:
         print_expression_statement((ExpressionStatement*) statement);
         break;
+
+    case STMT_IF:
+    case STMT_ELIF:
+    case STMT_ELSE:
+        print_branch_statement((BranchStatement*) statement);
+        break;
     }
 }
 
@@ -267,6 +273,52 @@ void Printer::print_while_statement(WhileStatement* statement) {
     indent();
     print_compound_statement(statement->get_statements());
     dedent();
+}
+
+void Printer::print_branch_statement(BranchStatement* statement) {
+    int kind;
+
+    kind = statement->get_kind();
+    print_indentation();
+
+    switch (kind) {
+    case STMT_IF:
+        out << "if ";
+        print_expression(statement->get_condition());
+        out << ":\n";
+        indent();
+        print_statement(statement->get_true_statements());
+        dedent();
+
+        if (statement->get_false_statements() != nullptr) {
+            print_statement(statement->get_false_statements());
+        }
+
+        break;
+
+    case STMT_ELIF:
+        out << "elif ";
+        print_expression(statement->get_condition());
+        out << ":\n";
+        indent();
+        print_statement(statement->get_true_statements());
+        dedent();
+
+        if (statement->get_false_statements() != nullptr) {
+            print_statement(statement->get_false_statements());
+        }
+
+        break;
+
+    case STMT_ELSE:
+        out << "else:\n";
+        indent();
+        print_statement(statement->get_true_statements());
+        dedent();
+
+        break;
+
+    }
 }
 
 void Printer::print_compound_statement(CompoundStatement* statement) {
