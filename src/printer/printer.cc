@@ -12,6 +12,12 @@ std::string Printer::to_str() {
     return out.str();
 }
 
+void Printer::print_sources(Sources* sources) {
+    for (int i = 0; i < sources->sources_count(); ++i) {
+        print_source(sources->get_source(i));
+    }
+}
+
 void Printer::print_source(Source* source) {
     if (source->import_count() > 0) {
         for (int i = 0; i < source->import_count(); ++i) {

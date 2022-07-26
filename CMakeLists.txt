@@ -18,6 +18,7 @@ set(PARSER_SRC
 )
 
 set(AST_SRC
+    src/ast/sources.cc
     src/ast/source.cc
     src/ast/import.cc
     src/ast/class.cc

@@ -1,0 +1,4 @@
+import player
+
+def main : void
+    i = 0

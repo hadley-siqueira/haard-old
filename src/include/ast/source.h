@@ -8,6 +8,8 @@
 #include "ast/function.h"
 
 namespace haard {
+    class Import;
+
     class Source {
         public:
             Source();

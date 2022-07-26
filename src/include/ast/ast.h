@@ -1,6 +1,7 @@
 #ifndef HAARD_AST_H
 #define HAARD_AST_H
 
+#include "ast/sources.h"
 #include "ast/source.h"
 #include "ast/import.h"
 #include "ast/class.h"

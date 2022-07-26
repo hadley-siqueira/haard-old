@@ -6,6 +6,7 @@
 #include "defs.h"
 #include "ast/ast.h"
 #include "printer/printer.h"
+#include "driver/driver.h"
 
 using namespace haard;
 
@@ -30,9 +31,16 @@ void test_parser(std::string path) {
     delete src;
 }
 
+void test_driver(int argc, char* argv[]) {
+    Driver driver;
+
+    driver.set_flags(argc, argv);
+    driver.run();
+}
+
 int main(int argc, char* argv[]) {
     // test_scanner(argv[1]);
-    test_parser(argv[1]);   
+    test_driver(argc, argv);   
 
     return 0;
 }

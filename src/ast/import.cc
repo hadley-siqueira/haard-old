@@ -3,6 +3,10 @@
 
 using namespace haard;
 
+Import::Import() {
+    source = nullptr;
+}
+
 int Import::get_line() {
     return line;
 }
@@ -21,6 +25,10 @@ std::vector<std::string> Import::get_path() {
             
 std::string Import::get_path(int idx) {
     return path[idx];
+}
+
+Source* Import::get_source() {
+    return source;
 }
 
 void Import::set_line(int line) {
@@ -42,6 +50,10 @@ void Import::set_path(std::vector<std::string> path) {
 void Import::set_from_token(Token& token) {
     line = token.get_line();
     column = token.get_column();
+}
+
+void Import::set_source(Source* source) {
+    this->source = source;
 }
 
 void Import::add_to_path(std::string s) {
