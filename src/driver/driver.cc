@@ -26,6 +26,7 @@ void Driver::run() {
     configure_search_path();
     parse_sources();
     print_sources();
+    print_information();
 /*    run_flags();
     parse_program();
     build_scopes();
@@ -50,6 +51,17 @@ void Driver::set_flags(int argc, char* argv[]) {
     }
 }
 
+void Driver::print_information() {
+    std::cout << "Compiler information:\n";
+    std::cout << " - Main file: " << main_path << std::endl;
+    std::cout << " - Root path: " << root_path << std::endl;
+
+    std::cout << " - Search path:\n";
+
+    for (int i = 0; i < search_path.size(); ++i) {
+        std::cout << "\t\"" << search_path[i] << '"' << std::endl;
+    }
+}
 void Driver::parse_sources() {
     parse_imports(parse_file(main_path));
 }
@@ -129,6 +141,7 @@ std::string Driver::build_import_path(Import* import) {
 
     return str;
 }
+
 bool Driver::file_exists(std::string path) {
     std::ifstream f(path.c_str());
     return f.good();

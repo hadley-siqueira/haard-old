@@ -1,3 +1,4 @@
+import std.io
 import player
 
 def main : void

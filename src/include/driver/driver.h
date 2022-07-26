@@ -23,6 +23,7 @@ namespace haard {
             void parse_imports(Source* file);
             void parse_import(Import* import);
             void parse_simple_import(Import* import);
+            void print_information();
             Source* parse_file(std::string path);
             void print_sources();
             std::string build_import_path(Import* import);
