@@ -2,21 +2,29 @@ def main : void
     args.each do (arg):
         print(arg)
 
-    args.each do |arg|:
-        print(arg)
-
-    args.each do |arg|
-        print(arg)
-
-    scope "(:locale") do:
+    v = scope[idx].foobar() do:
         resources :exams
         get 'exams/new/:schedule_id', to: 'exams#new', as: 'create_exame'
+
+    scope "(:locale)" do:
+        resources :exams
+        get 'exams/new/:schedule_id', to: 'exams#new', as: 'create_exame'
+
+    scope("(:locale)", -> {
+        resources(:exams)
+        get('exams/new/:schedule_id', to: 'exams#new', as: 'create_exam')
+    })
+
+    puts [22, 21, 19, 11, 51,31].select { |number| number.odd? }
+    puts {22, 21, 19, 11, 51, 31}.select { |number| number.odd? }
+
+    puts {22, 21, 19, 11, 51, 31}.select(|number| { number.odd? })
 
     def show : void
         parts = params[:id].split('-')
         @user = User.find(Exam.decode(parts[0])
 
-        respond_to do (ttype):
+        respond_to 'scope' do (ttype):
             ttype.html { redirect_to 'errors/errors_404', status: 404 }
             ttype.json { render nothing: true, status: 404 }
 

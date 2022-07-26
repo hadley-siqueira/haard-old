@@ -1,0 +1,5 @@
+struct Packet:
+    header : i8[3]
+    values : i32[10]
+    next   : Packet*
+    
