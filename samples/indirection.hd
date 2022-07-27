@@ -1,0 +1,9 @@
+def main : void
+    @a : int*
+    @b : float**
+    @c : bool&
+
+    a = 0
+    b = a + 1
+
+

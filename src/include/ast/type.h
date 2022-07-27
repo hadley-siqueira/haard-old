@@ -20,7 +20,7 @@ namespace haard {
             void set_line(int line);
             void set_column(int column);
 
-        private:
+        protected:
             int kind;
             int line;
             int column;

@@ -122,6 +122,7 @@ void Printer::print_parameters(Function* function) {
 
 void Printer::print_type(Type* type) {
     int kind = type->get_kind();
+    IndirectionType* pr = (IndirectionType*) type;
 
     switch (kind) {
     case TYPE_U8:
@@ -216,14 +217,6 @@ void Printer::print_type(Type* type) {
         out << "named";
         break;
 
-    case TYPE_POINTER:
-        out << "*";
-        break;
-
-    case TYPE_REFERENCE:
-        out << "&";
-        break;
-
     case TYPE_ARRAY:
         out << "[]";
         break;
@@ -234,6 +227,16 @@ void Printer::print_type(Type* type) {
 
     case TYPE_FUNCTION:
         out << "->";
+        break;
+
+    case TYPE_POINTER:
+        print_type(pr->get_subtype());
+        out << "*";
+        break;
+
+    case TYPE_REFERENCE:
+        print_type(pr->get_subtype());
+        out << "&";
         break;
 
     default:

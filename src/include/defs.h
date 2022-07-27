@@ -560,7 +560,8 @@ namespace haard {
         TYPE_REFERENCE,
         TYPE_ARRAY,
         TYPE_HASH,
-        TYPE_FUNCTION
+        TYPE_FUNCTION,
+        TYPE_TUPLE
     } TypeKind;
 
     typedef enum ExpressionKind {

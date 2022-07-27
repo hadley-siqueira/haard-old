@@ -8,6 +8,7 @@
 #include "ast/function.h"
 #include "ast/variable.h"
 #include "ast/type.h"
+#include "ast/indirection_type.h"
 
 // Expressions
 #include "ast/expression.h"

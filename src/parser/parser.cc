@@ -147,6 +147,8 @@ void Parser::parse_parameters(Function* function) {
 }
 
 Type* Parser::parse_type() {
+    Token token;
+    Expression* expr = nullptr;
     Type* type = nullptr;
 
     if (match(TK_INT)) {
@@ -193,6 +195,30 @@ Type* Parser::parse_type() {
         type = new Type(TYPE_U32, matched);
     } else if (match(TK_U64)) {
         type = new Type(TYPE_U64, matched);
+    } else if (lookahead(TK_ID) || lookahead(TK_SCOPE)) {
+        //type = new NamedType(parse_scope_expression());
+    }
+
+    while (type != nullptr) {
+        if (match(TK_TIMES)) {
+            type = new IndirectionType(TYPE_POINTER, matched, type);
+        } else if (match(TK_POWER)) {
+            type = new IndirectionType(TYPE_POINTER, matched, type);
+            type = new IndirectionType(TYPE_POINTER, matched, type);
+        } else if (match(TK_BITWISE_AND)) {
+            type = new IndirectionType(TYPE_REFERENCE, matched, type);
+        } else if (match(TK_LEFT_SQUARE_BRACKET)) {
+            token = matched;
+
+            if (!lookahead(TK_RIGHT_SQUARE_BRACKET)) {
+                expr = parse_expression();
+            }
+
+            expect(TK_RIGHT_SQUARE_BRACKET);
+         //   type = new ArrayType(matched, type, expr);
+        } else {
+            break;
+        }
     }
 
     return type;
