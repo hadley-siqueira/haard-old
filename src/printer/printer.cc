@@ -259,6 +259,11 @@ void Printer::print_type(Type* type) {
         out << "&";
         break;
 
+    case TYPE_PARENTHESIS:
+        out << "(";
+        print_type(pr->get_subtype());
+        out << ")";
+
     default:
         break;
     }

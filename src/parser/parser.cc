@@ -210,6 +210,9 @@ Type* Parser::parse_type() {
         expect(TK_COLON);
         type = new HashType(matched, type, parse_type());
         expect(TK_RIGHT_CURLY_BRACKET);
+    } else if (match(TK_LEFT_PARENTHESIS)) {
+        type = new IndirectionType(TYPE_PARENTHESIS, matched, parse_type());
+        expect(TK_RIGHT_PARENTHESIS);
     }
 
     while (type != nullptr) {

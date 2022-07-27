@@ -8,6 +8,7 @@ def main : void
     @f : [int**]*[]
     #@g : int -> int
     @h : {str : int}
+    @h : {str : ([int])*}
     #@b : int * int * float # tuple
     #@b : int -> int -> int
     #@b : int | str 
