@@ -157,10 +157,10 @@ Type* Parser::parse_function_type() {
 
     if (match(TK_ARROW)) {
         token = matched;
-        ftype = new TypeList(TYPE_FUNCTION, token, type, parse_type());
+        ftype = new TypeList(TYPE_FUNCTION, token, type, parse_tuple_type());
 
         while (match(TK_ARROW)) {
-            ftype->add_type(parse_type());
+            ftype->add_type(parse_tuple_type());
         }
 
         type = ftype;
@@ -170,7 +170,22 @@ Type* Parser::parse_function_type() {
 }
 
 Type* Parser::parse_tuple_type() {
-    return parse_union_type();
+    Token token;
+    TypeList* ftype = nullptr;
+    Type* type = parse_union_type();
+
+    if (match(TK_COMMA)) {
+        token = matched;
+        ftype = new TypeList(TYPE_TUPLE, token, type, parse_union_type());
+
+        while (match(TK_COMMA)) {
+            ftype->add_type(parse_union_type());
+        }
+
+        type = ftype;
+    }
+
+    return type;
 }
 
 Type* Parser::parse_union_type() {

@@ -4,8 +4,14 @@ using namespace haard;
 
 TypeList::TypeList(int kind, Token& token, Type* t1, Type* t2) {
     this->kind = kind;
-    types.push_back(t1);
-    types.push_back(t2);
+
+    if (t1 != nullptr) {
+        types.push_back(t1);
+    }
+
+    if (t2 != nullptr) {
+        types.push_back(t2);
+    }
 
     line = token.get_line();
     column = token.get_column();

@@ -9,8 +9,9 @@ def main : void
     @g : int -> int
     @h : {str : int}
     @h : {str : ([int])*}
-    #@b : int * int * float # tuple
+    @b : int , int , float # tuple
     @b : int -> int -> int
+    @f : (int, int) -> str
     #@b : int | str 
 
     a = 0

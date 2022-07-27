@@ -248,7 +248,11 @@ void Printer::print_type(Type* type) {
         break;
 
     case TYPE_FUNCTION:
-        print_type_list("->", tl);
+        print_type_list(" -> ", tl);
+        break;
+
+    case TYPE_TUPLE:
+        print_type_list(", ", tl);
         break;
 
     case TYPE_POINTER:
@@ -276,7 +280,7 @@ void Printer::print_type_list(std::string oper, TypeList* tlist) {
 
     for (i = 0; i < tlist->types_count() - 1; ++i) {
         print_type(tlist->get_type(i));
-        out << " " << oper << " ";
+        out << oper;
     }
 
     print_type(tlist->get_type(i));

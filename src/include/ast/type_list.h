@@ -8,7 +8,7 @@
 namespace haard {
     class TypeList : public Type {
         public:
-            TypeList(int kind, Token& token, Type* t1, Type* t2);
+            TypeList(int kind, Token& token, Type* t1=nullptr, Type* t2=nullptr);
             ~TypeList();
 
         public:
