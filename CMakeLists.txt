@@ -35,6 +35,7 @@ set(AST_SRC
     src/ast/statement.cc
     src/ast/while_statement.cc
     src/ast/branch_statement.cc
+    src/ast/jump_statement.cc
     src/ast/compound_statement.cc
     src/ast/expression_statement.cc
 )

@@ -205,6 +205,16 @@ Statement* Parser::parse_statement() {
         stmt = parse_while_statement();
     } else if (lookahead(TK_IF)) {
         stmt = parse_if_statement();
+    } else if (lookahead(TK_RETURN)) {
+        stmt = parse_jump_statement(TK_RETURN, STMT_RETURN);
+    } else if (lookahead(TK_YIELD)) {
+        stmt = parse_jump_statement(TK_YIELD, STMT_YIELD);
+    } else if (lookahead(TK_CONTINUE)) {
+        stmt = parse_jump_statement(TK_CONTINUE, STMT_CONTINUE);
+    } else if (lookahead(TK_GOTO)) {
+        stmt = parse_jump_statement(TK_GOTO, STMT_GOTO);
+    } else if (lookahead(TK_BREAK)) {
+        stmt = parse_jump_statement(TK_BREAK, STMT_BREAK);
     } else {
         stmt = new ExpressionStatement(parse_expression());
     }
@@ -284,6 +294,17 @@ BranchStatement* Parser::parse_else_statement() {
     indent();
     stmt->set_true_statements(parse_compound_statement());
     dedent();
+
+    return stmt;
+}
+
+JumpStatement* Parser::parse_jump_statement(int tkind, int skind) {
+    JumpStatement* stmt = new JumpStatement(skind);
+    expect(tkind);
+
+    if (next_token_same_line()) {
+        stmt->set_expression(parse_expression());
+    }
 
     return stmt;
 }
@@ -906,6 +927,10 @@ bool Parser::lookahead(int kind, int offset) {
 
 bool Parser::is_indentend() {
     return tokens[idx].get_whitespace() > indent_stack.top();
+}
+
+bool Parser::next_token_same_line() {
+    return matched.get_line() == tokens[idx].get_line();
 }
 
 bool Parser::has_parameters() {

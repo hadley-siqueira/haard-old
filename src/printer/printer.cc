@@ -262,6 +262,28 @@ void Printer::print_statement(Statement* statement) {
     case STMT_ELSE:
         print_branch_statement((BranchStatement*) statement);
         break;
+
+    case STMT_RETURN:
+        print_jump_statement("return", (JumpStatement*) statement);
+        break;
+
+    case STMT_GOTO:
+        print_jump_statement("goto", (JumpStatement*) statement);
+        break;
+
+    case STMT_YIELD:
+        print_jump_statement("yield", (JumpStatement*) statement);
+        break;
+
+    case STMT_CONTINUE:
+        print_jump_statement("continue", (JumpStatement*) statement);
+        break;
+
+    case STMT_BREAK:
+        print_jump_statement("break", (JumpStatement*) statement);
+        break;
+
+
     }
 }
 
@@ -319,6 +341,18 @@ void Printer::print_branch_statement(BranchStatement* statement) {
         break;
 
     }
+}
+
+void Printer::print_jump_statement(std::string op, JumpStatement* statement) {
+    print_indentation();
+    out << op;
+
+    if (statement->get_expression() != nullptr) {
+        out << ' ';
+        print_expression(statement->get_expression());
+    }
+
+    out << '\n';
 }
 
 void Printer::print_compound_statement(CompoundStatement* statement) {

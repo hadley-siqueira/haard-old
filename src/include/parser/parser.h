@@ -29,6 +29,7 @@ namespace haard {
             BranchStatement* parse_if_statement();
             BranchStatement* parse_elif_statement();
             BranchStatement* parse_else_statement();
+            JumpStatement* parse_jump_statement(int tkind, int skind);
             CompoundStatement* parse_compound_statement();
 
             Expression* parse_expression();
@@ -62,6 +63,7 @@ namespace haard {
             bool lookahead(int kind);
             bool lookahead(int kind, int offset);
             bool is_indentend();
+            bool next_token_same_line();
             bool has_parameters();
             void indent();
             void dedent();

@@ -22,6 +22,7 @@
 #include "ast/statement.h"
 #include "ast/while_statement.h"
 #include "ast/branch_statement.h"
+#include "ast/jump_statement.h"
 #include "ast/expression_statement.h"
 #include "ast/compound_statement.h"
 

@@ -1,0 +1,18 @@
+def main : void
+    return 0
+    yield 0
+    goto L0
+    break 2
+    continue 3
+
+    return
+    yield
+    goto L0
+    break
+    continue
+
+    while flag:
+        if cond:
+            break
+            continue
+            return obj.method()

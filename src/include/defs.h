@@ -648,7 +648,12 @@ namespace haard {
         STMT_COMPOUND,
         STMT_IF,
         STMT_ELIF,
-        STMT_ELSE
+        STMT_ELSE,
+        STMT_RETURN,
+        STMT_GOTO,
+        STMT_YIELD,
+        STMT_CONTINUE,
+        STMT_BREAK
     } StatementKind;
 }
 
