@@ -11,8 +11,6 @@ namespace haard {
             ~IndirectionType();
 
         public:
-            int get_line();
-            int get_column();
             Type* get_subtype();
 
         private:

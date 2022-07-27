@@ -26,6 +26,7 @@ set(AST_SRC
     src/ast/variable.cc
     src/ast/type.cc
     src/ast/indirection_type.cc
+    src/ast/array_list_type.cc
     src/ast/expression.cc
     src/ast/identifier.cc
     src/ast/unop.cc

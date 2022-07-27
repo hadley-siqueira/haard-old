@@ -123,6 +123,7 @@ void Printer::print_parameters(Function* function) {
 void Printer::print_type(Type* type) {
     int kind = type->get_kind();
     IndirectionType* pr = (IndirectionType*) type;
+    ArrayListType* al = (ArrayListType*) type;
 
     switch (kind) {
     case TYPE_U8:
@@ -218,7 +219,21 @@ void Printer::print_type(Type* type) {
         break;
 
     case TYPE_ARRAY:
-        out << "[]";
+        print_type(al->get_subtype());
+
+        out << "[";
+
+        if (al->get_expression() != nullptr) {
+            print_expression(al->get_expression());
+        }
+
+        out << "]";
+        break;
+
+    case TYPE_LIST:
+        out << "[";
+        print_type(al->get_subtype());
+        out << "]";
         break;
 
     case TYPE_HASH:

@@ -2,6 +2,10 @@ def main : void
     @a : int*
     @b : float**
     @c : bool&
+    @d : int[]
+    @e : int[MAX_SIZE]
+    @f : [int]
+    @f : [int**]*[]
 
     a = 0
     b = a + 1

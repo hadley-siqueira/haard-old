@@ -14,14 +14,6 @@ IndirectionType::~IndirectionType() {
     delete subtype;
 }
 
-int IndirectionType::get_line() {
-    return line;
-}
-
-int IndirectionType::get_column() {
-    return column;
-}
-
 Type* IndirectionType::get_subtype() {
     return subtype;
 }

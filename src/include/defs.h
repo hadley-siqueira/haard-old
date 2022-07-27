@@ -559,6 +559,7 @@ namespace haard {
         TYPE_POINTER,
         TYPE_REFERENCE,
         TYPE_ARRAY,
+        TYPE_LIST,
         TYPE_HASH,
         TYPE_FUNCTION,
         TYPE_TUPLE

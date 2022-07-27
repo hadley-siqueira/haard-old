@@ -197,6 +197,12 @@ Type* Parser::parse_type() {
         type = new Type(TYPE_U64, matched);
     } else if (lookahead(TK_ID) || lookahead(TK_SCOPE)) {
         //type = new NamedType(parse_scope_expression());
+    } else if (match(TK_LEFT_SQUARE_BRACKET)) {
+        token = matched;
+
+        type = parse_type();
+        expect(TK_RIGHT_SQUARE_BRACKET);
+        type = new ArrayListType(TYPE_LIST, matched, type);
     }
 
     while (type != nullptr) {
@@ -215,7 +221,7 @@ Type* Parser::parse_type() {
             }
 
             expect(TK_RIGHT_SQUARE_BRACKET);
-         //   type = new ArrayType(matched, type, expr);
+            type = new ArrayListType(TYPE_ARRAY, matched, type, expr);
         } else {
             break;
         }
