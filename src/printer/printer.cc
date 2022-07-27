@@ -255,6 +255,10 @@ void Printer::print_type(Type* type) {
         print_type_list(", ", tl);
         break;
 
+    case TYPE_UNION:
+        print_type_list(" | ", tl);
+        break;
+
     case TYPE_POINTER:
         print_type(pr->get_subtype());
         out << "*";

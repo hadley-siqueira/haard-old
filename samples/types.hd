@@ -12,7 +12,8 @@ def main : void
     @b : int , int , float # tuple
     @b : int -> int -> int
     @f : (int, int) -> str
-    #@b : int | str 
+    @b : int | str 
+    @b : int | str | u8
 
     a = 0
     b = a + 1

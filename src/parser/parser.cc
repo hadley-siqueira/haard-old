@@ -189,7 +189,22 @@ Type* Parser::parse_tuple_type() {
 }
 
 Type* Parser::parse_union_type() {
-    return parse_primary_type();
+    Token token;
+    TypeList* ftype = nullptr;
+    Type* type = parse_primary_type();
+
+    if (match(TK_BITWISE_OR)) {
+        token = matched;
+        ftype = new TypeList(TYPE_UNION, token, type, parse_primary_type());
+
+        while (match(TK_BITWISE_OR)) {
+            ftype->add_type(parse_primary_type());
+        }
+
+        type = ftype;
+    }
+
+    return type;
 }
 
 Type* Parser::parse_primary_type() {
