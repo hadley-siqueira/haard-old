@@ -10,6 +10,7 @@
 #include "ast/type.h"
 #include "ast/indirection_type.h"
 #include "ast/array_list_type.h"
+#include "ast/hash_type.h"
 
 // Expressions
 #include "ast/expression.h"

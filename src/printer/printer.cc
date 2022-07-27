@@ -124,6 +124,7 @@ void Printer::print_type(Type* type) {
     int kind = type->get_kind();
     IndirectionType* pr = (IndirectionType*) type;
     ArrayListType* al = (ArrayListType*) type;
+    HashType* hs = (HashType*) type;
 
     switch (kind) {
     case TYPE_U8:
@@ -237,7 +238,11 @@ void Printer::print_type(Type* type) {
         break;
 
     case TYPE_HASH:
-        out << "{}";
+        out << "{";
+        print_type(hs->get_key_type());
+        out << " : ";
+        print_type(hs->get_value_type());
+        out << "}";
         break;
 
     case TYPE_FUNCTION:

@@ -203,6 +203,13 @@ Type* Parser::parse_type() {
         type = parse_type();
         expect(TK_RIGHT_SQUARE_BRACKET);
         type = new ArrayListType(TYPE_LIST, matched, type);
+    } else if (match(TK_LEFT_CURLY_BRACKET)) {
+        token = matched;
+
+        type = parse_type();
+        expect(TK_COLON);
+        type = new HashType(matched, type, parse_type());
+        expect(TK_RIGHT_CURLY_BRACKET);
     }
 
     while (type != nullptr) {
@@ -930,8 +937,9 @@ void Parser::expect(int kind) {
 
     Token token;
     token.set_kind(kind);
-    std::cout << "parser error\n";
-    std::cout << token.to_str() << std::endl;
+    std::cout << "parser error: expected ";
+    std::cout << token.to_str();
+    std::cout << " but got a " << tokens[idx].to_str() << '\n';
     exit(0);
 }
 

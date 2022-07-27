@@ -2,6 +2,7 @@
 #define HAARD_AST_TYPE_H
 
 #include "token/token.h"
+#include "defs.h"
 
 namespace haard {
     class Type {
