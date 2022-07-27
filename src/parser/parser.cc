@@ -147,6 +147,37 @@ void Parser::parse_parameters(Function* function) {
 }
 
 Type* Parser::parse_type() {
+    return parse_function_type();
+}
+
+Type* Parser::parse_function_type() {
+    Token token;
+    TypeList* ftype = nullptr;
+    Type* type = parse_tuple_type();
+
+    if (match(TK_ARROW)) {
+        token = matched;
+        ftype = new TypeList(TYPE_FUNCTION, token, type, parse_type());
+
+        while (match(TK_ARROW)) {
+            ftype->add_type(parse_type());
+        }
+
+        type = ftype;
+    }
+
+    return type;
+}
+
+Type* Parser::parse_tuple_type() {
+    return parse_union_type();
+}
+
+Type* Parser::parse_union_type() {
+    return parse_primary_type();
+}
+
+Type* Parser::parse_primary_type() {
     Token token;
     Expression* expr = nullptr;
     Type* type = nullptr;

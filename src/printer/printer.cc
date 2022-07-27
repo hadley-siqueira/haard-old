@@ -121,10 +121,12 @@ void Printer::print_parameters(Function* function) {
 }
 
 void Printer::print_type(Type* type) {
+    int i;
     int kind = type->get_kind();
     IndirectionType* pr = (IndirectionType*) type;
     ArrayListType* al = (ArrayListType*) type;
     HashType* hs = (HashType*) type;
+    TypeList* tl = (TypeList*) type;
 
     switch (kind) {
     case TYPE_U8:
@@ -246,7 +248,7 @@ void Printer::print_type(Type* type) {
         break;
 
     case TYPE_FUNCTION:
-        out << "->";
+        print_type_list("->", tl);
         break;
 
     case TYPE_POINTER:
@@ -267,6 +269,17 @@ void Printer::print_type(Type* type) {
     default:
         break;
     }
+}
+
+void Printer::print_type_list(std::string oper, TypeList* tlist) {
+    int i;
+
+    for (i = 0; i < tlist->types_count() - 1; ++i) {
+        print_type(tlist->get_type(i));
+        out << " " << oper << " ";
+    }
+
+    print_type(tlist->get_type(i));
 }
 
 void Printer::print_statement(Statement* statement) {

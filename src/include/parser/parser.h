@@ -24,6 +24,10 @@ namespace haard {
             Function* parse_function();
             void parse_parameters(Function* function);
             Type* parse_type();
+            Type* parse_primary_type();
+            Type* parse_function_type();
+            Type* parse_tuple_type();
+            Type* parse_union_type();
             Statement* parse_statement();
             WhileStatement* parse_while_statement();
             BranchStatement* parse_if_statement();

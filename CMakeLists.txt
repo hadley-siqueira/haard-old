@@ -28,6 +28,7 @@ set(AST_SRC
     src/ast/indirection_type.cc
     src/ast/array_list_type.cc
     src/ast/hash_type.cc
+    src/ast/type_list.cc
     src/ast/expression.cc
     src/ast/identifier.cc
     src/ast/unop.cc
