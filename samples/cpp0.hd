@@ -1,3 +1,17 @@
+def read_int : int
+    @msg : str
+
+    i = 0
+    std::cout << msg
+    std::cin >> i
+    return i
+
+def print : void
+    @msg : str
+
+    std::cout << msg << '\n'
+
+
 class Window:
     x : int
     y : int
@@ -21,4 +35,8 @@ class Window:
 
         x = nx
         y = ny
+        x = read_int('Digite n: ')
 
+def main : int
+    print('Hello, world!')
+    return 0

@@ -16,9 +16,46 @@ _ZStL13allocator_arg:
 _ZStL6ignore:
 	.zero	1
 	.text
+	.globl	_Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+	.type	_Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE, @function
+_Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE:
+.LFB2530:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$32, %rsp
+	movq	%rdi, -24(%rbp)
+	movq	%fs:40, %rax
+	movq	%rax, -8(%rbp)
+	xorl	%eax, %eax
+	movl	$0, -12(%rbp)
+	movq	-24(%rbp), %rax
+	movq	%rax, %rsi
+	leaq	_ZSt4cout(%rip), %rdi
+	call	_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE@PLT
+	leaq	-12(%rbp), %rax
+	movq	%rax, %rsi
+	leaq	_ZSt3cin(%rip), %rdi
+	call	_ZNSirsERi@PLT
+	movl	-12(%rbp), %eax
+	movq	-8(%rbp), %rdx
+	xorq	%fs:40, %rdx
+	je	.L3
+	call	__stack_chk_fail@PLT
+.L3:
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE2530:
+	.size	_Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE, .-_Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
 	.type	_Z41__static_initialization_and_destruction_0ii, @function
 _Z41__static_initialization_and_destruction_0ii:
-.LFB3012:
+.LFB3017:
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -30,9 +67,9 @@ _Z41__static_initialization_and_destruction_0ii:
 	movl	%edi, -4(%rbp)
 	movl	%esi, -8(%rbp)
 	cmpl	$1, -4(%rbp)
-	jne	.L3
+	jne	.L6
 	cmpl	$65535, -8(%rbp)
-	jne	.L3
+	jne	.L6
 	leaq	_ZStL8__ioinit(%rip), %rdi
 	call	_ZNSt8ios_base4InitC1Ev@PLT
 	leaq	__dso_handle(%rip), %rdx
@@ -40,17 +77,17 @@ _Z41__static_initialization_and_destruction_0ii:
 	movq	_ZNSt8ios_base4InitD1Ev@GOTPCREL(%rip), %rax
 	movq	%rax, %rdi
 	call	__cxa_atexit@PLT
-.L3:
+.L6:
 	nop
 	leave
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE3012:
+.LFE3017:
 	.size	_Z41__static_initialization_and_destruction_0ii, .-_Z41__static_initialization_and_destruction_0ii
-	.type	_GLOBAL__sub_I_out.cc, @function
-_GLOBAL__sub_I_out.cc:
-.LFB3013:
+	.type	_GLOBAL__sub_I__Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE, @function
+_GLOBAL__sub_I__Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE:
+.LFB3018:
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -65,11 +102,11 @@ _GLOBAL__sub_I_out.cc:
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE3013:
-	.size	_GLOBAL__sub_I_out.cc, .-_GLOBAL__sub_I_out.cc
+.LFE3018:
+	.size	_GLOBAL__sub_I__Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE, .-_GLOBAL__sub_I__Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
 	.section	.init_array,"aw"
 	.align 8
-	.quad	_GLOBAL__sub_I_out.cc
+	.quad	_GLOBAL__sub_I__Z8read_intNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
 	.hidden	__dso_handle
 	.ident	"GCC: (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0"
 	.section	.note.GNU-stack,"",@progbits

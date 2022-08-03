@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <string>
+#include <set>
 #include "ast/ast.h"
 
 namespace haard {
@@ -46,6 +47,7 @@ namespace haard {
         private:
             int indent_c;
             std::stringstream out;
+            std::set<std::string> current_scope;
     };
 }
 

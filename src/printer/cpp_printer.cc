@@ -446,7 +446,7 @@ void CppPrinter::print_jump_statement(std::string op, JumpStatement* statement) 
         print_expression(statement->get_expression());
     }
 
-    out << '\n';
+    out << ";\n";
 }
 
 void CppPrinter::print_compound_statement(CompoundStatement* statement) {
@@ -487,6 +487,14 @@ void CppPrinter::print_expression(Expression* expression) {
         break;
 
     case EXPR_ASSIGN:
+        if (bin->get_left()->get_kind() == EXPR_ID) {
+            Identifier* id = (Identifier*) bin->get_left();
+            if (current_scope.count(id->get_lexeme()) == 0) {
+                out << "auto ";
+                current_scope.insert(id->get_lexeme());
+            }
+        }
+
         print_binop("=", bin);
         break;
 
@@ -801,7 +809,14 @@ void CppPrinter::print_identifier(Identifier* id) {
 }
 
 void CppPrinter::print_literal(Literal* literal) {
-    out << literal->get_lexeme();
+    if (literal->get_kind() == EXPR_LITERAL_STRING) {
+        std::string s = literal->get_lexeme();
+        s[0] = '"';
+        s[s.size() - 1] = '"';
+        out << s;
+    } else {
+        out << literal->get_lexeme();
+    }
 }
 
 void CppPrinter::print_expression_list(std::string begin, std::string end, ExpressionList* tuple) {

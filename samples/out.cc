@@ -5,6 +5,22 @@
 #include <vector>
 #include <map>
 
+int read_int(std::string msg) {
+    auto i = 0;
+    std::cout << msg;
+    std::cin >> i;
+    return i;
+}
+
+void print(std::string msg) {
+    std::cout << msg << '\n';
+}
+
+int main() {
+    print("Hello, world!");
+    return 0;
+}
+
 class Window {
 public:
     int x;
@@ -12,7 +28,7 @@ public:
     int* pixels;
 
     void set_x(int x_) {
-        x = x_;
+        auto x = x_;
         if (x > 0) {
             x = x + 1;
         }
@@ -26,7 +42,8 @@ public:
 
     void move(int nx, int ny) {
         x = nx;
-        y = ny;
+        auto y = ny;
+        x = read_int("Digite n: ");
     }
 
 
