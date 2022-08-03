@@ -629,6 +629,13 @@ Expression* Parser::parse_relational_expression() {
         } else if (match(TK_GE)) {
             oper = matched;
             expr = new BinOp(EXPR_GE, oper, expr, parse_arith_expression());
+        } else if (match(TK_IN)) {
+            oper = matched;
+            expr = new BinOp(EXPR_IN, oper, expr, parse_arith_expression());
+        } else if (match(TK_NOT)) {
+            oper = matched;
+            expect(TK_IN);
+            expr = new BinOp(EXPR_NOT_IN, oper, expr, parse_arith_expression());
         } else {
             break;
         }

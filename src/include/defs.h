@@ -599,6 +599,8 @@ namespace haard {
         EXPR_GT,
         EXPR_LE,
         EXPR_GE,
+        EXPR_IN,
+        EXPR_NOT_IN,
         EXPR_PLUS,
         EXPR_MINUS,
         EXPR_TIMES,

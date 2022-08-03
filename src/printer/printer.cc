@@ -303,6 +303,7 @@ void Printer::print_statement(Statement* statement) {
         break;
 
     case STMT_FOR:
+    case STMT_FOREACH:
         print_for_statement((ForStatement*) statement);
         break;
 
@@ -361,6 +362,7 @@ void Printer::print_for_statement(ForStatement* statement) {
         out << "; ";
         print_expression(statement->get_increment());
     } else {
+        print_expression(statement->get_condition());
     }
 
     out << ":\n";
@@ -622,6 +624,14 @@ void Printer::print_expression(Expression* expression) {
 
     case EXPR_GE:
         print_binop(">=", bin);
+        break;
+
+    case EXPR_IN:
+        print_binop("in", bin);
+        break;
+
+    case EXPR_NOT_IN:
+        print_binop("not in", bin);
         break;
 
     case EXPR_LOGICAL_NOT_OPER:
