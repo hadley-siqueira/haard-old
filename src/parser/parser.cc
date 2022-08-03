@@ -369,6 +369,14 @@ ForStatement* Parser::parse_for_statement() {
     } else {
         expr1 = parse_expression();
 
+        if (lookahead(TK_COMMA)) {
+            stmt->add_initialization(expr1);
+
+            while (match(TK_COMMA)) {
+                stmt->add_initialization(parse_expression());
+            }
+        }
+
         if (match(TK_SEMICOLON)) {
             if (match(TK_SEMICOLON)) {
                 if (!lookahead(TK_COLON)) { // matches for init; ; inc:

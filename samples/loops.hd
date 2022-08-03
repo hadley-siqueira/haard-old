@@ -38,5 +38,5 @@ def main : void
     i++
     i--
 
-    #for i = 0, j = 0; i < 10; ++i:
-    #    print(i + j)
+    for i = 0, j = 0; i < 10; ++i:
+        print(i + j)
