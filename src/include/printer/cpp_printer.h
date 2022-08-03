@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <set>
+#include <stack>
 #include "ast/ast.h"
 
 namespace haard {
@@ -43,11 +44,15 @@ namespace haard {
             void indent();
             void dedent();
             void print_indentation();
+            void save_scope();
+            void restore_scope();
+            void define(std::string name);
 
         private:
             int indent_c;
             std::stringstream out;
             std::set<std::string> current_scope;
+            std::stack<std::set<std::string> > scopes;
     };
 }
 

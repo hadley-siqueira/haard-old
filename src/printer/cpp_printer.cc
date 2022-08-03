@@ -80,6 +80,7 @@ void CppPrinter::print_class(Class* klass) {
             var = klass->get_variable(i);
             print_type(var->get_type());
             out << ' ' << var->get_name() << ";\n" ;
+            define(var->get_name());
         }
 
         out << '\n';
@@ -100,6 +101,7 @@ void CppPrinter::print_class(Class* klass) {
 
 void CppPrinter::print_function(Function* function) {
     print_indentation();
+    save_scope();
 
     print_type(function->get_return_type());
     out << " " << function->get_name();
@@ -111,6 +113,7 @@ void CppPrinter::print_function(Function* function) {
     dedent();
     print_indentation();
     out << "}\n";
+    restore_scope();
 }
 
 void CppPrinter::print_parameters(Function* function) {
@@ -124,11 +127,13 @@ void CppPrinter::print_parameters(Function* function) {
             param = function->get_parameter(i);
             print_type(param->get_type());
             out << " " << param->get_name() << ", ";
+            define(param->get_name());
         }
 
         param = function->get_parameter(i);
         print_type(param->get_type());
         out << " " << param->get_name();
+        define(param->get_name());
     }
 
     out << ") {\n";
@@ -354,14 +359,17 @@ void CppPrinter::print_statement(Statement* statement) {
 }
 
 void CppPrinter::print_while_statement(WhileStatement* statement) {
+    save_scope();
     print_indentation();
-    out << "while ";
+    out << "while (";
     print_expression(statement->get_condition());
-    out << ":\n";
+    out << ") {\n";
     indent();
     print_compound_statement(statement->get_statements());
     dedent();
-    out << '\n';
+    print_indentation();
+    out << "}\n";
+    restore_scope();
 }
 
 void CppPrinter::print_for_statement(ForStatement* statement) {
@@ -388,6 +396,7 @@ void CppPrinter::print_for_statement(ForStatement* statement) {
 void CppPrinter::print_branch_statement(BranchStatement* statement) {
     int kind;
 
+    save_scope();
     kind = statement->get_kind();
     print_indentation();
 
@@ -435,6 +444,7 @@ void CppPrinter::print_branch_statement(BranchStatement* statement) {
         break;
 
     }
+    restore_scope();
 }
 
 void CppPrinter::print_jump_statement(std::string op, JumpStatement* statement) {
@@ -895,4 +905,18 @@ void CppPrinter::print_indentation() {
     for (int i = 0; i < indent_c; ++i) {
         out << "    ";
     }
+}
+
+
+void CppPrinter::save_scope() {
+    scopes.push(current_scope);
+}
+
+void CppPrinter::restore_scope() {
+    current_scope = scopes.top();
+    scopes.pop();
+}
+
+void CppPrinter::define(std::string name) {
+    current_scope.insert(name);
 }

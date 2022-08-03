@@ -9,8 +9,13 @@ def read_int : int
 def print : void
     @msg : str
 
+    i = 0
     std::cout << msg << '\n'
 
+def print : void
+    @n : int
+
+    std::cout << n << '\n'
 
 class Window:
     x : int
@@ -39,4 +44,10 @@ class Window:
 
 def main : int
     print('Hello, world!')
+
+    i = 0
+    while i < 10:
+        print(i)
+        i = i + 1
+
     return 0
