@@ -453,7 +453,7 @@ BranchStatement* Parser::parse_elif_statement() {
 
     expect(TK_ELIF);
     token = matched;
-    expression = parse_expression();
+    stmt->set_condition(parse_expression());
 
     expect(TK_COLON);
     indent();

@@ -1,0 +1,24 @@
+class Window:
+    x : int
+    y : int
+    pixels : int*
+
+    def set_x : void
+        @x_ : int
+
+        x = x_
+
+        if x > 0:
+            x = x + 1
+        elif x == 0:
+            x = 1
+        else:
+            x = 0
+
+    def move : void
+        @nx : int
+        @ny : int
+
+        x = nx
+        y = ny
+

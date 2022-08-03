@@ -31,6 +31,12 @@ def main : void
             ttype.html -> redirect_to 'errors/errors_404', status: 404
             ttype.json -> render nothing: true, status: 404
 
+            ttype.html(| | { redirect_to 'errors/errors_404', status: 404 })
+
+        respond_to('scope') do (ttype):
+            ttype.html(-> { redirect_to('errors/errors_404', status: 404)})
+            ttype.json(-> { render(nothing: true, status: 404) })
+
         @exam_apply = ExamApply.new
 
         respond_to do (format):

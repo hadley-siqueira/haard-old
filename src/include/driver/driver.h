@@ -26,6 +26,7 @@ namespace haard {
             void print_information();
             Source* parse_file(std::string path);
             void print_sources();
+            void generate_cpp();
             std::string build_import_path(Import* import);
             bool file_exists(std::string path);
             std::string get_env_path(std::string key);

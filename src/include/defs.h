@@ -513,8 +513,8 @@ namespace haard {
         {">>>=", TK_SRL_ASSIGNMENT},
         {":=", TK_SPECIAL_ASSIGNMENT},
         {"=>", TK_HASH_ARROW},
-        {"@n", TK_NEWLINE},
-        {"@eof", TK_EOF},
+        {"@@@n", TK_NEWLINE},
+        {"@@@eof", TK_EOF},
         {"@", TK_AT},
         {"@begin", TK_BEGIN},
         {"@end", TK_END},
@@ -527,9 +527,9 @@ namespace haard {
         {"}", TK_RIGHT_CURLY_BRACKET},
         {")", TK_RIGHT_PARENTHESIS},
         {"]", TK_RIGHT_SQUARE_BRACKET},
-        {"@tbegin", TK_BEGIN_TEMPLATE},
-        {"@tend", TK_END_TEMPLATE},
-        {"@unknown", TK_UNKNOWN},
+        {"@@@tbegin", TK_BEGIN_TEMPLATE},
+        {"@@@tend", TK_END_TEMPLATE},
+        {"@@@unknown", TK_UNKNOWN},
     };
 
     typedef enum TypeKind {

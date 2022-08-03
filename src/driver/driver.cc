@@ -7,6 +7,7 @@
 #include <dirent.h>
 #include "driver/driver.h"
 #include "printer/printer.h"
+#include "printer/cpp_printer.h"
 
 using namespace haard;
 
@@ -26,6 +27,7 @@ void Driver::run() {
     configure_search_path();
     parse_sources();
     print_sources();
+    generate_cpp();
     print_information();
 /*    run_flags();
     parse_program();
@@ -119,6 +121,15 @@ void Driver::print_sources() {
 
     printer.print_sources(sources);
     std::cout << printer.to_str();
+}
+
+void Driver::generate_cpp() {
+    CppPrinter printer;
+
+    printer.print_sources(sources);
+    std::ofstream f("out.cc");
+    f << printer.to_str();
+    f.close();
 }
 
 std::string Driver::build_import_path(Import* import) {

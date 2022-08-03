@@ -47,6 +47,7 @@ set(AST_SRC
 
 set(PRINTER_SRC
     src/printer/printer.cc
+    src/printer/cpp_printer.cc
 )
 
 set(DRIVER_SRC
