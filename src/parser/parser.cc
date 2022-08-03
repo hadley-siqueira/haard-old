@@ -306,6 +306,8 @@ Statement* Parser::parse_statement() {
 
     if (lookahead(TK_WHILE)) {
         stmt = parse_while_statement();
+    } else if (lookahead(TK_FOR)) {
+        stmt = parse_for_statement();
     } else if (lookahead(TK_IF)) {
         stmt = parse_if_statement();
     } else if (lookahead(TK_RETURN)) {
@@ -330,6 +332,52 @@ WhileStatement* Parser::parse_while_statement() {
 
     expect(TK_WHILE);
     stmt->set_condition(parse_expression());
+    expect(TK_COLON);
+    indent();
+    stmt->set_statements(parse_compound_statement());
+    dedent();
+
+    return stmt;
+}
+
+ForStatement* Parser::parse_for_statement() {
+    ForStatement* stmt = new ForStatement();
+    Expression* expr1;
+    Expression* expr2;
+    Expression* expr3;
+
+    expect(TK_FOR);
+
+    if (match(TK_SEMICOLON)) { // matches for ; ...:
+    } else {
+        expr1 = parse_expression();
+
+        if (match(TK_SEMICOLON)) {
+            if (match(TK_SEMICOLON)) {
+                if (!lookahead(TK_COLON)) { // matches for init; ; inc:
+                    expr2 = parse_expression();
+                    stmt->set_initialization(expr1);
+                    stmt->set_increment(expr2);
+                }
+            } else {
+                expr2 = parse_expression();
+
+                if (match(TK_SEMICOLON)) {
+                    expr3 = parse_expression();
+                    stmt->set_initialization(expr1);
+                    stmt->set_condition(expr2);
+                    stmt->set_increment(expr3);
+                } else {
+                    stmt->set_initialization(expr1);
+                    stmt->set_condition(expr2);
+                }
+            }
+        } else { // matches for i in []:
+            stmt->set_kind(STMT_FOREACH);
+            stmt->set_condition(expr1);
+        }
+    }
+
     expect(TK_COLON);
     indent();
     stmt->set_statements(parse_compound_statement());

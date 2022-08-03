@@ -30,6 +30,7 @@ namespace haard {
             Type* parse_union_type();
             Statement* parse_statement();
             WhileStatement* parse_while_statement();
+            ForStatement* parse_for_statement();
             BranchStatement* parse_if_statement();
             BranchStatement* parse_elif_statement();
             BranchStatement* parse_else_statement();

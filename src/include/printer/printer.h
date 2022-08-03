@@ -23,6 +23,7 @@ namespace haard {
 
             void print_statement(Statement* statement);
             void print_while_statement(WhileStatement* statement);
+            void print_for_statement(ForStatement* statement);
             void print_branch_statement(BranchStatement* statement);
             void print_jump_statement(std::string op, JumpStatement* statement);
             void print_compound_statement(CompoundStatement* statement);

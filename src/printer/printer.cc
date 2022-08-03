@@ -302,6 +302,10 @@ void Printer::print_statement(Statement* statement) {
         print_while_statement((WhileStatement*) statement);
         break;
 
+    case STMT_FOR:
+        print_for_statement((ForStatement*) statement);
+        break;
+
     case STMT_EXPRESSION:
         print_expression_statement((ExpressionStatement*) statement);
         break;
@@ -340,6 +344,25 @@ void Printer::print_while_statement(WhileStatement* statement) {
     print_indentation();
     out << "while ";
     print_expression(statement->get_condition());
+    out << ":\n";
+    indent();
+    print_compound_statement(statement->get_statements());
+    dedent();
+}
+
+void Printer::print_for_statement(ForStatement* statement) {
+    print_indentation();
+    out << "for ";
+
+    if (statement->get_kind() == STMT_FOR) {
+        print_expression(statement->get_initialization());
+        out << "; ";
+        print_expression(statement->get_condition());
+        out << "; ";
+        print_expression(statement->get_increment());
+    } else {
+    }
+
     out << ":\n";
     indent();
     print_compound_statement(statement->get_statements());

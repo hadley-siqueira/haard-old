@@ -649,6 +649,8 @@ namespace haard {
         STMT_UNKNOWN,
         STMT_EXPRESSION,
         STMT_WHILE,
+        STMT_FOR,
+        STMT_FOREACH,
         STMT_COMPOUND,
         STMT_IF,
         STMT_ELIF,
