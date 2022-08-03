@@ -349,6 +349,7 @@ void Printer::print_while_statement(WhileStatement* statement) {
     indent();
     print_compound_statement(statement->get_statements());
     dedent();
+    out << '\n';
 }
 
 void Printer::print_for_statement(ForStatement* statement) {
@@ -369,6 +370,7 @@ void Printer::print_for_statement(ForStatement* statement) {
     indent();
     print_compound_statement(statement->get_statements());
     dedent();
+    out << '\n';
 }
 
 void Printer::print_branch_statement(BranchStatement* statement) {

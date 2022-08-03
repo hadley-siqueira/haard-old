@@ -349,6 +349,23 @@ ForStatement* Parser::parse_for_statement() {
     expect(TK_FOR);
 
     if (match(TK_SEMICOLON)) { // matches for ; ...:
+        if (match(TK_SEMICOLON)) {
+            if (!lookahead(TK_COLON)) {
+                expr1 = parse_expression();
+                stmt->set_increment(expr1);
+            }
+        } else {
+            expr1 = parse_expression();
+            stmt->set_condition(expr1);
+
+            if (match(TK_SEMICOLON)) {
+                if (!lookahead(TK_COLON)) {
+                    expr2 = parse_expression();
+                    stmt->set_condition(expr1);
+                    stmt->set_increment(expr2);
+                } 
+            }
+        }
     } else {
         expr1 = parse_expression();
 
