@@ -1,3 +1,7 @@
 def main : void
     for i = 0; i < 10; ++i:
         print(i)
+
+    for i = 0; i < 10:
+        print(i)
+        ++i # FIX: i++ bugs
