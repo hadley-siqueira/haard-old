@@ -40,3 +40,12 @@ def main : void
 
     for i = 0, j = 0; i < 10; ++i:
         print(i + j)
+
+    for (a, b) in [(1, 2), (3, 4)]:
+        print(a + b)
+    
+    for a, b in [(1, 2), (3, 4)]:
+        print(a + b)
+    
+    for a, b in (0, 0) .. (10, n):
+        print(a + b)

@@ -31,6 +31,9 @@ namespace haard {
             Statement* parse_statement();
             WhileStatement* parse_while_statement();
             ForStatement* parse_for_statement();
+            void parse_for_statement_init(ForStatement* stmt);
+            void parse_for_statement_condition(ForStatement* stmt);
+            void parse_for_statement_increment(ForStatement* stmt);
             BranchStatement* parse_if_statement();
             BranchStatement* parse_elif_statement();
             BranchStatement* parse_else_statement();

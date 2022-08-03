@@ -11,6 +11,14 @@ ExpressionList::ExpressionList(int kind, Expression* expression) {
     add_expression(expression);
 }
 
+ExpressionList::ExpressionList(int kind, std::vector<Expression*> exprs) {
+    this->kind = kind;
+
+    for (int i = 0; i < exprs.size(); ++i) {
+        add_expression(exprs[i]);
+    }
+}
+
 ExpressionList::~ExpressionList() {
     for (int i = 0; i < expressions.size(); ++i) {
         delete expressions[i];

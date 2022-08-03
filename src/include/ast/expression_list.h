@@ -9,6 +9,7 @@ namespace haard {
         public:
             ExpressionList(int kind);
             ExpressionList(int kind, Expression* expression);
+            ExpressionList(int kind, std::vector<Expression*> exprs);
             ~ExpressionList();
 
         public:
