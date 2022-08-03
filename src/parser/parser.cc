@@ -352,7 +352,7 @@ ForStatement* Parser::parse_for_statement() {
         if (match(TK_SEMICOLON)) {
             if (!lookahead(TK_COLON)) {
                 expr1 = parse_expression();
-                stmt->set_increment(expr1);
+                stmt->add_increment(expr1);
             }
         } else {
             expr1 = parse_expression();
@@ -362,7 +362,7 @@ ForStatement* Parser::parse_for_statement() {
                 if (!lookahead(TK_COLON)) {
                     expr2 = parse_expression();
                     stmt->set_condition(expr1);
-                    stmt->set_increment(expr2);
+                    stmt->add_increment(expr2);
                 } 
             }
         }
@@ -373,19 +373,19 @@ ForStatement* Parser::parse_for_statement() {
             if (match(TK_SEMICOLON)) {
                 if (!lookahead(TK_COLON)) { // matches for init; ; inc:
                     expr2 = parse_expression();
-                    stmt->set_initialization(expr1);
-                    stmt->set_increment(expr2);
+                    stmt->add_initialization(expr1);
+                    stmt->add_increment(expr2);
                 }
             } else {
                 expr2 = parse_expression();
 
                 if (match(TK_SEMICOLON)) {
                     expr3 = parse_expression();
-                    stmt->set_initialization(expr1);
+                    stmt->add_initialization(expr1);
                     stmt->set_condition(expr2);
-                    stmt->set_increment(expr3);
+                    stmt->add_increment(expr3);
                 } else {
-                    stmt->set_initialization(expr1);
+                    stmt->add_initialization(expr1);
                     stmt->set_condition(expr2);
                 }
             }
@@ -844,6 +844,12 @@ Expression* Parser::parse_postfix_expression() {
             oper = matched;
             expr = new BinOp(EXPR_CALL, oper, expr, parse_argument_list());
             expect(TK_RIGHT_PARENTHESIS);
+        } else if (next_token_same_line() && match(TK_INC)) {
+            oper = matched;
+            expr = new UnOp(EXPR_POS_INC, oper, expr);
+        } else if (next_token_same_line() && match(TK_DEC)) {
+            oper = matched;
+            expr = new UnOp(EXPR_POS_DEC, oper, expr);
         } else {
             break;
         }

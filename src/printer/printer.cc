@@ -336,8 +336,6 @@ void Printer::print_statement(Statement* statement) {
     case STMT_BREAK:
         print_jump_statement("break", (JumpStatement*) statement);
         break;
-
-
     }
 }
 
@@ -672,6 +670,14 @@ void Printer::print_expression(Expression* expression) {
         print_unop("--", un);
         break;
 
+    case EXPR_POS_INC:
+        print_unop("++", un, false);
+        break;
+
+    case EXPR_POS_DEC:
+        print_unop("--", un, false);
+        break;
+
     case EXPR_SIZEOF:
         print_unop("!", un);
         break;
@@ -736,6 +742,11 @@ void Printer::print_expression(Expression* expression) {
         print_expression_list("(", ")", exprlist);
         break;
 
+    case EXPR_FOR_INIT:
+    case EXPR_FOR_INC:
+        print_expression_list("", "", exprlist);
+        break;
+
     case EXPR_HASH:
     case EXPR_HASH_RAW:
         print_hash(exprlist);
@@ -753,9 +764,16 @@ void Printer::print_binop(std::string oper, BinOp* bin) {
     print_expression(bin->get_right());
 }
 
-void Printer::print_unop(std::string oper, UnOp* un) {
-    out << oper;
+void Printer::print_unop(std::string oper, UnOp* un, bool before) {
+    if (before) {
+        out << oper;
+    }
+
     print_expression(un->get_expression());
+
+    if (!before) {
+        out << oper;
+    }
 }
 
 void Printer::print_identifier(Identifier* id) {

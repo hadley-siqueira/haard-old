@@ -4,7 +4,8 @@ def main : void
 
     for i = 0; i < 10:
         print(i)
-        ++i # FIX: i++ bugs
+        ++i
+        i++
 
     for ; i < 10; ++i:
         print(i)
@@ -13,6 +14,12 @@ def main : void
         print(i)
 
     for i = 0; ; ++i:
+        print(i)
+
+    for i = 0; ; i += 1:
+        print(i)
+
+    for i = 0; ; i++:
         print(i)
 
     for i in 0..10:
@@ -27,3 +34,9 @@ def main : void
     while true:
         print(i)
     i = 0
+
+    i++
+    i--
+
+    #for i = 0, j = 0; i < 10; ++i:
+    #    print(i + j)
