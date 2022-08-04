@@ -38,6 +38,7 @@ namespace haard {
             void print_expression_list(std::string begin, std::string end, ExpressionList* tuple);
             void print_hash(ExpressionList* hash);
             void print_function_expression(FunctionExpression* function);
+            void print_new_expression(NewExpression* expr);
 
         private:
             void indent();

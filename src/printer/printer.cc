@@ -780,6 +780,10 @@ void Printer::print_expression(Expression* expression) {
     case EXPR_FUNCTION:
         print_function_expression((FunctionExpression*) expression);
         break;
+
+    case EXPR_NEW:
+        print_new_expression((NewExpression*) expression);
+        break;
     }
 }
 
@@ -871,6 +875,15 @@ void Printer::print_function_expression(FunctionExpression* function) {
 
     print_indentation();
     out << "}";
+}
+
+void Printer::print_new_expression(NewExpression* expr) {
+    out << "new ";
+    print_type(expr->get_new_type());
+
+    if (expr->has_arguments()) {
+        print_expression_list("(", ")", expr->get_arguments());
+    }
 }
 
 void Printer::indent() {

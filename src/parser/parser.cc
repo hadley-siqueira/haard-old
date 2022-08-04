@@ -860,6 +860,8 @@ Expression* Parser::parse_unary_expression() {
         expect(TK_LEFT_PARENTHESIS);
         expr = new UnOp(EXPR_SIZEOF, oper, parse_unary_expression());
         expect(TK_RIGHT_PARENTHESIS);
+    } else if (lookahead(TK_NEW)) {
+        expr = parse_new_expression();
     } else {
         expr = parse_postfix_expression();
     }
@@ -1085,6 +1087,20 @@ ExpressionList* Parser::parse_hash(Expression* key) {
     }
 
     return hash;
+}
+
+NewExpression* Parser::parse_new_expression() {
+    NewExpression* expr = new NewExpression();
+
+    expect(TK_NEW);
+    expr->set_new_type(parse_type());
+
+    if (match(TK_LEFT_PARENTHESIS)) {
+        expr->set_arguments(parse_argument_list());
+        expect(TK_RIGHT_PARENTHESIS);
+    }
+
+    return expr;
 }
 
 Expression* Parser::parse_scope_expression() {

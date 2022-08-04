@@ -1,0 +1,7 @@
+def main : void
+    p = new int
+    p = new int(2, 3)
+    p = new int*[10]
+    v = set_obj(new float(2), 'hello')
+    (new int[10])[0] = 1 # not printing. Why? Need to fix
+    v = (1 + 2) * 3

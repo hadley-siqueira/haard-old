@@ -65,6 +65,7 @@ namespace haard {
             Expression* parse_anonymous_function();
             ExpressionList* parse_argument_list();
             ExpressionList* parse_hash(Expression* key);
+            NewExpression* parse_new_expression();
 
             void advance();
             void expect(int kind);
