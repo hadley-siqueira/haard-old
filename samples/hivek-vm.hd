@@ -6,6 +6,12 @@ class HivekVM:
     def initialize : void
         ip = 0
         mem = new u8[1024 * 1024 * 8]
+        write32(0, 0xffabcdef)
+
+    def print_byte : void
+        @byte : u8
+
+        printf("%x\n", byte)
 
     def read32 : u64
         @addr : u64
@@ -19,3 +25,26 @@ class HivekVM:
         v = (v << 8) | mem[addr + 3]
 
         return v
+
+    def write32 : void
+        @addr  : u64
+        @value : u32
+
+        # v not declared error
+        # mem[addr + 0] = (v >> 24) & 0x0ff
+        mem[addr + 0] = (value >> 24) & 0x0ff
+        mem[addr + 1] = (value >> 16) & 0x0ff
+        mem[addr + 2] = (value >>  8) & 0x0ff
+        mem[addr + 3] = (value >>  0) & 0x0ff
+
+    def dump : void
+        i = 0
+
+        while i < 10:
+            print_byte(mem[i])
+            i = i + 1
+
+def main : int
+    v = HivekVM()
+    v.initialize()
+    v.dump()

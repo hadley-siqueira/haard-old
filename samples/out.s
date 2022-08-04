@@ -16,9 +16,30 @@ _ZStL13allocator_arg:
 _ZStL6ignore:
 	.zero	1
 	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB2534:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movq	$0, -32(%rbp)
+	movq	$0, -24(%rbp)
+	movq	$0, -16(%rbp)
+	movl	$0, %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE2534:
+	.size	main, .-main
 	.type	_Z41__static_initialization_and_destruction_0ii, @function
 _Z41__static_initialization_and_destruction_0ii:
-.LFB3012:
+.LFB3015:
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -30,9 +51,9 @@ _Z41__static_initialization_and_destruction_0ii:
 	movl	%edi, -4(%rbp)
 	movl	%esi, -8(%rbp)
 	cmpl	$1, -4(%rbp)
-	jne	.L3
+	jne	.L5
 	cmpl	$65535, -8(%rbp)
-	jne	.L3
+	jne	.L5
 	leaq	_ZStL8__ioinit(%rip), %rdi
 	call	_ZNSt8ios_base4InitC1Ev@PLT
 	leaq	__dso_handle(%rip), %rdx
@@ -40,17 +61,17 @@ _Z41__static_initialization_and_destruction_0ii:
 	movq	_ZNSt8ios_base4InitD1Ev@GOTPCREL(%rip), %rax
 	movq	%rax, %rdi
 	call	__cxa_atexit@PLT
-.L3:
+.L5:
 	nop
 	leave
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE3012:
+.LFE3015:
 	.size	_Z41__static_initialization_and_destruction_0ii, .-_Z41__static_initialization_and_destruction_0ii
-	.type	_GLOBAL__sub_I_out.cc, @function
-_GLOBAL__sub_I_out.cc:
-.LFB3013:
+	.type	_GLOBAL__sub_I_main, @function
+_GLOBAL__sub_I_main:
+.LFB3016:
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -65,11 +86,11 @@ _GLOBAL__sub_I_out.cc:
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE3013:
-	.size	_GLOBAL__sub_I_out.cc, .-_GLOBAL__sub_I_out.cc
+.LFE3016:
+	.size	_GLOBAL__sub_I_main, .-_GLOBAL__sub_I_main
 	.section	.init_array,"aw"
 	.align 8
-	.quad	_GLOBAL__sub_I_out.cc
+	.quad	_GLOBAL__sub_I_main
 	.hidden	__dso_handle
 	.ident	"GCC: (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0"
 	.section	.note.GNU-stack,"",@progbits

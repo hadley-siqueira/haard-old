@@ -13,7 +13,8 @@ std::string CppPrinter::to_str() {
 }
 
 void CppPrinter::print_sources(Sources* sources) {
-    out << "#include <stdint.h>\n";
+    out << "#include <cstdint>\n";
+    out << "#include <cstdio>\n";
     out << "#include <iostream>\n";
     out << "#include <string>\n";
     out << "#include <sstream>\n";
@@ -37,13 +38,13 @@ void CppPrinter::print_source(Source* source) {
         out << '\n';
     }
 
-    for (int i = 0; i < source->function_count(); ++i) {
-        print_function(source->get_function(i));
+    for (int i = 0;i < source->classes_count(); ++i) {
+        print_class(source->get_class(i));
         out << '\n';
     }
 
-    for (int i = 0;i < source->classes_count(); ++i) {
-        print_class(source->get_class(i));
+    for (int i = 0; i < source->function_count(); ++i) {
+        print_function(source->get_function(i));
         out << '\n';
     }
 }
