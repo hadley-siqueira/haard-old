@@ -10,6 +10,7 @@ class HivekVM:
         @addr : u64
 
         var v : u64 = 0
+        var k : u64
 
         v = (v << 8) | mem[addr + 0]
         v = (v << 8) | mem[addr + 1]

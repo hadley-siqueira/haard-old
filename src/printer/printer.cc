@@ -336,6 +336,10 @@ void Printer::print_statement(Statement* statement) {
     case STMT_BREAK:
         print_jump_statement("break", (JumpStatement*) statement);
         break;
+
+    case STMT_VAR_DECL:
+        print_variable_declaration((VarDeclaration*) statement);
+        break;
     }
 }
 
@@ -439,6 +443,27 @@ void Printer::print_expression_statement(ExpressionStatement* statement) {
     print_indentation();
     print_expression(statement->get_expression());
     out << "\n";
+}
+
+void Printer::print_variable_declaration(VarDeclaration* decl) {
+    Variable* var;
+
+    var = decl->get_variable();
+    print_indentation();
+    out << "var ";
+    out << var->get_name();
+
+    if (var->get_type() != nullptr) {
+        out << " : ";
+        print_type(var->get_type());
+    }
+
+    if (decl->get_expression() != nullptr) {
+        out << " = ";
+        print_expression(decl->get_expression());
+    }
+
+    out << '\n';
 }
 
 void Printer::print_expression(Expression* expression) {

@@ -28,6 +28,7 @@ namespace haard {
             void print_jump_statement(std::string op, JumpStatement* statement);
             void print_compound_statement(CompoundStatement* statement);
             void print_expression_statement(ExpressionStatement* statement);
+            void print_variable_declaration(VarDeclaration* decl);
 
             void print_expression(Expression* expression);
             void print_binop(std::string oper, BinOp* bin);

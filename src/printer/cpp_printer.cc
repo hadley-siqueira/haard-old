@@ -355,6 +355,10 @@ void CppPrinter::print_statement(Statement* statement) {
     case STMT_BREAK:
         print_jump_statement("break", (JumpStatement*) statement);
         break;
+
+    case STMT_VAR_DECL:
+        print_variable_declaration((VarDeclaration*) statement);
+        break;
     }
 }
 
@@ -471,6 +475,28 @@ void CppPrinter::print_expression_statement(ExpressionStatement* statement) {
     out << ";\n";
 }
 
+void CppPrinter::print_variable_declaration(VarDeclaration* decl) {
+    Variable* var;
+
+    var = decl->get_variable();
+    print_indentation();
+
+    if (var->get_type() != nullptr) {
+        print_type(var->get_type());
+    } else {
+        out << "auto";
+    }
+
+    out << ' ' << var->get_name();
+    define(var->get_name());
+
+    if (decl->get_expression() != nullptr) {
+        out << " = ";
+        print_expression(decl->get_expression());
+    }
+
+    out << ";\n";
+}
 void CppPrinter::print_expression(Expression* expression) {
     if (expression == nullptr) return;
 

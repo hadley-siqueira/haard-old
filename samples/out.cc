@@ -16,7 +16,9 @@ public:
     }
 
     uint64_t read32(uint64_t addr) {
-        auto v = (v << 8) | mem[addr + 0];
+        uint64_t v = 0;
+        uint64_t k;
+        v = (v << 8) | mem[addr + 0];
         v = (v << 8) | mem[addr + 1];
         v = (v << 8) | mem[addr + 2];
         v = (v << 8) | mem[addr + 3];
