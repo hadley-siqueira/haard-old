@@ -39,6 +39,7 @@ namespace haard {
             BranchStatement* parse_else_statement();
             JumpStatement* parse_jump_statement(int tkind, int skind);
             CompoundStatement* parse_compound_statement();
+            VarDeclaration* parse_variable_declaration();
 
             Expression* parse_expression();
             Expression* parse_assignment_expression();

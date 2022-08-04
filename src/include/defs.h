@@ -665,7 +665,8 @@ namespace haard {
         STMT_GOTO,
         STMT_YIELD,
         STMT_CONTINUE,
-        STMT_BREAK
+        STMT_BREAK,
+        STMT_VAR_DECL
     } StatementKind;
 }
 

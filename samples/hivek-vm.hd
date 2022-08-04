@@ -1,0 +1,19 @@
+class HivekVM:
+    ip   : u64
+    regs : u64
+    mem  : u8*
+
+    def initialize : void
+        ip = 0
+
+    def read32 : u64
+        @addr : u64
+
+        var v : u64 = 0
+
+        v = (v << 8) | mem[addr + 0]
+        v = (v << 8) | mem[addr + 1]
+        v = (v << 8) | mem[addr + 2]
+        v = (v << 8) | mem[addr + 3]
+
+        return v

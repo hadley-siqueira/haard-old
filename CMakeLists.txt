@@ -43,6 +43,7 @@ set(AST_SRC
     src/ast/jump_statement.cc
     src/ast/compound_statement.cc
     src/ast/expression_statement.cc
+    src/ast/var_decl.cc
 )
 
 set(PRINTER_SRC

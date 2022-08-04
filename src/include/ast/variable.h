@@ -27,6 +27,7 @@ namespace haard {
         private:
             int line;
             int column;
+            bool constant;
             std::string name;
             Type* type;
     };

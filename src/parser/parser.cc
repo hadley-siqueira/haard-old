@@ -320,6 +320,8 @@ Statement* Parser::parse_statement() {
         stmt = parse_jump_statement(TK_GOTO, STMT_GOTO);
     } else if (lookahead(TK_BREAK)) {
         stmt = parse_jump_statement(TK_BREAK, STMT_BREAK);
+    } else if (lookahead(TK_VAR)) {
+        stmt = parse_variable_declaration();
     } else {
         stmt = new ExpressionStatement(parse_expression());
     }
@@ -504,6 +506,27 @@ CompoundStatement* Parser::parse_compound_statement() {
     }
 
     return statements;
+}
+
+VarDeclaration* Parser::parse_variable_declaration() {
+    VarDeclaration* decl;
+    Variable* var;
+
+    expect(TK_VAR);
+    expect(TK_ID);
+    var = new Variable(matched);
+    decl = new VarDeclaration();
+    decl->set_variable(var);
+
+    if (match(TK_COLON)) {
+        var->set_type(parse_type());
+    }
+
+    if (match(TK_ASSIGNMENT)) {
+        decl->set_expression(parse_expression());
+    }
+
+    return decl;
 }
 
 Expression* Parser::parse_expression() {
