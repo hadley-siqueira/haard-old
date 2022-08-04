@@ -4,6 +4,9 @@ def main : void
     p = new int*[10]
     v = set_obj(new float(2), 'hello')
 
+    # FIXED (at least for now)
     # actually, it is priting, but considering as args to previous expr
     (new int[10])[0] = 1 # not printing. Why? Need to fix
     v = (1 + 2) * 3
+    v = a
+    (a, b) = (2, 3)

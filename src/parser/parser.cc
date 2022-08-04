@@ -884,7 +884,7 @@ Expression* Parser::parse_postfix_expression() {
             oper = matched;
             expr = new BinOp(EXPR_INDEX, oper, expr, parse_expression());
             expect(TK_RIGHT_SQUARE_BRACKET);
-        } else if (match(TK_LEFT_PARENTHESIS)) {
+        } else if (next_token_same_line() && match(TK_LEFT_PARENTHESIS)) {
             oper = matched;
             expr = new BinOp(EXPR_CALL, oper, expr, parse_argument_list());
             expect(TK_RIGHT_PARENTHESIS);
