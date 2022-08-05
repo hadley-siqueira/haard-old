@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include "utils/string_pool.h"
 #include "token/token.h"
 #include "scanner/scanner.h"
 #include "parser/parser.h"

@@ -9,6 +9,7 @@ namespace haard {
         public:
             static const char* get(const char* value);
             static const char* get(std::string value);
+            static void debug();
 
         public:
             static std::set<std::string> pool;

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "utils/string_pool.h"
 
 using namespace haard;
@@ -12,4 +13,16 @@ const char* StringPool::get(const char* value) {
 
 const char* StringPool::get(std::string value) {
     return pool.insert(value).first->c_str();
+}
+
+void StringPool::debug() {
+    std::set<std::string>::iterator it;
+
+    std::cout << "StringPool = {\n";
+
+    for (it = pool.begin(); it != pool.end(); ++it) {
+        std::cout << "    " << *it << ",\n";
+    }
+
+    std::cout << "}\n";
 }
