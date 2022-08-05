@@ -3,36 +3,40 @@
 using namespace haard;
 
 Symbol::Symbol() {
-    descriptor = nullptr;
+    name = nullptr;
 }
 
-Symbol::Symbol(int kind, std::string name, void* descriptor) {
+Symbol::Symbol(int kind, const char* name, void* descriptor) {
     this->kind = kind;
     this->name = name;
-    this->descriptor = descriptor;
+    descriptors.push_back(descriptor);
 }
 
 int Symbol::get_kind() {
     return kind;
 }
 
-std::string Symbol::get_name() {
+const char* Symbol::get_name() {
     return name;
 }
 
-void* Symbol::get_descriptor() {
-    return descriptor;
+void* Symbol::get_descriptor(int idx) {
+    if (idx < descriptors.size()) {
+        return descriptors[idx];
+    }
+
+    return nullptr;
 }
 
 void Symbol::set_kind(int kind) {
     this->kind = kind;
 }
 
-void Symbol::set_name(std::string name) {
+void Symbol::set_name(const char* name) {
     this->name = name;
 }
 
-void Symbol::set_descriptor(void* descriptor) {
-    this->descriptor = descriptor;
+void Symbol::add_descriptor(void* descriptor) {
+    descriptors.push_back(descriptor);
 }
 

@@ -17,12 +17,14 @@ namespace haard {
             void set_parent(SymbolTable* symtab);
 
             void define(Class* klass);
+            void define(Function* func);
 
             bool has_parent();
-            Symbol* has_class(std::string& name);
+            Symbol* has(const char* name);
+            Symbol* has_class(const char* name);
 
         private:
-            std::map<std::string, Symbol*> symbols;
+            std::map<const char*, Symbol*> symbols;
             SymbolTable* parent;
     };
 }

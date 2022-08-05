@@ -1,9 +1,11 @@
 #include "ast/source.h"
+#include "symtab/symbol_table.h"
 
 using namespace haard;
 
 Source::Source() {
-
+    path = nullptr;
+    symtab = new SymbolTable();
 }
 
 Source::~Source() {
@@ -18,6 +20,8 @@ Source::~Source() {
     for (int i = 0; i < classes.size(); ++i) {
         delete classes[i];
     }
+
+    delete symtab;
 }
 
 const char* Source::get_path() {
@@ -46,6 +50,10 @@ Class* Source::get_class(int idx) {
     }
 
     return nullptr;
+}
+
+SymbolTable* Source::get_symbol_table() {
+    return symtab;
 }
 
 void Source::set_path(const char* path) {

@@ -1,0 +1,8 @@
+def Player : int
+    return 0
+
+class Player:
+    x : int
+
+class Player2:
+    x : int

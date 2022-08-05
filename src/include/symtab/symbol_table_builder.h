@@ -14,6 +14,7 @@ namespace haard {
             void build_source(Source* source);
 
             void build_class(Class* klass);
+            void build_function(Function* func);
 
         private:
             int pass;

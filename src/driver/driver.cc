@@ -9,6 +9,7 @@
 #include "driver/driver.h"
 #include "printer/printer.h"
 #include "printer/cpp_printer.h"
+#include "symtab/symbol_table_builder.h"
 
 using namespace haard;
 
@@ -31,6 +32,7 @@ void Driver::run() {
     set_root_path_from_main_file();
     configure_search_path();
     parse_sources();
+    semantic_analysis();
 
     run_flags();
 /*
@@ -91,6 +93,12 @@ void Driver::print_information() {
 void Driver::parse_sources() {
     const char* path = StringPool::get(main_path);
     parse_imports(parse_file(path));
+}
+
+void Driver::semantic_analysis() {
+    SymbolTableBuilder sym_builder;
+
+    sym_builder.build_sources(sources);
 }
 
 void Driver::parse_imports(Source* file) {

@@ -21,6 +21,8 @@ namespace haard {
         private:
             void run_flags();
             void parse_sources();
+            void semantic_analysis();
+
             void parse_imports(Source* file);
             void parse_import(Import* import);
             void parse_simple_import(Import* import);

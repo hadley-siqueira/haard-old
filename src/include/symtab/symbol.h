@@ -1,27 +1,27 @@
 #ifndef HAARD_SYMBOL_H
 #define HAARD_SYMBOL_H
 
-#include <string>
+#include <vector>
 
 namespace haard {
     class Symbol {
         public:
             Symbol();
-            Symbol(int kind, std::string name, void* descriptor);
+            Symbol(int kind, const char* name, void* descriptor);
 
         public:
             int get_kind();
-            std::string get_name();
-            void* get_descriptor();
+            const char* get_name();
+            void* get_descriptor(int idx=0);
 
             void set_kind(int kind);
-            void set_name(std::string name);
-            void set_descriptor(void* descriptor);
+            void set_name(const char* name);
+            void add_descriptor(void* descriptor);
 
         private:
             int kind;
-            std::string name;
-            void* descriptor;
+            const char* name;
+            std::vector<void*> descriptors;
     };
 }
 

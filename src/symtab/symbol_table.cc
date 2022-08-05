@@ -7,7 +7,7 @@ SymbolTable::SymbolTable() {
 }
 
 SymbolTable::~SymbolTable() {
-    std::map<std::string, Symbol*>::iterator it;
+    std::map<const char*, Symbol*>::iterator it;
 
     for (it = symbols.begin(); it != symbols.end(); ++it) {
         delete it->second;
@@ -27,11 +27,28 @@ void SymbolTable::define(Class* klass) {
     symbols[klass->get_name()] = sym;
 }
 
+void SymbolTable::define(Function* func) {
+    Symbol* sym = new Symbol(SYM_FUNCTION, func->get_name(), func);
+    symbols[func->get_name()] = sym;
+}
+
 bool SymbolTable::has_parent() {
     return parent != nullptr;
 }
 
-Symbol* SymbolTable::has_class(std::string& name) {
+Symbol* SymbolTable::has(const char* name) {
+    if (symbols.count(name) > 0) {
+        return symbols[name];
+    }
+
+    if (has_parent()) {
+        return parent->has_class(name);
+    }
+
+    return nullptr;
+}
+
+Symbol* SymbolTable::has_class(const char* name) {
     Symbol* sym = nullptr;
 
     if (symbols.count(name) > 0) {
