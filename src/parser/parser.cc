@@ -450,9 +450,9 @@ BranchStatement* Parser::parse_if_statement() {
     stmt->set_true_statements(parse_compound_statement());
     dedent();
 
-    if (lookahead(TK_ELIF)) {
+    if (lookahead(TK_ELIF) && is_indentend()) {
         stmt->set_false_statements(parse_elif_statement());
-    } else if (lookahead(TK_ELSE)) {
+    } else if (lookahead(TK_ELSE) && is_indentend()) {
         stmt->set_false_statements(parse_else_statement());
     }
 
@@ -474,9 +474,9 @@ BranchStatement* Parser::parse_elif_statement() {
     stmt->set_true_statements(parse_compound_statement());
     dedent();
 
-    if (lookahead(TK_ELIF)) {
+    if (lookahead(TK_ELIF) && is_indentend()) {
         stmt->set_false_statements(parse_elif_statement());
-    } else if (lookahead(TK_ELSE)) {
+    } else if (lookahead(TK_ELSE) && is_indentend()) {
         stmt->set_false_statements(parse_else_statement());
     }
 
