@@ -383,20 +383,23 @@ void CppPrinter::print_for_statement(ForStatement* statement) {
     out << "for ";
 
     if (statement->get_kind() == STMT_FOR) {
+        out << "(";
         print_expression(statement->get_initialization());
         out << "; ";
         print_expression(statement->get_condition());
         out << "; ";
         print_expression(statement->get_increment());
+        out << ")";
     } else {
         print_expression(statement->get_condition());
     }
 
-    out << ":\n";
+    out << " {\n";
     indent();
     print_compound_statement(statement->get_statements());
     dedent();
-    out << '\n';
+    print_indentation();
+    out << "}\n";
 }
 
 void CppPrinter::print_branch_statement(BranchStatement* statement) {
