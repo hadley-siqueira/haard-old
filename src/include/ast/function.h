@@ -17,14 +17,14 @@ namespace haard {
         public:
             int get_line();
             int get_column();
-            std::string get_name();
+            const char* get_name();
             Variable* get_parameter(int idx);
             Type* get_return_type();
             CompoundStatement* get_statements();
 
             void set_line(int line);
             void set_column(int column);
-            void set_name(std::string name);
+            void set_name(const char* name);
             void set_from_token(Token& token);
             void set_return_type(Type* type);
             void set_statements(CompoundStatement* statements);
@@ -36,7 +36,7 @@ namespace haard {
         private:
             int line;
             int column;
-            std::string name;
+            const char* name;
             std::vector<Variable*> parameters;
             Type* return_type;
             CompoundStatement* statements;

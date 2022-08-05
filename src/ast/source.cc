@@ -20,7 +20,7 @@ Source::~Source() {
     }
 }
 
-std::string Source::get_path() {
+const char* Source::get_path() {
     return path;
 }
 
@@ -48,7 +48,7 @@ Class* Source::get_class(int idx) {
     return nullptr;
 }
 
-void Source::set_path(std::string path) {
+void Source::set_path(const char* path) {
     this->path = path;
 }
             

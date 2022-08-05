@@ -14,16 +14,16 @@ namespace haard {
         public:
             int get_line();
             int get_column();
-            std::string get_lexeme();
+            const char* get_lexeme();
 
             void set_line(int line);
             void set_column(int column);
-            void set_lexeme(std::string lexeme);
+            void set_lexeme(const char* lexeme);
             
         private:
             int line;
             int column;
-            std::string lexeme;
+            const char* lexeme;
             
     };
 }

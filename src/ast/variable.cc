@@ -27,7 +27,7 @@ int Variable::get_column() {
     return column;
 }
 
-std::string Variable::get_name() {
+const char* Variable::get_name() {
     return name;
 }
 
@@ -43,7 +43,7 @@ void Variable::set_column(int column) {
     this->column = column;
 }
 
-void Variable::set_name(std::string name) {
+void Variable::set_name(const char* name) {
     this->name = name;
 }
 

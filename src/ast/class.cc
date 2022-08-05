@@ -18,7 +18,7 @@ Class::~Class() {
     delete parent;
 }
 
-std::string Class::get_name() {
+const char* Class::get_name() {
     return name;
 }
 
@@ -56,7 +56,7 @@ void Class::set_from_token(Token& token) {
     set_column(token.get_column());
 }
 
-void Class::set_name(std::string name) {
+void Class::set_name(const char* name) {
     this->name = name;
 }
 

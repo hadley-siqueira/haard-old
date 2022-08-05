@@ -1,4 +1,5 @@
 #include <iostream>
+#include "utils/string_pool.h"
 #include "parser/parser.h"
 
 using namespace haard;
@@ -14,7 +15,7 @@ Source* Parser::read(std::string path) {
     idx = 0;
     tokens = s.read(path);
     source = parse_source();
-    source->set_path(path);
+    source->set_path(StringPool::get(path));
 
     return source;
 }

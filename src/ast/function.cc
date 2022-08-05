@@ -23,7 +23,7 @@ int Function::get_column() {
     return column;
 }
 
-std::string Function::get_name() {
+const char* Function::get_name() {
     return name;
 }
 
@@ -51,7 +51,7 @@ void Function::set_column(int column) {
     this->column = column;
 }
 
-void Function::set_name(std::string name) {
+void Function::set_name(const char* name) {
     this->name = name;
 }
 

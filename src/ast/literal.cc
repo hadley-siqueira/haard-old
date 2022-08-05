@@ -9,6 +9,6 @@ Literal::Literal(int kind, Token& token) {
     column = token.get_column();
 }
             
-std::string Literal::get_lexeme() {
+const char* Literal::get_lexeme() {
     return lexeme;
 }

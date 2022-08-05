@@ -16,27 +16,27 @@ namespace haard {
         public:
             int get_line();
             int get_column();
-            std::string get_alias();
-            std::vector<std::string> get_path();
-            std::string get_path(int idx);
+            const char* get_alias();
+            std::vector<const char*> get_path();
+            const char* get_path(int idx);
             Source* get_source();
 
             void set_line(int line);
             void set_column(int column);
-            void set_alias(std::string alias);
-            void set_path(std::vector<std::string> path);
+            void set_alias(const char* alias);
+            void set_path(std::vector<const char*> path);
             void set_from_token(Token& token);
             void set_source(Source* source);
 
-            void add_to_path(std::string s);
+            void add_to_path(const char* s);
             bool has_alias();
             int path_count();
 
         private:
             int line;
             int column;
-            std::string alias;
-            std::vector<std::string> path;
+            const char* alias;
+            std::vector<const char*> path;
             Source* source;
     };
 }

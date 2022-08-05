@@ -21,7 +21,7 @@ int Identifier::get_column() {
     return column;
 }
 
-std::string Identifier::get_lexeme() {
+const char* Identifier::get_lexeme() {
     return lexeme;
 }
 
@@ -33,6 +33,6 @@ void Identifier::set_column(int column) {
     this->column;
 }
 
-void Identifier::set_lexeme(std::string lexeme) {
+void Identifier::set_lexeme(const char* lexeme) {
     this->lexeme = lexeme;
 }

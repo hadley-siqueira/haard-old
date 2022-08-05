@@ -14,7 +14,7 @@ namespace haard {
             ~Class();
 
         public:
-            std::string get_name();
+            const char* get_name();
             int get_line();
             int get_column();
             Function* get_method(int idx);
@@ -22,7 +22,7 @@ namespace haard {
             Type* get_parent();
 
             void set_from_token(Token& token);
-            void set_name(std::string name);
+            void set_name(const char* name);
             void set_line(int line);
             void set_column(int column);
             void set_parent(Type* type);
@@ -34,7 +34,7 @@ namespace haard {
             int variables_count();
 
         private:
-            std::string name;
+            const char* name;
             int line;
             int column;
             Type* parent;

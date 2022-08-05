@@ -25,10 +25,10 @@ namespace haard {
             void parse_import(Import* import);
             void parse_simple_import(Import* import);
             void print_information();
-            Source* parse_file(std::string path);
+            Source* parse_file(const char* path);
             void print_sources();
             void generate_cpp();
-            std::string build_import_path(Import* import);
+            const char* build_import_path(Import* import);
             bool file_exists(std::string path);
             std::string get_env_path(std::string key);
             void configure_search_path();

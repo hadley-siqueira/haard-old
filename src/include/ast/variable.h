@@ -15,12 +15,12 @@ namespace haard {
         public:
             int get_line();
             int get_column();
-            std::string get_name();
+            const char* get_name();
             Type* get_type();
 
             void set_line(int line);
             void set_column(int column);
-            void set_name(std::string name);
+            void set_name(const char* name);
             void set_type(Type* type);
             void set_from_token(Token& token);
 
@@ -28,7 +28,7 @@ namespace haard {
             int line;
             int column;
             bool constant;
-            std::string name;
+            const char* name;
             Type* type;
     };
 }

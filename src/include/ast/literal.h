@@ -10,10 +10,10 @@ namespace haard {
             Literal(int kind, Token& token);
 
         public:
-            std::string get_lexeme();
+            const char* get_lexeme();
 
         private:
-            std::string lexeme;
+            const char* lexeme;
             int line;
             int column;
     };
