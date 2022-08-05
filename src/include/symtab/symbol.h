@@ -7,7 +7,8 @@ namespace haard {
     class Symbol {
         public:
             Symbol();
-            
+            Symbol(int kind, std::string name, void* descriptor);
+
         public:
             int get_kind();
             std::string get_name();

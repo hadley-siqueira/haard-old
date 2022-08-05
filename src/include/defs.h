@@ -670,6 +670,10 @@ namespace haard {
         STMT_BREAK,
         STMT_VAR_DECL
     } StatementKind;
+
+    typedef enum SymbolKind {
+        SYM_CLASS,
+    } SymbolKind;
 }
 
 #endif

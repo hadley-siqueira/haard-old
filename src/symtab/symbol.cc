@@ -6,6 +6,12 @@ Symbol::Symbol() {
     descriptor = nullptr;
 }
 
+Symbol::Symbol(int kind, std::string name, void* descriptor) {
+    this->kind = kind;
+    this->name = name;
+    this->descriptor = descriptor;
+}
+
 int Symbol::get_kind() {
     return kind;
 }

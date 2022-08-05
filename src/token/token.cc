@@ -1,4 +1,5 @@
 #include <sstream>
+#include "utils/string_pool.h"
 #include "token/token.h"
 #include "defs.h"
 
@@ -41,7 +42,10 @@ void Token::set_whitespace(int whitespace) {
 }
 
 void Token::set_lexeme(std::string lexeme) {
+    char* foo = "aaaa";
     this->lexeme = lexeme;
+    lexeme_ = StringPool::get(lexeme);
+    lexeme_ = foo;
 }
 
 std::string Token::to_str() {

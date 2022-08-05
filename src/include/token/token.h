@@ -26,6 +26,7 @@ namespace haard {
             int column;
             int whitespace;
             std::string lexeme;
+            const char* lexeme_;
     };
 }
 
