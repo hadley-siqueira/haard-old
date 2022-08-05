@@ -29,14 +29,14 @@ void CppPrinter::print_sources(Sources* sources) {
 }
 
 void CppPrinter::print_source(Source* source) {
-    if (source->import_count() > 0) {
+    /*if (source->import_count() > 0) {
         for (int i = 0; i < source->import_count(); ++i) {
             print_import(source->get_import(i));
             out << '\n';
         }
 
         out << '\n';
-    }
+    }*/
 
     for (int i = 0;i < source->classes_count(); ++i) {
         print_class(source->get_class(i));

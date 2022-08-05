@@ -16,6 +16,10 @@ Driver::Driver() {
     env_var = "HAARD_PATH";
     main_path = "main.hd";
     sources = new Sources;
+
+    cpp_flag = false;
+    pretty_flag = false;
+    info_flag = false;
 }
 
 Driver::~Driver() {
@@ -26,10 +30,9 @@ void Driver::run() {
     set_root_path_from_main_file();
     configure_search_path();
     parse_sources();
-    print_sources();
-    generate_cpp();
-    print_information();
-/*    run_flags();
+
+    run_flags();
+/*
     parse_program();
     build_scopes();
 
@@ -37,6 +40,20 @@ void Driver::run() {
         build_cpp();
     }
     //build_ir();*/
+}
+
+void Driver::run_flags() {
+    if (info_flag) {
+        print_information();
+    }
+
+    if (pretty_flag) {
+        print_sources();
+    }
+
+    if (cpp_flag) {
+        generate_cpp();
+    }
 }
 
 void Driver::set_flags(int argc, char* argv[]) {
@@ -49,6 +66,12 @@ void Driver::set_flags(int argc, char* argv[]) {
         } else if (strcmp(argv[i], "-i") == 0) {
             ++i;
             search_path.push_back(argv[i]);
+        } else if (strcmp(argv[i], "-cpp") == 0) {
+            cpp_flag = true;
+        } else if (strcmp(argv[i], "-pretty") == 0) {
+            pretty_flag = true;
+        } else if (strcmp(argv[i], "-info") == 0) {
+            info_flag = true;
         }
     }
 }
@@ -130,6 +153,7 @@ void Driver::generate_cpp() {
     std::ofstream f("out.cc");
     f << printer.to_str();
     f.close();
+    system("g++ out.cc");
 }
 
 std::string Driver::build_import_path(Import* import) {

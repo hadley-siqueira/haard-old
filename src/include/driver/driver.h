@@ -19,6 +19,7 @@ namespace haard {
             void set_flags(int argc, char* argv[]);
 
         private:
+            void run_flags();
             void parse_sources();
             void parse_imports(Source* file);
             void parse_import(Import* import);
@@ -42,6 +43,10 @@ namespace haard {
             std::string output_name;
             std::vector<std::string> search_path;
             Sources* sources;
+
+            bool cpp_flag;
+            bool pretty_flag;
+            bool info_flag;
     };
 }
 

@@ -57,6 +57,11 @@ set(DRIVER_SRC
     src/driver/driver.cc
 )
 
+set(SYMTAB_SRC
+    src/symtab/symbol.cc
+    src/symtab/symbol_table.cc
+)
+
 set(SOURCES
     src/main.cc
     ${TOKEN_SRC}
@@ -64,6 +69,7 @@ set(SOURCES
     ${PARSER_SRC}
     ${AST_SRC}
     ${PRINTER_SRC}
+    ${SYMTAB_SRC}
     ${DRIVER_SRC}
 )
 
