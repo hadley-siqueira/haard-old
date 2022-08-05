@@ -1,11 +1,11 @@
 #include "ast/source.h"
-#include "symtab/symbol_table.h"
+#include "scope/scope.h"
 
 using namespace haard;
 
 Source::Source() {
     path = nullptr;
-    symtab = new SymbolTable();
+    scope = new Scope();
 }
 
 Source::~Source() {
@@ -21,7 +21,7 @@ Source::~Source() {
         delete classes[i];
     }
 
-    delete symtab;
+    delete scope;
 }
 
 const char* Source::get_path() {
@@ -52,8 +52,8 @@ Class* Source::get_class(int idx) {
     return nullptr;
 }
 
-SymbolTable* Source::get_symbol_table() {
-    return symtab;
+Scope* Source::get_scope() {
+    return scope;
 }
 
 void Source::set_path(const char* path) {

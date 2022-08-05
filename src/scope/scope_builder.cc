@@ -1,14 +1,14 @@
 #include <iostream>
-#include "symtab/symbol_table_builder.h"
+#include "scope/scope_builder.h"
 
 using namespace haard;
 
-SymbolTableBuilder::SymbolTableBuilder() {
+ScopeBuilder::ScopeBuilder() {
     pass = 0;
-    current_table = nullptr;
+    current_scope = nullptr;
 }
 
-void SymbolTableBuilder::build_sources(Sources* sources) {
+void ScopeBuilder::build_sources(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
@@ -16,8 +16,8 @@ void SymbolTableBuilder::build_sources(Sources* sources) {
     pass++;
 }
 
-void SymbolTableBuilder::build_source(Source* source) {
-    current_table = source->get_symbol_table();
+void ScopeBuilder::build_source(Source* source) {
+    current_scope = source->get_scope();
 
     if (pass == 0) {
         for (int i = 0; i < source->classes_count(); ++i) {
@@ -30,24 +30,23 @@ void SymbolTableBuilder::build_source(Source* source) {
     }
 }
 
-void SymbolTableBuilder::build_class(Class* klass) {
-
+void ScopeBuilder::build_class(Class* klass) {
     if (pass == 0) {
-        if (!current_table->has(klass->get_name())) {
-            current_table->define(klass);
+        if (!current_scope->has(klass->get_name())) {
+            current_scope->define(klass);
         } else {
-            Symbol* sym = current_table->has(klass->get_name());
+            Symbol* sym = current_scope->has(klass->get_name());
             std::cout << "Error: you tried to define a class named '" << klass->get_name() << "', but it is already defined. First occurrence\n";
             exit(0);
         }
     }
 }
 
-void SymbolTableBuilder::build_function(Function* func) {
-    Symbol* sym = current_table->has(func->get_name());
+void ScopeBuilder::build_function(Function* func) {
+    Symbol* sym = current_scope->has(func->get_name());
 
     if (!sym) {
-        current_table->define(func);
+        current_scope->define(func);
     } else if (sym->get_kind() == SYM_FUNCTION) {
             sym->add_descriptor(func);
     } else {
@@ -56,3 +55,12 @@ void SymbolTableBuilder::build_function(Function* func) {
     }
 }
 
+void ScopeBuilder::enter_scope(Scope* symtab) {
+    scopes.push(current_scope);
+    current_scope = symtab;
+}
+
+void ScopeBuilder::leave_scope() {
+    current_scope = scopes.top();
+    scopes.pop();
+}

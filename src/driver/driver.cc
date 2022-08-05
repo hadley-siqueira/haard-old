@@ -9,7 +9,7 @@
 #include "driver/driver.h"
 #include "printer/printer.h"
 #include "printer/cpp_printer.h"
-#include "symtab/symbol_table_builder.h"
+#include "scope/scope_builder.h"
 
 using namespace haard;
 
@@ -96,7 +96,7 @@ void Driver::parse_sources() {
 }
 
 void Driver::semantic_analysis() {
-    SymbolTableBuilder sym_builder;
+    ScopeBuilder sym_builder;
 
     sym_builder.build_sources(sources);
 }

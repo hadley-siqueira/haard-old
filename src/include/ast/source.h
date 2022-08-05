@@ -9,7 +9,7 @@
 
 namespace haard {
     class Import;
-    class SymbolTable;
+    class Scope;
 
     class Source {
         public:
@@ -21,7 +21,7 @@ namespace haard {
             Import* get_import(int idx);
             Function* get_function(int idx);
             Class* get_class(int idx);
-            SymbolTable* get_symbol_table();
+            Scope* get_scope();
 
             void set_path(const char* path);
             void add_import(Import* import);
@@ -37,7 +37,7 @@ namespace haard {
             std::vector<Import*> imports;
             std::vector<Function*> functions;
             std::vector<Class*> classes;
-            SymbolTable* symtab;
+            Scope* scope;
     };
 }
 

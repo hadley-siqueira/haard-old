@@ -1,8 +1,11 @@
-def Player : int
+def foo : int
+    return 0
+
+def foo : int
     return 0
 
 class Player:
     x : int
 
-class Player2:
+class Player:
     x : int

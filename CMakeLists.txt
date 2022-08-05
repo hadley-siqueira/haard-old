@@ -61,10 +61,10 @@ set(DRIVER_SRC
     src/driver/driver.cc
 )
 
-set(SYMTAB_SRC
-    src/symtab/symbol.cc
-    src/symtab/symbol_table.cc
-    src/symtab/symbol_table_builder.cc
+set(SCOPE_SRC
+    src/scope/symbol.cc
+    src/scope/scope.cc
+    src/scope/scope_builder.cc
 )
 
 set(SOURCES
@@ -75,7 +75,7 @@ set(SOURCES
     ${PARSER_SRC}
     ${AST_SRC}
     ${PRINTER_SRC}
-    ${SYMTAB_SRC}
+    ${SCOPE_SRC}
     ${DRIVER_SRC}
 )
 

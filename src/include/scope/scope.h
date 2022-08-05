@@ -1,20 +1,20 @@
-#ifndef HAARD_SYMBOL_TABLE_H
-#define HAARD_SYMBOL_TABLE_H
+#ifndef HAARD_SCOPE_H
+#define HAARD_SCOPE_H
 
 #include <map>
 #include "ast/ast.h"
-#include "symtab/symbol.h"
+#include "scope/symbol.h"
 
 namespace haard {
-    class SymbolTable {
+    class Scope {
         public:
-            SymbolTable();
-            ~SymbolTable();
+            Scope();
+            ~Scope();
 
         public:
-            SymbolTable* get_parent();
+            Scope* get_parent();
 
-            void set_parent(SymbolTable* symtab);
+            void set_parent(Scope* symtab);
 
             void define(Class* klass);
             void define(Function* func);
@@ -25,7 +25,7 @@ namespace haard {
 
         private:
             std::map<const char*, Symbol*> symbols;
-            SymbolTable* parent;
+            Scope* parent;
     };
 }
 
