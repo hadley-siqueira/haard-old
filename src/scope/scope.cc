@@ -32,6 +32,11 @@ void Scope::define(Function* func) {
     symbols[func->get_name()] = sym;
 }
 
+void Scope::define(Variable* var) {
+    Symbol* sym = new Symbol(SYM_VARIABLE, var->get_name(), var);
+    symbols[var->get_name()] = sym;
+}
+
 bool Scope::has_parent() {
     return parent != nullptr;
 }

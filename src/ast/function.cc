@@ -1,14 +1,18 @@
 #include "ast/function.h"
+#include "scope/scope.h"
 
 using namespace haard;
 
 Function::Function() {
     return_type = nullptr;
+    statements = nullptr;
+    scope = new Scope();
 }
 
 Function::~Function() {
     delete return_type;
     delete statements;
+    delete scope;
     
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];
@@ -41,6 +45,10 @@ Type* Function::get_return_type() {
 
 CompoundStatement* Function::get_statements() {
     return statements;
+}
+
+Scope* Function::get_scope() {
+    return scope;
 }
 
 void Function::set_line(int line) {

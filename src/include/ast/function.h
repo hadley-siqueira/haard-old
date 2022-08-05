@@ -9,6 +9,8 @@
 #include "ast/compound_statement.h"
 
 namespace haard {
+    class Scope;
+
     class Function {
         public:
             Function();
@@ -21,6 +23,7 @@ namespace haard {
             Variable* get_parameter(int idx);
             Type* get_return_type();
             CompoundStatement* get_statements();
+            Scope* get_scope();
 
             void set_line(int line);
             void set_column(int column);
@@ -40,6 +43,7 @@ namespace haard {
             std::vector<Variable*> parameters;
             Type* return_type;
             CompoundStatement* statements;
+            Scope* scope;
             
     };
 }

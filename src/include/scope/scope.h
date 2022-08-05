@@ -18,6 +18,7 @@ namespace haard {
 
             void define(Class* klass);
             void define(Function* func);
+            void define(Variable* var);
 
             bool has_parent();
             Symbol* has(const char* name);

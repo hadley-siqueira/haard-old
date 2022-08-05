@@ -1,4 +1,8 @@
 def foo : int
+    @a : int
+    @b : int
+    @b : int
+
     return 0
 
 def foo : int

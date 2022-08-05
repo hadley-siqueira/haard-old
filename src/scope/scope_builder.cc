@@ -37,7 +37,6 @@ void ScopeBuilder::build_class(Class* klass) {
         } else {
             Symbol* sym = current_scope->has(klass->get_name());
             std::cout << "Error: you tried to define a class named '" << klass->get_name() << "', but it is already defined. First occurrence\n";
-            exit(0);
         }
     }
 }
@@ -48,16 +47,44 @@ void ScopeBuilder::build_function(Function* func) {
     if (!sym) {
         current_scope->define(func);
     } else if (sym->get_kind() == SYM_FUNCTION) {
-            sym->add_descriptor(func);
+        sym->add_descriptor(func);
     } else {
-            std::cout << "Error: you tried to define a function named '" << func->get_name() << "', but it is already defined. First occurrence\n";
-            exit(0);
+        std::cout << "Error: you tried to define a function named '" << func->get_name() << "', but it is already defined. First occurrence\n";
+    }
+
+    enter_scope(func->get_scope());
+    build_function_parameters(func);
+
+
+    leave_scope();
+}
+
+void ScopeBuilder::build_function_parameters(Function* func) {
+    Variable* param;
+
+    for (int i = 0; i < func->parameters_count(); ++i) {
+        build_variable(func->get_parameter(i));
     }
 }
 
-void ScopeBuilder::enter_scope(Scope* symtab) {
+void ScopeBuilder::build_variable(Variable* var) {
+    Symbol* sym;
+
+    sym = current_scope->has(var->get_name());
+
+    if (!sym) {
+        current_scope->define(var);
+    } else if (sym->get_kind() != SYM_VARIABLE) {
+        current_scope->define(var);
+    } else {
+        std::cout << "variable already defined\n";
+    }
+}
+
+void ScopeBuilder::enter_scope(Scope* scope) {
     scopes.push(current_scope);
-    current_scope = symtab;
+    scope->set_parent(current_scope);
+    current_scope = scope;
 }
 
 void ScopeBuilder::leave_scope() {

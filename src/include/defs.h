@@ -673,7 +673,8 @@ namespace haard {
 
     typedef enum SymbolKind {
         SYM_CLASS,
-        SYM_FUNCTION
+        SYM_FUNCTION,
+        SYM_VARIABLE,
     } SymbolKind;
 }
 
