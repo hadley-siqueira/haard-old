@@ -9,6 +9,11 @@ set(UTILS_SRC
     src/utils/string_pool.cc
 )
 
+set(LOG_SRC
+    src/log/log.cc
+    src/log/logger.cc
+)
+
 set(TOKEN_SRC
     src/token/token.cc
 )
@@ -70,6 +75,7 @@ set(SCOPE_SRC
 set(SOURCES
     src/main.cc
     ${UTILS_SRC}
+    ${LOG_SRC}
     ${TOKEN_SRC}
     ${SCANNER_SRC}
     ${PARSER_SRC}

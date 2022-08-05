@@ -675,6 +675,8 @@ namespace haard {
         SYM_CLASS,
         SYM_FUNCTION,
         SYM_VARIABLE,
+        SYM_CLASS_VARIABLE,
+        SYM_PARAMETER
     } SymbolKind;
 }
 

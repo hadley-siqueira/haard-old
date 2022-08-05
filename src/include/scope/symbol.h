@@ -2,6 +2,8 @@
 #define HAARD_SYMBOL_H
 
 #include <vector>
+#include <sstream>
+#include <string>
 
 namespace haard {
     class Symbol {
@@ -17,6 +19,8 @@ namespace haard {
             void set_kind(int kind);
             void set_name(const char* name);
             void add_descriptor(void* descriptor);
+
+            std::string to_str();
 
         private:
             int kind;

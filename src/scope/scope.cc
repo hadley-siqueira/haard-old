@@ -1,3 +1,4 @@
+#include <iostream>
 #include "scope/scope.h"
 
 using namespace haard;
@@ -32,8 +33,8 @@ void Scope::define(Function* func) {
     symbols[func->get_name()] = sym;
 }
 
-void Scope::define(Variable* var) {
-    Symbol* sym = new Symbol(SYM_VARIABLE, var->get_name(), var);
+void Scope::define(int kind, Variable* var) {
+    Symbol* sym = new Symbol(kind, var->get_name(), var);
     symbols[var->get_name()] = sym;
 }
 
@@ -69,4 +70,23 @@ Symbol* Scope::has_class(const char* name) {
     }
 
     return nullptr;
+}
+
+void Scope::debug() {
+    Symbol* sym;
+    std::map<const char*, Symbol*>::iterator it;
+
+    if (has_parent()) {
+        parent->debug();
+        std::cout << " -> ";
+    }
+
+    std::cout << "{";
+
+    for (it = symbols.begin(); it != symbols.end(); ++it) {
+        sym = it->second;
+        std::cout << sym->to_str() << ", ";
+    }
+
+    std::cout << "}";
 }

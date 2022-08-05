@@ -18,7 +18,7 @@ namespace haard {
 
             void build_function(Function* func);
             void build_function_parameters(Function* func);
-            void build_variable(Variable* var);
+            void build_parameter(Variable* var);
 
         private:
             void enter_scope(Scope* scope);

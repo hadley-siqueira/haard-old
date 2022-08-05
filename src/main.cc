@@ -8,6 +8,7 @@
 #include "ast/ast.h"
 #include "printer/printer.h"
 #include "driver/driver.h"
+#include "log/logger.h"
 
 using namespace haard;
 
@@ -42,6 +43,9 @@ void test_driver(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
     // test_scanner(argv[1]);
     test_driver(argc, argv);   
+    Logger log;
+
+    log.read_file(argv[1], 2, 2);
 
     return 0;
 }

@@ -18,11 +18,13 @@ namespace haard {
 
             void define(Class* klass);
             void define(Function* func);
-            void define(Variable* var);
+            void define(int kind, Variable* var);
 
             bool has_parent();
             Symbol* has(const char* name);
             Symbol* has_class(const char* name);
+
+            void debug();
 
         private:
             std::map<const char*, Symbol*> symbols;

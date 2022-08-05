@@ -63,21 +63,23 @@ void ScopeBuilder::build_function_parameters(Function* func) {
     Variable* param;
 
     for (int i = 0; i < func->parameters_count(); ++i) {
-        build_variable(func->get_parameter(i));
+        build_parameter(func->get_parameter(i));
     }
+
+    current_scope->debug(); std::cout << '\n';
 }
 
-void ScopeBuilder::build_variable(Variable* var) {
+void ScopeBuilder::build_parameter(Variable* var) {
     Symbol* sym;
 
     sym = current_scope->has(var->get_name());
 
     if (!sym) {
-        current_scope->define(var);
-    } else if (sym->get_kind() != SYM_VARIABLE) {
-        current_scope->define(var);
+        current_scope->define(SYM_PARAMETER, var);
+    } else if (sym->get_kind() != SYM_PARAMETER) {
+        current_scope->define(SYM_PARAMETER, var);
     } else {
-        std::cout << "variable already defined\n";
+        std::cout << "parameter already defined\n";
     }
 }
 
