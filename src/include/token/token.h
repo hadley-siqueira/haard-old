@@ -10,7 +10,7 @@ namespace haard {
             int get_line();
             int get_column();
             int get_whitespace();
-            std::string get_lexeme();
+            const char* get_lexeme();
 
             void set_kind(int kind);
             void set_line(int line);
@@ -25,8 +25,7 @@ namespace haard {
             int line;
             int column;
             int whitespace;
-            std::string lexeme;
-            const char* lexeme_;
+            const char* lexeme;
     };
 }
 
