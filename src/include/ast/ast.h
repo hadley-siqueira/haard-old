@@ -12,6 +12,7 @@
 #include "ast/array_list_type.h"
 #include "ast/hash_type.h"
 #include "ast/type_list.h"
+#include "ast/named_type.h"
 
 // Expressions
 #include "ast/expression.h"

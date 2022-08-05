@@ -147,6 +147,7 @@ void CppPrinter::print_type(Type* type) {
     ArrayListType* al = (ArrayListType*) type;
     HashType* hs = (HashType*) type;
     TypeList* tl = (TypeList*) type;
+    NamedType* named = (NamedType*) type;
 
     switch (kind) {
     case TYPE_U8:
@@ -238,7 +239,7 @@ void CppPrinter::print_type(Type* type) {
         break;
 
     case TYPE_NAMED:
-        out << "named";
+        out << named->get_name()->get_lexeme();
         break;
 
     case TYPE_ARRAY:

@@ -210,6 +210,7 @@ Type* Parser::parse_union_type() {
 Type* Parser::parse_primary_type() {
     Token token;
     Expression* expr = nullptr;
+    Identifier* id = nullptr;
     Type* type = nullptr;
 
     if (match(TK_INT)) {
@@ -256,8 +257,19 @@ Type* Parser::parse_primary_type() {
         type = new Type(TYPE_U32, matched);
     } else if (match(TK_U64)) {
         type = new Type(TYPE_U64, matched);
-    } else if (lookahead(TK_ID) || lookahead(TK_SCOPE)) {
-        //type = new NamedType(parse_scope_expression());
+    } else if (match(TK_ID)) {
+        NamedType* named = new NamedType();
+        id = new Identifier(matched);
+
+        if (match(TK_SCOPE)) {
+            named->set_alias(id);
+            expect(TK_ID);
+            named->set_name(new Identifier(matched));
+        } else {
+            named->set_name(id);
+        }
+
+        type = named;
     } else if (match(TK_LEFT_SQUARE_BRACKET)) {
         token = matched;
 
