@@ -1,9 +1,31 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <stack>
+#include <map>
 #include "log/logger.h"
 
 using namespace haard;
+
+#define NORMAL "\033[0m"
+#define BLACK "\033[30m"
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"   
+#define WHITE   "\033[37m"
+#define BRIGHT_BLACK "\033[90m"
+#define BRIGHT_RED "\033[91m"
+#define BRIGHT_GREEN "\033[92m"
+#define BRIGHT_YELLOW "\033[93m"
+#define BRIGHT_BLUE "\033[94m"
+#define BRIGHT_MAGENTA "\033[95m"
+#define BRIGHT_CYAN    "\033[96m"   
+#define BRIGHT_WHITE   "\033[97m"
+
+std::string colorify(std::string msg);
 
 Logger::~Logger() {
     for (int i = 0; i < logs.size(); ++i) {
@@ -35,22 +57,82 @@ std::string Logger::read_file(const char* path, int lbegin, int count) {
         }
     }
 
+    std::cout << "main.hd:181:10: ;<red>error:</red> unknown type:\n";
     std::cout << do_message("    @a : int", 181, 10, 2) << '\n';
-    std::cout << buffer;
+
+    std::cout << "\nmain.hd:181:10: error: unexpected end of expression:\n";
+    std::cout << do_message("       if obj.get():", 181, 15, 5) << '\n';
+    
+    std::cout << colorify("main.hd:181:10: ;<red>error:</red> unknown <yellow>type:</yellow> and now is <white>white</white> and this one is <magenta>warning</magenta>\n") << '\n';
     return buffer;
 }
 
-#define RED 0
-#define REDD "\033[31m"
-#define NORMAL "\033[0m"
 
-std::string colorify(int color, std::string msg, int column, int count) {
+std::string colorify(std::string msg) {
+    std::stringstream ss;
+    std::vector<std::string> pieces;
+    std::stack<std::string> color_stack;
+
+    std::map<std::string, std::string> color_map = {
+        {"<black>", BLACK},
+        {"<red>", RED},
+        {"<green>", GREEN},
+        {"<yellow>", YELLOW},
+        {"<blue>", BLUE},
+        {"<magenta>", MAGENTA},
+        {"<cyan>", CYAN},
+        {"<white>", WHITE},
+    };
+
+    for (int i = 0; i < msg.size(); ++i) {
+        if (msg[i] == '<') {
+            pieces.push_back(ss.str());
+            ss.str("");
+
+            while (msg[i] != '>') {
+                ss << msg[i];
+                ++i;
+            }
+
+            ss << msg[i];
+            pieces.push_back(ss.str());
+            ss.str("");
+        } else {
+            ss << msg[i];
+        }
+    }
+
+    pieces.push_back(ss.str());
+    ss.str("");
+    color_stack.push(NORMAL);
+
+    for (int i = 0; i < pieces.size(); ++i) {
+        std::cout << pieces[i] << '\n';
+
+        if (color_map.count(pieces[i]) > 0) {
+            ss << color_map[pieces[i]];
+            color_stack.push(color_map[pieces[i]]);
+        } else if (pieces[i] == "<yellow>") {
+            ss << YELLOW;
+            color_stack.push(YELLOW);
+        } else if (pieces[i].size() >= 2 && pieces[i][0] == '<' && pieces[i][1] == '/') {
+            color_stack.pop();
+            ss << color_stack.top();
+        } else {
+            ss << pieces[i];
+        }
+    }
+    
+    return ss.str();
+}
+
+std::string colorify(std::string color, std::string msg, int column, int count) {
     std::stringstream ss;
     int c_end = column + count;
 
     for (int i = 0; i < msg.size(); ++i) {
         if (i == column - 1) {
-            ss << REDD;
+            ss << color;
         } 
 
         ss << msg[i];
