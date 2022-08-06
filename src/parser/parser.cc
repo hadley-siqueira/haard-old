@@ -20,10 +20,10 @@ Source* Parser::read(std::string path) {
     Source* source = nullptr;
 
     idx = 0;
+    this->path = path;
     tokens = s.read(path);
     source = parse_source();
     source->set_path(StringPool::get(path));
-    this->path = path;
 
     return source;
 }
@@ -45,11 +45,11 @@ Source* Parser::parse_source() {
             std::stringstream ss;
             Token tk = tokens[idx];
 
-            ss << "unexpected token '<red>";
+            ss << "unexpected token '<white>";
             ss << tk.get_lexeme();
-            ss << "</red>'\n";
+            ss << "</white>'";
 
-            logger->error(path, tk.get_line(), tk.get_column(), ss.str());
+            logger->error(path, tk, ss.str());
             break;
         }
     }
@@ -1167,11 +1167,26 @@ void Parser::expect(int kind) {
         return;
     }
 
+//file.hd:10:5: error: expected a 
+//  10 |     int foo;
+//     |     ^^^
     Token token;
     token.set_kind(kind);
     std::cout << "parser error: expected ";
     std::cout << token.to_str();
     std::cout << " but got a " << tokens[idx].to_str() << '\n';
+
+    std::stringstream ss;
+    Token tk = tokens[idx];
+
+    ss << "expected token '<white>";
+    ss << tk.get_lexeme();
+    ss << "</white>' but got a ";
+    ss << tk.get_lexeme();
+    ss << " instead";
+
+    logger->error(path, tk, ss.str());
+
     exit(0);
 }
 

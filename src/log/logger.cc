@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stack>
 #include <map>
+#include <cstring>
 #include "defs.h"
 #include "log/logger.h"
 
@@ -33,12 +34,10 @@ void Logger::warn(std::string path, int line, int column, std::string msg) {
 void Logger::error(std::string path, int line, int column, std::string msg) {
     std::stringstream ss;
 
-
-    std::string c = read_file(path.c_str(), line, 1);
+    std::string c = read_line(path.c_str(), line);
     std::string cf = do_message(c, RED, line, column, 1);
 
     ss << colorify(msg) << '\n';
-    ss << c << '\n';
     ss << cf << '\n';
     
     logs.push_back(new Log(LOG_ERROR, line, column, path, ss.str()));
@@ -46,29 +45,33 @@ void Logger::error(std::string path, int line, int column, std::string msg) {
     exit(0);
 }
 
-std::string Logger::read_file(const char* path, int lbegin, int count) {
-    std::string buffer;
-    std::ifstream file(path);
-    int line = 1;
-    char c;
+void Logger::error(std::string path, Token& token, std::string msg) {
+    std::stringstream ss;
+    int line = token.get_line();
+    int column = token.get_column();
+    int count = strlen(token.get_lexeme());
 
-    while (line != lbegin && file.get(c)) {
-        if (c == '\n') {
-            ++line;
-        }
-    }
+    std::string c = read_line(path.c_str(), token.get_line());
+    std::string cf = do_message(c, RED, line, column, count);
 
-    while (line != lbegin + count && file.get(c)) {
-        buffer += c;
-
-        if (c == '\n') {
-            ++line;
-        }
-    }
-
-    return buffer;
+    ss << colorify(msg) << '\n';
+    ss << cf << '\n';
+    
+    logs.push_back(new Log(LOG_ERROR, line, column, path, ss.str()));
+    print();
+    exit(0);
 }
 
+std::string Logger::read_line(const char* path, int line) {
+    std::ifstream file(path);
+    std::string str;
+
+    for (int i = 0; i < line; ++i) {
+        getline(file, str);
+    }
+
+    return str;
+}
 
 std::string colorify(std::string msg) {
     std::stringstream ss;
@@ -109,8 +112,6 @@ std::string colorify(std::string msg) {
     color_stack.push(NORMAL);
 
     for (int i = 0; i < pieces.size(); ++i) {
-        std::cout << pieces[i] << '\n';
-
         if (color_map.count(pieces[i]) > 0) {
             ss << color_map[pieces[i]];
             color_stack.push(color_map[pieces[i]]);
