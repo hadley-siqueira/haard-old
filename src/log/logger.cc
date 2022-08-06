@@ -35,19 +35,43 @@ std::string Logger::read_file(const char* path, int lbegin, int count) {
         }
     }
 
-    std::cout << do_message("    @a", 181, 5, 1);
+    std::cout << do_message("    @a : int", 181, 10, 2) << '\n';
     std::cout << buffer;
     return buffer;
 }
 
-std::string Logger::do_message(std::string buf, int line, int column, int count) {
+#define RED 0
+#define REDD "\033[31m"
+#define NORMAL "\033[0m"
+
+std::string colorify(int color, std::string msg, int column, int count) {
+    std::stringstream ss;
+    int c_end = column + count;
+
+    for (int i = 0; i < msg.size(); ++i) {
+        if (i == column - 1) {
+            ss << REDD;
+        } 
+
+        ss << msg[i];
+
+        if (i == column + count - 2) {
+            ss << NORMAL;
+        }
+    }
+
+    return ss.str();
+}
+
+std::string create_trailing(int line, int column, int count) {
     std::stringstream ss;
     int s1;
 
     ss << "  " << line << " |";
     s1 = ss.str().size();
 
-    ss << buf << '\n';
+    ss.str("");
+
     for (int i = 0; i < s1 - 1; ++i) {
         ss << ' ';
     }
@@ -61,6 +85,17 @@ std::string Logger::do_message(std::string buf, int line, int column, int count)
     for (int i = 0; i < count; ++i) {
         ss << '^';
     }
+
+    ss << "    ";
+    return colorify(RED, ss.str(), column + s1, count);
+}
+
+std::string Logger::do_message(std::string buf, int line, int column, int count) {
+    std::stringstream ss;
+
+    ss << "  " << line << " |";
+    ss << colorify(RED, buf, column, count) << '\n';
+    ss << create_trailing(line, column, count);
 
     return ss.str();
 }
