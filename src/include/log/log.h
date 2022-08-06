@@ -5,8 +5,15 @@
 
 namespace haard {
     class Log {
+        public:
+            Log(int kind, int line, int column, std::string path, std::string message);
+            std::string to_str();
+
         private:
             int kind;
+            int line;
+            int column;
+            std::string path;
             std::string message;
     };
 }
