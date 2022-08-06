@@ -16,6 +16,12 @@ Logger::~Logger() {
     }
 }
 
+void Logger::print() {
+    for (int i = 0; i < logs.size(); ++i) {
+        std::cout << logs[i]->to_str();
+    }
+}
+
 void Logger::info(std::string path, int line, int column, std::string msg) {
     logs.push_back(new Log(LOG_INFO, line, column, path, msg));
 }
@@ -25,11 +31,19 @@ void Logger::warn(std::string path, int line, int column, std::string msg) {
 }
 
 void Logger::error(std::string path, int line, int column, std::string msg) {
-    logs.push_back(new Log(LOG_ERROR, line, column, path, msg));
-}
+    std::stringstream ss;
 
-void Logger::add_log(Log* log) {
-    logs.push_back(log);
+
+    std::string c = read_file(path.c_str(), line, 1);
+    std::string cf = do_message(c, RED, line, column, 1);
+
+    ss << colorify(msg) << '\n';
+    ss << c << '\n';
+    ss << cf << '\n';
+    
+    logs.push_back(new Log(LOG_ERROR, line, column, path, ss.str()));
+    print();
+    exit(0);
 }
 
 std::string Logger::read_file(const char* path, int lbegin, int count) {
@@ -52,13 +66,6 @@ std::string Logger::read_file(const char* path, int lbegin, int count) {
         }
     }
 
-    std::cout << "main.hd:181:10: ;<red>error:</red> unknown type:\n";
-    std::cout << do_message("    @a : int", 181, 10, 2) << '\n';
-
-    std::cout << "\nmain.hd:181:10: error: unexpected end of expression:\n";
-    std::cout << do_message("       if obj.get():", 181, 15, 5) << '\n';
-    
-    std::cout << colorify("main.hd:181:10: ;<red>error:</red> unknown <yellow>type:</yellow> and now is <white>white</white> and this one is <magenta>warning</magenta>\n") << '\n';
     return buffer;
 }
 
@@ -167,11 +174,11 @@ std::string create_trailing(int line, int column, int count) {
     return colorify(RED, ss.str(), column + s1, count);
 }
 
-std::string Logger::do_message(std::string buf, int line, int column, int count) {
+std::string Logger::do_message(std::string buf, std::string color, int line, int column, int count) {
     std::stringstream ss;
 
     ss << "  " << line << " |";
-    ss << colorify(RED, buf, column, count) << '\n';
+    ss << colorify(color, buf, column, count) << '\n';
     ss << create_trailing(line, column, count);
 
     return ss.str();

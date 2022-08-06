@@ -11,12 +11,14 @@ namespace haard {
             ~Logger();
 
         public:
-            void add_log(Log* log);
+            void print();
             void info(std::string path, int line, int column, std::string msg);
             void warn(std::string path, int line, int column, std::string msg);
             void error(std::string path, int line, int column, std::string msg);
+
+        private:
             std::string read_file(const char* path, int lbegin, int count=1);
-            std::string do_message(std::string buf, int line, int column, int count=1);
+            std::string do_message(std::string buf, std::string color, int line, int column, int count=1);
 
         private:
             std::vector<Log*> logs;

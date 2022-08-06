@@ -142,7 +142,7 @@ Source* Driver::parse_file(const char* path) {
     std::cout << "Parsing: " << path << std::endl;
 
     if (!sources->has_source(path)) {
-        Parser parser;
+        Parser parser(&logger);
         sources->add_source(path, parser.read(path));
     }
 

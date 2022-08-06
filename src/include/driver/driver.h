@@ -7,6 +7,7 @@
 #include "ast/sources.h"
 #include "ast/source.h"
 #include "parser/parser.h"
+#include "log/logger.h"
 
 namespace haard {
     class Driver {
@@ -45,6 +46,7 @@ namespace haard {
             std::string output_name;
             std::vector<std::string> search_path;
             Sources* sources;
+            Logger logger;
 
             bool cpp_flag;
             bool pretty_flag;

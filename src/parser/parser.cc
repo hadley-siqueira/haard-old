@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include "utils/string_pool.h"
 #include "parser/parser.h"
 
@@ -6,6 +7,12 @@ using namespace haard;
 
 Parser::Parser() {
     idx = 0;
+    this->logger = nullptr;
+}
+
+Parser::Parser(Logger* logger) {
+    idx = 0;
+    this->logger = logger;
 }
 
 Source* Parser::read(std::string path) {
@@ -16,6 +23,7 @@ Source* Parser::read(std::string path) {
     tokens = s.read(path);
     source = parse_source();
     source->set_path(StringPool::get(path));
+    this->path = path;
 
     return source;
 }
@@ -31,6 +39,17 @@ Source* Parser::parse_source() {
         } else if (lookahead(TK_CLASS)) {
             source->add_class(parse_class());
         } else {
+//file.hd:10:5: error: can't recognize token
+//  10 |     int foo;
+//     |     ^^^
+            std::stringstream ss;
+            Token tk = tokens[idx];
+
+            ss << "unexpected token '<red>";
+            ss << tk.get_lexeme();
+            ss << "</red>'\n";
+
+            logger->error(path, tk.get_line(), tk.get_column(), ss.str());
             break;
         }
     }

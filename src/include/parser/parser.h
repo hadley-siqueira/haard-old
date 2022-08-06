@@ -7,11 +7,13 @@
 #include "token/token.h"
 #include "scanner/scanner.h"
 #include "ast/ast.h"
+#include "log/logger.h"
 
 namespace haard {
     class Parser {
         public:
             Parser();
+            Parser(Logger* logger);
 
         public:
             Source* read(std::string path);
@@ -80,9 +82,11 @@ namespace haard {
 
         private:
             int idx;
+            std::string path;
             std::vector<Token> tokens;
             std::stack<int> indent_stack;
             Token matched;
+            Logger* logger;
     };
 }
 
