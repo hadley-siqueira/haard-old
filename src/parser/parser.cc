@@ -139,7 +139,7 @@ Function* Parser::parse_function() {
 
         ss << "expected a return type";
         logger->error(path, tokens[idx - 1], ss.str());*/
-        // logger->error(error_message_no_return_type(path, tokens[idx - 1]);
+        logger->error(error_message_no_return_type(path, tokens[idx - 1]));
     } 
 
     function->set_return_type(type);
@@ -1168,18 +1168,7 @@ void Parser::expect(int kind) {
         return;
     }
 
-    /*std::stringstream ss;
-    Token tk = tokens[idx];
-
-    ss << "expected token '<white>";
-    ss << token_kind_to_str_map.at(kind);
-    ss << "</white>' but got a <white>";
-    ss << token_kind_to_str_map.at(tk.get_kind());
-    ss << "</white> instead";
-
-    logger->error(path, tk, ss.str());*/
     logger->error(error_message_expected_token(path, kind, tokens[idx]));
-    exit(0);
 }
 
 bool Parser::match(int kind) {
