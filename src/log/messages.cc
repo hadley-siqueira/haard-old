@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <stack>
+#include <cstring>
 #include "log/messages.h"
 
 using namespace haard;
@@ -122,6 +123,8 @@ std::string create_trailing(int line, int column, int count) {
 std::string do_message(std::string buf, std::string color, int line, int column, int count) {
     std::stringstream ss;
 
+    if (count < 1) count = 1;
+
     ss << "  " << line << " |";
     ss << colorify(color, buf, column, count) << '\n';
     ss << create_trailing(line, column, count);
@@ -134,15 +137,18 @@ Log* haard::error_message_unexpected_token(std::string path, Token& token) {
     int line = token.get_line();
     int column = token.get_column();
     int kind = token.get_kind();
+    int count = strlen(token.get_lexeme());
 
     ss << "unexpected token '<white>";
     ss << token_kind_to_str_map.at(kind);
     ss << "</white>'";
 
     std::string c = read_line(path.c_str(), line);
-    std::string cf = do_message(c, RED, line, column, 1);
+    std::string cf = do_message(c, RED, line, column, count);
+    std::string msg = ss.str();
+    ss.str("");
 
-    ss << colorify(ss.str()) << '\n';
+    ss << colorify(msg) << '\n';
     ss << cf << '\n';
 
     return new Log(LOG_ERROR, line, column, path, ss.str());
