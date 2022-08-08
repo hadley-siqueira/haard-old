@@ -2,6 +2,7 @@
 #include <sstream>
 #include "utils/string_pool.h"
 #include "parser/parser.h"
+#include "log/messages.h"
 
 using namespace haard;
 
@@ -39,14 +40,15 @@ Source* Parser::parse_source() {
         } else if (lookahead(TK_CLASS)) {
             source->add_class(parse_class());
         } else {
-            std::stringstream ss;
+            /*std::stringstream ss;
             Token tk = tokens[idx];
 
             ss << "unexpected token '<white>";
             ss << token_kind_to_str_map.at(tk.get_kind());
             ss << "</white>'";
 
-            logger->error(path, tk, ss.str());
+            logger->error(path, tk, ss.str());*/
+            logger->error(error_message_unexpected_token(path, tokens[idx]));
             break;
         }
     }
@@ -142,10 +144,11 @@ Function* Parser::parse_function() {
     type = parse_type();
 
     if (type == nullptr) {
-        std::stringstream ss;
+        /*std::stringstream ss;
 
         ss << "expected a return type";
-        logger->error(path, tokens[idx - 1], ss.str());
+        logger->error(path, tokens[idx - 1], ss.str());*/
+        // logger->error(error_message_no_return_type(path, tokens[idx - 1]);
     } 
 
     function->set_return_type(type);
@@ -1174,7 +1177,7 @@ void Parser::expect(int kind) {
         return;
     }
 
-    std::stringstream ss;
+    /*std::stringstream ss;
     Token tk = tokens[idx];
 
     ss << "expected token '<white>";
@@ -1183,7 +1186,9 @@ void Parser::expect(int kind) {
     ss << token_kind_to_str_map.at(tk.get_kind());
     ss << "</white> instead";
 
-    logger->error(path, tk, ss.str());
+    logger->error(path, tk, ss.str());*/
+    // logger->error(error_message_expected_token(path, tokens[idx])
+    exit(0);
 }
 
 bool Parser::match(int kind) {

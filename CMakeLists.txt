@@ -12,6 +12,7 @@ set(UTILS_SRC
 set(LOG_SRC
     src/log/log.cc
     src/log/logger.cc
+    src/log/messages.cc
 )
 
 set(TOKEN_SRC

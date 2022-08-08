@@ -17,6 +17,7 @@ namespace haard {
             void warn(std::string path, int line, int column, std::string msg);
             void error(std::string path, int line, int column, std::string msg);
             void error(std::string path, Token& token, std::string msg);
+            void error(Log* log);
 
         private:
             std::string read_line(const char* path, int line);

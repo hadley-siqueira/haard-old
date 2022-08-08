@@ -36,6 +36,7 @@ void ScopeBuilder::build_class(Class* klass) {
             current_scope->define(klass);
         } else {
             Symbol* sym = current_scope->has(klass->get_name());
+            // logger->error(build_error_message_1(klass)
             std::cout << "Error: you tried to define a class named '" << klass->get_name() << "', but it is already defined. First occurrence\n";
         }
     }
