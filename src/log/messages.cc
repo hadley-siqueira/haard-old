@@ -153,3 +153,27 @@ Log* haard::error_message_unexpected_token(std::string path, Token& token) {
 
     return new Log(LOG_ERROR, line, column, path, ss.str());
 }
+
+Log* haard::error_message_expected_token(std::string path, int kind, Token& token) {
+    std::stringstream ss;
+    int line = token.get_line();
+    int column = token.get_column();
+    int tkind = token.get_kind();
+    int count = strlen(token.get_lexeme());
+
+    ss << "expected token '<white>";
+    ss << token_kind_to_str_map.at(kind);
+    ss << "</white>' but got a <white>";
+    ss << token_kind_to_str_map.at(token.get_kind());
+    ss << "</white> instead";
+
+    std::string c = read_line(path.c_str(), line);
+    std::string cf = do_message(c, RED, line, column, count);
+    std::string msg = ss.str();
+    ss.str("");
+
+    ss << colorify(msg) << '\n';
+    ss << cf << '\n';
+
+    return new Log(LOG_ERROR, line, column, path, ss.str());
+}
