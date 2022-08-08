@@ -39,14 +39,11 @@ Source* Parser::parse_source() {
         } else if (lookahead(TK_CLASS)) {
             source->add_class(parse_class());
         } else {
-//file.hd:10:5: error: can't recognize token
-//  10 |     int foo;
-//     |     ^^^
             std::stringstream ss;
             Token tk = tokens[idx];
 
             ss << "unexpected token '<white>";
-            ss << tk.get_lexeme();
+            ss << token_kind_to_str_map.at(tk.get_kind());
             ss << "</white>'";
 
             logger->error(path, tk, ss.str());
@@ -133,6 +130,7 @@ Variable* Parser::parse_class_variable() {
 }
 
 Function* Parser::parse_function() {
+    Type* type;
     Function* function = new Function();
 
     expect(TK_DEF);
@@ -141,7 +139,16 @@ Function* Parser::parse_function() {
 
     expect(TK_COLON);
     indent();
-    function->set_return_type(parse_type());
+    type = parse_type();
+
+    if (type == nullptr) {
+        std::stringstream ss;
+
+        ss << "expected a return type";
+        logger->error(path, tokens[idx - 1], ss.str());
+    } 
+
+    function->set_return_type(type);
 
     if (has_parameters()) {
         parse_parameters(function);
@@ -1167,27 +1174,16 @@ void Parser::expect(int kind) {
         return;
     }
 
-//file.hd:10:5: error: expected a 
-//  10 |     int foo;
-//     |     ^^^
-    Token token;
-    token.set_kind(kind);
-    std::cout << "parser error: expected ";
-    std::cout << token.to_str();
-    std::cout << " but got a " << tokens[idx].to_str() << '\n';
-
     std::stringstream ss;
     Token tk = tokens[idx];
 
     ss << "expected token '<white>";
-    ss << tk.get_lexeme();
-    ss << "</white>' but got a ";
-    ss << tk.get_lexeme();
-    ss << " instead";
+    ss << token_kind_to_str_map.at(kind);
+    ss << "</white>' but got a <white>";
+    ss << token_kind_to_str_map.at(tk.get_kind());
+    ss << "</white> instead";
 
     logger->error(path, tk, ss.str());
-
-    exit(0);
 }
 
 bool Parser::match(int kind) {
