@@ -16,9 +16,10 @@ namespace haard {
 
             void set_parent(Scope* symtab);
 
-            void define(Class* klass);
-            void define(Function* func);
-            void define(int kind, Variable* var);
+            Symbol* define(Class* klass);
+            Symbol* define(Function* func);
+            Symbol* define(int kind, Function* func);
+            Symbol* define(int kind, Variable* var);
 
             bool has_parent();
             Symbol* has(const char* name);

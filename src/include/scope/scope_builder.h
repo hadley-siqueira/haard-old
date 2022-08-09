@@ -20,12 +20,35 @@ namespace haard {
             void build_function_parameters(Function* func);
             void build_parameter(Variable* var);
 
+            void build_type(Type* type);
+
+            void build_statement(Statement* statement);
+            void build_compound_statement(CompoundStatement* stmts);
+            void build_expression_statement(ExpressionStatement* statement);
+
+            void build_expression(Expression* expression);
+            void build_assignment(BinOp* bin);
+            void build_binop(std::string oper, BinOp* bin);
+            void build_unop(std::string oper, UnOp* un, bool before=true);
+            void build_identifier(Identifier* id);
+            void build_literal(Literal* literal);
+            void build_expression_list(std::string begin, std::string end, ExpressionList* tuple);
+            void build_hash(ExpressionList* hash);
+            void build_function_expression(FunctionExpression* function);
+            void build_new_expression(NewExpression* expr);
+
+        private:
+            void define_sources_elements(Sources* sources);
+            void define_source_elements(Source* source);
+            void define_class(Class* klass);
+            void define_function(Function* func);
+            void define_method(Function* func);
+
         private:
             void enter_scope(Scope* scope);
             void leave_scope();
 
         private:
-            int pass;
             Scope* current_scope;
             std::stack<Scope*> scopes;
     };

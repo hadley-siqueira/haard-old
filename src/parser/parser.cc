@@ -39,6 +39,8 @@ Source* Parser::parse_source() {
             source->add_function(parse_function());
         } else if (lookahead(TK_CLASS)) {
             source->add_class(parse_class());
+        } else if (match(TK_EOF)) {
+            break;
         } else {
             logger->error(error_message_unexpected_token(path, tokens[idx]));
         }
@@ -135,10 +137,6 @@ Function* Parser::parse_function() {
     type = parse_type();
 
     if (type == nullptr) {
-        /*std::stringstream ss;
-
-        ss << "expected a return type";
-        logger->error(path, tokens[idx - 1], ss.str());*/
         logger->error(error_message_no_return_type(path, tokens[idx - 1]));
     } 
 

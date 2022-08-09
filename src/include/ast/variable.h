@@ -4,12 +4,14 @@
 #include <string>
 #include "token/token.h"
 #include "ast/type.h"
+#include "ast/identifier.h"
 
 namespace haard {
     class Variable {
         public:
             Variable();
             Variable(Token& token);
+            Variable(Identifier* id);
             ~Variable();
 
         public:

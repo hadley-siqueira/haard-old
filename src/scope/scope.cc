@@ -23,19 +23,28 @@ void Scope::set_parent(Scope* symtab) {
     parent = symtab;
 }
 
-void Scope::define(Class* klass) {
+Symbol* Scope::define(Class* klass) {
     Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
     symbols[klass->get_name()] = sym;
+    return sym;
 }
 
-void Scope::define(Function* func) {
+Symbol* Scope::define(Function* func) {
     Symbol* sym = new Symbol(SYM_FUNCTION, func->get_name(), func);
     symbols[func->get_name()] = sym;
+    return sym;
 }
 
-void Scope::define(int kind, Variable* var) {
+Symbol* Scope::define(int kind, Function* func) {
+    Symbol* sym = new Symbol(kind, func->get_name(), func);
+    symbols[func->get_name()] = sym;
+    return sym;
+}
+
+Symbol* Scope::define(int kind, Variable* var) {
     Symbol* sym = new Symbol(kind, var->get_name(), var);
     symbols[var->get_name()] = sym;
+    return sym;
 }
 
 bool Scope::has_parent() {

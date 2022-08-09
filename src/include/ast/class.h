@@ -8,6 +8,8 @@
 #include "ast/type.h"
 
 namespace haard {
+    class Scope;
+
     class Class {
         public:
             Class();
@@ -20,6 +22,7 @@ namespace haard {
             Function* get_method(int idx);
             Variable* get_variable(int idx);
             Type* get_parent();
+            Scope* get_scope();
 
             void set_from_token(Token& token);
             void set_name(const char* name);
@@ -40,6 +43,7 @@ namespace haard {
             Type* parent;
             std::vector<Function*> methods;
             std::vector<Variable*> variables;
+            Scope* scope;
     };
 }
 

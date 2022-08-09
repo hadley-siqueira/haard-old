@@ -4,58 +4,40 @@
 using namespace haard;
 
 ScopeBuilder::ScopeBuilder() {
-    pass = 0;
     current_scope = nullptr;
 }
 
 void ScopeBuilder::build_sources(Sources* sources) {
+    define_sources_elements(sources);
+
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
-
-    pass++;
 }
 
 void ScopeBuilder::build_source(Source* source) {
     current_scope = source->get_scope();
 
-    if (pass == 0) {
-        for (int i = 0; i < source->classes_count(); ++i) {
-            build_class(source->get_class(i));
-        }
-
-        for (int i = 0; i < source->function_count(); ++i) {
-            build_function(source->get_function(i));
-        }
+    for (int i = 0; i < source->function_count(); ++i) {
+        build_function(source->get_function(i));
     }
 }
 
 void ScopeBuilder::build_class(Class* klass) {
-    if (pass == 0) {
-        if (!current_scope->has(klass->get_name())) {
-            current_scope->define(klass);
-        } else {
-            Symbol* sym = current_scope->has(klass->get_name());
-            // logger->error(build_error_message_1(klass)
-            std::cout << "Error: you tried to define a class named '" << klass->get_name() << "', but it is already defined. First occurrence\n";
-        }
+    enter_scope(klass->get_scope());
+
+    for (int i = 0; klass->methods_count(); ++i) {
+
     }
+
+    leave_scope();
 }
 
 void ScopeBuilder::build_function(Function* func) {
-    Symbol* sym = current_scope->has(func->get_name());
-
-    if (!sym) {
-        current_scope->define(func);
-    } else if (sym->get_kind() == SYM_FUNCTION) {
-        sym->add_descriptor(func);
-    } else {
-        std::cout << "Error: you tried to define a function named '" << func->get_name() << "', but it is already defined. First occurrence\n";
-    }
-
     enter_scope(func->get_scope());
-    build_function_parameters(func);
 
+    build_function_parameters(func);
+    build_compound_statement(func->get_statements());
 
     leave_scope();
 }
@@ -81,6 +63,574 @@ void ScopeBuilder::build_parameter(Variable* var) {
         current_scope->define(SYM_PARAMETER, var);
     } else {
         std::cout << "parameter already defined\n";
+    }
+}
+
+void ScopeBuilder::build_type(Type* type) {
+
+}
+
+void ScopeBuilder::build_statement(Statement* statement) {
+    int kind = statement->get_kind();
+
+    switch (kind) {
+    case STMT_COMPOUND:
+        build_compound_statement((CompoundStatement*) statement);
+        break;
+
+    case STMT_WHILE:
+       // build_while_statement((WhileStatement*) statement);
+        break;
+
+    case STMT_FOR:
+    case STMT_FOREACH:
+      //  build_for_statement((ForStatement*) statement);
+        break;
+
+    case STMT_EXPRESSION:
+        build_expression_statement((ExpressionStatement*) statement);
+        break;
+
+    case STMT_IF:
+    case STMT_ELIF:
+    case STMT_ELSE:
+     //   build_branch_statement((BranchStatement*) statement);
+        break;
+
+    case STMT_RETURN:
+     //   build_jump_statement("return", (JumpStatement*) statement);
+        break;
+
+    case STMT_GOTO:
+    //    build_jump_statement("goto", (JumpStatement*) statement);
+        break;
+
+    case STMT_YIELD:
+    //    build_jump_statement("yield", (JumpStatement*) statement);
+        break;
+
+    case STMT_CONTINUE:
+    //    build_jump_statement("continue", (JumpStatement*) statement);
+        break;
+
+    case STMT_BREAK:
+   //     build_jump_statement("break", (JumpStatement*) statement);
+        break;
+
+    case STMT_VAR_DECL:
+   //     build_variable_declaration((VarDeclaration*) statement);
+        break;
+    }
+}
+
+void ScopeBuilder::build_compound_statement(CompoundStatement* stmts) {
+    for (int i = 0; i < stmts->statements_count(); ++i) {
+        build_statement(stmts->get_statement(i));
+    }
+}
+
+void ScopeBuilder::build_expression_statement(ExpressionStatement* statement) {
+    build_expression(statement->get_expression());
+}
+
+void ScopeBuilder::build_expression(Expression* expression) {
+    if (expression == nullptr) return;
+
+    int kind = expression->get_kind();
+    BinOp* bin = (BinOp*) expression;
+    UnOp* un = (UnOp*) expression;
+    Literal* literal = (Literal*) expression;
+    ExpressionList* exprlist = (ExpressionList*) expression;
+
+    switch (kind) {
+    case EXPR_ID:
+        build_identifier((Identifier*) expression);
+        break;
+
+    case EXPR_SCOPE:
+        build_expression(bin->get_left());
+        build_expression(bin->get_right());
+        break;
+
+    case EXPR_GLOBAL_SCOPE:
+        build_expression(un->get_expression());
+        break;
+
+    case EXPR_ASSIGN:
+        build_assignment(bin);
+        break;
+
+    case EXPR_SPECIAL_ASSIGN:
+        build_binop(":=", bin);
+        break;
+
+    case EXPR_SRL_ASSIGN:
+        build_binop(">>>=", bin);
+        break;
+
+    case EXPR_SRA_ASSIGN:
+        build_binop(">>=", bin);
+        break;
+
+    case EXPR_SLL_ASSIGN:
+        build_binop("<<=", bin);
+        break;
+
+    case EXPR_TIMES_ASSIGN:
+        build_binop("*=", bin);
+        break;
+
+    case EXPR_PLUS_ASSIGN:
+        build_binop("+=", bin);
+        break;
+
+    case EXPR_MODULO_ASSIGN:
+        build_binop("%=", bin);
+        break;
+
+    case EXPR_MINUS_ASSIGN:
+        build_binop("-=", bin);
+        break;
+
+    case EXPR_INTEGER_DIVISIO_ASSIGN:
+        build_binop("//=", bin);
+        break;
+
+    case EXPR_DIVISION_ASSIGN:
+        build_binop("/=", bin);
+        break;
+
+    case EXPR_BITWISE_NOT_ASSIGN:
+        build_binop("~=", bin);
+        break;
+
+    case EXPR_BITWISE_OR_ASSIGN:
+        build_binop("|=", bin);
+        break;
+
+    case EXPR_BITWISE_XOR_ASSIGN:
+        build_binop("^=", bin);
+        break;
+
+    case EXPR_BITWISE_AND_ASSIGN:
+        build_binop("&=", bin);
+        break;
+
+    case EXPR_PLUS:
+        build_binop("+", bin);
+        break;
+
+    case EXPR_MINUS:
+        build_binop("-", bin);
+        break;
+
+    case EXPR_TIMES:
+        build_binop("*", bin);
+        break;
+
+    case EXPR_DIVISION:
+        build_binop("/", bin);
+        break;
+
+    case EXPR_INTEGER_DIVISION:
+        build_binop("//", bin);
+        break;
+
+    case EXPR_MODULO:
+        build_binop("%", bin);
+        break;
+
+    case EXPR_POWER:
+        build_binop("**", bin);
+        break;
+
+    case EXPR_BITWISE_OR:
+        build_binop("|", bin);
+        break;
+
+    case EXPR_BITWISE_XOR:
+        build_binop("^", bin);
+        break;
+
+    case EXPR_BITWISE_AND:
+        build_binop("&", bin);
+        break;
+
+    case EXPR_SLL:
+        build_binop("<<", bin);
+        break;
+
+    case EXPR_SRL:
+        build_binop(">>>", bin);
+        break;
+
+    case EXPR_SRA:
+        build_binop(">>", bin);
+        break;
+
+    case EXPR_INCLUSIVE_RANGE:
+        build_binop("..", bin);
+        break;
+
+    case EXPR_EXCLUSIVE_RANGE:
+        build_binop("...", bin);
+        break;
+
+    case EXPR_LOGICAL_OR:
+        build_binop("or", bin);
+        break;
+
+    case EXPR_LOGICAL_OR_OPER:
+        build_binop("||", bin);
+        break;
+
+    case EXPR_LOGICAL_AND:
+        build_binop("and", bin);
+        break;
+
+    case EXPR_LOGICAL_AND_OPER:
+        build_binop("&&", bin);
+        break;
+
+    case EXPR_EQ:
+        build_binop("==", bin);
+        break;
+
+    case EXPR_NE:
+        build_binop("!=", bin);
+        break;
+
+    case EXPR_LT:
+        build_binop("<", bin);
+        break;
+
+    case EXPR_GT:
+        build_binop(">", bin);
+        break;
+
+    case EXPR_LE:
+        build_binop("<=", bin);
+        break;
+
+    case EXPR_GE:
+        build_binop(">=", bin);
+        break;
+
+    case EXPR_IN:
+        build_binop("in", bin);
+        break;
+
+    case EXPR_NOT_IN:
+        build_binop("not in", bin);
+        break;
+
+    case EXPR_LOGICAL_NOT_OPER:
+        build_unop("!", un);
+        break;
+
+    case EXPR_LOGICAL_NOT:
+        build_unop("not ", un);
+        break;
+
+    case EXPR_ADDRESS_OF:
+        build_unop("&", un);
+        break;
+
+    case EXPR_DEREFERENCE:
+        build_unop("*", un);
+        break;
+
+    case EXPR_BITWISE_NOT:
+        build_unop("~", un);
+        break;
+
+    case EXPR_UNARY_MINUS:
+        build_unop("-", un);
+        break;
+
+    case EXPR_UNARY_PLUS:
+        build_unop("+", un);
+        break;
+
+    case EXPR_PRE_INC:
+        build_unop("++", un);
+        break;
+
+    case EXPR_PRE_DEC:
+        build_unop("--", un);
+        break;
+
+    case EXPR_POS_INC:
+        build_unop("++", un, false);
+        break;
+
+    case EXPR_POS_DEC:
+        build_unop("--", un, false);
+        break;
+
+    case EXPR_SIZEOF:
+        build_unop("!", un);
+        break;
+
+    case EXPR_PARENTHESIS:
+        build_expression(un->get_expression());
+        break;
+
+    case EXPR_CALL:
+        build_expression(bin->get_left());
+        build_expression(bin->get_right());
+        break;
+
+    case EXPR_INDEX:
+        build_expression(bin->get_left());
+        build_expression(bin->get_right());
+        break;
+
+    case EXPR_ARROW:
+        build_expression(bin->get_left());
+        build_expression(bin->get_right());
+        break;
+
+    case EXPR_DOT:
+        build_expression(bin->get_left());
+        build_expression(bin->get_right());
+        break;
+
+    case EXPR_LITERAL_BOOL:
+    case EXPR_LITERAL_INTEGER:
+    case EXPR_LITERAL_FLOAT:
+    case EXPR_LITERAL_DOUBLE:
+    case EXPR_LITERAL_CHAR:
+    case EXPR_LITERAL_STRING:
+    case EXPR_LITERAL_SYMBOL:
+        build_literal(literal);
+        break;
+
+    case EXPR_LITERAL_NULL:
+        break;
+
+    case EXPR_TUPLE:
+        build_expression_list("(", ")", exprlist);
+        break;
+
+    case EXPR_LIST:
+        build_expression_list("[", "]", exprlist);
+        break;
+
+    case EXPR_ARRAY:
+        build_expression_list("{", "}", exprlist);
+        break;
+
+    case EXPR_ARGS:
+        build_expression_list("(", ")", exprlist);
+        break;
+
+    case EXPR_FOR_INIT:
+    case EXPR_FOR_INC:
+        build_expression_list("", "", exprlist);
+        break;
+
+    case EXPR_HASH:
+    case EXPR_HASH_RAW:
+        build_hash(exprlist);
+        break;
+
+    case EXPR_FUNCTION:
+        build_function_expression((FunctionExpression*) expression);
+        break;
+
+    case EXPR_NEW:
+        build_new_expression((NewExpression*) expression);
+        break;
+    }
+}
+
+void ScopeBuilder::build_assignment(BinOp* bin) {
+    int lkind;
+    Symbol* sym;
+    Expression* left;
+    Identifier* id;
+    Variable* var;
+
+    build_expression(bin->get_right());
+
+    left = bin->get_left();
+    lkind = left->get_kind();
+
+    if (lkind == EXPR_ID) {
+        id = (Identifier*) left;
+        sym = current_scope->has(id->get_lexeme());
+
+        if (!sym) {
+            var = new Variable(id);
+            current_scope->define(SYM_VARIABLE, var);
+        }
+ 
+        // FIXME
+        id->set_symbol(sym);
+        current_scope->debug(); std::cout << '\n';
+    }
+}
+
+void ScopeBuilder::build_binop(std::string oper, BinOp* bin) {
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+}
+
+void ScopeBuilder::build_unop(std::string oper, UnOp* un, bool before) {
+    /*if (before) {
+        out << oper;
+    }
+
+    build_expression(un->get_expression());
+
+    if (!before) {
+        out << oper;
+    }*/
+}
+
+void ScopeBuilder::build_identifier(Identifier* id) {
+    Symbol* sym = current_scope->has(id->get_lexeme());
+
+    if (!sym) {
+        // FIXME
+        std::cout << "Error: undefined id " << id->get_lexeme() << "\n";
+        exit(0);
+    }
+}
+
+void ScopeBuilder::build_literal(Literal* literal) {
+/*
+    out << literal->get_lexeme();
+*/
+}
+
+void ScopeBuilder::build_expression_list(std::string begin, std::string end, ExpressionList* tuple) {
+/*
+    int i;
+    out << begin;
+
+    for (i = 0; i < tuple->expressions_count() - 1; ++i) {
+        build_expression(tuple->get_expression(i));
+        out << ", ";
+    }
+        
+    build_expression(tuple->get_expression(i));
+    out << end;*/
+}
+
+void ScopeBuilder::build_hash(ExpressionList* hash) {
+/*
+    BinOp* pair;
+    int i;
+
+    if (hash->get_kind() == EXPR_HASH) {
+        out << "{";
+    }
+
+    for (i = 0; i < hash->expressions_count() - 1; ++i) {
+        pair = (BinOp*) hash->get_expression(i);
+        build_expression(pair->get_left());
+        out << ": ";
+        build_expression(pair->get_right());
+        out << ", ";
+    }
+
+    pair = (BinOp*) hash->get_expression(i);
+    build_expression(pair->get_left());
+    out << ": ";
+    build_expression(pair->get_right());
+
+    if (hash->get_kind() == EXPR_HASH) {
+        out << "}";
+    }*/
+}
+
+void ScopeBuilder::build_function_expression(FunctionExpression* function) {
+/*
+    int i;
+    Function* f = function->get_function();
+
+    out << "|";
+
+    if (f->parameters_count() > 0) {
+        for (i = 0; i < f->parameters_count() - 1; ++i) {
+            out << f->get_parameter(i)->get_name();
+            out << ", ";
+        }
+
+        out << f->get_parameter(i)->get_name();
+    }
+
+    out << "| {\n";
+
+    indent();
+    build_compound_statement(f->get_statements());
+    dedent();
+
+    build_indentation();
+    out << "}";*/
+}
+
+void ScopeBuilder::build_new_expression(NewExpression* expr) { /*
+    out << "new ";
+    build_type(expr->get_new_type());
+
+    if (expr->has_arguments()) {
+        build_expression_list("(", ")", expr->get_arguments());
+    }*/
+}
+
+void ScopeBuilder::define_sources_elements(Sources* sources) {
+    for (int i = 0; i < sources->sources_count(); ++i) {
+        define_source_elements(sources->get_source(i));
+    }
+}
+
+void ScopeBuilder::define_source_elements(Source* source) {
+    current_scope = source->get_scope();
+
+    for (int i = 0; i < source->classes_count(); ++i) {
+        define_class(source->get_class(i));
+    }
+
+    for (int i = 0; i < source->function_count(); ++i) {
+        define_function(source->get_function(i));
+    }
+}
+
+void ScopeBuilder::define_class(Class* klass) {
+    Symbol* sym = current_scope->has(klass->get_name());
+
+    if (!sym) {
+        current_scope->define(klass);
+    } else {
+        std::cout << "Error: you tried to define a class named '" << klass->get_name() << "', but it is already defined. Other occurrence\n";
+        exit(0);
+    }
+}
+
+void ScopeBuilder::define_function(Function* func) {
+    Symbol* sym = current_scope->has(func->get_name());
+
+    if (!sym) {
+        current_scope->define(func);
+    } else if (sym->get_kind() == SYM_FUNCTION) {
+        sym->add_descriptor(func);
+    } else {
+        std::cout << "Error: you tried to define a function named '" << func->get_name() << "', but it is already defined. Other occurrence\n";
+    }
+}
+
+void ScopeBuilder::define_method(Function* func) {
+    Symbol* sym = current_scope->has(func->get_name());
+
+    if (!sym) {
+        current_scope->define(SYM_METHOD, func);
+    } else if (sym->get_kind() == SYM_METHOD) {
+        sym->add_descriptor(func);
+    } else {
+        std::cout << "Error: you tried to define a method named '" << func->get_name() << "', but it is already defined. Other occurrence\n";
     }
 }
 

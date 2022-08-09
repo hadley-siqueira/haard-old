@@ -15,6 +15,13 @@ Variable::Variable(Token& token) {
     type = nullptr;
 }
 
+Variable::Variable(Identifier* id) {
+    name = id->get_lexeme();
+    line = id->get_line();
+    column = id->get_column();
+    type = nullptr;
+}
+
 Variable::~Variable() {
     delete type;
 }

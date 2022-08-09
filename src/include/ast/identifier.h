@@ -4,6 +4,7 @@
 #include <string>
 #include "ast/expression.h"
 #include "token/token.h"
+#include "scope/symbol.h"
 
 namespace haard {
     class Identifier : public Expression {
@@ -15,15 +16,18 @@ namespace haard {
             int get_line();
             int get_column();
             const char* get_lexeme();
+            Symbol* get_symbol();
 
             void set_line(int line);
             void set_column(int column);
             void set_lexeme(const char* lexeme);
+            void set_symbol(Symbol* symbol);
             
         private:
             int line;
             int column;
             const char* lexeme;
+            Symbol* symbol;
             
     };
 }

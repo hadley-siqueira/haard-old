@@ -1,9 +1,11 @@
 #include "ast/class.h"
+#include "scope/scope.h"
 
 using namespace haard;
 
 Class::Class() {
     parent = nullptr;
+    scope = new Scope();
 }
 
 Class::~Class() {
@@ -48,6 +50,10 @@ Variable* Class::get_variable(int idx) {
 
 Type* Class::get_parent() {
     return parent;
+}
+
+Scope* Class::get_scope() {
+    return scope;
 }
 
 void Class::set_from_token(Token& token) {
