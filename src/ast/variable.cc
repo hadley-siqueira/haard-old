@@ -23,7 +23,7 @@ Variable::Variable(Identifier* id) {
 }
 
 Variable::~Variable() {
-    delete type;
+    // delete type;
 }
 
 int Variable::get_line() {

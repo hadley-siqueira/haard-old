@@ -1,19 +1,40 @@
+#include <vector>
 #include "ast/type.h"
 
 using namespace haard;
 
-Type::Type() {
+class TypePool {
+    public:
+        void add(Type* type) {
+            types.push_back(type);
+        }
 
+        ~TypePool() {
+            for (int i = 0; i < types.size(); ++i) {
+                delete types[i];
+            }
+        }
+
+    private:
+        std::vector<Type*> types;
+};
+
+TypePool type_pool;
+
+Type::Type() {
+    type_pool.add(this);
 }
 
 Type::Type(int kind) {
     this->kind = kind;
+    type_pool.add(this);
 }
 
 Type::Type(int kind, Token& token) {
     this->kind = kind;
     line = token.get_line();
     column = token.get_column();
+    type_pool.add(this);
 }
 
 Type::~Type() {

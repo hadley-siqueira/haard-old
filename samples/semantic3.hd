@@ -10,5 +10,6 @@ class Pixel:
 def main : int
     a = 2
     b = a + 1
+    ptr = &a
     c = foo()
     p = Pixel

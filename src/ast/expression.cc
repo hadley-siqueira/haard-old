@@ -7,7 +7,7 @@ Expression::Expression() {
 }
 
 Expression::~Expression() {
-    delete type;
+    // delete type;
 }
 
 int Expression::get_kind() {

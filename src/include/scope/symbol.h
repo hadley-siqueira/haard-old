@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include "ast/type.h"
 
 namespace haard {
     class Symbol {
@@ -15,6 +16,7 @@ namespace haard {
             int get_kind();
             const char* get_name();
             void* get_descriptor(int idx=0);
+            Type* get_type();
 
             void set_kind(int kind);
             void set_name(const char* name);

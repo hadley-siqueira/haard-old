@@ -10,7 +10,6 @@ Function::Function() {
 }
 
 Function::~Function() {
-    delete return_type;
     delete statements;
     delete scope;
     

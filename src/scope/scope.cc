@@ -1,5 +1,6 @@
 #include <iostream>
 #include "scope/scope.h"
+#include "printer/printer.h"
 
 using namespace haard;
 

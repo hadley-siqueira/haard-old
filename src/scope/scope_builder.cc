@@ -333,7 +333,7 @@ void ScopeBuilder::build_expression(Expression* expression) {
         break;
 
     case EXPR_ADDRESS_OF:
-        build_unop("&", un);
+        build_address_of(un);
         break;
 
     case EXPR_DEREFERENCE:
@@ -468,9 +468,11 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
     Expression* left;
     Identifier* id;
     Variable* var;
+    Type* rtype;
 
     build_expression(bin->get_right());
 
+    rtype = bin->get_right()->get_type();
     left = bin->get_left();
     lkind = left->get_kind();
 
@@ -480,6 +482,7 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
 
         if (!sym) {
             var = new Variable(id);
+            var->set_type(rtype);
             current_scope->define(SYM_VARIABLE, var);
             current_function->add_variable(var);
         }
@@ -490,6 +493,17 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
     } else {
         build_expression(left);
     }
+}
+
+void ScopeBuilder::build_address_of(UnOp* op) {
+    Type* type;
+
+    build_expression(op->get_expression());
+
+    type = op->get_expression()->get_type();
+    type = new IndirectionType(TYPE_POINTER, type);
+
+    op->set_type(type);
 }
 
 void ScopeBuilder::build_dot(BinOp* bin) {
@@ -533,6 +547,9 @@ std::cout << "id... "; current_scope->debug(); std::cout << '\n';
         std::cout << "Error: undefined id " << id->get_lexeme() << "\n";
         exit(0);
     }
+
+    id->set_symbol(sym);
+    id->set_type(sym->get_type());
 }
 
 void ScopeBuilder::build_literal(Literal* literal, int kind) {

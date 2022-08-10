@@ -11,8 +11,8 @@ HashType::HashType(Token& token, Type* key, Type* value) {
 }
 
 HashType::~HashType() {
-    delete key;
-    delete value;
+    // delete key;
+    // delete value;
 }
 
 Type* HashType::get_key_type() {

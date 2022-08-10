@@ -28,7 +28,11 @@ namespace haard {
 
             void build_expression(Expression* expression);
             void build_assignment(BinOp* bin);
+
+            void build_address_of(UnOp* op);
             void build_dot(BinOp* bin);
+
+
             void build_binop(std::string oper, BinOp* bin);
             void build_unop(std::string oper, UnOp* un, bool before=true);
             void build_identifier(Identifier* id);

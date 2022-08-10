@@ -10,8 +10,13 @@ IndirectionType::IndirectionType(int kind, Token& token, Type* subtype) {
     column = token.get_column();
 }
 
+IndirectionType::IndirectionType(int kind, Type* subtype) {
+    this->kind = kind;
+    this->subtype = subtype;
+}
+
 IndirectionType::~IndirectionType() {
-    delete subtype;
+    // delete subtype;
 }
 
 Type* IndirectionType::get_subtype() {

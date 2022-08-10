@@ -1,5 +1,7 @@
 #include "scope/symbol.h"
+#include "ast/variable.h"
 #include "defs.h"
+#include "printer/printer.h"
 
 using namespace haard;
 
@@ -41,6 +43,25 @@ void Symbol::add_descriptor(void* descriptor) {
     descriptors.push_back(descriptor);
 }
 
+Type* Symbol::get_type() {
+    Variable* var = (Variable*) descriptors[0];
+
+    switch (kind) {
+    case SYM_CLASS:
+        return nullptr;
+
+    case SYM_FUNCTION:
+        return nullptr;
+
+    case SYM_PARAMETER:
+    case SYM_VARIABLE:
+    case SYM_CLASS_VARIABLE:
+        return var->get_type();
+    }
+
+    return nullptr;
+}
+
 std::string Symbol::to_str() {
     std::stringstream ss;
 
@@ -60,7 +81,15 @@ std::string Symbol::to_str() {
         break;
 
     case SYM_VARIABLE:
-        ss << "var";
+        ss << "var(";
+
+        if (get_type()) {
+            Printer p;
+            p.print_type(get_type());
+            ss << p.to_str();
+        }
+
+        ss << ")";
         break;
 
     case SYM_CLASS_VARIABLE:

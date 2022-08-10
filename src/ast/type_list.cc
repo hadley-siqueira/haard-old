@@ -18,9 +18,7 @@ TypeList::TypeList(int kind, Token& token, Type* t1, Type* t2) {
 }
 
 TypeList::~TypeList() {
-    for (int i = 0; i < types.size(); ++i) {
-        delete types[i];
-    }
+    
 }
 
 Type* TypeList::get_type(int idx) {

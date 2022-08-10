@@ -8,6 +8,7 @@ namespace haard {
     class IndirectionType : public Type {
         public:
             IndirectionType(int kind, Token& token, Type* subtype);
+            IndirectionType(int kind, Type* subtype);
             ~IndirectionType();
 
         public:

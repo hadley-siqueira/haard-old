@@ -13,7 +13,6 @@ ArrayListType::ArrayListType(int kind, Token& token, Type* subtype, Expression* 
 
 ArrayListType::~ArrayListType() {
     delete expression;
-    delete subtype;
 }
 
 Expression* ArrayListType::get_expression() {
