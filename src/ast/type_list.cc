@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ast/type_list.h"
 
 using namespace haard;
@@ -43,4 +44,24 @@ int TypeList::types_count() {
 
 void TypeList::add_type(Type* type) {
     types.push_back(type);
+}
+
+bool TypeList::equal(Type* type) {
+    TypeList* other = (TypeList*) type;
+
+    if (kind != type->get_kind()) {
+        return false;
+    }
+
+    if (types_count() != other->types_count()) {
+        return false;
+    }
+ 
+    for (int i = 0; i < types.size(); ++i) {
+        if (!types[i]->equal(other->get_type(i))) {
+            return false;
+        }
+    }
+
+    return true;
 }

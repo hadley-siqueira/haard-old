@@ -64,3 +64,7 @@ void Type::set_line(int line) {
 void Type::set_column(int column) {
     this->column = column;
 }
+
+bool Type::equal(Type* type) {
+    return kind == type->kind;
+}

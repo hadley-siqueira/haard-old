@@ -22,3 +22,13 @@ IndirectionType::~IndirectionType() {
 Type* IndirectionType::get_subtype() {
     return subtype;
 }
+
+bool IndirectionType::equal(Type* type) {
+    IndirectionType* other = (IndirectionType*) type;
+
+    if (kind == other->get_kind()) {
+        return subtype->equal(other->get_subtype());
+    }
+
+    return false;
+}

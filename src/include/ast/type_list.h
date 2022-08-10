@@ -18,6 +18,8 @@ namespace haard {
             int types_count();
             void add_type(Type* type);
 
+            bool equal(Type* type);
+
         private:
             std::vector<Type*> types;
     };

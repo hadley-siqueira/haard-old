@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include "ast/type.h"
+#include "ast/type_list.h"
 
 namespace haard {
     class Symbol {
@@ -26,6 +27,7 @@ namespace haard {
             std::string to_cpp();
 
             int overloaded_count();
+            void* get_overloaded(TypeList* types);
 
         private:
             int kind;

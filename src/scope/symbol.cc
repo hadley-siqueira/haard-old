@@ -161,3 +161,7 @@ std::string Symbol::to_cpp() {
 int Symbol::overloaded_count() {
     return descriptors.size();
 }
+
+void* Symbol::get_overloaded(TypeList* types) {
+    return nullptr;
+}

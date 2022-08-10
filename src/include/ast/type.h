@@ -21,6 +21,8 @@ namespace haard {
             void set_line(int line);
             void set_column(int column);
 
+            virtual bool equal(Type* type);
+
         protected:
             int kind;
             int line;

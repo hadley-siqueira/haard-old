@@ -13,6 +13,7 @@ namespace haard {
 
         public:
             Type* get_subtype();
+            bool equal(Type* type);
 
         private:
             Type* subtype;

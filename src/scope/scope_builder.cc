@@ -1,4 +1,5 @@
 #include <iostream>
+#include "printer/printer.h"
 #include "scope/scope_builder.h"
 
 using namespace haard;
@@ -791,6 +792,17 @@ void ScopeBuilder::define_function_self_type(Function* func) {
 }
 
 void ScopeBuilder::define_overloaded_function(Symbol* sym, Function* func) {
+    for (int i = 0; i < sym->overloaded_count(); ++i) {
+        Function* other = (Function*) sym->get_descriptor(i);
+
+        if (func->get_self_type()->equal(other->get_self_type())) {
+            // FIXME
+            std::cout << "Error: " << func->get_name() << 
+                " already defined function with signature\n";
+            exit(0);
+        } 
+    }
+
     sym->add_descriptor(func);
 }
 
