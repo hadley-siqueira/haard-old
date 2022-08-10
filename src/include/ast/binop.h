@@ -19,11 +19,15 @@ namespace haard {
             void set_left(Expression* left);
             void set_right(Expression* right);
 
+            void set_initial_assign(bool value);
+            bool get_initial_assign();
+
         private:
             Expression* left;
             Expression* right;
             int line;
             int column;
+            bool initial_assign;
     };
 }
 

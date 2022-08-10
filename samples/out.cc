@@ -26,7 +26,14 @@ int foo() {
     return 0;
 }
 
+int soma(int p0_a, int p1_b) {
+    int v0_c = p0_a + p1_b;
+    return p0_a + p1_b;
+    return v0_c;
+}
+
 int main() {
+    c0_Pixel v0_p = c0_Pixel;
     return 0;
 }
 

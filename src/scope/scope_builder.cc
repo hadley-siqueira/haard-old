@@ -41,6 +41,8 @@ void ScopeBuilder::build_class(Class* klass) {
 }
 
 void ScopeBuilder::build_function(Function* func) {
+    var_counter = 0;
+
     enter_scope(func->get_scope());
     current_function = func;
     build_type(func->get_return_type());
@@ -56,6 +58,7 @@ void ScopeBuilder::build_function_parameters(Function* func) {
 
     for (int i = 0; i < func->parameters_count(); ++i) {
         build_parameter(func->get_parameter(i));
+        func->get_parameter(i)->set_uid(i);
     }
 }
 
@@ -169,7 +172,7 @@ void ScopeBuilder::build_statement(Statement* statement) {
         break;
 
     case STMT_RETURN:
-     //   build_jump_statement("return", (JumpStatement*) statement);
+        build_jump_statement((JumpStatement*) statement);
         break;
 
     case STMT_GOTO:
@@ -201,6 +204,10 @@ void ScopeBuilder::build_compound_statement(CompoundStatement* stmts) {
 }
 
 void ScopeBuilder::build_expression_statement(ExpressionStatement* statement) {
+    build_expression(statement->get_expression());
+}
+
+void ScopeBuilder::build_jump_statement(JumpStatement* statement) {
     build_expression(statement->get_expression());
 }
 
@@ -546,6 +553,7 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
     rtype = bin->get_right()->get_type();
     left = bin->get_left();
     lkind = left->get_kind();
+    bin->set_type(rtype);
 
     if (lkind == EXPR_ID) {
         id = (Identifier*) left;
@@ -554,8 +562,11 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
         if (!sym) {
             var = new Variable(id);
             var->set_type(rtype);
-            current_scope->define(SYM_VARIABLE, var);
+            var->set_uid(var_counter++);
+            bin->set_initial_assign(true);
+            sym = current_scope->define(SYM_VARIABLE, var);
             current_function->add_variable(var);
+            id->set_type(rtype);
         }
  
         // FIXME
@@ -595,6 +606,7 @@ void ScopeBuilder::build_dot(BinOp* bin) {
 void ScopeBuilder::build_binop(std::string oper, BinOp* bin) {
     build_expression(bin->get_left());
     build_expression(bin->get_right());
+    bin->set_type(bin->get_left()->get_type());
 }
 
 void ScopeBuilder::build_unop(std::string oper, UnOp* un, bool before) {
@@ -730,7 +742,7 @@ void ScopeBuilder::define_class(Class* klass) {
     Symbol* sym = current_scope->has(klass->get_name());
 
     if (!sym) {
-        current_scope->define(klass);
+        sym = current_scope->define(klass);
 
         id = new Identifier();
         id->set_line(klass->get_line());
@@ -738,6 +750,7 @@ void ScopeBuilder::define_class(Class* klass) {
         id->set_lexeme(klass->get_name());
         type = new NamedType();
         type->set_name(id);
+        type->set_symbol(sym);
         klass->set_self_type(type);
         klass->set_uid(class_counter++);
     } else {

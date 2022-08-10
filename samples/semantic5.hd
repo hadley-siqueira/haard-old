@@ -20,13 +20,5 @@ def soma : int
     return c
 
 def main : int
-    a = 2
-    b = a + 1
-    c = 2.0
-    c = c + 1
-    ptr = &a
-    # c = foo()
-    # p = Pixel
-    p2 = new Pixel
-    p3 = new Window
+    p = Pixel
     return 0

@@ -29,6 +29,7 @@ namespace haard {
             void build_statement(Statement* statement);
             void build_compound_statement(CompoundStatement* stmts);
             void build_expression_statement(ExpressionStatement* statement);
+            void build_jump_statement(JumpStatement* statement);
 
             void build_expression(Expression* expression);
             void build_assignment(BinOp* bin);
@@ -64,6 +65,7 @@ namespace haard {
             int class_counter;
             int function_counter;
             int method_counter;
+            int var_counter;
     };
 }
 

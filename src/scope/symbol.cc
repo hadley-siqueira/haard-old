@@ -130,19 +130,11 @@ std::string Symbol::to_cpp() {
         break;
 
     case SYM_VARIABLE:
-        ss << "var(";
-
-        if (get_type()) {
-            Printer p;
-            p.print_type(get_type());
-            ss << p.to_str();
-        }
-
-        ss << ")";
+        ss << "v" << var->get_uid() << '_' << var->get_name();
         break;
 
     case SYM_CLASS_VARIABLE:
-        ss << "cvar";
+        ss << "cv" << var->get_uid() << '_' << var->get_name();
         break;
     }
 
