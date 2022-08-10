@@ -120,7 +120,7 @@ std::string Symbol::to_str() {
     return ss.str();
 }
             
-std::string Symbol::to_cpp() {
+std::string Symbol::to_cpp(int idx) {
     std::stringstream ss;
 
     // FIXME
@@ -129,9 +129,9 @@ std::string Symbol::to_cpp() {
         exit(0);
     }
 
-    Class* klass = (Class*) descriptors[0];
-    Function* func = (Function*) descriptors[0];
-    Variable* var = (Variable*) descriptors[0];
+    Class* klass = (Class*) descriptors[idx];
+    Function* func = (Function*) descriptors[idx];
+    Variable* var = (Variable*) descriptors[idx];
 
     switch (kind) {
     case SYM_CLASS:

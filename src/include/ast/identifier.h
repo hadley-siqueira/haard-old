@@ -22,12 +22,16 @@ namespace haard {
             void set_column(int column);
             void set_lexeme(const char* lexeme);
             void set_symbol(Symbol* symbol);
+
+            int get_overloaded_index();
+            void set_overloaded_index(int idx);
             
         private:
             int line;
             int column;
             const char* lexeme;
             Symbol* symbol;
+            int overloaded_index;
             
     };
 }

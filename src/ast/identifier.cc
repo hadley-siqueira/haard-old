@@ -6,6 +6,7 @@ Identifier::Identifier() {
     kind = EXPR_ID;
     symbol = nullptr;
     lexeme = nullptr;
+    overloaded_index = 0;
 }
 
 Identifier::Identifier(Token& token) {
@@ -14,6 +15,7 @@ Identifier::Identifier(Token& token) {
     column = token.get_column();
     lexeme = token.get_lexeme();
     symbol = nullptr;
+    overloaded_index = 0;
 }
 
 int Identifier::get_line() {
@@ -46,4 +48,12 @@ void Identifier::set_lexeme(const char* lexeme) {
 
 void Identifier::set_symbol(Symbol* symbol) {
     this->symbol = symbol;
+}
+
+int Identifier::get_overloaded_index() {
+    return overloaded_index;
+}
+
+void Identifier::set_overloaded_index(int idx) {
+    overloaded_index = idx;
 }

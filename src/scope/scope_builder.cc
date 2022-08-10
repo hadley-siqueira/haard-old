@@ -578,9 +578,59 @@ void ScopeBuilder::build_dot(BinOp* bin) {
 }
 
 void ScopeBuilder::build_call_expression(BinOp* bin) {
+    Type* tl;
+    Type* tr;
+    TypeList* ft;
+    TypeList* args;
+
     build_expression(bin->get_left());
     build_expression(bin->get_right());
-    bin->set_type(bin->get_left()->get_type());
+
+    tl = bin->get_left()->get_type();
+    tr = bin->get_right()->get_type();
+
+    // baz(...)
+    if (bin->get_left()->get_kind() == EXPR_ID) {
+        Identifier* id = (Identifier*) bin->get_left();
+        Symbol* sym = id->get_symbol();
+        args = (TypeList*) tr;
+        bool found = false;
+        int i;
+
+        for (i = 0; i < sym->overloaded_count(); ++i) {
+            Function* f = (Function*) sym->get_descriptor(i);
+            ft = (TypeList*) f->get_self_type();
+
+            if (ft->check_arguments_type(args)) {
+                found = true;
+            }
+        }
+
+        if (found) {
+            id->set_overloaded_index(i);
+        } else {
+            // FIXME
+            std::cout << "Error: function not overloaded with signature\n";
+            exit(0);
+        }
+    }
+
+    if (tl->get_kind() == TYPE_FUNCTION) {
+        /*TypeList* ft = (TypeList*) tl;
+        TypeList* args = (TypeList*) tr;
+
+        if (!ft->check_arguments_type(args)) {
+            // FIXME
+            std::cout << "Error: invalid arg types\n";
+            exit(0);
+        }*/
+    } else {
+        // FIXME
+        std::cout << "Error: not a function to be called\n";
+        exit(0);
+    }
+
+    bin->set_type(ft->get_return_type());
 }
 
 void ScopeBuilder::build_binop(std::string oper, BinOp* bin) {
@@ -622,7 +672,7 @@ void ScopeBuilder::build_literal(Literal* literal, int kind) {
 }
 
 void ScopeBuilder::build_expression_list(ExpressionList* tuple) {
-    TypeList* types = new TypeList();
+    TypeList* types = new TypeList(TYPE_TUPLE);
 
     for (int i = 0; i < tuple->expressions_count(); ++i) {
         build_expression(tuple->get_expression(i));
@@ -742,6 +792,7 @@ void ScopeBuilder::define_function(Function* func) {
     enter_scope(func->get_scope());
     define_function_parameters(func);
     define_function_self_type(func);
+    func->set_uid(function_counter++);
     leave_scope();
 
     if (!sym) {

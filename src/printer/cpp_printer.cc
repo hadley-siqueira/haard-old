@@ -104,7 +104,7 @@ void CppPrinter::print_function(Function* function) {
     print_indentation();
 
     print_type(function->get_return_type());
-    out << " " << function->get_name();
+    out << " f" << function->get_uid() << '_' << function->get_name();
 
     print_parameters(function);
     indent();
@@ -857,7 +857,7 @@ void CppPrinter::print_unop(std::string oper, UnOp* un, bool before) {
 }
 
 void CppPrinter::print_identifier(Identifier* id) {
-    out << id->get_symbol()->to_cpp();
+    out << id->get_symbol()->to_cpp(id->get_overloaded_index());
 }
 
 void CppPrinter::print_literal(Literal* literal) {

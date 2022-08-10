@@ -65,3 +65,25 @@ bool TypeList::equal(Type* type) {
 
     return true;
 }
+
+bool TypeList::check_arguments_type(TypeList* args) {
+    if (args->types_count() != types_count() - 1) {
+        return false;
+    }
+
+    for (int i = 0; i < types.size() - 1; ++i) {
+        if (!args->get_type(i)->equal(types[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+Type* TypeList::get_return_type() {
+    if (types.size() > 0) {
+        return types[types.size() - 1];
+    }
+
+    return nullptr;
+}

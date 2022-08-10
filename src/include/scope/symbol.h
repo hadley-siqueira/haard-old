@@ -24,7 +24,7 @@ namespace haard {
             void add_descriptor(void* descriptor);
 
             std::string to_str();
-            std::string to_cpp();
+            std::string to_cpp(int idx=0);
 
             int overloaded_count();
             void* get_overloaded(TypeList* types);

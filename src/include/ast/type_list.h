@@ -19,6 +19,8 @@ namespace haard {
             void add_type(Type* type);
 
             bool equal(Type* type);
+            bool check_arguments_type(TypeList* args);
+            Type* get_return_type();
 
         private:
             std::vector<Type*> types;

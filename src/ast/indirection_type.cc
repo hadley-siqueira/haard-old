@@ -28,6 +28,8 @@ bool IndirectionType::equal(Type* type) {
 
     if (kind == other->get_kind()) {
         return subtype->equal(other->get_subtype());
+    } else if (kind == TYPE_PARENTHESIS) {
+        return subtype->equal(type);
     }
 
     return false;

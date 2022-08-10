@@ -28,5 +28,6 @@ def soma : int
 
 def main : int
     #p = Pixel
-    #v = soma(2, 3)
+    v = soma(2, 3)
+    k = 0
     return 0
