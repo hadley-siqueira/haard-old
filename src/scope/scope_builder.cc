@@ -45,35 +45,9 @@ void ScopeBuilder::build_function(Function* func) {
 
     enter_scope(func->get_scope());
     current_function = func;
-    build_type(func->get_return_type());
 
-    build_function_parameters(func);
     build_compound_statement(func->get_statements());
-
     leave_scope();
-}
-
-void ScopeBuilder::build_function_parameters(Function* func) {
-    Variable* param;
-
-    for (int i = 0; i < func->parameters_count(); ++i) {
-        build_parameter(func->get_parameter(i));
-        func->get_parameter(i)->set_uid(i);
-    }
-}
-
-void ScopeBuilder::build_parameter(Variable* var) {
-    Symbol* sym;
-
-    sym = current_scope->has(var->get_name());
-
-    if (!sym) {
-        current_scope->define(SYM_PARAMETER, var);
-    } else if (sym->get_kind() != SYM_PARAMETER) {
-        current_scope->define(SYM_PARAMETER, var);
-    } else {
-        std::cout << "parameter already defined\n";
-    }
 }
 
 void ScopeBuilder::build_class_variable(Variable* var) {
@@ -455,8 +429,7 @@ void ScopeBuilder::build_expression(Expression* expression) {
         break;
 
     case EXPR_CALL:
-        build_expression(bin->get_left());
-        build_expression(bin->get_right());
+        build_call_expression(bin);
         break;
 
     case EXPR_INDEX:
@@ -603,6 +576,12 @@ void ScopeBuilder::build_dot(BinOp* bin) {
     }*/
 }
 
+void ScopeBuilder::build_call_expression(BinOp* bin) {
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+    bin->set_type(bin->get_left()->get_type());
+}
+
 void ScopeBuilder::build_binop(std::string oper, BinOp* bin) {
     build_expression(bin->get_left());
     build_expression(bin->get_right());
@@ -642,17 +621,14 @@ void ScopeBuilder::build_literal(Literal* literal, int kind) {
 }
 
 void ScopeBuilder::build_expression_list(ExpressionList* tuple) {
-/*
-    int i;
-    out << begin;
+    TypeList* types = new TypeList();
 
-    for (i = 0; i < tuple->expressions_count() - 1; ++i) {
+    for (int i = 0; i < tuple->expressions_count(); ++i) {
         build_expression(tuple->get_expression(i));
-        out << ", ";
+        types->add_type(tuple->get_expression(i)->get_type());
     }
-        
-    build_expression(tuple->get_expression(i));
-    out << end;*/
+
+    tuple->set_type(types);
 }
 
 void ScopeBuilder::build_hash(ExpressionList* hash) {
@@ -762,6 +738,11 @@ void ScopeBuilder::define_class(Class* klass) {
 void ScopeBuilder::define_function(Function* func) {
     Symbol* sym = current_scope->has(func->get_name());
 
+    enter_scope(func->get_scope());
+    define_function_parameters(func);
+    define_function_self_type(func);
+    leave_scope();
+
     if (!sym) {
         current_scope->define(func);
     } else if (sym->get_kind() == SYM_FUNCTION) {
@@ -769,6 +750,44 @@ void ScopeBuilder::define_function(Function* func) {
     } else {
         std::cout << "Error: you tried to define a function named '" << func->get_name() << "', but it is already defined. Other occurrence\n";
     }
+}
+
+void ScopeBuilder::define_function_parameters(Function* func) {
+    Variable* param;
+    Symbol* sym;
+
+    for (int i = 0; i < func->parameters_count(); ++i) {
+        param = func->get_parameter(i);
+        param->set_uid(i);
+        build_type(param->get_type());
+
+        sym = current_scope->has(param->get_name());
+
+        if (!sym) {
+            current_scope->define(SYM_PARAMETER, param);
+        } else if (sym->get_kind() != SYM_PARAMETER) {
+            current_scope->define(SYM_PARAMETER, param);
+        } else {
+            std::cout << "parameter already defined\n";
+        }
+    }
+}
+
+void ScopeBuilder::define_function_self_type(Function* func) {
+    TypeList* types = new TypeList(TYPE_FUNCTION);
+
+    build_type(func->get_return_type());
+
+    if (func->parameters_count() > 0) {
+        for (int i = 0; i < func->parameters_count(); ++i) {
+            types->add_type(func->get_parameter(i)->get_type());
+        }
+    } else {
+        types->add_type(new Type(TYPE_VOID));
+    }
+
+    types->add_type(func->get_return_type());
+    func->set_self_type(types);
 }
 
 void ScopeBuilder::define_method(Function* func) {

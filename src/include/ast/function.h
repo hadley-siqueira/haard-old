@@ -36,6 +36,9 @@ namespace haard {
             int get_uid();
             void set_uid(int uid);
 
+            Type* get_self_type();
+            void set_self_type(Type* type);
+
             int parameters_count();
 
             void add_parameter(Variable* param);
@@ -49,6 +52,7 @@ namespace haard {
             std::vector<Variable*> parameters;
             std::vector<Variable*> variables;
             Type* return_type;
+            Type* self_type;
             CompoundStatement* statements;
             Scope* scope;
             

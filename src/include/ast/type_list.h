@@ -8,6 +8,8 @@
 namespace haard {
     class TypeList : public Type {
         public:
+            TypeList();
+            TypeList(int kind);
             TypeList(int kind, Token& token, Type* t1=nullptr, Type* t2=nullptr);
             ~TypeList();
 

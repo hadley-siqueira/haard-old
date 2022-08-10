@@ -2,6 +2,14 @@
 
 using namespace haard;
 
+TypeList::TypeList() {
+
+}
+
+TypeList::TypeList(int kind) {
+    this->kind = kind;
+}
+
 TypeList::TypeList(int kind, Token& token, Type* t1, Type* t2) {
     this->kind = kind;
 

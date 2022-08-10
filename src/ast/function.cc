@@ -90,6 +90,14 @@ void Function::set_uid(int uid) {
     this->uid = uid;
 }
 
+Type* Function::get_self_type() {
+    return self_type;
+}
+
+void Function::set_self_type(Type* type) {
+    self_type = type;
+}
+
 int Function::parameters_count() {
     return parameters.size();
 }

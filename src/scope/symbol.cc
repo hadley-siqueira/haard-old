@@ -47,13 +47,14 @@ void Symbol::add_descriptor(void* descriptor) {
 Type* Symbol::get_type() {
     Variable* var = (Variable*) descriptors[0];
     Class* klass = (Class*) descriptors[0];
+    Function* func = (Function*) descriptors[0];
 
     switch (kind) {
     case SYM_CLASS:
         return klass->get_self_type();
 
     case SYM_FUNCTION:
-        return nullptr;
+        return func->get_self_type();
 
     case SYM_PARAMETER:
     case SYM_VARIABLE:
@@ -75,11 +76,27 @@ std::string Symbol::to_str() {
         break;
 
     case SYM_FUNCTION:
-        ss << "func";
+        ss << "func(";
+
+        if (get_type()) {
+            Printer p;
+            p.print_type(get_type());
+            ss << p.to_str();
+        }
+
+        ss << ")";
         break;
 
     case SYM_PARAMETER:
-        ss << "param";
+        ss << "param(";
+
+        if (get_type()) {
+            Printer p;
+            p.print_type(get_type());
+            ss << p.to_str();
+        }
+
+        ss << ")";
         break;
 
     case SYM_VARIABLE:

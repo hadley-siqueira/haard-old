@@ -36,6 +36,7 @@ namespace haard {
 
             void build_address_of(UnOp* op);
             void build_dot(BinOp* bin);
+            void build_call_expression(BinOp* bin);
 
             void build_binop(std::string oper, BinOp* bin);
             void build_unop(std::string oper, UnOp* un, bool before=true);
@@ -51,6 +52,8 @@ namespace haard {
             void define_source_elements(Source* source);
             void define_class(Class* klass);
             void define_function(Function* func);
+            void define_function_parameters(Function* func);
+            void define_function_self_type(Function* func);
             void define_method(Function* func);
 
         private:

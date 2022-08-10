@@ -15,10 +15,11 @@ def soma : int
     @a : int
     @b : int
 
-    c = a + b
+    c = a + b + b
     return a + b
     return c
 
 def main : int
-    p = Pixel
+    #p = Pixel
+    #v = soma(2, 3)
     return 0
