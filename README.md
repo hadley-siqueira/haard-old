@@ -2,6 +2,16 @@
   <img src="https://github.com/hadley-siqueira/hdc/blob/master/img/haard-logo.png" width="300">
 </p>
 
+<div style="text-align: right">
+*For God so loved the world, that he gave his only begotten Son, that 
+whosoever believeth in him should not perish, but have everlasting life.
+
+For God sent not his Son into the world to condemn the world; but that 
+the world through him might be saved.*
+
+*John 3:16-17*
+</div>
+
 # The Haard Programming Language
 
 Haard is a programming language with syntax inspired 
