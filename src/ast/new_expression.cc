@@ -10,7 +10,6 @@ NewExpression::NewExpression() {
 
 NewExpression::~NewExpression() {
     delete args;
-    delete new_type;
 }
 
 Type* NewExpression::get_new_type() {

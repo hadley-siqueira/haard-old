@@ -19,8 +19,12 @@ namespace haard {
             void build_function(Function* func);
             void build_function_parameters(Function* func);
             void build_parameter(Variable* var);
+            void build_class_variable(Variable* var);
 
             void build_type(Type* type);
+            void build_named_type(NamedType* type);
+            void build_indirection_type(IndirectionType* type);
+            void build_array_list_type(ArrayListType* type);
 
             void build_statement(Statement* statement);
             void build_compound_statement(CompoundStatement* stmts);
@@ -32,12 +36,11 @@ namespace haard {
             void build_address_of(UnOp* op);
             void build_dot(BinOp* bin);
 
-
             void build_binop(std::string oper, BinOp* bin);
             void build_unop(std::string oper, UnOp* un, bool before=true);
             void build_identifier(Identifier* id);
             void build_literal(Literal* literal, int kind);
-            void build_expression_list(std::string begin, std::string end, ExpressionList* tuple);
+            void build_expression_list(ExpressionList* tuple);
             void build_hash(ExpressionList* hash);
             void build_function_expression(FunctionExpression* function);
             void build_new_expression(NewExpression* expr);
@@ -58,6 +61,9 @@ namespace haard {
             Function* current_function;
             Class* current_class;
             std::stack<Scope*> scopes;
+            int class_counter;
+            int function_counter;
+            int method_counter;
     };
 }
 

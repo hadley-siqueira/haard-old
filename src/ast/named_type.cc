@@ -6,6 +6,7 @@ NamedType::NamedType() {
     kind = TYPE_NAMED;
     alias = nullptr;
     name = nullptr;
+    symbol = nullptr;
 }
 
 NamedType::~NamedType() {
@@ -21,10 +22,18 @@ Identifier* NamedType::get_name() {
     return name;
 }
 
+Symbol* NamedType::get_symbol() {
+    return symbol;
+}
+
 void NamedType::set_alias(Identifier* id) {
     alias = id;
 }
 
 void NamedType::set_name(Identifier* id) {
     name = id;
+}
+
+void NamedType::set_symbol(Symbol* symbol) {
+    this->symbol = symbol;
 }

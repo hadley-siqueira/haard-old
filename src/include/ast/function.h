@@ -33,12 +33,16 @@ namespace haard {
             void set_return_type(Type* type);
             void set_statements(CompoundStatement* statements);
 
+            int get_uid();
+            void set_uid(int uid);
+
             int parameters_count();
 
             void add_parameter(Variable* param);
             void add_variable(Variable* var);
 
         private:
+            int uid;
             int line;
             int column;
             const char* name;

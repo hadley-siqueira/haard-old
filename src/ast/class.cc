@@ -5,6 +5,7 @@ using namespace haard;
 
 Class::Class() {
     parent = nullptr;
+    self_type = nullptr;
     scope = new Scope();
 }
 
@@ -57,6 +58,10 @@ Scope* Class::get_scope() {
     return scope;
 }
 
+NamedType* Class::get_self_type() {
+    return self_type;
+}
+
 void Class::set_from_token(Token& token) {
     set_name(token.get_lexeme());
     set_line(token.get_line());
@@ -77,6 +82,18 @@ void Class::set_column(int column) {
 
 void Class::set_parent(Type* type) {
     parent = type;
+}
+
+int Class::get_uid() {
+    return uid;
+}
+
+void Class::set_uid(int uid) {
+    this->uid = uid;
+}
+
+void Class::set_self_type(NamedType* type) {
+    self_type = type;
 }
 
 void Class::add_method(Function* method) {

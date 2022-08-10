@@ -1,0 +1,22 @@
+def foo : int
+    return 0
+
+class Pixel:
+    r : u8
+    g : u8
+    b : u8
+    a : u8
+
+class Window:
+    x : int
+    y : int
+
+def main : int
+    a = 2
+    # b = a + 1
+    # ptr = &a
+    # c = foo()
+    # p = Pixel
+    # p2 = new Pixel
+    # p3 = new Window
+    return 0

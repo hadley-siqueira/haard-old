@@ -1,3 +1,4 @@
+#include <iostream>
 #include "scope/symbol.h"
 #include "ast/variable.h"
 #include "defs.h"
@@ -45,10 +46,11 @@ void Symbol::add_descriptor(void* descriptor) {
 
 Type* Symbol::get_type() {
     Variable* var = (Variable*) descriptors[0];
+    Class* klass = (Class*) descriptors[0];
 
     switch (kind) {
     case SYM_CLASS:
-        return nullptr;
+        return klass->get_self_type();
 
     case SYM_FUNCTION:
         return nullptr;
@@ -98,5 +100,51 @@ std::string Symbol::to_str() {
     }
 
     ss << ">";
+    return ss.str();
+}
+            
+std::string Symbol::to_cpp() {
+    std::stringstream ss;
+
+    // FIXME
+    if (descriptors.size() == 0) {
+        std::cout << __FILE__ << ' ' << __LINE__ << "Error: descriptor empty\n";
+        exit(0);
+    }
+
+    Class* klass = (Class*) descriptors[0];
+    Function* func = (Function*) descriptors[0];
+    Variable* var = (Variable*) descriptors[0];
+
+    switch (kind) {
+    case SYM_CLASS:
+        ss << "c" << klass->get_uid() << '_' << klass->get_name();
+        break;
+
+    case SYM_FUNCTION:
+        ss << "f" << func->get_uid() << '_' << func->get_name();
+        break;
+
+    case SYM_PARAMETER:
+        ss << "p" << var->get_uid() << '_' << var->get_name();
+        break;
+
+    case SYM_VARIABLE:
+        ss << "var(";
+
+        if (get_type()) {
+            Printer p;
+            p.print_type(get_type());
+            ss << p.to_str();
+        }
+
+        ss << ")";
+        break;
+
+    case SYM_CLASS_VARIABLE:
+        ss << "cvar";
+        break;
+    }
+
     return ss.str();
 }

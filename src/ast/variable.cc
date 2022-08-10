@@ -63,3 +63,11 @@ void Variable::set_from_token(Token& token) {
     column = token.get_column();
     name = token.get_lexeme();
 }
+
+int Variable::get_uid() {
+    return uid;
+}
+
+void Variable::set_uid(int uid) {
+    this->uid = uid;
+}

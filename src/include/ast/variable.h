@@ -26,7 +26,11 @@ namespace haard {
             void set_type(Type* type);
             void set_from_token(Token& token);
 
+            int get_uid();
+            void set_uid(int uid);
+
         private:
+            int uid;
             int line;
             int column;
             bool constant;

@@ -72,7 +72,8 @@ void CppPrinter::print_class(Class* klass) {
 
     print_indentation();
 
-    out << "class " << klass->get_name() << " {\npublic:\n";
+    out << "class c" << klass->get_uid() << "_";
+    out << klass->get_name() << " {\npublic:\n";
     indent();
 
     if (klass->variables_count() > 0) {
@@ -239,7 +240,7 @@ void CppPrinter::print_type(Type* type) {
         break;
 
     case TYPE_NAMED:
-        out << named->get_name()->get_lexeme();
+        print_named_type(named);
         break;
 
     case TYPE_ARRAY:
@@ -309,6 +310,19 @@ void CppPrinter::print_type_list(std::string oper, TypeList* tlist) {
     }
 
     print_type(tlist->get_type(i));
+}
+
+void CppPrinter::print_named_type(NamedType* named) {
+    Class* klass;
+    Symbol* sym = named->get_symbol();
+
+    if (!sym) {
+        // FIXME
+        std::cout << __FILE__ << ' ' << __LINE__ << "sym should not be null\n";
+        exit(0);
+    }
+
+    out << sym->to_cpp();
 }
 
 void CppPrinter::print_statement(Statement* statement) {
@@ -502,6 +516,7 @@ void CppPrinter::print_variable_declaration(VarDeclaration* decl) {
 
     out << ";\n";
 }
+
 void CppPrinter::print_expression(Expression* expression) {
     if (expression == nullptr) return;
 
@@ -850,7 +865,7 @@ void CppPrinter::print_unop(std::string oper, UnOp* un, bool before) {
 }
 
 void CppPrinter::print_identifier(Identifier* id) {
-    out << id->get_lexeme();
+    out << id->get_symbol()->to_cpp();
 }
 
 void CppPrinter::print_literal(Literal* literal) {

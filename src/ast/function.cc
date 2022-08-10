@@ -82,6 +82,14 @@ void Function::set_statements(CompoundStatement* statements) {
     this->statements = statements;
 }
 
+int Function::get_uid() {
+    return uid;
+}
+
+void Function::set_uid(int uid) {
+    this->uid = uid;
+}
+
 int Function::parameters_count() {
     return parameters.size();
 }

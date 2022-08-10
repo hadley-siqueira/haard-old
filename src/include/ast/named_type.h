@@ -3,6 +3,7 @@
 
 #include "ast/type.h"
 #include "ast/identifier.h"
+#include "scope/symbol.h"
 
 namespace haard {
     class NamedType : public Type {
@@ -13,13 +14,16 @@ namespace haard {
         public:
             Identifier* get_alias();
             Identifier* get_name();
+            Symbol* get_symbol();
 
             void set_alias(Identifier* id);
             void set_name(Identifier* id);
+            void set_symbol(Symbol* symbol);
 
         private:
             Identifier* alias;
             Identifier* name;
+            Symbol* symbol;
     };
 }
 

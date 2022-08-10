@@ -5,6 +5,8 @@ using namespace haard;
 
 ScopeBuilder::ScopeBuilder() {
     current_scope = nullptr;
+    class_counter = 0;
+    function_counter = 0;
 }
 
 void ScopeBuilder::build_sources(Sources* sources) {
@@ -27,6 +29,10 @@ void ScopeBuilder::build_class(Class* klass) {
     enter_scope(klass->get_scope());
     current_class = klass;
 
+    for (int i = 0; i < klass->variables_count(); ++i) {
+        build_class_variable(klass->get_variable(i));
+    }
+
     for (int i = 0; klass->methods_count(); ++i) {
 
     }
@@ -37,6 +43,7 @@ void ScopeBuilder::build_class(Class* klass) {
 void ScopeBuilder::build_function(Function* func) {
     enter_scope(func->get_scope());
     current_function = func;
+    build_type(func->get_return_type());
 
     build_function_parameters(func);
     build_compound_statement(func->get_statements());
@@ -66,8 +73,72 @@ void ScopeBuilder::build_parameter(Variable* var) {
     }
 }
 
-void ScopeBuilder::build_type(Type* type) {
+void ScopeBuilder::build_class_variable(Variable* var) {
+    Symbol* sym;
 
+    sym = current_scope->has(var->get_name());
+
+    if (!sym) {
+        current_scope->define(SYM_CLASS_VARIABLE, var);
+    } else if (sym->get_kind() != SYM_CLASS_VARIABLE) {
+        current_scope->define(SYM_CLASS_VARIABLE, var);
+    } else {
+        std::cout << "class variable already defined\n";
+    }
+}
+
+void ScopeBuilder::build_type(Type* type) {
+    if (type == nullptr) return;
+
+    switch (type->get_kind()) {
+    case TYPE_NAMED:
+        build_named_type((NamedType*) type);
+        break;
+
+    case TYPE_POINTER:
+    case TYPE_REFERENCE:
+        build_indirection_type((IndirectionType*) type);
+        break;
+
+    case TYPE_ARRAY:
+    case TYPE_LIST:
+        build_array_list_type((ArrayListType*) type);
+        break;
+
+    case TYPE_HASH:
+    case TYPE_FUNCTION:
+    case TYPE_TUPLE:
+    case TYPE_PARENTHESIS:
+    case TYPE_UNION:
+        break;
+    }
+}
+
+void ScopeBuilder::build_named_type(NamedType* type) {
+    Symbol* sym = current_scope->has(type->get_name()->get_lexeme());
+
+    if (!sym) {
+        std::cout << "Error: named type not in scope\n";
+        exit(0);
+    }
+
+    int kind = sym->get_kind();
+
+    if (kind == SYM_CLASS) {
+        type->set_symbol(sym);
+    } else {
+        std::cout << "Error: named type not in scope but is another entity\n";
+        exit(0);
+    }
+}
+
+void ScopeBuilder::build_indirection_type(IndirectionType* type) {
+    build_type(type->get_subtype());
+}
+
+void ScopeBuilder::build_array_list_type(ArrayListType* type) {
+    build_type(type->get_subtype());
+    build_expression(type->get_expression());
 }
 
 void ScopeBuilder::build_statement(Statement* statement) {
@@ -427,24 +498,24 @@ void ScopeBuilder::build_expression(Expression* expression) {
         break;
 
     case EXPR_TUPLE:
-        build_expression_list("(", ")", exprlist);
+        build_expression_list(exprlist);
         break;
 
     case EXPR_LIST:
-        build_expression_list("[", "]", exprlist);
+        build_expression_list(exprlist);
         break;
 
     case EXPR_ARRAY:
-        build_expression_list("{", "}", exprlist);
+        build_expression_list(exprlist);
         break;
 
     case EXPR_ARGS:
-        build_expression_list("(", ")", exprlist);
+        build_expression_list(exprlist);
         break;
 
     case EXPR_FOR_INIT:
     case EXPR_FOR_INC:
-        build_expression_list("", "", exprlist);
+        build_expression_list(exprlist);
         break;
 
     case EXPR_HASH:
@@ -541,7 +612,9 @@ void ScopeBuilder::build_unop(std::string oper, UnOp* un, bool before) {
 void ScopeBuilder::build_identifier(Identifier* id) {
     Symbol* sym = current_scope->has(id->get_lexeme());
 
-std::cout << "id... "; current_scope->debug(); std::cout << '\n';
+    // FIXME
+    std::cout << "id... "; current_scope->debug(); std::cout << '\n';
+
     if (!sym) {
         // FIXME
         std::cout << "Error: undefined id " << id->get_lexeme() << "\n";
@@ -556,7 +629,7 @@ void ScopeBuilder::build_literal(Literal* literal, int kind) {
     literal->set_type(new Type(kind));
 }
 
-void ScopeBuilder::build_expression_list(std::string begin, std::string end, ExpressionList* tuple) {
+void ScopeBuilder::build_expression_list(ExpressionList* tuple) {
 /*
     int i;
     out << begin;
@@ -623,13 +696,14 @@ void ScopeBuilder::build_function_expression(FunctionExpression* function) {
     out << "}";*/
 }
 
-void ScopeBuilder::build_new_expression(NewExpression* expr) { /*
-    out << "new ";
+void ScopeBuilder::build_new_expression(NewExpression* expr) {
     build_type(expr->get_new_type());
 
     if (expr->has_arguments()) {
-        build_expression_list("(", ")", expr->get_arguments());
-    }*/
+        build_expression_list(expr->get_arguments());
+    }
+
+    expr->set_type(new IndirectionType(TYPE_POINTER, expr->get_new_type()));
 }
 
 void ScopeBuilder::define_sources_elements(Sources* sources) {
@@ -651,10 +725,21 @@ void ScopeBuilder::define_source_elements(Source* source) {
 }
 
 void ScopeBuilder::define_class(Class* klass) {
+    NamedType* type;
+    Identifier* id;
     Symbol* sym = current_scope->has(klass->get_name());
 
     if (!sym) {
         current_scope->define(klass);
+
+        id = new Identifier();
+        id->set_line(klass->get_line());
+        id->set_column(klass->get_column());
+        id->set_lexeme(klass->get_name());
+        type = new NamedType();
+        type->set_name(id);
+        klass->set_self_type(type);
+        klass->set_uid(class_counter++);
     } else {
         std::cout << "Error: you tried to define a class named '" << klass->get_name() << "', but it is already defined. Other occurrence\n";
         exit(0);
