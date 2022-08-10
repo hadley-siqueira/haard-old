@@ -21,6 +21,7 @@ namespace haard {
             int get_column();
             const char* get_name();
             Variable* get_parameter(int idx);
+            Variable* get_variable(int idx);
             Type* get_return_type();
             CompoundStatement* get_statements();
             Scope* get_scope();
@@ -35,12 +36,14 @@ namespace haard {
             int parameters_count();
 
             void add_parameter(Variable* param);
+            void add_variable(Variable* var);
 
         private:
             int line;
             int column;
             const char* name;
             std::vector<Variable*> parameters;
+            std::vector<Variable*> variables;
             Type* return_type;
             CompoundStatement* statements;
             Scope* scope;

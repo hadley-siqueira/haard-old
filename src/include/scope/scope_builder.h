@@ -28,10 +28,11 @@ namespace haard {
 
             void build_expression(Expression* expression);
             void build_assignment(BinOp* bin);
+            void build_dot(BinOp* bin);
             void build_binop(std::string oper, BinOp* bin);
             void build_unop(std::string oper, UnOp* un, bool before=true);
             void build_identifier(Identifier* id);
-            void build_literal(Literal* literal);
+            void build_literal(Literal* literal, int kind);
             void build_expression_list(std::string begin, std::string end, ExpressionList* tuple);
             void build_hash(ExpressionList* hash);
             void build_function_expression(FunctionExpression* function);
@@ -50,6 +51,8 @@ namespace haard {
 
         private:
             Scope* current_scope;
+            Function* current_function;
+            Class* current_class;
             std::stack<Scope*> scopes;
     };
 }

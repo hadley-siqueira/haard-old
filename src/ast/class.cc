@@ -18,6 +18,7 @@ Class::~Class() {
     }
 
     delete parent;
+    delete scope;
 }
 
 const char* Class::get_name() {

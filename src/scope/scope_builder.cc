@@ -25,6 +25,7 @@ void ScopeBuilder::build_source(Source* source) {
 
 void ScopeBuilder::build_class(Class* klass) {
     enter_scope(klass->get_scope());
+    current_class = klass;
 
     for (int i = 0; klass->methods_count(); ++i) {
 
@@ -35,6 +36,7 @@ void ScopeBuilder::build_class(Class* klass) {
 
 void ScopeBuilder::build_function(Function* func) {
     enter_scope(func->get_scope());
+    current_function = func;
 
     build_function_parameters(func);
     build_compound_statement(func->get_statements());
@@ -48,8 +50,6 @@ void ScopeBuilder::build_function_parameters(Function* func) {
     for (int i = 0; i < func->parameters_count(); ++i) {
         build_parameter(func->get_parameter(i));
     }
-
-    current_scope->debug(); std::cout << '\n';
 }
 
 void ScopeBuilder::build_parameter(Variable* var) {
@@ -392,18 +392,35 @@ void ScopeBuilder::build_expression(Expression* expression) {
         break;
 
     case EXPR_DOT:
-        build_expression(bin->get_left());
-        build_expression(bin->get_right());
+        build_dot(bin);
         break;
 
     case EXPR_LITERAL_BOOL:
+        build_literal(literal, TYPE_BOOL);
+        break;
+
     case EXPR_LITERAL_INTEGER:
+        build_literal(literal, TYPE_INT);
+        break;
+
     case EXPR_LITERAL_FLOAT:
+        build_literal(literal, TYPE_FLOAT);
+        break;
+
     case EXPR_LITERAL_DOUBLE:
+        build_literal(literal, TYPE_DOUBLE);
+        break;
+
     case EXPR_LITERAL_CHAR:
+        build_literal(literal, TYPE_CHAR);
+        break;
+
     case EXPR_LITERAL_STRING:
+        build_literal(literal, TYPE_STR);
+        break;
+
     case EXPR_LITERAL_SYMBOL:
-        build_literal(literal);
+        build_literal(literal, TYPE_SYMBOL);
         break;
 
     case EXPR_LITERAL_NULL:
@@ -464,12 +481,30 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
         if (!sym) {
             var = new Variable(id);
             current_scope->define(SYM_VARIABLE, var);
+            current_function->add_variable(var);
         }
  
         // FIXME
         id->set_symbol(sym);
-        current_scope->debug(); std::cout << '\n';
+        std::cout << "=... "; current_scope->debug(); std::cout << '\n';
+    } else {
+        build_expression(left);
     }
+}
+
+void ScopeBuilder::build_dot(BinOp* bin) {
+    int lkind;
+    Type* tleft;
+
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+
+    /*tleft = bin->get_left()->get_type();
+    lkind = tleft->get_kind();
+
+    if (lkind == TYPE_NAMED) {
+        
+    }*/
 }
 
 void ScopeBuilder::build_binop(std::string oper, BinOp* bin) {
@@ -492,6 +527,7 @@ void ScopeBuilder::build_unop(std::string oper, UnOp* un, bool before) {
 void ScopeBuilder::build_identifier(Identifier* id) {
     Symbol* sym = current_scope->has(id->get_lexeme());
 
+std::cout << "id... "; current_scope->debug(); std::cout << '\n';
     if (!sym) {
         // FIXME
         std::cout << "Error: undefined id " << id->get_lexeme() << "\n";
@@ -499,10 +535,8 @@ void ScopeBuilder::build_identifier(Identifier* id) {
     }
 }
 
-void ScopeBuilder::build_literal(Literal* literal) {
-/*
-    out << literal->get_lexeme();
-*/
+void ScopeBuilder::build_literal(Literal* literal, int kind) {
+    literal->set_type(new Type(kind));
 }
 
 void ScopeBuilder::build_expression_list(std::string begin, std::string end, ExpressionList* tuple) {

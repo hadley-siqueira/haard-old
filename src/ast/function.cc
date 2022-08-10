@@ -17,6 +17,10 @@ Function::~Function() {
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];
     }
+
+    for (int i = 0; i < variables.size(); ++i) {
+        delete variables[i];
+    }
 }
 
 int Function::get_line() {
@@ -34,6 +38,14 @@ const char* Function::get_name() {
 Variable* Function::get_parameter(int idx) {
     if (idx < parameters.size()) {
         return parameters[idx];
+    }
+
+    return nullptr;
+}
+
+Variable* Function::get_variable(int idx) {
+    if (idx < variables.size()) {
+        return variables[idx];
     }
 
     return nullptr;
@@ -77,6 +89,10 @@ int Function::parameters_count() {
 
 void Function::add_parameter(Variable* param) {
     parameters.push_back(param);
+}
+
+void Function::add_variable(Variable* var) {
+    variables.push_back(var);
 }
             
 void Function::set_from_token(Token& token) {

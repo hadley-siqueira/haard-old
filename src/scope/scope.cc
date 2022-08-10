@@ -57,7 +57,7 @@ Symbol* Scope::has(const char* name) {
     }
 
     if (has_parent()) {
-        return parent->has_class(name);
+        return parent->has(name);
     }
 
     return nullptr;
