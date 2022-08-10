@@ -746,7 +746,7 @@ void ScopeBuilder::define_function(Function* func) {
     if (!sym) {
         current_scope->define(func);
     } else if (sym->get_kind() == SYM_FUNCTION) {
-        sym->add_descriptor(func);
+        define_overloaded_function(sym, func);
     } else {
         std::cout << "Error: you tried to define a function named '" << func->get_name() << "', but it is already defined. Other occurrence\n";
     }
@@ -788,6 +788,10 @@ void ScopeBuilder::define_function_self_type(Function* func) {
 
     types->add_type(func->get_return_type());
     func->set_self_type(types);
+}
+
+void ScopeBuilder::define_overloaded_function(Symbol* sym, Function* func) {
+    sym->add_descriptor(func);
 }
 
 void ScopeBuilder::define_method(Function* func) {

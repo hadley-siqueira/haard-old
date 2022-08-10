@@ -25,6 +25,8 @@ namespace haard {
             std::string to_str();
             std::string to_cpp();
 
+            int overloaded_count();
+
         private:
             int kind;
             const char* name;

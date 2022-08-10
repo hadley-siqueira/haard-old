@@ -157,3 +157,7 @@ std::string Symbol::to_cpp() {
 
     return ss.str();
 }
+
+int Symbol::overloaded_count() {
+    return descriptors.size();
+}
