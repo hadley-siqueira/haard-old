@@ -37,7 +37,7 @@ def soma : int
     return c
 
 def main : int
-    #p = Pixel
+    p = Pixel
     v = soma(2, 3)
     print('Hello, world!')
     print(2)

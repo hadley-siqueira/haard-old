@@ -20,6 +20,7 @@ namespace haard {
             int get_line();
             int get_column();
             const char* get_name();
+            std::string get_cpp_name();
             Variable* get_parameter(int idx);
             Variable* get_variable(int idx);
             Type* get_return_type();
@@ -36,6 +37,8 @@ namespace haard {
             int get_uid();
             void set_uid(int uid);
 
+            void set_method(bool value=true);
+
             Type* get_self_type();
             void set_self_type(Type* type);
 
@@ -48,6 +51,7 @@ namespace haard {
             int uid;
             int line;
             int column;
+            bool method_flag;
             const char* name;
             std::vector<Variable*> parameters;
             std::vector<Variable*> variables;

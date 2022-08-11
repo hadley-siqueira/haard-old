@@ -1,3 +1,5 @@
+#include <cstring>
+#include <sstream>
 #include "ast/class.h"
 #include "scope/scope.h"
 
@@ -24,6 +26,13 @@ Class::~Class() {
 
 const char* Class::get_name() {
     return name;
+}
+
+std::string Class::get_cpp_name() {
+    std::stringstream ss;
+
+    ss << "c" << uid << "_" << name;
+    return ss.str();
 }
 
 int Class::get_line() {
@@ -98,6 +107,16 @@ void Class::set_self_type(NamedType* type) {
 
 void Class::add_method(Function* method) {
     methods.push_back(method);
+
+    if (strcmp(method->get_name(), "init") == 0) {
+        constructors.push_back(method);
+    }
+    
+    if (strcmp(method->get_name(), "destroy") == 0) {
+        destructor = method;
+    }
+
+    method->set_method();
 }
 
 void Class::add_variable(Variable* var) {
@@ -110,5 +129,17 @@ int Class::methods_count() {
 
 int Class::variables_count() {
     return variables.size();
+}
+
+int Class::constructors_count() {
+    return constructors.size();
+}
+
+Function* Class::get_constructor(int idx) {
+    if (idx < constructors_count()) {
+        return constructors[idx];
+    }
+
+    return nullptr;
 }
 

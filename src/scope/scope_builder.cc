@@ -24,6 +24,10 @@ void ScopeBuilder::build_source(Source* source) {
     for (int i = 0; i < source->function_count(); ++i) {
         build_function(source->get_function(i));
     }
+
+    for (int i = 0; i < source->classes_count(); ++i) {
+        build_class(source->get_class(i));
+    }
 }
 
 void ScopeBuilder::build_class(Class* klass) {
@@ -32,10 +36,11 @@ void ScopeBuilder::build_class(Class* klass) {
 
     for (int i = 0; i < klass->variables_count(); ++i) {
         build_class_variable(klass->get_variable(i));
+        klass->get_variable(i)->set_uid(i); 
     }
 
-    for (int i = 0; klass->methods_count(); ++i) {
-
+    for (int i = 0; i < klass->methods_count(); ++i) {
+        build_function(klass->get_method(i));
     }
 
     leave_scope();
@@ -593,45 +598,63 @@ void ScopeBuilder::build_call_expression(BinOp* bin) {
     if (bin->get_left()->get_kind() == EXPR_ID) {
         Identifier* id = (Identifier*) bin->get_left();
         Symbol* sym = id->get_symbol();
-        args = (TypeList*) tr;
-        bool found = false;
-        int i;
 
-        for (i = 0; i < sym->overloaded_count(); ++i) {
-            Function* f = (Function*) sym->get_descriptor(i);
-            ft = (TypeList*) f->get_self_type();
+        if (tl->get_kind() == TYPE_FUNCTION) {
+            args = (TypeList*) tr;
+            int i = 0;
+            bool found = false;
 
-            if (ft->check_arguments_type(args)) {
-                found = true;
-                break;
+            for (i = 0; i < sym->overloaded_count(); ++i) {
+                Function* f = (Function*) sym->get_descriptor(i);
+                ft = (TypeList*) f->get_self_type();
+
+                if (ft->check_arguments_type(args)) {
+                    found = true;
+                    break;
+                }
             }
-        }
 
-        if (found) {
-            id->set_overloaded_index(i);
+            if (found) {
+                id->set_overloaded_index(i);
+            } else {
+                // FIXME
+                std::cout << "Error: function not overloaded with signature\n";
+                exit(0);
+            }
+
+            bin->set_type(ft->get_return_type());
+        } else if (tl->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS) {
+            bool found = false;
+            int i = 0;
+            Class* klass = (Class*) sym->get_descriptor();
+            args = (TypeList*) tr;
+
+            for (i = 0; i < klass->constructors_count(); ++i) {
+                Function* f = (Function*) klass->get_constructor(i);
+                ft = (TypeList*) f->get_self_type();
+
+                if (ft->check_arguments_type(args)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                // id->set_overloaded_index(i);
+            } else {
+                // FIXME
+                std::cout << "Error: constructor not overloaded with signature\n";
+                exit(0);
+            }
+
+            bin->set_type(sym->get_type());
         } else {
             // FIXME
-            std::cout << "Error: function not overloaded with signature\n";
+            std::cout << "Error: not a function to be called\n";
             exit(0);
         }
     }
 
-    if (tl->get_kind() == TYPE_FUNCTION) {
-        /*TypeList* ft = (TypeList*) tl;
-        TypeList* args = (TypeList*) tr;
-
-        if (!ft->check_arguments_type(args)) {
-            // FIXME
-            std::cout << "Error: invalid arg types\n";
-            exit(0);
-        }*/
-    } else {
-        // FIXME
-        std::cout << "Error: not a function to be called\n";
-        exit(0);
-    }
-
-    bin->set_type(ft->get_return_type());
 }
 
 void ScopeBuilder::build_binop(std::string oper, BinOp* bin) {
@@ -675,9 +698,13 @@ void ScopeBuilder::build_literal(Literal* literal, int kind) {
 void ScopeBuilder::build_expression_list(ExpressionList* tuple) {
     TypeList* types = new TypeList(TYPE_TUPLE);
 
-    for (int i = 0; i < tuple->expressions_count(); ++i) {
-        build_expression(tuple->get_expression(i));
-        types->add_type(tuple->get_expression(i)->get_type());
+    if (tuple->expressions_count() > 0) {
+        for (int i = 0; i < tuple->expressions_count(); ++i) {
+            build_expression(tuple->get_expression(i));
+            types->add_type(tuple->get_expression(i)->get_type());
+        }
+    } else {
+        types->add_type(new Type(TYPE_VOID));
     }
 
     tuple->set_type(types);
@@ -781,6 +808,10 @@ void ScopeBuilder::define_class(Class* klass) {
         type->set_symbol(sym);
         klass->set_self_type(type);
         klass->set_uid(class_counter++);
+
+        for (int i = 0; i < klass->methods_count(); ++i) {
+            define_method(klass->get_method(i));
+        }
     } else {
         std::cout << "Error: you tried to define a class named '" << klass->get_name() << "', but it is already defined. Other occurrence\n";
         exit(0);
@@ -802,6 +833,24 @@ void ScopeBuilder::define_function(Function* func) {
         define_overloaded_function(sym, func);
     } else {
         std::cout << "Error: you tried to define a function named '" << func->get_name() << "', but it is already defined. Other occurrence\n";
+    }
+}
+
+void ScopeBuilder::define_method(Function* func) {
+    Symbol* sym = current_scope->has(func->get_name());
+
+    enter_scope(func->get_scope());
+    define_function_parameters(func);
+    define_function_self_type(func);
+    func->set_uid(function_counter++);
+    leave_scope();
+
+    if (!sym) {
+        current_scope->define(SYM_METHOD, func);
+    } else if (sym->get_kind() == SYM_METHOD) {
+        define_overloaded_function(sym, func);
+    } else {
+        std::cout << "Error: you tried to define a method named '" << func->get_name() << "', but it is already defined. Other occurrence\n";
     }
 }
 
@@ -856,18 +905,6 @@ void ScopeBuilder::define_overloaded_function(Symbol* sym, Function* func) {
     }
 
     sym->add_descriptor(func);
-}
-
-void ScopeBuilder::define_method(Function* func) {
-    Symbol* sym = current_scope->has(func->get_name());
-
-    if (!sym) {
-        current_scope->define(SYM_METHOD, func);
-    } else if (sym->get_kind() == SYM_METHOD) {
-        sym->add_descriptor(func);
-    } else {
-        std::cout << "Error: you tried to define a method named '" << func->get_name() << "', but it is already defined. Other occurrence\n";
-    }
 }
 
 void ScopeBuilder::enter_scope(Scope* scope) {

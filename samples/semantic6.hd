@@ -1,0 +1,19 @@
+class Window:
+    x : int
+    y : int
+
+    def init : void
+        x = 0
+        y = 0
+
+    def init : void
+        @nx : int
+        @ny : int
+
+        x = nx
+        y = ny
+
+def main : void
+    p = 0
+    w = Window()
+    w1 = Window(2, 3)

@@ -18,6 +18,7 @@ namespace haard {
 
         public:
             const char* get_name();
+            std::string get_cpp_name();
             int get_line();
             int get_column();
             int get_uid();
@@ -41,6 +42,9 @@ namespace haard {
             int methods_count();
             int variables_count();
 
+            int constructors_count();
+            Function* get_constructor(int idx);
+
         private:
             const char* name;
             int line;
@@ -48,6 +52,8 @@ namespace haard {
             int uid;
             Type* parent;
             std::vector<Function*> methods;
+            std::vector<Function*> constructors;
+            Function* destructor;
             std::vector<Variable*> variables;
             Scope* scope;
             NamedType* self_type;

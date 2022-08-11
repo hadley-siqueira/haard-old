@@ -79,8 +79,7 @@ void CppPrinter::print_class(Class* klass) {
 
     print_indentation();
 
-    out << "class c" << klass->get_uid() << "_";
-    out << klass->get_name() << " {\npublic:\n";
+    out << "class " << klass->get_cpp_name() << " {\npublic:\n";
     indent();
 
     if (klass->variables_count() > 0) {
@@ -88,7 +87,7 @@ void CppPrinter::print_class(Class* klass) {
             print_indentation();
             var = klass->get_variable(i);
             print_type(var->get_type());
-            out << ' ' << var->get_name() << ";\n" ;
+            out << " cv" << var->get_uid() << "_" << var->get_name() << ";\n" ;
         }
 
         out << '\n';
@@ -103,6 +102,30 @@ void CppPrinter::print_class(Class* klass) {
         out << '\n';
     }
 
+    for (int i = 0; i < klass->constructors_count(); ++i) {
+        print_indentation();
+        out << klass->get_cpp_name();
+
+        Function* f = klass->get_method(i);
+        print_parameters(f);
+        print_indentation();
+        out << "    " << f->get_cpp_name() << '(';
+
+        if (f->parameters_count() > 0) {
+            int j = 0;
+            for (j = 0; j < f->parameters_count() - 1; ++j) {
+                out << "p" << j << "_" << f->get_parameter(j)->get_name() << ", ";
+            }
+            out << "p" << j << "_" << f->get_parameter(j)->get_name();
+        }
+
+        out << ");\n";
+        print_indentation();
+        out << "}\n";
+
+        
+    }
+
     out << "};\n";
     dedent();
 }
@@ -111,7 +134,7 @@ void CppPrinter::print_function(Function* function) {
     print_indentation();
 
     print_type(function->get_return_type());
-    out << " f" << function->get_uid() << '_' << function->get_name();
+    out << " " << function->get_cpp_name();
 
     if (strcmp(function->get_name(), "main") == 0) {
         main_function = function;

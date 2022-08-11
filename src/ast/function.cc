@@ -7,6 +7,7 @@ Function::Function() {
     return_type = nullptr;
     statements = nullptr;
     scope = new Scope();
+    method_flag = false;
 }
 
 Function::~Function() {
@@ -32,6 +33,19 @@ int Function::get_column() {
 
 const char* Function::get_name() {
     return name;
+}
+
+std::string Function::get_cpp_name() {
+    std::stringstream ss;
+
+    if (method_flag) {
+        ss << 'm';
+    } else {
+        ss << 'f';
+    }
+
+    ss << uid << '_' << name;
+    return ss.str();
 }
 
 Variable* Function::get_parameter(int idx) {
@@ -114,4 +128,8 @@ void Function::set_from_token(Token& token) {
     line = token.get_line();
     column = token.get_column();
     name = token.get_lexeme();
+}
+
+void Function::set_method(bool value) {
+    method_flag = value;
 }
