@@ -36,6 +36,7 @@ namespace haard {
             void print_expression(Expression* expression);
             void print_binop(std::string oper, BinOp* bin);
             void print_unop(std::string oper, UnOp* un, bool before=true);
+            void print_double_dolar(UnOp* un);
             void print_identifier(Identifier* id);
             void print_literal(Literal* literal);
             void print_expression_list(std::string begin, std::string end, ExpressionList* tuple);
@@ -47,6 +48,7 @@ namespace haard {
             void indent();
             void dedent();
             void print_indentation();
+            Function* main_function;
 
         private:
             int indent_c;

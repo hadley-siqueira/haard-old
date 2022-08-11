@@ -11,6 +11,16 @@ class Window:
     x : int
     y : int
 
+def print : void
+    @msg : str
+
+    $$'std::cout << p0_msg << "\n"'
+
+def print : void
+    @n : int
+
+    $$'std::cout << p0_n << "\n"'
+
 def soma : int
     @a : int
     @b : int
@@ -29,5 +39,9 @@ def soma : int
 def main : int
     #p = Pixel
     v = soma(2, 3)
+    print('Hello, world!')
+    print(2)
     k = 0
     return 0
+
+

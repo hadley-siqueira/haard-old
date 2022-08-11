@@ -603,6 +603,7 @@ void ScopeBuilder::build_call_expression(BinOp* bin) {
 
             if (ft->check_arguments_type(args)) {
                 found = true;
+                break;
             }
         }
 

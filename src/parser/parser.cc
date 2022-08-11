@@ -891,6 +891,9 @@ Expression* Parser::parse_unary_expression() {
         expect(TK_LEFT_PARENTHESIS);
         expr = new UnOp(EXPR_SIZEOF, oper, parse_unary_expression());
         expect(TK_RIGHT_PARENTHESIS);
+    } else if (match(TK_DOUBLE_DOLAR)) {
+        oper = matched;
+        expr = new UnOp(EXPR_DOUBLE_DOLAR, oper, parse_unary_expression());
     } else if (lookahead(TK_NEW)) {
         expr = parse_new_expression();
     } else {

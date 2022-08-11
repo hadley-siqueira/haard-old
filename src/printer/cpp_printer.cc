@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include "printer/cpp_printer.h"
 #include "defs.h"
 
@@ -26,6 +27,12 @@ void CppPrinter::print_sources(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         print_source(sources->get_source(i));
     }
+
+    out << "int main(int argc, char* argv[]) {\n";
+    out << "    f" << main_function->get_uid() 
+        << "_" << main_function->get_name()
+        << "();\n";
+    out << "}\n";
 }
 
 void CppPrinter::print_source(Source* source) {
@@ -105,6 +112,10 @@ void CppPrinter::print_function(Function* function) {
 
     print_type(function->get_return_type());
     out << " f" << function->get_uid() << '_' << function->get_name();
+
+    if (strcmp(function->get_name(), "main") == 0) {
+        main_function = function;
+    }
 
     print_parameters(function);
     indent();
@@ -734,6 +745,10 @@ void CppPrinter::print_expression(Expression* expression) {
         print_unop("-", un);
         break;
 
+    case EXPR_DOUBLE_DOLAR:
+        print_double_dolar(un);
+        break;
+
     case EXPR_UNARY_PLUS:
         print_unop("+", un);
         break;
@@ -854,6 +869,14 @@ void CppPrinter::print_unop(std::string oper, UnOp* un, bool before) {
     if (!before) {
         out << oper;
     }
+}
+
+void CppPrinter::print_double_dolar(UnOp* un) {
+    Literal* l = (Literal*) un->get_expression();
+    std::string s(l->get_lexeme());
+    s[0] = ' ';
+    s[s.size() - 1] = ' ';
+    out << s;
 }
 
 void CppPrinter::print_identifier(Identifier* id) {

@@ -160,10 +160,10 @@ void Driver::generate_cpp() {
     CppPrinter printer;
 
     printer.print_sources(sources);
-    std::ofstream f("out.cc");
+    std::ofstream f("/tmp/out.cc");
     f << printer.to_str();
     f.close();
-    system("g++ out.cc");
+    system("g++ /tmp/out.cc");
 }
 
 const char* Driver::build_import_path(Import* import) {
