@@ -59,6 +59,10 @@ namespace haard {
             void define_method(Function* func);
 
         private:
+            void build_class_variables(Class* klass);
+            void build_class_methods(Class* klass);
+
+        private:
             void enter_scope(Scope* scope);
             void leave_scope();
 

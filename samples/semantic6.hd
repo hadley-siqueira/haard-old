@@ -17,3 +17,4 @@ def main : void
     p = 0
     w = Window()
     w1 = Window(2, 3)
+    w1 = Window()

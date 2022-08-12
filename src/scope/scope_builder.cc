@@ -34,16 +34,23 @@ void ScopeBuilder::build_class(Class* klass) {
     enter_scope(klass->get_scope());
     current_class = klass;
 
+    build_class_variables(klass);
+    build_class_methods(klass);
+
+    leave_scope();
+}
+
+void ScopeBuilder::build_class_variables(Class* klass) {
     for (int i = 0; i < klass->variables_count(); ++i) {
         build_class_variable(klass->get_variable(i));
         klass->get_variable(i)->set_uid(i); 
     }
+}
 
+void ScopeBuilder::build_class_methods(Class* klass) {
     for (int i = 0; i < klass->methods_count(); ++i) {
         build_function(klass->get_method(i));
     }
-
-    leave_scope();
 }
 
 void ScopeBuilder::build_function(Function* func) {
