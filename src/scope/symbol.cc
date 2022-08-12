@@ -135,23 +135,17 @@ std::string Symbol::to_cpp(int idx) {
 
     switch (kind) {
     case SYM_CLASS:
-        ss << "c" << klass->get_uid() << '_' << klass->get_name();
+        ss << klass->get_cpp_name();
         break;
 
     case SYM_FUNCTION:
-        ss << "f" << func->get_uid() << '_' << func->get_name();
+        ss << func->get_cpp_name();
         break;
 
     case SYM_PARAMETER:
-        ss << "p" << var->get_uid() << '_' << var->get_name();
-        break;
-
     case SYM_VARIABLE:
-        ss << "v" << var->get_uid() << '_' << var->get_name();
-        break;
-
     case SYM_CLASS_VARIABLE:
-        ss << "cv" << var->get_uid() << '_' << var->get_name();
+        ss << var->get_cpp_name();
         break;
     }
 

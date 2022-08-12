@@ -1,0 +1,5 @@
+import std.io
+
+def main : int
+    print('Hello, world!')
+    return 0

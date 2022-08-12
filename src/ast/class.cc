@@ -121,6 +121,7 @@ void Class::add_method(Function* method) {
 
 void Class::add_variable(Variable* var) {
     variables.push_back(var);
+    var->set_kind(VAR_CLASS);
 }
 
 int Class::methods_count() {

@@ -71,3 +71,32 @@ int Variable::get_uid() {
 void Variable::set_uid(int uid) {
     this->uid = uid;
 }
+
+void Variable::set_kind(int kind) {
+    this->kind = kind;
+}
+
+int Variable::get_kind() {
+    return kind;
+}
+
+std::string Variable::get_cpp_name() {
+    std::stringstream ss;
+
+    switch (kind) {
+    case VAR_LOCAL:
+        ss << "v";
+        break;
+
+    case VAR_PARAM:
+        ss << "p";
+        break;
+
+    case VAR_CLASS:
+        ss << "cv";
+        break;
+    }
+
+    ss << uid << '_' << name;
+    return ss.str();
+}

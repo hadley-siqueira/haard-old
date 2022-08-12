@@ -29,11 +29,16 @@ namespace haard {
             int get_uid();
             void set_uid(int uid);
 
+            void set_kind(int kind);
+            int get_kind();
+            std::string get_cpp_name();
+
         private:
             int uid;
             int line;
             int column;
             bool constant;
+            int kind;
             const char* name;
             Type* type;
     };

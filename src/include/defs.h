@@ -701,6 +701,12 @@ namespace haard {
         STMT_VAR_DECL
     } StatementKind;
 
+    typedef enum VariableKind {
+        VAR_LOCAL,
+        VAR_PARAM,
+        VAR_CLASS
+    } VariableKind;
+
     typedef enum SymbolKind {
         SYM_CLASS,
         SYM_FUNCTION,

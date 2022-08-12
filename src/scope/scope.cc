@@ -51,13 +51,45 @@ bool Scope::has_parent() {
     return parent != nullptr;
 }
 
+bool Scope::has_siblings() {
+    return siblings.size() > 0;
+}
+
+void Scope::add_sibling(Scope* scope) {
+    siblings.push_back(scope);
+}
+
+int Scope::siblings_count() {
+    return siblings.size();
+}
+
+Symbol* Scope::has_as_sibling(const char* name) {
+    if (symbols.count(name) > 0) {
+        return symbols[name];
+    }
+
+    return nullptr;
+}
+
 Symbol* Scope::has(const char* name) {
+    Symbol* sym;
+
     if (symbols.count(name) > 0) {
         return symbols[name];
     }
 
     if (has_parent()) {
         return parent->has(name);
+    }
+
+    if (has_siblings()) {
+        for (int i = 0; i < siblings_count(); ++i) {
+            sym = siblings[i]->has_as_sibling(name);
+
+            if (sym != nullptr) {
+                return sym;
+            }
+        }
     }
 
     return nullptr;

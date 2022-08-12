@@ -22,6 +22,8 @@ namespace haard {
             void set_column(int column);
 
             virtual bool equal(Type* type);
+            virtual std::string to_cpp();
+            virtual std::string to_str();
 
         protected:
             int kind;

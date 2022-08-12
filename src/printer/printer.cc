@@ -131,95 +131,29 @@ void Printer::print_type(Type* type) {
 
     switch (kind) {
     case TYPE_U8:
-        out << "u8";
-        break;
-
     case TYPE_U16:
-        out << "u16";
-        break;
-
     case TYPE_U32:
-        out << "u32";
-        break;
-
     case TYPE_U64:
-        out << "u64";
-        break;
-
     case TYPE_I8:
-        out << "i8";
-        break;
-
     case TYPE_I16:
-        out << "i16";
-        break;
-
     case TYPE_I32:
-        out << "i32";
-        break;
-
     case TYPE_I64:
-        out << "i64";
-        break;
-
     case TYPE_VOID:
-        out << "void";
-        break;
-
     case TYPE_SYMBOL:
-        out << "sym";
-        break;
-
     case TYPE_BOOL:
-        out << "bool";
-        break;
-
     case TYPE_UCHAR:
-        out << "uchar";
-        break;
-
     case TYPE_CHAR:
-        out << "char";
-        break;
-
     case TYPE_USHORT:
-        out << "ushort";
-        break;
-
     case TYPE_SHORT:
-        out << "short";
-        break;
-
     case TYPE_UINT:
-        out << "uint";
-        break;
-
     case TYPE_INT:
-        out << "int";
-        break;
-
     case TYPE_ULONG:
-        out << "ulong";
-        break;
-
     case TYPE_LONG:
-        out << "long";
-        break;
-
     case TYPE_FLOAT:
-        out << "float";
-        break;
-
     case TYPE_DOUBLE:
-        out << "double";
-        break;
-
     case TYPE_STR:
-        out << "str";
-        break;
-
     case TYPE_NAMED:
-        out << named->get_name()->get_lexeme();
+        out << type->to_str();
         break;
 
     case TYPE_ARRAY:

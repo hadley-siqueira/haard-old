@@ -118,6 +118,7 @@ int Function::parameters_count() {
 
 void Function::add_parameter(Variable* param) {
     parameters.push_back(param);
+    param->set_kind(VAR_PARAM);
 }
 
 void Function::add_variable(Variable* var) {

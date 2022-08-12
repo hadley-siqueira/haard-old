@@ -2,6 +2,7 @@
 #define HAARD_SCOPE_H
 
 #include <map>
+#include <vector>
 #include "ast/ast.h"
 #include "scope/symbol.h"
 
@@ -22,7 +23,12 @@ namespace haard {
             Symbol* define(int kind, Variable* var);
 
             bool has_parent();
+            bool has_siblings();
+            void add_sibling(Scope* scope);
+            int siblings_count();
+
             Symbol* has(const char* name);
+            Symbol* has_as_sibling(const char* name);
             Symbol* has_class(const char* name);
 
             void debug();
@@ -30,6 +36,7 @@ namespace haard {
         private:
             std::map<const char*, Symbol*> symbols;
             Scope* parent;
+            std::vector<Scope*> siblings;
     };
 }
 

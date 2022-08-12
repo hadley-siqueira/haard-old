@@ -22,7 +22,6 @@ namespace haard {
             void print_parameters(Function* function);
             void print_type(Type* type);
             void print_type_list(std::string oper, TypeList* tlist);
-            void print_named_type(NamedType* named);
 
             void print_statement(Statement* statement);
             void print_while_statement(WhileStatement* statement);

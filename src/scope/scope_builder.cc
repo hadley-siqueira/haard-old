@@ -576,6 +576,7 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
             var = new Variable(id);
             var->set_type(rtype);
             var->set_uid(var_counter++);
+            var->set_kind(VAR_LOCAL);
             bin->set_initial_assign(true);
             sym = current_scope->define(SYM_VARIABLE, var);
             current_function->add_variable(var);
@@ -814,6 +815,10 @@ void ScopeBuilder::define_sources_elements(Sources* sources) {
 
 void ScopeBuilder::define_source_elements(Source* source) {
     current_scope = source->get_scope();
+
+    for (int i = 0; i < source->import_count(); ++i) {
+        current_scope->add_sibling(source->get_import(i)->get_source()->get_scope());
+    }
 
     for (int i = 0; i < source->classes_count(); ++i) {
         define_class(source->get_class(i));

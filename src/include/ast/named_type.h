@@ -20,6 +20,9 @@ namespace haard {
             void set_name(Identifier* id);
             void set_symbol(Symbol* symbol);
 
+            std::string to_cpp();
+            std::string to_str();
+
         private:
             Identifier* alias;
             Identifier* name;
