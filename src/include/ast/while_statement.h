@@ -4,6 +4,7 @@
 #include "ast/statement.h"
 #include "ast/compound_statement.h"
 #include "ast/expression.h"
+#include "scope/scope.h"
 
 namespace haard {
     class WhileStatement : public Statement {
@@ -18,9 +19,12 @@ namespace haard {
             void set_condition(Expression* expression);
             void set_statements(CompoundStatement* statements);
 
+            Scope* get_scope();
+
         private:
             Expression* condition;
-            CompoundStatement* statements;           
+            CompoundStatement* statements;
+            Scope* scope;         
     };
 }
 

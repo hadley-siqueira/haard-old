@@ -140,7 +140,7 @@ void ScopeBuilder::build_statement(Statement* statement) {
         break;
 
     case STMT_WHILE:
-       // build_while_statement((WhileStatement*) statement);
+        build_while_statement((WhileStatement*) statement);
         break;
 
     case STMT_FOR:
@@ -188,6 +188,15 @@ void ScopeBuilder::build_compound_statement(CompoundStatement* stmts) {
     for (int i = 0; i < stmts->statements_count(); ++i) {
         build_statement(stmts->get_statement(i));
     }
+}
+
+void ScopeBuilder::build_while_statement(WhileStatement* statement) {
+    enter_scope(statement->get_scope());
+
+    build_expression(statement->get_condition());
+    build_compound_statement(statement->get_statements());
+
+    leave_scope();
 }
 
 void ScopeBuilder::build_expression_statement(ExpressionStatement* statement) {
@@ -552,11 +561,11 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
             bin->set_initial_assign(true);
             sym = current_scope->define(SYM_VARIABLE, var);
             current_function->add_variable(var);
-            id->set_type(rtype);
         }
  
         // FIXME
         id->set_symbol(sym);
+        id->set_type(rtype);
         std::cout << "=... "; current_scope->debug(); std::cout << '\n';
     } else {
         build_expression(left);
@@ -661,7 +670,6 @@ void ScopeBuilder::build_call_expression(BinOp* bin) {
             exit(0);
         }
     }
-
 }
 
 void ScopeBuilder::build_binop(std::string oper, BinOp* bin) {

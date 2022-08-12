@@ -31,6 +31,7 @@ namespace haard {
             void build_compound_statement(CompoundStatement* stmts);
             void build_expression_statement(ExpressionStatement* statement);
             void build_jump_statement(JumpStatement* statement);
+            void build_while_statement(WhileStatement* statement);
 
             void build_expression(Expression* expression);
             void build_assignment(BinOp* bin);
