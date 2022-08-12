@@ -48,6 +48,30 @@ std::string Function::get_cpp_name() {
     return ss.str();
 }
 
+std::string Function::get_cpp_signature() {
+    std::stringstream ss;
+
+    ss << return_type->to_cpp();
+    ss << ' ';
+    ss << get_cpp_name() << '(';
+
+    if (parameters_count() > 0) {
+        int i;
+
+        for (i = 0; i < parameters_count() - 1; ++i) {
+            ss << get_parameter(i)->get_type()->to_cpp();
+            ss << ' ' << get_parameter(i)->get_cpp_name() << ", ";
+        }
+
+        ss << get_parameter(i)->get_type()->to_cpp();
+        ss << ' ' << get_parameter(i)->get_cpp_name();
+    }
+
+    ss << ')';
+
+    return ss.str();
+}
+
 Variable* Function::get_parameter(int idx) {
     if (idx < parameters.size()) {
         return parameters[idx];

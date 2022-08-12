@@ -52,6 +52,7 @@ namespace haard {
         private:
             int indent_c;
             std::stringstream out;
+            std::stringstream signatures;
     };
 }
 

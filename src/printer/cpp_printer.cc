@@ -11,20 +11,24 @@ CppPrinter::CppPrinter() {
 }
  
 std::string CppPrinter::to_str() {
-    return out.str();
+    std::stringstream res;
+
+    res << "#include <cstdint>\n";
+    res << "#include <cstdio>\n";
+    res << "#include <iostream>\n";
+    res << "#include <string>\n";
+    res << "#include <sstream>\n";
+    res << "#include <vector>\n";
+    res << "#include <map>\n";
+    res << '\n';
+    res << signatures.str();
+    res << '\n';
+    res << out.str();
+
+    return res.str();
 }
 
 void CppPrinter::print_sources(Sources* sources) {
-    out << "#include <cstdint>\n";
-    out << "#include <cstdio>\n";
-    out << "#include <iostream>\n";
-    out << "#include <string>\n";
-    out << "#include <sstream>\n";
-    out << "#include <vector>\n";
-    out << "#include <map>\n";
-
-    out << '\n';
-
     for (int i = 0; i < sources->sources_count(); ++i) {
         print_source(sources->get_source(i));
     }
@@ -34,6 +38,7 @@ void CppPrinter::print_sources(Sources* sources) {
     if (main_function) {
         out << "    " << main_function->get_cpp_name() << "();\n";
     }
+
     out << "}\n";
 }
 
@@ -135,14 +140,17 @@ void CppPrinter::print_class(Class* klass) {
 void CppPrinter::print_function(Function* function) {
     print_indentation();
 
-    print_type(function->get_return_type());
-    out << " " << function->get_cpp_name();
+    out << function->get_cpp_signature();
+    signatures << function->get_cpp_signature() << ";\n";
+    out << " {\n";
+//    print_type(function->get_return_type());
+//    out << " " << function->get_cpp_name();
 
     if (strcmp(function->get_name(), "main") == 0) {
         main_function = function;
     }
 
-    print_parameters(function);
+    //print_parameters(function);
     indent();
     print_compound_statement(function->get_statements());
 

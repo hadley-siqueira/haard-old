@@ -24,3 +24,6 @@
 - scope build operators
 
 - create function declare_var on scope_builder
+
+- on cpp_printer::print_class need to refactor constructor generation
+- need to implement all types to_cpp
