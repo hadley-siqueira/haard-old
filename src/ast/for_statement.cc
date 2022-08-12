@@ -8,6 +8,7 @@ ForStatement::ForStatement() {
     init = new ExpressionList(EXPR_FOR_INIT);
     increment = new ExpressionList(EXPR_FOR_INC);
     statements = nullptr;
+    scope = new Scope();
 }
 
 ForStatement::~ForStatement() {
@@ -15,6 +16,7 @@ ForStatement::~ForStatement() {
     delete condition;
     delete increment;
     delete statements;
+    delete scope;
 }
 
 ExpressionList* ForStatement::get_initialization() {
@@ -47,4 +49,9 @@ void ForStatement::add_increment(Expression* expression) {
 
 void ForStatement::set_statements(CompoundStatement* statements) {
     this->statements = statements;
+}
+
+
+Scope* ForStatement::get_scope() {
+    return scope;
 }

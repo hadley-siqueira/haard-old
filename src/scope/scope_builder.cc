@@ -145,7 +145,7 @@ void ScopeBuilder::build_statement(Statement* statement) {
 
     case STMT_FOR:
     case STMT_FOREACH:
-      //  build_for_statement((ForStatement*) statement);
+        build_for_statement((ForStatement*) statement);
         break;
 
     case STMT_EXPRESSION:
@@ -196,6 +196,19 @@ void ScopeBuilder::build_while_statement(WhileStatement* statement) {
     build_expression(statement->get_condition());
     build_compound_statement(statement->get_statements());
 
+    leave_scope();
+}
+
+void ScopeBuilder::build_for_statement(ForStatement* statement) {
+    enter_scope(statement->get_scope());
+
+    if (statement->get_kind() == STMT_FOR) {
+        build_expression(statement->get_initialization());
+        build_expression(statement->get_condition());
+        build_expression(statement->get_increment());
+    }
+
+    build_compound_statement(statement->get_statements());
     leave_scope();
 }
 
@@ -698,15 +711,8 @@ void ScopeBuilder::build_binop(std::string oper, BinOp* bin) {
 }
 
 void ScopeBuilder::build_unop(std::string oper, UnOp* un, bool before) {
-    /*if (before) {
-        out << oper;
-    }
-
     build_expression(un->get_expression());
-
-    if (!before) {
-        out << oper;
-    }*/
+    un->set_type(un->get_expression()->get_type());
 }
 
 void ScopeBuilder::build_identifier(Identifier* id) {

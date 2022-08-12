@@ -1,0 +1,5 @@
+import std.io
+
+def main : void
+    for i = 0; i < 15; ++i:
+        print(i)

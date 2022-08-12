@@ -5,6 +5,7 @@
 #include "ast/compound_statement.h"
 #include "ast/expression.h"
 #include "ast/expression_list.h"
+#include "scope/scope.h"
 
 namespace haard {
     class ForStatement : public Statement {
@@ -23,11 +24,14 @@ namespace haard {
             void add_increment(Expression* expression);
             void set_statements(CompoundStatement* statements);
 
+            Scope* get_scope();
+
         private:
             Expression* condition;
             ExpressionList* init;
             ExpressionList* increment;
-            CompoundStatement* statements;           
+            CompoundStatement* statements;
+            Scope* scope;
     };
 }
 
