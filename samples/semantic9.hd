@@ -1,0 +1,25 @@
+def main : void
+    i = 0
+    if i > 0:
+        i = 1
+    else:
+        i = 0
+        j = 1
+
+        if j > i:
+            j = 0
+            k = 2
+
+        if j > i:
+            j = 1
+
+            k = 2
+            while k > 3:
+                k = k + 1
+                if k > 3:
+                    p = 0
+                elif k == 0:
+                    p = 1
+                else:
+                    p = 2
+    j = 2

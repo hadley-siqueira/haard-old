@@ -155,7 +155,7 @@ void ScopeBuilder::build_statement(Statement* statement) {
     case STMT_IF:
     case STMT_ELIF:
     case STMT_ELSE:
-     //   build_branch_statement((BranchStatement*) statement);
+        build_branch_statement((BranchStatement*) statement);
         break;
 
     case STMT_RETURN:
@@ -197,6 +197,24 @@ void ScopeBuilder::build_while_statement(WhileStatement* statement) {
     build_compound_statement(statement->get_statements());
 
     leave_scope();
+}
+
+void ScopeBuilder::build_branch_statement(BranchStatement* statement) {
+    enter_scope(statement->get_scope());
+
+    if (statement->get_condition()) {
+        build_expression(statement->get_condition());
+    }
+
+    if (statement->get_true_statements()) {
+        build_statement(statement->get_true_statements());
+    }
+
+    leave_scope();
+
+    if (statement->get_false_statements()) {
+        build_statement(statement->get_false_statements());
+    }
 }
 
 void ScopeBuilder::build_expression_statement(ExpressionStatement* statement) {

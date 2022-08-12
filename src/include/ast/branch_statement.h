@@ -3,6 +3,7 @@
 
 #include "ast/statement.h"
 #include "ast/expression.h"
+#include "scope/scope.h"
 
 namespace haard {
     class BranchStatement : public Statement {
@@ -19,10 +20,13 @@ namespace haard {
             void set_true_statements(Statement* stmt);
             void set_false_statements(Statement* stmt);
 
+            Scope* get_scope();
+
         private:
             Expression* condition;
             Statement* true_statements;
             Statement* false_statements;
+            Scope* scope;
     };
 }
 
