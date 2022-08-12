@@ -1,0 +1,26 @@
+- handle recursive file import
+    file A:
+        class Foo(Baz)
+        class Bar
+
+    file B:
+        class Baz(Bar)
+
+- get_cpp_signature
+- Expression::to_str()
+- handle member access operators
+- handle scope search in super class
+- handle error messages
+    - scanner
+    - parser
+    - scope builder
+
+- proper handling of yield, goto, break, continue
+
+- cpp generation of :symbols
+
+- remove debug prints
+
+- scope build operators
+
+- create function declare_var on scope_builder
