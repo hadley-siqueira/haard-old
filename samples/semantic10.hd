@@ -1,0 +1,11 @@
+class HivekVM:
+    def read_bin : void
+        @path : char*
+
+        return
+
+class HivekMem:
+    def read_bin : void
+        @path : char*
+
+        return

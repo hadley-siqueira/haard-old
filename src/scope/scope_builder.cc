@@ -842,9 +842,13 @@ void ScopeBuilder::define_class(Class* klass) {
         klass->set_self_type(type);
         klass->set_uid(class_counter++);
 
+        enter_scope(klass->get_scope());
+
         for (int i = 0; i < klass->methods_count(); ++i) {
             define_method(klass->get_method(i));
         }
+
+        leave_scope();
     } else {
         std::cout << "Error: you tried to define a class named '" << klass->get_name() << "', but it is already defined. Other occurrence\n";
         exit(0);
