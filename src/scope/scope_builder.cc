@@ -163,19 +163,19 @@ void ScopeBuilder::build_statement(Statement* statement) {
         break;
 
     case STMT_GOTO:
-    //    build_jump_statement("goto", (JumpStatement*) statement);
+        build_jump_statement((JumpStatement*) statement);
         break;
 
     case STMT_YIELD:
-    //    build_jump_statement("yield", (JumpStatement*) statement);
+        build_jump_statement((JumpStatement*) statement);
         break;
 
     case STMT_CONTINUE:
-    //    build_jump_statement("continue", (JumpStatement*) statement);
+        build_jump_statement((JumpStatement*) statement);
         break;
 
     case STMT_BREAK:
-   //     build_jump_statement("break", (JumpStatement*) statement);
+        build_jump_statement((JumpStatement*) statement);
         break;
 
     case STMT_VAR_DECL:
