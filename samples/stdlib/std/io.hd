@@ -1,4 +1,21 @@
 def print : void
     @s : str
 
-    s = ""
+    $$'std::cout << p0_s << std::endl'
+
+def print : void
+    @n : int
+
+    $$'std::cout << p0_n << std::endl'
+
+def read_int : int
+    v = 0
+    $$'std::cin >> v0_v'
+    return v
+
+def read_int : int
+    @msg : str
+
+    $$'std::cout << p0_msg'
+    return read_int()
+

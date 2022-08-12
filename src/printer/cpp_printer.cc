@@ -7,6 +7,7 @@ using namespace haard;
 
 CppPrinter::CppPrinter() {
     indent_c = 0;
+    main_function = nullptr;
 }
  
 std::string CppPrinter::to_str() {
@@ -29,9 +30,10 @@ void CppPrinter::print_sources(Sources* sources) {
     }
 
     out << "int main(int argc, char* argv[]) {\n";
-    out << "    f" << main_function->get_uid() 
-        << "_" << main_function->get_name()
-        << "();\n";
+
+    if (main_function) {
+        out << "    " << main_function->get_cpp_name() << "();\n";
+    }
     out << "}\n";
 }
 
