@@ -1,0 +1,8 @@
+import std.io
+
+def main : void
+    n = read_int('Enter a number: ')
+
+    while n > 0:
+        print(n)
+        n = n - 1
