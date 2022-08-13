@@ -1,3 +1,5 @@
+- handle super class
+- handle templates
 - handle recursive file import
     file A:
         class Foo(Baz)
