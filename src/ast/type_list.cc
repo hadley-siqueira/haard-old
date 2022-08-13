@@ -87,3 +87,15 @@ Type* TypeList::get_return_type() {
 
     return nullptr;
 }
+
+Type* TypeList::clone() {
+    TypeList* other = new TypeList();
+
+    other->kind = kind;
+    for (int i = 0; i < types.size(); ++i) {
+        other->add_type(types[i]->clone());
+    }
+
+    return other;
+}
+

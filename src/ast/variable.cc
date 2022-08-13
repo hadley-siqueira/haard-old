@@ -110,7 +110,10 @@ Variable* Variable::clone() {
     other->column = column;
     other->constant = constant;
     other->name = name;
-    other->type = type->clone();
+
+    if (type) {
+        other->type = type->clone();
+    }
 
     return other;
 }

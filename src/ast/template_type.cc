@@ -27,3 +27,11 @@ std::string TemplateType::to_str() {
 std::string TemplateType::to_cpp() {
     return name;
 }
+
+Type* TemplateType::clone() {
+    TemplateType* other = new TemplateType();
+
+    other->name = name;
+
+    return other;
+}

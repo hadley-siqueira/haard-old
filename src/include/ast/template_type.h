@@ -18,6 +18,8 @@ namespace haard {
             std::string to_str();
             std::string to_cpp();
 
+            Type* clone();
+
         private:
             const char* name;
     };

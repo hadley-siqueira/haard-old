@@ -69,3 +69,18 @@ Symbol* NamedType::has_field(const char* name) {
 
     return sym;
 }
+
+Type* NamedType::clone() {
+    NamedType* other = new NamedType();
+
+    if (alias) {
+        other->alias = (Identifier*) alias->clone();
+    }
+
+    if (name) {
+        other->name = (Identifier*) name->clone();
+    }
+
+    return other;
+}
+

@@ -19,6 +19,8 @@ namespace haard {
 
             bool has_arguments();
 
+            Expression* clone();
+
         private:
             Type* new_type;
             ExpressionList* args;

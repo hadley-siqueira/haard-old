@@ -28,3 +28,17 @@ void VarDeclaration::set_variable(Variable* var) {
 void VarDeclaration::set_expression(Expression* expr) {
     this->expr = expr;
 }
+
+Statement* VarDeclaration::clone() {
+    VarDeclaration* other = new VarDeclaration();
+
+    if (var) {
+        other->var = var->clone();
+    }
+
+    if (expr) {
+        other->expr = expr;
+    }
+
+    return other;
+}

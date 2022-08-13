@@ -25,6 +25,8 @@ namespace haard {
             std::string to_cpp();
             std::string to_str();
 
+            Type* clone();
+
         private:
             Identifier* alias;
             Identifier* name;

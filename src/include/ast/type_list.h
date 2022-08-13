@@ -21,6 +21,7 @@ namespace haard {
             bool equal(Type* type);
             bool check_arguments_type(TypeList* args);
             Type* get_return_type();
+            Type* clone();
 
         private:
             std::vector<Type*> types;

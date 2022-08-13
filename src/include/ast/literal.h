@@ -7,10 +7,12 @@
 namespace haard {
     class Literal : public Expression {
         public:
+            Literal(int kind);
             Literal(int kind, Token& token);
 
         public:
             const char* get_lexeme();
+            Expression* clone();
 
         private:
             const char* lexeme;

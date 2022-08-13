@@ -20,6 +20,7 @@ namespace haard {
             void set_statements(CompoundStatement* statements);
 
             Scope* get_scope();
+            Statement* clone();
 
         private:
             Expression* condition;

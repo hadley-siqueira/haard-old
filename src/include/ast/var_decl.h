@@ -16,6 +16,7 @@ namespace haard {
 
             void set_variable(Variable* var);
             void set_expression(Expression* expr);
+            Statement* clone();
 
         private:
             Variable* var;
