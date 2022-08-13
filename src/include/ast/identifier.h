@@ -25,6 +25,8 @@ namespace haard {
 
             int get_overloaded_index();
             void set_overloaded_index(int idx);
+
+            std::string to_cpp();
             
         private:
             int line;

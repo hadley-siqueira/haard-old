@@ -17,7 +17,7 @@ namespace haard {
             int get_kind();
             const char* get_name();
             void* get_descriptor(int idx=0);
-            Type* get_type();
+            Type* get_type(int idx=0);
 
             void set_kind(int kind);
             void set_name(const char* name);

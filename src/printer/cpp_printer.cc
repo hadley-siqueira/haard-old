@@ -832,7 +832,7 @@ void CppPrinter::print_double_dolar(UnOp* un) {
 }
 
 void CppPrinter::print_identifier(Identifier* id) {
-    out << id->get_symbol()->to_cpp(id->get_overloaded_index());
+    out << id->to_cpp();
 }
 
 void CppPrinter::print_literal(Literal* literal) {

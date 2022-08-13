@@ -1,3 +1,4 @@
+#include <sstream>
 #include "ast/identifier.h"
 
 using namespace haard;
@@ -56,4 +57,8 @@ int Identifier::get_overloaded_index() {
 
 void Identifier::set_overloaded_index(int idx) {
     overloaded_index = idx;
+}
+
+std::string Identifier::to_cpp() {
+    return symbol->to_cpp(overloaded_index);
 }

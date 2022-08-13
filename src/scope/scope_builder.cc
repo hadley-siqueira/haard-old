@@ -19,15 +19,17 @@ void ScopeBuilder::build_sources(Sources* sources) {
 }
 
 void ScopeBuilder::build_source(Source* source) {
-    current_scope = source->get_scope();
+    enter_scope(source->get_scope());
+
+    for (int i = 0; i < source->classes_count(); ++i) {
+        build_class(source->get_class(i));
+    }
 
     for (int i = 0; i < source->function_count(); ++i) {
         build_function(source->get_function(i));
     }
 
-    for (int i = 0; i < source->classes_count(); ++i) {
-        build_class(source->get_class(i));
-    }
+    leave_scope();
 }
 
 void ScopeBuilder::build_class(Class* klass) {
@@ -715,6 +717,36 @@ void ScopeBuilder::build_call_expression(BinOp* bin) {
             // FIXME
             std::cout << "Error: not a function to be called\n";
             exit(0);
+        }
+    } else if (bin->get_left()->get_kind() == EXPR_DOT) {
+        BinOp* dot = (BinOp*) bin->get_left();
+        Identifier* id = (Identifier*) dot->get_right();
+        Symbol* sym = id->get_symbol();
+
+        if (tl->get_kind() == TYPE_FUNCTION) {
+            args = (TypeList*) tr;
+            int i = 0;
+            bool found = false;
+
+            for (i = 0; i < sym->overloaded_count(); ++i) {
+                Function* f = (Function*) sym->get_descriptor(i);
+                ft = (TypeList*) f->get_self_type();
+
+                if (ft->check_arguments_type(args)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                id->set_overloaded_index(i);
+            } else {
+                // FIXME
+                std::cout << "Error: function not overloaded with signature\n";
+                exit(0);
+            }
+
+            bin->set_type(ft->get_return_type());
         }
     }
 }
