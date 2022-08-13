@@ -27,6 +27,8 @@ namespace haard {
             void set_overloaded_index(int idx);
 
             std::string to_cpp();
+
+            Expression* clone();
             
         private:
             int line;

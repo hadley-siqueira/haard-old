@@ -15,6 +15,8 @@ namespace haard {
             Type* get_subtype();
             bool equal(Type* type);
 
+            Type* clone();
+
         private:
             Type* subtype;
     };

@@ -33,6 +33,8 @@ namespace haard {
             int get_kind();
             std::string get_cpp_name();
 
+            Variable* clone();
+
         private:
             int uid;
             int line;

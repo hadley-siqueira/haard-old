@@ -14,3 +14,7 @@ FunctionExpression::~FunctionExpression() {
 Function* FunctionExpression::get_function() {
     return function;
 }
+
+Expression* FunctionExpression::clone() {
+    return new FunctionExpression(function->clone());
+}

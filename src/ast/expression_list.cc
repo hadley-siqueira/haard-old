@@ -41,3 +41,12 @@ int ExpressionList::expressions_count() {
     return expressions.size();
 }
 
+Expression* ExpressionList::clone() {
+    ExpressionList* other = new ExpressionList(kind);
+
+    for (int i = 0; i < expressions.size(); ++i) {
+        other->add_expression(expressions[i]->clone());
+    }
+
+    return other;
+}

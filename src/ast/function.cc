@@ -172,3 +172,26 @@ bool Function::is_template() {
     return templates != nullptr;
 }
 
+Function* Function::clone() {
+    Function* nfunc = new Function();
+
+    nfunc->uid = uid;
+    nfunc->line = line;
+    nfunc->column = column;
+    nfunc->method_flag = method_flag;
+    nfunc->name = name;
+    
+    for (int i = 0; i < parameters.size(); ++i) {
+        nfunc->add_parameter(parameters[i]->clone());
+    }
+
+    for (int i = 0; i < variables.size(); ++i) {
+        nfunc->add_variable(variables[i]->clone());
+    }
+
+    nfunc->return_type = return_type->clone();
+    nfunc->self_type = self_type->clone();
+    nfunc->statements = (CompoundStatement*) statements->clone();
+
+    return nfunc;
+}

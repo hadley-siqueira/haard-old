@@ -65,6 +65,13 @@ void ScopeBuilder::build_function(Function* func) {
 
     build_compound_statement(func->get_statements());
     leave_scope();
+
+    Function* other = func->clone();
+
+    Printer p;
+    p.print_function(other);
+    std::cout << p.to_str();
+    exit(0);
 }
 
 void ScopeBuilder::build_class_variable(Variable* var) {

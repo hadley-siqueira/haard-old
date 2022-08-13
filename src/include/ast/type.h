@@ -24,6 +24,7 @@ namespace haard {
             virtual bool equal(Type* type);
             virtual std::string to_cpp();
             virtual std::string to_str();
+            virtual Type* clone();
 
         protected:
             int kind;

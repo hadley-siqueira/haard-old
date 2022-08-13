@@ -15,6 +15,8 @@ namespace haard {
             int statements_count();
             void add_statement(Statement* stmt);
 
+            Statement* clone();
+
         private:
             std::vector<Statement*> statements;
     };

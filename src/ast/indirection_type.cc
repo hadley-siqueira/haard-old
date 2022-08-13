@@ -34,3 +34,7 @@ bool IndirectionType::equal(Type* type) {
 
     return false;
 }
+
+Type* IndirectionType::clone() {
+    return new IndirectionType(kind, subtype->clone());
+}

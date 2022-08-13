@@ -54,6 +54,8 @@ namespace haard {
 
             bool is_template();
 
+            Function* clone();
+
         private:
             int uid;
             int line;

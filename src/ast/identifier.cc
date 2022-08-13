@@ -62,3 +62,13 @@ void Identifier::set_overloaded_index(int idx) {
 std::string Identifier::to_cpp() {
     return symbol->to_cpp(overloaded_index);
 }
+
+Expression* Identifier::clone() {
+    Identifier* other = new Identifier();
+
+    other->line = line;
+    other->column = column;
+    other->lexeme = lexeme;
+
+    return other;
+}

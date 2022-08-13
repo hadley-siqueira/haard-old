@@ -17,6 +17,8 @@ namespace haard {
 
             void add_expression(Expression* expression);
             int expressions_count();
+
+            Expression* clone();
             
         private:
             std::vector<Expression*> expressions;

@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 #include <sstream>
 #include "ast/type.h"
 
@@ -264,3 +265,14 @@ std::string Type::to_cpp() {
 
     return out.str();
 }
+
+Type* Type::clone() {
+    Type* other = new Type();
+
+    other->kind = kind;
+    other->line = line;
+    other->column = column;
+
+    return other;
+}
+

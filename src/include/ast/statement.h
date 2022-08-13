@@ -11,6 +11,7 @@ namespace haard {
             int get_kind();
 
             void set_kind(int kind);
+            virtual Statement* clone();
 
         protected:
             int kind;

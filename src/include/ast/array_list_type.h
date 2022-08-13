@@ -8,12 +8,14 @@
 namespace haard {
     class ArrayListType : public Type {
         public:
+            ArrayListType();
             ArrayListType(int kind, Token& token, Type* subtype=nullptr, Expression* expr=nullptr);
             ~ArrayListType();
 
         public:
             Expression* get_expression();
             Type* get_subtype();
+            Type* clone();
             
         private:
             Expression* expression;

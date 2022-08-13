@@ -7,12 +7,15 @@
 namespace haard {
     class HashType : public Type {
         public:
+            HashType();
             HashType(Token& token, Type* key, Type* value);
             ~HashType();
 
         public:
             Type* get_key_type();
             Type* get_value_type();
+
+            Type* clone();
 
         private:
             Type* key;

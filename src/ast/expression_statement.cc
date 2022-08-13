@@ -18,3 +18,10 @@ Expression* ExpressionStatement::get_expression() {
 void ExpressionStatement::set_expression(Expression* expression) {
     this->expression = expression;
 }
+
+Statement* ExpressionStatement::clone() {
+    ExpressionStatement* other = new ExpressionStatement();
+
+    other->expression = expression->clone();
+    return other;
+}

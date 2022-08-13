@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ast/variable.h"
 
 using namespace haard;
@@ -99,4 +100,17 @@ std::string Variable::get_cpp_name() {
 
     ss << uid << '_' << name;
     return ss.str();
+}
+
+Variable* Variable::clone() {
+    Variable* other = new Variable();
+
+    other->uid = uid;
+    other->line = line;
+    other->column = column;
+    other->constant = constant;
+    other->name = name;
+    other->type = type->clone();
+
+    return other;
 }

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ast/expression.h"
 
 using namespace haard;
@@ -26,4 +27,7 @@ void Expression::set_type(Type* type) {
     this->type = type;
 }
 
+Expression* Expression::clone() {
+    std::cout << __FILE__ << ' ' << __LINE__ << " clone\n"; exit(0);
+}
 

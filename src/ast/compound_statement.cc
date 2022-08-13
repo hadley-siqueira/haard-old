@@ -29,3 +29,12 @@ void CompoundStatement::add_statement(Statement* stmt) {
     statements.push_back(stmt);
 }
 
+Statement* CompoundStatement::clone() {
+    CompoundStatement* other = new CompoundStatement();
+
+    for (int i = 0; i < statements.size(); ++i) {
+        other->add_statement(statements[i]->clone());
+    }
+
+    return other;
+}

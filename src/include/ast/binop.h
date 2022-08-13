@@ -22,6 +22,8 @@ namespace haard {
             void set_initial_assign(bool value);
             bool get_initial_assign();
 
+            Expression* clone();
+
         private:
             Expression* left;
             Expression* right;

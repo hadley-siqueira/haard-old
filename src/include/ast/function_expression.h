@@ -12,6 +12,7 @@ namespace haard {
 
         public:
             Function* get_function();
+            Expression* clone();
 
         private:
             Function* function;

@@ -17,6 +17,8 @@ namespace haard {
             void set_kind(int kind);
             void set_type(Type* type);
 
+            virtual Expression* clone();
+
         protected:
             int kind;
             Type* type;
