@@ -66,12 +66,14 @@ void ScopeBuilder::build_function(Function* func) {
 void ScopeBuilder::build_class_variable(Variable* var) {
     Symbol* sym;
 
-    sym = current_scope->has(var->get_name());
+    sym = current_scope->has_field(var->get_name());
 
     if (!sym) {
         current_scope->define(SYM_CLASS_VARIABLE, var);
+        build_type(var->get_type());
     } else if (sym->get_kind() != SYM_CLASS_VARIABLE) {
         current_scope->define(SYM_CLASS_VARIABLE, var);
+        build_type(var->get_type());
     } else {
         std::cout << "class variable already defined\n";
     }
@@ -618,16 +620,30 @@ void ScopeBuilder::build_address_of(UnOp* op) {
 void ScopeBuilder::build_dot(BinOp* bin) {
     int lkind;
     Type* tleft;
+    NamedType* named;
+    Symbol* sym;
+    Scope* scope;
 
     build_expression(bin->get_left());
-    build_expression(bin->get_right());
 
-    /*tleft = bin->get_left()->get_type();
+    tleft = bin->get_left()->get_type();
     lkind = tleft->get_kind();
 
     if (lkind == TYPE_NAMED) {
-        
-    }*/
+        Identifier* id = (Identifier*) bin->get_right();
+        const char* name = id->get_lexeme();
+        named = (NamedType*) tleft;
+
+        sym = named->has_field(name);
+
+        if (sym) {
+            id->set_symbol(sym);
+            id->set_type(sym->get_type());
+            bin->set_type(sym->get_type());
+        } else {
+            std::cout << "NOT FOUND SYMBOL\n"; exit(0);
+        }
+    }
 }
 
 void ScopeBuilder::build_call_expression(BinOp* bin) {
@@ -642,7 +658,6 @@ void ScopeBuilder::build_call_expression(BinOp* bin) {
     tl = bin->get_left()->get_type();
     tr = bin->get_right()->get_type();
 
-    // baz(...)
     if (bin->get_left()->get_kind() == EXPR_ID) {
         Identifier* id = (Identifier*) bin->get_left();
         Symbol* sym = id->get_symbol();
@@ -820,7 +835,7 @@ void ScopeBuilder::define_sources_elements(Sources* sources) {
 }
 
 void ScopeBuilder::define_source_elements(Source* source) {
-    current_scope = source->get_scope();
+    enter_scope(source->get_scope());
 
     for (int i = 0; i < source->import_count(); ++i) {
         current_scope->add_sibling(source->get_import(i)->get_source()->get_scope());
@@ -833,6 +848,8 @@ void ScopeBuilder::define_source_elements(Source* source) {
     for (int i = 0; i < source->function_count(); ++i) {
         define_function(source->get_function(i));
     }
+
+    leave_scope();
 }
 
 void ScopeBuilder::define_class(Class* klass) {
@@ -858,6 +875,8 @@ void ScopeBuilder::define_class(Class* klass) {
         for (int i = 0; i < klass->methods_count(); ++i) {
             define_method(klass->get_method(i));
         }
+
+        build_class_variables(klass);
 
         leave_scope();
     } else {
@@ -964,4 +983,31 @@ void ScopeBuilder::enter_scope(Scope* scope) {
 void ScopeBuilder::leave_scope() {
     current_scope = scopes.top();
     scopes.pop();
+}
+
+bool ScopeBuilder::is_function_call(Expression* expr) {
+    if (expr->get_kind() != EXPR_ID) {
+        return false;
+    }
+
+    if (expr->get_type()->get_kind() != TYPE_FUNCTION) {
+        return false;
+    }
+
+    return true;
+}
+
+bool ScopeBuilder::is_constructor_call(Expression* expr) {
+    if (expr->get_kind() != EXPR_ID) {
+        return false;
+    }
+
+    Identifier* id = (Identifier*) expr;
+    Symbol* sym = id->get_symbol();
+
+    if (expr->get_type()->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS) {
+        return true;
+    }
+
+    return false;
 }

@@ -61,6 +61,9 @@ namespace haard {
             void define_overloaded_function(Symbol* sym, Function* func);
             void define_method(Function* func);
 
+            bool is_function_call(Expression* expr);
+            bool is_constructor_call(Expression* expr);
+
         private:
             void build_class_variables(Class* klass);
             void build_class_methods(Class* klass);

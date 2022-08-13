@@ -5,6 +5,7 @@ using namespace haard;
 
 Scope::Scope() {
     parent = nullptr;
+    super = nullptr;
 }
 
 Scope::~Scope() {
@@ -19,8 +20,16 @@ Scope* Scope::get_parent() {
     return parent;
 }
 
+Scope* Scope::get_super() {
+    return super;
+}
+
 void Scope::set_parent(Scope* symtab) {
     parent = symtab;
+}
+
+void Scope::set_super(Scope* symtab) {
+    super = symtab;
 }
 
 Symbol* Scope::define(Class* klass) {
@@ -55,6 +64,10 @@ bool Scope::has_siblings() {
     return siblings.size() > 0;
 }
 
+bool Scope::has_super() {
+    return super != nullptr;
+}
+
 void Scope::add_sibling(Scope* scope) {
     siblings.push_back(scope);
 }
@@ -63,9 +76,21 @@ int Scope::siblings_count() {
     return siblings.size();
 }
 
-Symbol* Scope::has_as_sibling(const char* name) {
+Symbol* Scope::shallow_has(const char* name) {
     if (symbols.count(name) > 0) {
         return symbols[name];
+    }
+
+    return nullptr;
+}
+
+Symbol* Scope::has_field(const char* name) {
+    if (symbols.count(name) > 0) {
+        return symbols[name];
+    }
+
+    if (has_super()) {
+        return super->has_field(name);
     }
 
     return nullptr;
@@ -84,7 +109,7 @@ Symbol* Scope::has(const char* name) {
 
     if (has_siblings()) {
         for (int i = 0; i < siblings_count(); ++i) {
-            sym = siblings[i]->has_as_sibling(name);
+            sym = siblings[i]->shallow_has(name);
 
             if (sym != nullptr) {
                 return sym;

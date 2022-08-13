@@ -1,3 +1,5 @@
+#include <iostream>
+#include "ast/ast.h"
 #include "ast/named_type.h"
 
 using namespace haard;
@@ -44,4 +46,26 @@ std::string NamedType::to_cpp() {
 
 std::string NamedType::to_str() {
     return name->get_lexeme();
+}
+
+Symbol* NamedType::has_field(const char* name) {
+    Class* klass;
+    Symbol* sym = nullptr;
+
+    if (!symbol) {
+        return nullptr;
+    }
+
+    switch (symbol->get_kind()) {
+    case SYM_CLASS:
+        klass = (Class*) symbol->get_descriptor();
+        sym = klass->get_scope()->has_field(name);
+        break;
+
+    default:
+        std::cout << __FILE__ << ' ' << __LINE__ << " invalid symbol kind\n";
+        exit(0);
+    }
+
+    return sym;
 }

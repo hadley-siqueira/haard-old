@@ -532,6 +532,10 @@ JumpStatement* Parser::parse_jump_statement(int tkind, int skind) {
 CompoundStatement* Parser::parse_compound_statement() {
     CompoundStatement* statements = new CompoundStatement();
 
+    if (match(TK_PASS)) {
+        return statements;
+    }
+
     while (is_indentend() && !lookahead(TK_RIGHT_CURLY_BRACKET)) {
         statements->add_statement(parse_statement());
     }

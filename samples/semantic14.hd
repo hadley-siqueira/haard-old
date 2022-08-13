@@ -1,0 +1,27 @@
+import std.io
+
+class Pixel:
+    r : u8
+    g : u8
+    b : u8
+
+class Window:
+    x : int
+    y : int
+    p : Pixel
+
+    def init : void
+        pass
+
+    def move : void
+        @nx : int
+        @ny : int
+
+        x = nx
+        y = ny
+
+def main : void
+    w = Window()
+    w.x = 0
+    w.p.r = 0
+    k = w.x

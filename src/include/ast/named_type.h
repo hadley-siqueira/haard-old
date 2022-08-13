@@ -20,6 +20,8 @@ namespace haard {
             void set_name(Identifier* id);
             void set_symbol(Symbol* symbol);
 
+            Symbol* has_field(const char* name);
+
             std::string to_cpp();
             std::string to_str();
 
