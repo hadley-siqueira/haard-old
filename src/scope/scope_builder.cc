@@ -56,6 +56,8 @@ void ScopeBuilder::build_class_methods(Class* klass) {
 }
 
 void ScopeBuilder::build_function(Function* func) {
+    if (func->is_template()) return;
+
     var_counter = 0;
 
     enter_scope(func->get_scope());
@@ -918,6 +920,8 @@ void ScopeBuilder::define_class(Class* klass) {
 }
 
 void ScopeBuilder::define_function(Function* func) {
+    if (func->is_template()) return;
+
     Symbol* sym = current_scope->has(func->get_name());
 
     enter_scope(func->get_scope());

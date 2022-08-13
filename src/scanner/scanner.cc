@@ -10,6 +10,8 @@ Scanner::Scanner() {
     column = 1;
     idx = 0;
     ws = 0;
+    template_flag = false;
+    template_counter = 0;
 }
 
 std::vector<Token> Scanner::read(std::string path) {
@@ -179,6 +181,7 @@ void Scanner::get_keyword_or_identifier() {
     } 
 
     create_token(kind);
+    template_flag = lookahead('<');
 }
 
 void Scanner::get_operator() {
@@ -187,6 +190,24 @@ void Scanner::get_operator() {
 
     for (int i = 0; i < 4; ++i) {
         tmp += buffer[idx + i]; 
+    }
+
+    if (template_flag || template_counter > 0) {
+        template_flag = false;
+
+        if (tmp[0] == '<') {
+            start_token();
+            advance();
+            create_token(TK_BEGIN_TEMPLATE);
+            template_counter++;
+            return;
+        } else if (tmp[0] == '>') {
+            start_token();
+            advance();
+            create_token(TK_END_TEMPLATE);
+            template_counter--;
+            return;
+        }
     }
 
     while (tmp.size() > 0) {

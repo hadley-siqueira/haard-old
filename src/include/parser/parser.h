@@ -30,6 +30,8 @@ namespace haard {
             Type* parse_function_type();
             Type* parse_tuple_type();
             Type* parse_union_type();
+            TypeList* parse_template_list();
+            TypeList* parse_template_list_header();
             Statement* parse_statement();
             WhileStatement* parse_while_statement();
             ForStatement* parse_for_statement();

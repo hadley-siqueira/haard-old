@@ -41,7 +41,7 @@ void test_driver(int argc, char* argv[]) {
 }
 
 int main(int argc, char* argv[]) {
-    // test_scanner(argv[1]);
+    //test_scanner(argv[1]);
     test_driver(argc, argv);   
 
     return 0;

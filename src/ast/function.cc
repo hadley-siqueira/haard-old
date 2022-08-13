@@ -8,6 +8,7 @@ Function::Function() {
     statements = nullptr;
     scope = new Scope();
     method_flag = false;
+    templates = nullptr;
 }
 
 Function::~Function() {
@@ -158,3 +159,16 @@ void Function::set_from_token(Token& token) {
 void Function::set_method(bool value) {
     method_flag = value;
 }
+
+void Function::set_template_list(TypeList* types) {
+    this->templates = types;
+}
+
+TypeList* Function::get_template_list() {
+    return templates;
+}
+
+bool Function::is_template() {
+    return templates != nullptr;
+}
+

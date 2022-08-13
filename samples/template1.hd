@@ -1,0 +1,17 @@
+def main<Hash<int,float>> : void
+    return
+
+class MainWindow<T, K>(Window<T>):
+    x : T
+    y : K
+
+class Node<T>:
+    next : Node<T>*
+    prev : Node<T>*
+    data : T
+
+class List<T>:
+    head : Node<T>*
+    tail : Node<T>*
+
+

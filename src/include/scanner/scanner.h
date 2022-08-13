@@ -48,6 +48,8 @@ namespace haard {
             std::vector<Token> tokens;
             std::string buffer;
             std::string lexeme;
+            bool template_flag;
+            int template_counter;
     };
 }
 

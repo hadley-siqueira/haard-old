@@ -132,6 +132,10 @@ Function* Parser::parse_function() {
     expect(TK_ID);
     function->set_from_token(matched);
 
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        function->set_template_list(parse_template_list_header());
+    }
+
     expect(TK_COLON);
     indent();
     type = parse_type();
@@ -186,6 +190,38 @@ Type* Parser::parse_function_type() {
     }
 
     return type;
+}
+
+TypeList* Parser::parse_template_list_header() {
+    Type* type;
+    TypeList* types = new TypeList();
+
+    expect(TK_BEGIN_TEMPLATE);
+    expect(TK_ID);
+    types->add_type(new TemplateType(matched));
+
+    while (match(TK_COMMA)) {
+        expect(TK_ID);
+        types->add_type(new TemplateType(matched));
+    }
+
+    expect(TK_END_TEMPLATE);
+    return types;
+}
+
+TypeList* Parser::parse_template_list() {
+    Type* type;
+    TypeList* types = new TypeList();
+
+    expect(TK_BEGIN_TEMPLATE);
+    types->add_type(parse_type());
+
+    while (match(TK_COMMA)) {
+        types->add_type(parse_type());
+    }
+
+    expect(TK_END_TEMPLATE);
+    return types;
 }
 
 Type* Parser::parse_tuple_type() {

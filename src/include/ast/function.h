@@ -6,6 +6,7 @@
 #include "token/token.h"
 #include "ast/variable.h"
 #include "ast/type.h"
+#include "ast/type_list.h"
 #include "ast/compound_statement.h"
 
 namespace haard {
@@ -43,10 +44,15 @@ namespace haard {
             Type* get_self_type();
             void set_self_type(Type* type);
 
+            void set_template_list(TypeList* types);
+            TypeList* get_template_list();
+
             int parameters_count();
 
             void add_parameter(Variable* param);
             void add_variable(Variable* var);
+
+            bool is_template();
 
         private:
             int uid;
@@ -58,6 +64,7 @@ namespace haard {
             std::vector<Variable*> variables;
             Type* return_type;
             Type* self_type;
+            TypeList* templates;
             CompoundStatement* statements;
             Scope* scope;
             

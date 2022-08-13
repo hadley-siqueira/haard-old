@@ -593,7 +593,8 @@ namespace haard {
         TYPE_FUNCTION,
         TYPE_TUPLE,
         TYPE_PARENTHESIS,
-        TYPE_UNION
+        TYPE_UNION,
+        TYPE_TEMPLATE
     } TypeKind;
 
     typedef enum ExpressionKind {
