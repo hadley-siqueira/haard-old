@@ -19,12 +19,22 @@ Logger::~Logger() {
 
 void Logger::print() {
     for (int i = 0; i < logs.size(); ++i) {
-        std::cout << logs[i]->to_str();
+        std::cout << colorify(logs[i]->to_str()) << '\n';
     }
 }
 
 void Logger::info(std::string msg) {
     logs.push_back(new Log(LOG_INFO, msg));
+}
+
+void Logger::error(std::string msg) {
+    logs.push_back(new Log(LOG_ERROR, msg));
+}
+
+void Logger::error_and_exit(std::string msg) {
+    error(msg);
+    print();
+    exit(0);
 }
 
 void Logger::info(std::string path, int line, int column, std::string msg) {

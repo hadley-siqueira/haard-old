@@ -14,6 +14,7 @@ set(LOG_SRC
     src/log/logger.cc
     src/log/messages.cc
     src/log/info_messages.cc
+    src/log/error_messages.cc
 )
 
 set(TOKEN_SRC

@@ -36,6 +36,7 @@ void Driver::run() {
     semantic_analysis();
 
     run_flags();
+    logger.print();
 /*
     parse_program();
     build_scopes();
@@ -100,6 +101,7 @@ void Driver::semantic_analysis() {
     ScopeDefinitionBuilder def_builder;
     ScopeBuilder sym_builder;
 
+    def_builder.set_logger(&logger);
     def_builder.define_sources(sources);
     // sym_builder.build_sources(sources);
 }

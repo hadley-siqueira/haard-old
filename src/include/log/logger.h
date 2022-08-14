@@ -12,8 +12,10 @@ namespace haard {
             ~Logger();
 
         public:
-            void print();
             void info(std::string msg);
+            void error(std::string msg);
+            void error_and_exit(std::string msg);
+            void print();
             void info(std::string path, int line, int column, std::string msg);
             void warn(std::string path, int line, int column, std::string msg);
             void error(Log* log);

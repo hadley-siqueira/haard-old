@@ -9,6 +9,7 @@
 
 namespace haard {
     std::string info_message_defining_source(Source* source);
+    std::string info_message_defining_class(Class* klass);
 }
 
 #endif

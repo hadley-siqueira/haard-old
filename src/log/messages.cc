@@ -198,3 +198,9 @@ Log* haard::error_message_no_return_type(std::string path, Token& token) {
     return new Log(LOG_ERROR, line, column, path, ss.str());
 }
 
+std::string haard::error_header(std::string path, int line, int column) {
+    std::stringstream ss;
+
+    ss << path << ':' << line << ':' << column << ": <red>error:</red> ";
+    return ss.str();
+}

@@ -1,0 +1,7 @@
+class Window:
+    x : int
+    y : int
+
+class Window:
+    x : int
+    y : int
