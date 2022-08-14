@@ -56,6 +56,12 @@ Symbol* Scope::define(int kind, Variable* var) {
     return sym;
 }
 
+Symbol* Scope::define(TemplateType* type) {
+    Symbol* sym = new Symbol(SYM_TEMPLATE, type->get_name(), type);
+    symbols[type->get_name()] = sym;
+    return sym;
+}
+
 bool Scope::has_parent() {
     return parent != nullptr;
 }

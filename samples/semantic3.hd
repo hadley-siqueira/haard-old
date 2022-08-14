@@ -12,4 +12,4 @@ def main : int
     b = a + 1
     ptr = &a
     c = foo()
-    p = Pixel
+    p = Pixel()

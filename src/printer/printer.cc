@@ -92,7 +92,22 @@ void Printer::print_class(Class* klass) {
 void Printer::print_function(Function* function) {
     print_indentation();
 
-    out << "def " << function->get_name() << " : ";
+    out << "def " << function->get_name();
+
+    if (function->get_template_list()) {
+        TypeList* types = function->get_template_list();
+        int i;
+        out << '<';
+
+        for (i = 0; i < types->types_count() - 1; ++i) {
+            out << types->get_type(i)->to_str() << ", ";
+        }
+
+        out << types->get_type(i)->to_str();
+        out << '>';
+    }
+
+    out << " : ";
     print_type(function->get_return_type());
     out << '\n';
     indent();

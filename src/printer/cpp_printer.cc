@@ -138,6 +138,7 @@ void CppPrinter::print_class(Class* klass) {
 }
 
 void CppPrinter::print_function(Function* function) {
+    if (function->is_template()) return;
     print_indentation();
 
     out << function->get_cpp_signature();

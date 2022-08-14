@@ -681,7 +681,8 @@ namespace haard {
         EXPR_HASH_PAIR,
         EXPR_FUNCTION,
         EXPR_NEW,
-        EXPR_DELETE
+        EXPR_DELETE,
+        EXPR_TEMPLATE
     } ExpressionKind;
 
     typedef enum StatementKind {
@@ -714,7 +715,8 @@ namespace haard {
         SYM_METHOD,
         SYM_VARIABLE,
         SYM_CLASS_VARIABLE,
-        SYM_PARAMETER
+        SYM_PARAMETER,
+        SYM_TEMPLATE
     } SymbolKind;
 }
 

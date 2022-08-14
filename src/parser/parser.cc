@@ -1062,6 +1062,10 @@ Expression* Parser::parse_primary_expression() {
         expr = new Literal(EXPR_LITERAL_NULL, matched);
     } else if (lookahead(TK_ID)) {
         expr = parse_scope_expression();
+
+        if (lookahead(TK_BEGIN_TEMPLATE)) {
+            expr = new TemplateExpression(expr, parse_template_list());
+        }
     } else if (match(TK_SCOPE)) {
         expr = new UnOp(EXPR_GLOBAL_SCOPE, parse_identifier_expression());
     } else if (lookahead(TK_BITWISE_OR)) {

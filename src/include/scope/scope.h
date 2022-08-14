@@ -23,6 +23,7 @@ namespace haard {
             Symbol* define(Function* func);
             Symbol* define(int kind, Function* func);
             Symbol* define(int kind, Variable* var);
+            Symbol* define(TemplateType* type);
 
             bool has_parent();
             bool has_siblings();

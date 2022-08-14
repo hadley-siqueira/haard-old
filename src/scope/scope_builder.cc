@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include "printer/printer.h"
 #include "scope/scope_builder.h"
 
@@ -56,7 +57,19 @@ void ScopeBuilder::build_class_methods(Class* klass) {
 }
 
 void ScopeBuilder::build_function(Function* func) {
-    if (func->is_template()) return;
+    if (func->is_template()) {
+        if (strcmp(func->get_name(), "soma") == 0) {
+            std::cout << "LETS GO\n";
+            TypeList* b = new TypeList();
+            b->add_type(new Type(TYPE_INT));
+            Function* k = func->get_with_template_binding(b);
+            Printer p;
+            p.print_function(k);
+            std::cout << p.to_str() << "\n\n";
+        }
+
+        return;
+    } 
 
     var_counter = 0;
 
@@ -65,13 +78,6 @@ void ScopeBuilder::build_function(Function* func) {
 
     build_compound_statement(func->get_statements());
     leave_scope();
-
-    Function* other = func->clone();
-
-    Printer p;
-    p.print_function(other);
-    std::cout << p.to_str();
-    exit(0);
 }
 
 void ScopeBuilder::build_class_variable(Variable* var) {
@@ -640,7 +646,7 @@ void ScopeBuilder::build_dot(BinOp* bin) {
     tleft = bin->get_left()->get_type();
     lkind = tleft->get_kind();
 
-    if (lkind == TYPE_NAMED) {
+    if (lkind == TYPE_NAMED && bin->get_left()->get_kind() == EXPR_ID) {
         Identifier* id = (Identifier*) bin->get_right();
         const char* name = id->get_lexeme();
         named = (NamedType*) tleft;
@@ -757,6 +763,8 @@ void ScopeBuilder::build_call_expression(BinOp* bin) {
 
             bin->set_type(ft->get_return_type());
         }
+    } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
+
     }
 }
 
@@ -929,9 +937,22 @@ void ScopeBuilder::define_class(Class* klass) {
 void ScopeBuilder::define_function(Function* func) {
     if (func->is_template()) return;
 
+std::cout << "DEFINE " << func->get_name() << "\n\n";
     Symbol* sym = current_scope->has(func->get_name());
 
     enter_scope(func->get_scope());
+
+    {
+        TypeList* types = func->get_template_list();
+
+        if (types) {
+            for (int i = 0; i < types->types_count(); ++i) {
+                TemplateType* type = (TemplateType*) types->get_type(i);
+                current_scope->define(type);
+            }
+        }
+    }
+
     define_function_parameters(func);
     define_function_self_type(func);
     func->set_uid(function_counter++);

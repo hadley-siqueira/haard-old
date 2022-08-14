@@ -53,8 +53,11 @@ namespace haard {
             void add_variable(Variable* var);
 
             bool is_template();
+            bool is_binded_with_types(TypeList* types);
+            void bind_with(TypeList* types);
 
             Function* clone();
+            Function* get_with_template_binding(TypeList* bindings);
 
         private:
             int uid;
@@ -69,6 +72,7 @@ namespace haard {
             TypeList* templates;
             CompoundStatement* statements;
             Scope* scope;
+            std::vector<Function*> tfunctions;
             
     };
 }

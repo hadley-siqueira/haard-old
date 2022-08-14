@@ -18,10 +18,15 @@ namespace haard {
             std::string to_str();
             std::string to_cpp();
 
+            Type* get_bind_type();
+            void set_bind_type(Type* type);
+            bool is_binded();
+
             Type* clone();
 
         private:
             const char* name;
+            Type* bind_type;
     };
 }
 
