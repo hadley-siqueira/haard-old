@@ -56,6 +56,7 @@ namespace haard {
             void define_source_elements(Source* source);
             void define_class(Class* klass);
             void define_function(Function* func);
+            void define_function_template_list(Function* func);
             void define_function_parameters(Function* func);
             void define_function_self_type(Function* func);
             void define_overloaded_function(Symbol* sym, Function* func);

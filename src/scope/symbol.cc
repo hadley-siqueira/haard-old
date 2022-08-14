@@ -129,6 +129,10 @@ std::string Symbol::to_str() {
     case SYM_CLASS_VARIABLE:
         ss << "cvar";
         break;
+
+    case SYM_TEMPLATE:
+        ss << "template";
+        break;
     }
 
     ss << ">";

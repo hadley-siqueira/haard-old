@@ -646,7 +646,7 @@ void ScopeBuilder::build_dot(BinOp* bin) {
     tleft = bin->get_left()->get_type();
     lkind = tleft->get_kind();
 
-    if (lkind == TYPE_NAMED && bin->get_left()->get_kind() == EXPR_ID) {
+    if (lkind == TYPE_NAMED && bin->get_right()->get_kind() == EXPR_ID) {
         Identifier* id = (Identifier*) bin->get_right();
         const char* name = id->get_lexeme();
         named = (NamedType*) tleft;
@@ -934,25 +934,22 @@ void ScopeBuilder::define_class(Class* klass) {
     }
 }
 
-void ScopeBuilder::define_function(Function* func) {
-    if (func->is_template()) return;
+void ScopeBuilder::define_function_template_list(Function* func) {
+    TypeList* types = func->get_template_list();
 
-std::cout << "DEFINE " << func->get_name() << "\n\n";
+    if (types) {
+        for (int i = 0; i < types->types_count(); ++i) {
+            TemplateType* type = (TemplateType*) types->get_type(i);
+            current_scope->define(type);
+        }
+    }
+}
+
+void ScopeBuilder::define_function(Function* func) {
     Symbol* sym = current_scope->has(func->get_name());
 
     enter_scope(func->get_scope());
-
-    {
-        TypeList* types = func->get_template_list();
-
-        if (types) {
-            for (int i = 0; i < types->types_count(); ++i) {
-                TemplateType* type = (TemplateType*) types->get_type(i);
-                current_scope->define(type);
-            }
-        }
-    }
-
+    define_function_template_list(func);
     define_function_parameters(func);
     define_function_self_type(func);
     func->set_uid(function_counter++);

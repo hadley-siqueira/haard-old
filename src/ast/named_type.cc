@@ -48,6 +48,16 @@ std::string NamedType::to_str() {
     return name->get_lexeme();
 }
 
+bool NamedType::equal(Type* type) {
+    if (type->get_kind() != TYPE_NAMED) {
+        return false;
+    }
+
+    NamedType* other = (NamedType*) type;
+
+    return symbol != other->symbol;
+}
+
 Symbol* NamedType::has_field(const char* name) {
     Class* klass;
     Symbol* sym = nullptr;

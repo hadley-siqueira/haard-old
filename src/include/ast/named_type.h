@@ -21,6 +21,7 @@ namespace haard {
             void set_symbol(Symbol* symbol);
 
             Symbol* has_field(const char* name);
+            bool equal(Type* type);
 
             std::string to_cpp();
             std::string to_str();
