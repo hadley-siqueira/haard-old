@@ -4,6 +4,23 @@ def soma<T> : T
 
     return a + b
 
+def soma : int
+    @a : int
+    @b : int
+
+    return a + b
+
+def soma<T, K> : K
+    @a : T
+    @b : K
+
+    return b
+
+def soma<T> : T
+    @a : T
+
+    return a + 1
+
 def make_pair<A, B> : int
     @a : A
     @b : B
@@ -18,5 +35,5 @@ def foo : int
 
 def main : void
     a = foo(2, 3)
-    #b = soma<int>(2, 3)
+    b = soma<int>(2, 3)
 

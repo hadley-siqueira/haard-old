@@ -23,6 +23,10 @@ void Logger::print() {
     }
 }
 
+void Logger::info(std::string msg) {
+    logs.push_back(new Log(LOG_INFO, msg));
+}
+
 void Logger::info(std::string path, int line, int column, std::string msg) {
     logs.push_back(new Log(LOG_INFO, line, column, path, msg));
 }

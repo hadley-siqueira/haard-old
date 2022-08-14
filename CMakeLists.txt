@@ -13,6 +13,7 @@ set(LOG_SRC
     src/log/log.cc
     src/log/logger.cc
     src/log/messages.cc
+    src/log/info_messages.cc
 )
 
 set(TOKEN_SRC
@@ -72,6 +73,7 @@ set(DRIVER_SRC
 set(SCOPE_SRC
     src/scope/symbol.cc
     src/scope/scope.cc
+    src/scope/scope_definition_builder.cc
     src/scope/scope_builder.cc
 )
 

@@ -4,6 +4,11 @@
 
 using namespace haard;
 
+Log::Log(int kind, std::string message) {
+    this->kind = kind;
+    this->message = message;
+}
+
 Log::Log(int kind, int line, int column, std::string path, std::string message) {
     this->kind = kind;
     this->line = line;

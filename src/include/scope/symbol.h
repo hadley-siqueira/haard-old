@@ -23,7 +23,7 @@ namespace haard {
             void set_name(const char* name);
             void add_descriptor(void* descriptor);
 
-            std::string to_str();
+            std::string to_str(int idx=0);
             std::string to_cpp(int idx=0);
 
             int overloaded_count();

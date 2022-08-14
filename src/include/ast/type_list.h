@@ -2,6 +2,7 @@
 #define HAARD_AST_TYPE_LIST_H
 
 #include <vector>
+#include <string>
 #include "token/token.h"
 #include "ast/type.h"
 
@@ -23,8 +24,15 @@ namespace haard {
             Type* get_return_type();
             Type* clone();
 
+            Type* get_template(int idx);
+            void add_template(Type* type);
+            int templates_count();
+
+            std::string to_str();
+
         private:
             std::vector<Type*> types;
+            std::vector<Type*> templates;
     };
 }
 

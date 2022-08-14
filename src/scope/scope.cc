@@ -157,7 +157,10 @@ void Scope::debug() {
 
     for (it = symbols.begin(); it != symbols.end(); ++it) {
         sym = it->second;
-        std::cout << sym->to_str() << ", ";
+
+        for (int i = 0; i < sym->overloaded_count(); ++i) {
+            std::cout << sym->to_str(i) << ", ";
+        }
     }
 
     std::cout << "}";

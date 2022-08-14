@@ -23,6 +23,7 @@ namespace haard {
             const char* get_name();
             std::string get_cpp_name();
             std::string get_cpp_signature();
+            std::string get_type_signature();
             Variable* get_parameter(int idx);
             Variable* get_variable(int idx);
             Type* get_return_type();

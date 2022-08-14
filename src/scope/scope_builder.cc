@@ -59,7 +59,6 @@ void ScopeBuilder::build_class_methods(Class* klass) {
 void ScopeBuilder::build_function(Function* func) {
     if (func->is_template()) {
         if (strcmp(func->get_name(), "soma") == 0) {
-            std::cout << "LETS GO\n";
             TypeList* b = new TypeList();
             b->add_type(new Type(TYPE_INT));
             Function* k = func->get_with_template_binding(b);
@@ -120,6 +119,15 @@ void ScopeBuilder::build_type(Type* type) {
     case TYPE_PARENTHESIS:
     case TYPE_UNION:
         break;
+
+    case TYPE_TEMPLATE:
+        break;
+    }
+}
+
+void ScopeBuilder::build_type_list(TypeList* types) {
+    for (int i = 0; i < types->types_count(); ++i) {
+        build_type(types->get_type(i));
     }
 }
 
@@ -134,6 +142,8 @@ void ScopeBuilder::build_named_type(NamedType* type) {
     int kind = sym->get_kind();
 
     if (kind == SYM_CLASS) {
+        type->set_symbol(sym);
+    } else if (kind == SYM_TEMPLATE) {
         type->set_symbol(sym);
     } else {
         std::cout << "Error: named type not in scope but is another entity\n";
@@ -582,6 +592,10 @@ void ScopeBuilder::build_expression(Expression* expression) {
     case EXPR_NEW:
         build_new_expression((NewExpression*) expression);
         break;
+
+    case EXPR_TEMPLATE:
+        build_template_expression((TemplateExpression*) expression);
+        break;
     }
 }
 
@@ -764,7 +778,8 @@ void ScopeBuilder::build_call_expression(BinOp* bin) {
             bin->set_type(ft->get_return_type());
         }
     } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
-
+        // FIXME assuming that is a function type
+        
     }
 }
 
@@ -875,6 +890,12 @@ void ScopeBuilder::build_new_expression(NewExpression* expr) {
     }
 
     expr->set_type(new IndirectionType(TYPE_POINTER, expr->get_new_type()));
+}
+
+void ScopeBuilder::build_template_expression(TemplateExpression* expression) {
+    build_type_list(expression->get_types());
+    build_expression(expression->get_expression());
+    expression->set_type(expression->get_expression()->get_type());
 }
 
 void ScopeBuilder::define_sources_elements(Sources* sources) {
@@ -1006,6 +1027,14 @@ void ScopeBuilder::define_function_parameters(Function* func) {
 void ScopeBuilder::define_function_self_type(Function* func) {
     TypeList* types = new TypeList(TYPE_FUNCTION);
 
+    if (func->get_template_list()) {
+        TypeList* ts = func->get_template_list();
+
+        for (int i = 0; i < ts->types_count(); ++i) {
+            types->add_template(ts->get_type(i));
+        }
+    }
+
     build_type(func->get_return_type());
 
     if (func->parameters_count() > 0) {
@@ -1028,6 +1057,10 @@ void ScopeBuilder::define_overloaded_function(Symbol* sym, Function* func) {
             // FIXME
             std::cout << "Error: " << func->get_name() << 
                 " already defined function with signature\n";
+            std::cout << "Previous signature " << other->get_self_type()->to_str()
+                << '\n';
+            //std::cout << other->get_type_signature() << '\n';
+            //std::cout << func->get_type_signature() << '\n';
             exit(0);
         } 
     }

@@ -267,3 +267,10 @@ Function* Function::get_with_template_binding(TypeList* bindings) {
 
     return tfunctions[tfunctions.size() - 1];
 }
+
+std::string Function::get_type_signature() {
+    std::stringstream ss;
+
+    ss << name << self_type->to_str();
+    return ss.str();
+}

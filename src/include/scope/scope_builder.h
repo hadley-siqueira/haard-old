@@ -26,6 +26,7 @@ namespace haard {
             void build_named_type(NamedType* type);
             void build_indirection_type(IndirectionType* type);
             void build_array_list_type(ArrayListType* type);
+            void build_type_list(TypeList* types);
 
             void build_statement(Statement* statement);
             void build_compound_statement(CompoundStatement* stmts);
@@ -50,6 +51,7 @@ namespace haard {
             void build_hash(ExpressionList* hash);
             void build_function_expression(FunctionExpression* function);
             void build_new_expression(NewExpression* expr);
+            void build_template_expression(TemplateExpression* expression);
 
         private:
             void define_sources_elements(Sources* sources);

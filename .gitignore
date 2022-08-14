@@ -52,3 +52,6 @@ build
 
 # tests
 samples/out.cpp
+
+# ctags
+tags

@@ -68,7 +68,7 @@ Type* Symbol::get_type(int idx) {
     return nullptr;
 }
 
-std::string Symbol::to_str() {
+std::string Symbol::to_str(int idx) {
     std::stringstream ss;
 
     ss << "<" << name << ":";
@@ -81,9 +81,9 @@ std::string Symbol::to_str() {
     case SYM_FUNCTION:
         ss << "func(";
 
-        if (get_type()) {
+        if (get_type(idx)) {
             Printer p;
-            p.print_type(get_type());
+            p.print_type(get_type(idx));
             ss << p.to_str();
         }
 
@@ -93,9 +93,9 @@ std::string Symbol::to_str() {
     case SYM_METHOD:
         ss << "method(";
 
-        if (get_type()) {
+        if (get_type(idx)) {
             Printer p;
-            p.print_type(get_type());
+            p.print_type(get_type(idx));
             ss << p.to_str();
         }
 
