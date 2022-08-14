@@ -10,6 +10,7 @@
 
 namespace haard {
     class Scope;
+    class Source;
 
     class Class {
         public:
@@ -45,6 +46,9 @@ namespace haard {
             int constructors_count();
             Function* get_constructor(int idx);
 
+            Source* get_source();
+            void set_source(Source* source);
+
         private:
             const char* name;
             int line;
@@ -57,6 +61,7 @@ namespace haard {
             std::vector<Variable*> variables;
             Scope* scope;
             NamedType* self_type;
+            Source* source; // source where this class is defined
     };
 }
 

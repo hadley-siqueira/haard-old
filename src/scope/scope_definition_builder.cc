@@ -40,7 +40,7 @@ void ScopeDefinitionBuilder::define_class(Class* klass) {
     if (!sym) {
         current_scope->define(klass);
     } else {
-        logger->error(error_message_class_aready_defined(klass, sym));
+        logger->error(error_message_cant_define_class(klass, sym));
     }
 }
 

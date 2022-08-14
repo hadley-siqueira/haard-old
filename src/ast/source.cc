@@ -70,6 +70,7 @@ void Source::add_function(Function* function) {
 
 void Source::add_class(Class* klass) {
     classes.push_back(klass);
+    klass->set_source(this);
 }
 
 int Source::import_count() {

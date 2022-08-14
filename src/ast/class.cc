@@ -144,3 +144,10 @@ Function* Class::get_constructor(int idx) {
     return nullptr;
 }
 
+Source* Class::get_source() {
+    return source;
+}
+
+void Class::set_source(Source* source) {
+    this->source = source;
+}

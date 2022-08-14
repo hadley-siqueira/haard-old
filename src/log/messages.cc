@@ -204,3 +204,46 @@ std::string haard::error_header(std::string path, int line, int column) {
     ss << path << ':' << line << ':' << column << ": <red>error:</red> ";
     return ss.str();
 }
+
+std::string create_trailing(int column, int count) {
+    std::stringstream ss;
+
+    return ss.str();
+}
+
+std::string create_trailing(int line, int column, int count, std::string color) {
+    std::stringstream ss;
+    int s1;
+
+    ss << "  " << line << " |";
+    s1 = ss.str().size();
+
+    ss.str("");
+
+    for (int i = 0; i < s1 - 1; ++i) {
+        ss << ' ';
+    }
+
+    ss << "|";
+
+    for (int i = 0; i < column - 1; ++i) {
+        ss << ' ';
+    }
+
+    ss << '<' << color << '>';
+    for (int i = 0; i < count; ++i) {
+        ss << '^';
+    }
+
+    ss << "</" << color << '>';
+    ss << "    ";
+    return ss.str();
+}
+
+std::string haard::get_line_for_message(std::string path, int line, int column, int count) {
+    std::stringstream msg;
+
+    msg << "  " << line << " |" << read_line(path.c_str(), line) << '\n';
+    msg << create_trailing(line, column, count, "blue") << '\n';
+    return msg.str(); 
+}

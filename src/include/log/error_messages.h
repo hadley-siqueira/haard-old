@@ -9,7 +9,7 @@
 #include "scope/symbol.h"
 
 namespace haard {
-    std::string error_message_class_aready_defined(Class* klass, Symbol* sym);
+    std::string error_message_cant_define_class(Class* klass, Symbol* sym);
 }
 
 #endif

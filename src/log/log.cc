@@ -19,7 +19,7 @@ Log::Log(int kind, int line, int column, std::string path, std::string message) 
 
 std::string Log::to_str() {
     std::stringstream ss;
-
+/*
     ss << path << ':' << line << ':' << column << ": ";
 
     switch (kind) {
@@ -34,7 +34,7 @@ std::string Log::to_str() {
     case LOG_ERROR:
         ss << RED << "error: " << NORMAL;
         break;
-    }
+    }*/
 
     ss << message;
 
