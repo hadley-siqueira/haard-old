@@ -76,23 +76,121 @@ void ScopeDefinitionBuilder::connect_sibling_scopes(Sources* sources) {
 void ScopeDefinitionBuilder::define_function(Function* function) {
     Symbol* sym = current_scope->local_has(function->get_name());
 
-    link_function_types(function);
+    define_function_signature(function);
 
     if (!sym) {
+        logger->info(info_message_defining_function(function));
         current_scope->define(function);
     } else if (sym->get_kind() == SYM_FUNCTION) {
+        logger->info(info_message_defining_function(function));
         define_overloaded_function(sym, function);
     } else {
         logger->error("can't define function");
     }
 }
 
-void ScopeDefinitionBuilder::link_function_types(Function* function) {
+void ScopeDefinitionBuilder::define_function_signature(Function* function) {
+    enter_scope(function->get_scope());
 
+    define_function_template_list(function);
+    define_function_parameters(function);
+    link_type(function->get_return_type());
+    define_function_self_type(function);
+
+    leave_scope();
+}
+
+void ScopeDefinitionBuilder::define_function_template_list(Function* function) {
+    Symbol* sym;
+    TypeList* types = function->get_template_list();
+
+    if (types) {
+        for (int i = 0; i < types->types_count(); ++i) {
+            TemplateType* type = (TemplateType*) types->get_type(i);
+            sym = current_scope->local_has(type->get_name());
+
+            if (!sym) {
+                current_scope->define(type);
+            } else {
+                logger->error("template name already defined");
+            }
+        }
+    }
+}
+
+void ScopeDefinitionBuilder::define_function_parameters(Function* function) {
+    Variable* param;
+    Symbol* sym;
+
+    for (int i = 0; i < function->parameters_count(); ++i) {
+        param = function->get_parameter(i);
+        param->set_uid(i);
+        link_type(param->get_type());
+
+        sym = current_scope->has(param->get_name());
+
+        if (!sym) {
+            current_scope->define(SYM_PARAMETER, param);
+        } else if (sym->get_kind() != SYM_PARAMETER) {
+            current_scope->define(SYM_PARAMETER, param);
+        } else {
+            logger->error("parameter already defined");
+        }
+    }
+}
+
+void ScopeDefinitionBuilder::define_function_self_type(Function* function) {
+    TypeList* types = new TypeList(TYPE_FUNCTION);
+
+    if (function->get_template_list()) {
+        TypeList* ts = function->get_template_list();
+
+        for (int i = 0; i < ts->types_count(); ++i) {
+            types->add_template(ts->get_type(i));
+        }
+    }
+
+    if (function->parameters_count() > 0) {
+        for (int i = 0; i < function->parameters_count(); ++i) {
+            types->add_type(function->get_parameter(i)->get_type());
+        }
+    } else {
+        types->add_type(new Type(TYPE_VOID));
+    }
+
+    types->add_type(function->get_return_type());
+    function->set_self_type(types);
 }
 
 void ScopeDefinitionBuilder::define_overloaded_function(Symbol* symbol, Function* function) {
+    for (int i = 0; i < symbol->overloaded_count(); ++i) {
+        Function* other = (Function*) symbol->get_descriptor(i);
 
+        if (function->same_signature(other)) {
+            logger->error("function with same signature");
+        }
+    }
+
+    symbol->add_descriptor(function);
+    function->set_overloaded_index(symbol->overloaded_count() - 1);
+}
+
+
+
+void ScopeDefinitionBuilder::link_type(Type* type) {
+    if (type == nullptr) {
+        return;
+    }
+
+    switch (type->get_kind()) {
+    case TYPE_NAMED:
+        link_named_type((NamedType*) type);
+        break;
+    }
+}
+
+void ScopeDefinitionBuilder::link_named_type(NamedType* type) {
+    
 }
 
 void ScopeDefinitionBuilder::set_logger(Logger* logger) {

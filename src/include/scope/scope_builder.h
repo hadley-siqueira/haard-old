@@ -14,6 +14,11 @@ namespace haard {
             void build_sources(Sources* sources);
             void build_source(Source* source);
 
+            void define_sources_classes(Sources* sources);
+            void define_source_classes(Source* source);
+
+            void connect_sibling_scopes(Sources* sources);
+
             void build_class(Class* klass);
             void build_method(Function* func);
 

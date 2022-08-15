@@ -16,3 +16,11 @@ std::string haard::info_message_defining_class(Class* klass) {
     msg << "<blue>info: </blue>defining class '" << klass->get_name() << "' on source file '" << klass->get_source()->get_path();
     return msg.str();
 }
+
+std::string haard::info_message_defining_function(Function* function) {
+    std::stringstream msg;
+
+    msg << "<blue>info: </blue>defining function '" << function->get_type_signature() << "' on source file '" << function->get_source()->get_path();
+    return msg.str();
+
+}

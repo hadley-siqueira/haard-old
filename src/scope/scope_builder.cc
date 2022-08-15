@@ -2,6 +2,8 @@
 #include <cstring>
 #include "printer/printer.h"
 #include "scope/scope_builder.h"
+#include "log/info_messages.h"
+#include "log/error_messages.h"
 
 using namespace haard;
 
@@ -12,11 +14,42 @@ ScopeBuilder::ScopeBuilder() {
 }
 
 void ScopeBuilder::build_sources(Sources* sources) {
+    connect_sibling_scopes(sources);
+    define_sources_classes(sources);
+    exit(0);
+
     define_sources_elements(sources);
 
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
+}
+
+void ScopeBuilder::connect_sibling_scopes(Sources* sources) {
+    for (int i = 0; i < sources->sources_count(); ++i) {
+        Source* src = sources->get_source(i);
+        Scope* scope = src->get_scope();
+
+        for (int j = 0; j < src->import_count(); ++j) {
+            scope->add_sibling(src->get_import(j)->get_source()->get_scope());
+        }
+    }
+}
+
+void ScopeBuilder::define_sources_classes(Sources* sources) {
+    for (int i = 0; i < sources->sources_count(); ++i) {
+        define_source_classes(sources->get_source(i));
+    }
+}
+
+void ScopeBuilder::define_source_classes(Source* source) {
+    enter_scope(source->get_scope());
+
+    for (int i = 0; i < source->classes_count(); ++i) {
+        define_class(source->get_class(i));
+    }
+
+    leave_scope();
 }
 
 void ScopeBuilder::build_source(Source* source) {

@@ -269,8 +269,46 @@ Function* Function::get_with_template_binding(TypeList* bindings) {
 }
 
 std::string Function::get_type_signature() {
+    int i;
     std::stringstream ss;
 
-    ss << name << self_type->to_str();
+    ss << name;
+    ss << ' ' << self_type->to_str();
     return ss.str();
+}
+
+void Function::set_source(Source* source) {
+    this->source = source;
+}
+
+Source* Function::get_source() {
+    return source;
+}
+
+bool Function::same_signature(Function* other) {
+    if (templates && other->templates) {
+        if (templates->types_count() != other->templates->types_count()) {
+            return false;
+        }
+    }
+
+    if (parameters_count() != other->parameters_count()) {
+        return false;
+    } else {
+        for (int i = 0; i < parameters_count(); ++i) {
+            if (!parameters[i]->get_type()->equal(other->parameters[i]->get_type())) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+void Function::set_overloaded_index(int idx) {
+    overloaded_index = idx;
+}
+
+int Function::get_overloaded_index() {
+    return overloaded_index;
 }

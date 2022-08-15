@@ -11,6 +11,7 @@
 
 namespace haard {
     class Scope;
+    class Source;
 
     class Function {
         public:
@@ -59,11 +60,19 @@ namespace haard {
 
             Function* clone();
             Function* get_with_template_binding(TypeList* bindings);
+            bool same_signature(Function* other);
+
+            void set_source(Source* source);
+            Source* get_source();
+
+            void set_overloaded_index(int idx);
+            int get_overloaded_index();
 
         private:
             int uid;
             int line;
             int column;
+            int overloaded_index;
             bool method_flag;
             const char* name;
             std::vector<Variable*> parameters;
@@ -73,6 +82,7 @@ namespace haard {
             TypeList* templates;
             CompoundStatement* statements;
             Scope* scope;
+            Source* source;
             std::vector<Function*> tfunctions;
             
     };

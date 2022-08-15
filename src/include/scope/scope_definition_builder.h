@@ -19,15 +19,21 @@ namespace haard {
             void define_source_functions(Source* source);
 
             void define_class(Class* klass);
+
             void define_function(Function* function);
+            void define_function_signature(Function* function);
+            void define_function_template_list(Function* function);
+            void define_function_parameters(Function* function);
+            void define_function_self_type(Function* function);
             void define_overloaded_function(Symbol* symbol, Function* function);
+
             void connect_sibling_scopes(Sources* sources);
+
+            void link_type(Type* type);
+            void link_named_type(NamedType* type);
 
         public:
             void set_logger(Logger* logger);
-
-        private:
-            void link_function_types(Function* function);
 
         private:
             void enter_scope(Scope* scope);

@@ -15,3 +15,9 @@ def sum : int
     @a : int
 
     return a
+
+def sum<T> : T
+    @a : T
+    @b : T
+
+    return a + b
