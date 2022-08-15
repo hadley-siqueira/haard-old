@@ -82,7 +82,7 @@ int Scope::siblings_count() {
     return siblings.size();
 }
 
-Symbol* Scope::shallow_has(const char* name) {
+Symbol* Scope::local_has(const char* name) {
     if (symbols.count(name) > 0) {
         return symbols[name];
     }
@@ -115,7 +115,7 @@ Symbol* Scope::has(const char* name) {
 
     if (has_siblings()) {
         for (int i = 0; i < siblings_count(); ++i) {
-            sym = siblings[i]->shallow_has(name);
+            sym = siblings[i]->local_has(name);
 
             if (sym != nullptr) {
                 return sym;

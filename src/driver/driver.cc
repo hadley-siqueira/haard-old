@@ -93,7 +93,14 @@ void Driver::print_information() {
     }
 }
 void Driver::parse_sources() {
-    const char* path = StringPool::get(main_path);
+    const char* path;
+
+    if (root_path == ".") {
+        path = StringPool::get("./" + main_path);
+    } else {
+        path = StringPool::get(main_path);
+    }
+
     parse_imports(parse_file(path));
 }
 

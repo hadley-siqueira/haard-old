@@ -1,0 +1,5 @@
+import error6
+
+class Window:
+    x : int
+    y : int

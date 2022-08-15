@@ -33,7 +33,7 @@ namespace haard {
 
             Symbol* has(const char* name);
             Symbol* has_field(const char* name);
-            Symbol* shallow_has(const char* name);
+            Symbol* local_has(const char* name);
             Symbol* has_class(const char* name);
 
             void debug();
