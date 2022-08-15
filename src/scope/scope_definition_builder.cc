@@ -13,11 +13,7 @@ ScopeDefinitionBuilder::ScopeDefinitionBuilder() {
 void ScopeDefinitionBuilder::define_sources(Sources* sources) {
     connect_sibling_scopes(sources);
     define_sources_classes(sources);
-
-    for (int i = 0; i < sources->sources_count(); ++i) {
-std::cout << "i = " << i << '\n';
-        define_source_functions(sources->get_source(i));
-    }
+    define_sources_functions(sources);
 }
 
 void ScopeDefinitionBuilder::define_sources_classes(Sources* sources) {
@@ -26,15 +22,10 @@ void ScopeDefinitionBuilder::define_sources_classes(Sources* sources) {
     }
 }
 
-void ScopeDefinitionBuilder::define_source(Source* source) {
-    logger->info(info_message_defining_source(source));
-
-    enter_scope(source->get_scope());
-
-    define_source_classes(source);
-    define_source_functions(source);
-
-    leave_scope();
+void ScopeDefinitionBuilder::define_sources_functions(Sources* sources) {
+    for (int i = 0; i < sources->sources_count(); ++i) {
+        define_source_functions(sources->get_source(i));
+    }
 }
 
 void ScopeDefinitionBuilder::define_source_classes(Source* source) {
@@ -48,9 +39,13 @@ void ScopeDefinitionBuilder::define_source_classes(Source* source) {
 }
 
 void ScopeDefinitionBuilder::define_source_functions(Source* source) {
+    enter_scope(source->get_scope());
+
     for (int i = 0; i < source->function_count(); ++i) {
         define_function(source->get_function(i));
     }
+
+    leave_scope();
 }
 
 void ScopeDefinitionBuilder::define_class(Class* klass) {
@@ -79,6 +74,24 @@ void ScopeDefinitionBuilder::connect_sibling_scopes(Sources* sources) {
 }
 
 void ScopeDefinitionBuilder::define_function(Function* function) {
+    Symbol* sym = current_scope->local_has(function->get_name());
+
+    link_function_types(function);
+
+    if (!sym) {
+        current_scope->define(function);
+    } else if (sym->get_kind() == SYM_FUNCTION) {
+        define_overloaded_function(sym, function);
+    } else {
+        logger->error("can't define function");
+    }
+}
+
+void ScopeDefinitionBuilder::link_function_types(Function* function) {
+
+}
+
+void ScopeDefinitionBuilder::define_overloaded_function(Symbol* symbol, Function* function) {
 
 }
 

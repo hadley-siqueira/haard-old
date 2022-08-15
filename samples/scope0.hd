@@ -1,0 +1,17 @@
+class Window:
+    x : int
+    y : int
+
+class Player:
+    life : int
+
+def sum : int
+    @a : int
+    @b : int
+
+    return a + b
+
+def sum : int
+    @a : int
+
+    return a
