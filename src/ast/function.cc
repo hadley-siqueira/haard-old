@@ -187,6 +187,10 @@ bool Function::is_template() {
     return false;
 }
 
+bool Function::is_method() {
+    return method_flag;
+}
+
 Function* Function::clone() {
     Function* nfunc = new Function();
 
@@ -196,6 +200,7 @@ Function* Function::clone() {
     nfunc->method_flag = method_flag;
     nfunc->name = name;
     nfunc->scope->set_parent(scope->get_parent());
+    nfunc->source = source;
     
     for (int i = 0; i < parameters.size(); ++i) {
         nfunc->add_parameter(parameters[i]->clone());
@@ -254,18 +259,18 @@ void Function::bind_with(TypeList* types) {
 }
 
 Function* Function::get_with_template_binding(TypeList* bindings) {
-    for (int i = 0; i < tfunctions.size(); ++i) {
+    /*for (int i = 0; i < tfunctions.size(); ++i) {
         if (tfunctions[i]->is_binded_with_types(bindings)) {
             return tfunctions[i];
         }
-    }
+    }*/
 
     Function* new_func = clone();
 
     new_func->bind_with(bindings);
-    this->tfunctions.push_back(new_func);
+    //this->tfunctions.push_back(new_func);
 
-    return tfunctions[tfunctions.size() - 1];
+    return new_func;//tfunctions[tfunctions.size() - 1];
 }
 
 std::string Function::get_type_signature() {

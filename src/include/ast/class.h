@@ -25,7 +25,6 @@ namespace haard {
             int get_uid();
             Function* get_method(int idx);
             Variable* get_variable(int idx);
-            Type* get_parent();
             Scope* get_scope();
             NamedType* get_self_type();
 
@@ -34,7 +33,6 @@ namespace haard {
             void set_line(int line);
             void set_column(int column);
             void set_uid(int uid);
-            void set_parent(Type* type);
             void set_self_type(NamedType* type);
 
             void add_method(Function* method);
@@ -49,12 +47,16 @@ namespace haard {
             Source* get_source();
             void set_source(Source* source);
 
+            Type* get_super_class();
+            void set_super_class(Type* type);
+            bool has_super_class();
+
         private:
             const char* name;
             int line;
             int column;
             int uid;
-            Type* parent;
+            Type* super_class;
             std::vector<Function*> methods;
             std::vector<Function*> constructors;
             Function* destructor;

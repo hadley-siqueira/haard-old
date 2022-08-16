@@ -38,3 +38,7 @@ bool IndirectionType::equal(Type* type) {
 Type* IndirectionType::clone() {
     return new IndirectionType(kind, subtype->clone());
 }
+
+std::string IndirectionType::to_str() {
+    return subtype->to_str() + "*";
+}

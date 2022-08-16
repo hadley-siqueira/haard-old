@@ -16,6 +16,7 @@ namespace haard {
             bool equal(Type* type);
 
             Type* clone();
+            std::string to_str();
 
         private:
             Type* subtype;

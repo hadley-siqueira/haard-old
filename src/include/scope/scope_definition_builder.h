@@ -12,6 +12,18 @@ namespace haard {
             ScopeDefinitionBuilder();
 
         public:
+            void build(Sources* sources);
+
+        private:
+            void build_sources(Sources* sources);
+            void build_source(Source* source);
+
+            void build_class(Class* klass);
+            void build_class_methods(Class* klass);
+
+            void build_function(Function* function);
+
+        private:
             void define_sources(Sources* sources);
             void define_sources_classes(Sources* sources);
             void define_sources_functions(Sources* sources);
@@ -19,6 +31,12 @@ namespace haard {
             void define_source_functions(Source* source);
 
             void define_class(Class* klass);
+            void define_class_variables(Class* klass);
+            void define_class_variable(Variable* var);
+            void define_class_methods(Class* klass);
+            void define_class_method(Function* method);
+            void define_class_template_header(Class* klass);
+            void define_class_super(Class* klass);
 
             void define_function(Function* function);
             void define_function_signature(Function* function);
@@ -29,6 +47,7 @@ namespace haard {
 
             void connect_sibling_scopes(Sources* sources);
 
+        public:
             void link_type(Type* type);
             void link_named_type(NamedType* type);
 

@@ -109,7 +109,7 @@ void Driver::semantic_analysis() {
     ScopeBuilder sym_builder;
 
     def_builder.set_logger(&logger);
-    def_builder.define_sources(sources);
+    def_builder.build(sources);
     // sym_builder.build_sources(sources);
 }
 

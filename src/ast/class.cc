@@ -6,7 +6,7 @@
 using namespace haard;
 
 Class::Class() {
-    parent = nullptr;
+    super_class = nullptr;
     self_type = nullptr;
     scope = new Scope();
 }
@@ -20,7 +20,6 @@ Class::~Class() {
         delete variables[i];
     }
 
-    delete parent;
     delete scope;
 }
 
@@ -59,8 +58,8 @@ Variable* Class::get_variable(int idx) {
     return nullptr;
 }
 
-Type* Class::get_parent() {
-    return parent;
+Type* Class::get_super_class() {
+    return super_class;
 }
 
 Scope* Class::get_scope() {
@@ -89,8 +88,12 @@ void Class::set_column(int column) {
     this->column = column;
 }
 
-void Class::set_parent(Type* type) {
-    parent = type;
+void Class::set_super_class(Type* type) {
+    super_class = type;
+}
+
+bool Class::has_super_class() {
+    return super_class != nullptr;
 }
 
 int Class::get_uid() {

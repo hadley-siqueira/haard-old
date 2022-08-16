@@ -1028,7 +1028,7 @@ void ScopeBuilder::define_method(Function* func) {
     leave_scope();
 
     if (!sym) {
-        current_scope->define(SYM_METHOD, func);
+        current_scope->define(func);
     } else if (sym->get_kind() == SYM_METHOD) {
         define_overloaded_function(sym, func);
     } else {

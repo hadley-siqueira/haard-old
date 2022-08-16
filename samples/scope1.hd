@@ -1,3 +1,5 @@
+import std.io
+
 class Window:
     x : int
     y : int
@@ -31,5 +33,18 @@ def sum : int
 def sum<K> : K
     @a : K
     @b : K
+
+    return a + b
+
+def sum : int
+    @a : int*
+    @b : int**
+    @c : int***
+
+    return 0
+
+def foobar<T> : T
+    @a : T
+    @b : T
 
     return a + b

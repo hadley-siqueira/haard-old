@@ -55,6 +55,7 @@ namespace haard {
             void add_variable(Variable* var);
 
             bool is_template();
+            bool is_method();
             bool is_binded_with_types(TypeList* types);
             void bind_with(TypeList* types);
 
@@ -83,7 +84,7 @@ namespace haard {
             CompoundStatement* statements;
             Scope* scope;
             Source* source;
-            std::vector<Function*> tfunctions;
+            //std::vector<Function*> tfunctions;
             
     };
 }

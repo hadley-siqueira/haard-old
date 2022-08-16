@@ -39,13 +39,14 @@ Symbol* Scope::define(Class* klass) {
 }
 
 Symbol* Scope::define(Function* func) {
-    Symbol* sym = new Symbol(SYM_FUNCTION, func->get_name(), func);
-    symbols[func->get_name()] = sym;
-    return sym;
-}
+    Symbol* sym;
 
-Symbol* Scope::define(int kind, Function* func) {
-    Symbol* sym = new Symbol(kind, func->get_name(), func);
+    if (func->is_method()) {
+        sym = new Symbol(SYM_METHOD, func->get_name(), func);
+    } else {
+        sym = new Symbol(SYM_FUNCTION, func->get_name(), func);
+    }
+
     symbols[func->get_name()] = sym;
     return sym;
 }
