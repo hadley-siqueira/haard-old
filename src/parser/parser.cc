@@ -84,9 +84,9 @@ Class* Parser::parse_class() {
     expect(TK_ID);
     klass->set_from_token(matched);
 
-    /*if (lookahead(TK_BEGIN_TEMPLATE)) {
-        klass->set_template_list(parse_template_list());
-    }*/
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        klass->set_template_header(parse_template_header());
+    }
 
     if (match(TK_LEFT_PARENTHESIS)) {
         klass->set_super_class(parse_type());
@@ -112,6 +112,22 @@ Class* Parser::parse_class() {
 
 }
 
+TemplateHeader* Parser::parse_template_header() {
+    TemplateHeader* header = new TemplateHeader();
+
+    expect(TK_BEGIN_TEMPLATE);
+    expect(TK_ID);
+    header->add_type(new TemplateType(matched));
+
+    while (match(TK_COMMA)) {
+        expect(TK_ID);
+        header->add_type(new TemplateType(matched));
+    }
+
+    expect(TK_END_TEMPLATE);
+    return header;
+}
+
 Variable* Parser::parse_class_variable() {
     Variable* var = new Variable();
 
@@ -133,7 +149,7 @@ Function* Parser::parse_function() {
     function->set_from_token(matched);
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        function->set_template_list(parse_template_list_header());
+        function->set_template_header(parse_template_header());
     }
 
     expect(TK_COLON);
@@ -314,14 +330,16 @@ Type* Parser::parse_primary_type() {
         type = new Type(TYPE_U64, matched);
     } else if (match(TK_ID)) {
         NamedType* named = new NamedType();
-        id = new Identifier(matched);
+        named->set_name(matched.get_lexeme());
 
         if (match(TK_SCOPE)) {
-            named->set_alias(id);
+            named->set_alias(named->get_name());
             expect(TK_ID);
-            named->set_name(new Identifier(matched));
-        } else {
-            named->set_name(id);
+            named->set_name(matched.get_lexeme());
+        } 
+
+        if (lookahead(TK_BEGIN_TEMPLATE)) {
+            named->set_template_header(parse_template_header());
         }
 
         type = named;

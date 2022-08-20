@@ -39,10 +39,12 @@ set(AST_SRC
     src/ast/type.cc
     src/ast/indirection_type.cc
     src/ast/array_list_type.cc
+    src/ast/function_type.cc
     src/ast/hash_type.cc
     src/ast/type_list.cc
     src/ast/named_type.cc
     src/ast/template_type.cc
+    src/ast/template_header.cc
     src/ast/expression.cc
     src/ast/identifier.cc
     src/ast/unop.cc
@@ -75,7 +77,6 @@ set(SCOPE_SRC
     src/scope/symbol.cc
     src/scope/scope.cc
     src/scope/scope_definition_builder.cc
-    src/scope/scope_builder.cc
 )
 
 set(SOURCES

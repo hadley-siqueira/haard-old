@@ -1,3 +1,4 @@
+- handle super variables
 - handle super class
 - handle templates
 - handle recursive file import

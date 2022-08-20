@@ -155,12 +155,29 @@ void ScopeDefinitionBuilder::define_class_method(Function* method) {
 }
 
 void ScopeDefinitionBuilder::define_class_template_header(Class* klass) {
+    TemplateHeader* header = klass->get_template_header();
 
+    if (header) {
+        for (int i = 0; i < header->types_count(); ++i) {
+            TemplateType* t = (TemplateType*) header->get_type(i);
+
+            if (current_scope->local_has(t->get_name())) {
+                logger->error("error: already used type on template header");
+            } else {
+                current_scope->define(t);
+            }
+        }
+    }
 }
 
 void ScopeDefinitionBuilder::define_class_super(Class* klass) {
+    // FIXME handle super with templates
     if (klass->has_super_class()) {
         link_type(klass->get_super_class());
+        NamedType* named = (NamedType*) klass->get_super_class();
+        Symbol* sym = named->get_symbol();
+        Class* super = (Class*) sym->get_descriptor();
+        current_scope->set_super(super->get_scope());
     }
 }
 
@@ -194,7 +211,7 @@ void ScopeDefinitionBuilder::define_function(Function* function) {
 void ScopeDefinitionBuilder::define_function_signature(Function* function) {
     enter_scope(function->get_scope());
 
-    define_function_template_list(function);
+    define_function_template_header(function);
     define_function_parameters(function);
     link_type(function->get_return_type());
     define_function_self_type(function);
@@ -202,13 +219,13 @@ void ScopeDefinitionBuilder::define_function_signature(Function* function) {
     leave_scope();
 }
 
-void ScopeDefinitionBuilder::define_function_template_list(Function* function) {
+void ScopeDefinitionBuilder::define_function_template_header(Function* function) {
     Symbol* sym;
-    TypeList* types = function->get_template_list();
+    TemplateHeader* header = function->get_template_header();
 
-    if (types) {
-        for (int i = 0; i < types->types_count(); ++i) {
-            TemplateType* type = (TemplateType*) types->get_type(i);
+    if (header) {
+        for (int i = 0; i < header->types_count(); ++i) {
+            TemplateType* type = (TemplateType*) header->get_type(i);
             sym = current_scope->local_has(type->get_name());
 
             if (!sym) {
@@ -243,26 +260,26 @@ void ScopeDefinitionBuilder::define_function_parameters(Function* function) {
 }
 
 void ScopeDefinitionBuilder::define_function_self_type(Function* function) {
-    TypeList* types = new TypeList(TYPE_FUNCTION);
+    FunctionType* ftype = new FunctionType();
 
-    if (function->get_template_list()) {
-        TypeList* ts = function->get_template_list();
+    if (function->get_template_header()) {
+        TemplateHeader* header = function->get_template_header();
 
-        for (int i = 0; i < ts->types_count(); ++i) {
-            types->add_template(ts->get_type(i));
+        for (int i = 0; i < header->types_count(); ++i) {
+            ftype->add_template(header->get_type(i));
         }
     }
 
     if (function->parameters_count() > 0) {
         for (int i = 0; i < function->parameters_count(); ++i) {
-            types->add_type(function->get_parameter(i)->get_type());
+            ftype->add_param_type(function->get_parameter(i)->get_type());
         }
     } else {
-        types->add_type(new Type(TYPE_VOID));
+        ftype->add_param_type(new Type(TYPE_VOID));
     }
 
-    types->add_type(function->get_return_type());
-    function->set_self_type(types);
+    ftype->set_return_type(function->get_return_type());
+    function->set_self_type(ftype);
 }
 
 void ScopeDefinitionBuilder::define_overloaded_function(Symbol* symbol, Function* function) {
@@ -298,7 +315,28 @@ void ScopeDefinitionBuilder::link_type(Type* type) {
 }
 
 void ScopeDefinitionBuilder::link_named_type(NamedType* type) {
-    
+    TemplateHeader* header = type->get_template_header();
+    Symbol* sym = current_scope->has(type->get_name());
+
+    if (!sym) {
+        logger->error("<red>error: </red> named type not in scope");
+    }
+
+    int kind = sym->get_kind();
+
+    if (kind == SYM_CLASS) {
+        type->set_symbol(sym);
+    } else if (kind == SYM_TEMPLATE) {
+        type->set_symbol(sym);
+    } else {
+        logger->error("error: named type not in scope but is another entity");
+    }
+
+    if (header) {
+        for (int i = 0; i < header->types_count(); ++i) {
+            link_type(header->get_type(i));
+        }
+    } 
 }
 
 void ScopeDefinitionBuilder::set_logger(Logger* logger) {

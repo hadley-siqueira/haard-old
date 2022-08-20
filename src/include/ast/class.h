@@ -7,6 +7,7 @@
 #include "ast/variable.h"
 #include "ast/type.h"
 #include "ast/named_type.h"
+#include "ast/template_header.h"
 
 namespace haard {
     class Scope;
@@ -51,19 +52,23 @@ namespace haard {
             void set_super_class(Type* type);
             bool has_super_class();
 
+            void set_template_header(TemplateHeader* header);
+            TemplateHeader* get_template_header();
+
         private:
-            const char* name;
             int line;
             int column;
             int uid;
+            const char* name;
             Type* super_class;
-            std::vector<Function*> methods;
-            std::vector<Function*> constructors;
+            TemplateHeader* template_header;
             Function* destructor;
-            std::vector<Variable*> variables;
             Scope* scope;
             NamedType* self_type;
             Source* source; // source where this class is defined
+            std::vector<Function*> methods;
+            std::vector<Function*> constructors;
+            std::vector<Variable*> variables;
     };
 }
 

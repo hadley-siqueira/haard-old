@@ -8,6 +8,7 @@ using namespace haard;
 Class::Class() {
     super_class = nullptr;
     self_type = nullptr;
+    template_header = nullptr;
     scope = new Scope();
 }
 
@@ -153,4 +154,13 @@ Source* Class::get_source() {
 
 void Class::set_source(Source* source) {
     this->source = source;
+}
+
+
+void Class::set_template_header(TemplateHeader* header) {
+    template_header = header;
+}
+
+TemplateHeader* Class::get_template_header() {
+    return template_header;
 }

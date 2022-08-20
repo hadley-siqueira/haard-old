@@ -10,13 +10,14 @@ Function::Function() {
     statements = nullptr;
     scope = new Scope();
     method_flag = false;
-    templates = nullptr;
+    template_header = nullptr;
     self_type = nullptr;
 }
 
 Function::~Function() {
     delete statements;
     delete scope;
+    delete template_header;
     
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];
@@ -136,7 +137,7 @@ Type* Function::get_self_type() {
     return self_type;
 }
 
-void Function::set_self_type(Type* type) {
+void Function::set_self_type(FunctionType* type) {
     self_type = type;
 }
 
@@ -163,21 +164,13 @@ void Function::set_method(bool value) {
     method_flag = value;
 }
 
-void Function::set_template_list(TypeList* types) {
-    this->templates = types;
-}
-
-TypeList* Function::get_template_list() {
-    return templates;
-}
-
 bool Function::is_template() {
-    if (templates == nullptr) {
+    if (template_header == nullptr) {
         return false;
     }
 
-    for (int i = 0; i < templates->types_count(); ++i) {
-        TemplateType* type = (TemplateType*) templates->get_type(i);
+    for (int i = 0; i < template_header->types_count(); ++i) {
+        TemplateType* type = (TemplateType*) template_header->get_type(i);
 
         if (!type->is_binded()) {
             return true;
@@ -210,8 +203,8 @@ Function* Function::clone() {
         nfunc->add_variable(variables[i]->clone());
     }
 
-    if (templates) {
-        nfunc->templates = (TypeList*) templates->clone();
+    if (template_header) {
+        nfunc->template_header = template_header->clone();
     }
 
     if (return_type) {
@@ -219,7 +212,7 @@ Function* Function::clone() {
     }
 
     if (self_type) {
-        nfunc->self_type = self_type->clone();
+        nfunc->self_type = (FunctionType*) self_type->clone();
     }
 
     if (statements) {
@@ -230,16 +223,16 @@ Function* Function::clone() {
 }
 
 bool Function::is_binded_with_types(TypeList* types) {
-    if (templates == nullptr) {
+    if (template_header == nullptr) {
         return false;
     }
 
-    if (templates->types_count() != types->types_count()) {
+    if (template_header->types_count() != types->types_count()) {
         return false;
     }
 
-    for (int i = 0; i < templates->types_count(); ++i) {
-        TemplateType* t = (TemplateType*) templates->get_type(i);
+    for (int i = 0; i < template_header->types_count(); ++i) {
+        TemplateType* t = (TemplateType*) template_header->get_type(i);
 
         if (t->is_binded()) {
             if (!t->get_bind_type()->equal(types->get_type(i))) {
@@ -252,8 +245,8 @@ bool Function::is_binded_with_types(TypeList* types) {
 }
 
 void Function::bind_with(TypeList* types) {
-    for (int i = 0; i < templates->types_count(); ++i) {
-        TemplateType* t = (TemplateType*) templates->get_type(i);
+    for (int i = 0; i < template_header->types_count(); ++i) {
+        TemplateType* t = (TemplateType*) template_header->get_type(i);
         t->set_bind_type(types->get_type(i));
     }
 }
@@ -278,7 +271,7 @@ std::string Function::get_type_signature() {
     std::stringstream ss;
 
     ss << name;
-    ss << ' ' << self_type->to_str();
+    ss << " :: " << self_type->to_str();
     return ss.str();
 }
 
@@ -291,8 +284,8 @@ Source* Function::get_source() {
 }
 
 bool Function::same_signature(Function* other) {
-    if (templates && other->templates) {
-        if (templates->types_count() != other->templates->types_count()) {
+    if (template_header && other->template_header) {
+        if (template_header->types_count() != other->template_header->types_count()) {
             return false;
         }
     }
@@ -316,4 +309,12 @@ void Function::set_overloaded_index(int idx) {
 
 int Function::get_overloaded_index() {
     return overloaded_index;
+}
+
+void Function::set_template_header(TemplateHeader* header) {
+    template_header = header;
+}
+
+TemplateHeader* Function::get_template_header() {
+    return template_header;
 }

@@ -94,16 +94,16 @@ void Printer::print_function(Function* function) {
 
     out << "def " << function->get_name();
 
-    if (function->get_template_list()) {
-        TypeList* types = function->get_template_list();
+    if (function->get_template_header()) {
+        TemplateHeader* header = function->get_template_header();
         int i;
         out << '<';
 
-        for (i = 0; i < types->types_count() - 1; ++i) {
-            out << types->get_type(i)->to_str() << ", ";
+        for (i = 0; i < header->types_count() - 1; ++i) {
+            out << header->get_type(i)->to_str() << ", ";
         }
 
-        out << types->get_type(i)->to_str();
+        out << header->get_type(i)->to_str();
         out << '>';
     }
 

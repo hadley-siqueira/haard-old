@@ -14,6 +14,7 @@
 #include "ast/type_list.h"
 #include "ast/named_type.h"
 #include "ast/template_type.h"
+#include "ast/template_header.h"
 
 // Expressions
 #include "ast/expression.h"

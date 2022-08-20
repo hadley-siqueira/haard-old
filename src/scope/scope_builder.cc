@@ -165,7 +165,7 @@ void ScopeBuilder::build_type_list(TypeList* types) {
 }
 
 void ScopeBuilder::build_named_type(NamedType* type) {
-    Symbol* sym = current_scope->has(type->get_name()->get_lexeme());
+    Symbol* sym = current_scope->has(type->get_name());
 
     if (!sym) {
         std::cout << "Error: named type not in scope\n";
@@ -963,12 +963,8 @@ void ScopeBuilder::define_class(Class* klass) {
     if (!sym) {
         sym = current_scope->define(klass);
 
-        id = new Identifier();
-        id->set_line(klass->get_line());
-        id->set_column(klass->get_column());
-        id->set_lexeme(klass->get_name());
         type = new NamedType();
-        type->set_name(id);
+        type->set_name(klass->get_name());
         type->set_symbol(sym);
         klass->set_self_type(type);
         klass->set_uid(class_counter++);
@@ -989,7 +985,7 @@ void ScopeBuilder::define_class(Class* klass) {
 }
 
 void ScopeBuilder::define_function_template_list(Function* func) {
-    TypeList* types = func->get_template_list();
+    TemplateHeader* types = func->get_template_header();
 
     if (types) {
         for (int i = 0; i < types->types_count(); ++i) {
@@ -1060,8 +1056,8 @@ void ScopeBuilder::define_function_parameters(Function* func) {
 void ScopeBuilder::define_function_self_type(Function* func) {
     TypeList* types = new TypeList(TYPE_FUNCTION);
 
-    if (func->get_template_list()) {
-        TypeList* ts = func->get_template_list();
+    if (func->get_template_header()) {
+        TemplateHeader* ts = func->get_template_header();
 
         for (int i = 0; i < ts->types_count(); ++i) {
             types->add_template(ts->get_type(i));

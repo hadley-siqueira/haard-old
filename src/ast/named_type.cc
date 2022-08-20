@@ -9,18 +9,18 @@ NamedType::NamedType() {
     alias = nullptr;
     name = nullptr;
     symbol = nullptr;
+    template_header = nullptr;
 }
 
 NamedType::~NamedType() {
-    delete alias;
-    delete name;
+    /* Empty */
 }
 
-Identifier* NamedType::get_alias() {
+const char* NamedType::get_alias() {
     return alias;
 }
 
-Identifier* NamedType::get_name() {
+const char* NamedType::get_name() {
     return name;
 }
 
@@ -28,11 +28,11 @@ Symbol* NamedType::get_symbol() {
     return symbol;
 }
 
-void NamedType::set_alias(Identifier* id) {
+void NamedType::set_alias(const char* id) {
     alias = id;
 }
 
-void NamedType::set_name(Identifier* id) {
+void NamedType::set_name(const char* id) {
     name = id;
 }
 
@@ -45,7 +45,7 @@ std::string NamedType::to_cpp() {
 }
 
 std::string NamedType::to_str() {
-    return name->get_lexeme();
+    return name;
 }
 
 bool NamedType::equal(Type* type) {
@@ -54,7 +54,6 @@ bool NamedType::equal(Type* type) {
     }
 
     NamedType* other = (NamedType*) type;
-
     return symbol != other->symbol;
 }
 
@@ -83,14 +82,16 @@ Symbol* NamedType::has_field(const char* name) {
 Type* NamedType::clone() {
     NamedType* other = new NamedType();
 
-    if (alias) {
-        other->alias = (Identifier*) alias->clone();
-    }
-
-    if (name) {
-        other->name = (Identifier*) name->clone();
-    }
+    other->alias = alias;
+    other->name = name;
 
     return other;
 }
 
+void NamedType::set_template_header(TemplateHeader* header) {
+    template_header = header;
+}
+
+TemplateHeader* NamedType::get_template_header() {
+    return template_header;
+}

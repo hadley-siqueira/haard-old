@@ -1,0 +1,12 @@
+class Window:
+    x : int
+    y : int
+
+class MainWindow(Window):
+    z : int
+    x : int
+
+class Node<T>:
+    next  : Node<T>*
+    prev  : Node<T>*
+    value : T

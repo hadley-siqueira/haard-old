@@ -7,6 +7,8 @@
 #include "ast/variable.h"
 #include "ast/type.h"
 #include "ast/type_list.h"
+#include "ast/function_type.h"
+#include "ast/template_header.h"
 #include "ast/compound_statement.h"
 
 namespace haard {
@@ -44,10 +46,7 @@ namespace haard {
             void set_method(bool value=true);
 
             Type* get_self_type();
-            void set_self_type(Type* type);
-
-            void set_template_list(TypeList* types);
-            TypeList* get_template_list();
+            void set_self_type(FunctionType* type);
 
             int parameters_count();
 
@@ -69,6 +68,9 @@ namespace haard {
             void set_overloaded_index(int idx);
             int get_overloaded_index();
 
+            void set_template_header(TemplateHeader* header);
+            TemplateHeader* get_template_header();
+
         private:
             int uid;
             int line;
@@ -76,15 +78,14 @@ namespace haard {
             int overloaded_index;
             bool method_flag;
             const char* name;
-            std::vector<Variable*> parameters;
-            std::vector<Variable*> variables;
             Type* return_type;
-            Type* self_type;
-            TypeList* templates;
+            FunctionType* self_type;
+            TemplateHeader* template_header;
             CompoundStatement* statements;
             Scope* scope;
             Source* source;
-            //std::vector<Function*> tfunctions;
+            std::vector<Variable*> parameters;
+            std::vector<Variable*> variables;
             
     };
 }
