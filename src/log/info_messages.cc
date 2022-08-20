@@ -24,3 +24,12 @@ std::string haard::info_message_defining_function(Function* function) {
     return msg.str();
 
 }
+
+std::string haard::info_message_defining_method(Function* method) {
+    std::stringstream msg;
+
+    msg << "<blue>info: </blue>defining method '" << method->get_type_signature() 
+        << "' on class '" << method->get_class()->get_name() << "'";
+    return msg.str();
+
+}

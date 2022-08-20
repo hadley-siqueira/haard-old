@@ -33,10 +33,12 @@ namespace haard {
             void define_class(Class* klass);
             void define_class_variables(Class* klass);
             void define_class_variable(Variable* var);
-            void define_class_methods(Class* klass);
-            void define_class_method(Function* method);
             void define_class_template_header(Class* klass);
             void define_class_super(Class* klass);
+
+            void define_class_methods(Class* klass);
+            void define_class_method(Function* method);
+            void define_method_signature(Function* method);
 
             void define_function(Function* function);
             void define_function_signature(Function* function);
@@ -50,6 +52,8 @@ namespace haard {
         public:
             void link_type(Type* type);
             void link_named_type(NamedType* type);
+            void link_function_type(FunctionType* type);
+            void link_template_header(TemplateHeader* header);
 
         public:
             void set_logger(Logger* logger);

@@ -118,8 +118,10 @@ void ScopeDefinitionBuilder::define_class_variables(Class* klass) {
 
 void ScopeDefinitionBuilder::define_class_variable(Variable* var) {
     Symbol* sym;
+    Symbol* lsym;
 
     sym = current_scope->has_field(var->get_name());
+    lsym = current_scope->local_has(var->get_name());
 
     if (!sym) {
         current_scope->define(SYM_CLASS_VARIABLE, var);
@@ -128,7 +130,11 @@ void ScopeDefinitionBuilder::define_class_variable(Variable* var) {
         current_scope->define(SYM_CLASS_VARIABLE, var);
         link_type(var->get_type());
     } else {
-        logger->error("<red>error: </red> class variable already defined");
+        if (lsym == nullptr) {
+            logger->error("<red>error: </red>class variable already defined in super class");
+        } else {
+            logger->error("<red>error: </red>class variable already defined");
+        }
     }
 }
 
@@ -139,19 +145,23 @@ void ScopeDefinitionBuilder::define_class_methods(Class* klass) {
 }
 
 void ScopeDefinitionBuilder::define_class_method(Function* method) {
-    Symbol* sym = current_scope->has_field(method->get_name());
+    Symbol* sym = current_scope->local_has(method->get_name());
 
-    define_function_signature(method);
+    define_method_signature(method);
 
     if (!sym) {
-        logger->info(info_message_defining_function(method));
+        logger->info(info_message_defining_method(method));
         current_scope->define(method);
     } else if (sym->get_kind() == SYM_METHOD) {
-        logger->info(info_message_defining_function(method));
+        logger->info(info_message_defining_method(method));
         define_overloaded_function(sym, method);
     } else {
-        logger->error("can't define function");
+        logger->error("can't define method");
     }
+}
+
+void ScopeDefinitionBuilder::define_method_signature(Function* method) {
+    define_function_signature(method);
 }
 
 void ScopeDefinitionBuilder::define_class_template_header(Class* klass) {
@@ -280,6 +290,7 @@ void ScopeDefinitionBuilder::define_function_self_type(Function* function) {
 
     ftype->set_return_type(function->get_return_type());
     function->set_self_type(ftype);
+    link_type(ftype);
 }
 
 void ScopeDefinitionBuilder::define_overloaded_function(Symbol* symbol, Function* function) {
@@ -311,6 +322,10 @@ void ScopeDefinitionBuilder::link_type(Type* type) {
     case TYPE_REFERENCE:
         link_type(it->get_subtype());
         break;
+
+    case TYPE_FUNCTION:
+        link_function_type((FunctionType*) type);
+        break;
     }
 }
 
@@ -337,6 +352,24 @@ void ScopeDefinitionBuilder::link_named_type(NamedType* type) {
             link_type(header->get_type(i));
         }
     } 
+}
+
+void ScopeDefinitionBuilder::link_function_type(FunctionType* type) {
+    link_template_header(type->get_template_header());
+
+    for (int i = 0; i < type->params_count(); ++i) {
+        link_type(type->get_param_type(i));
+    }
+
+    link_type(type->get_return_type());
+}
+
+void ScopeDefinitionBuilder::link_template_header(TemplateHeader* header) {
+    if (header) {
+        for (int i = 0; i < header->types_count(); ++i) {
+            link_type(header->get_type(i));
+        }
+    }
 }
 
 void ScopeDefinitionBuilder::set_logger(Logger* logger) {

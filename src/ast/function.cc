@@ -318,3 +318,12 @@ void Function::set_template_header(TemplateHeader* header) {
 TemplateHeader* Function::get_template_header() {
     return template_header;
 }
+
+
+void Function::set_class(Class* klass) {
+    this->klass = klass;
+}
+
+Class* Function::get_class() {
+    return klass;
+}

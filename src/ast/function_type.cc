@@ -102,3 +102,23 @@ std::string FunctionType::to_str() {
     return ss.str();
 }
 
+int FunctionType::templates_count() {
+    if (template_header) {
+        return template_header->types_count();
+    }
+
+    return 0;
+}
+
+TemplateHeader* FunctionType::get_template_header() {
+    return template_header;
+}
+
+Type* FunctionType::get_template(int idx) {
+    if (template_header && idx < template_header->types_count()) {
+        return template_header->get_type(idx);
+    }
+
+    return nullptr;
+}
+

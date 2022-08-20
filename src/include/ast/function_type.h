@@ -19,6 +19,9 @@ namespace haard {
             Type* get_param_type(int idx);
             Type* get_return_type();
             void add_template(Type* type);
+            int templates_count();
+            Type* get_template(int idx);
+            TemplateHeader* get_template_header();
 
             // override
             bool equal(Type* type);

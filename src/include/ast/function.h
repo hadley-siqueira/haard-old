@@ -13,6 +13,7 @@
 
 namespace haard {
     class Scope;
+    class Class;
     class Source;
 
     class Function {
@@ -71,6 +72,9 @@ namespace haard {
             void set_template_header(TemplateHeader* header);
             TemplateHeader* get_template_header();
 
+            void set_class(Class* klass);
+            Class* get_class();
+
         private:
             int uid;
             int line;
@@ -84,6 +88,7 @@ namespace haard {
             CompoundStatement* statements;
             Scope* scope;
             Source* source;
+            Class* klass;
             std::vector<Variable*> parameters;
             std::vector<Variable*> variables;
             

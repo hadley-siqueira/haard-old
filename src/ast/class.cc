@@ -121,6 +121,7 @@ void Class::add_method(Function* method) {
     }
 
     method->set_method();
+    method->set_class(this);
 }
 
 void Class::add_variable(Variable* var) {
