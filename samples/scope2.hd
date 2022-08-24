@@ -24,3 +24,9 @@ class Node<T>:
     next  : Node<T>*
     prev  : Node<T>*
     value : T
+
+# type Callback_t : Widget* -> Event* -> void
+
+class List<T>:
+    head : Node<T>*
+    tail : Node<T>*

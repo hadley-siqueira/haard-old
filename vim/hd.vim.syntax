@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:	Haard
 " Maintainer:	Hadley Siqueira <hadley.siqueira@gmail.com>
-" Last Change:	2019 Sep 10
+" Last Change:	2022 Aug 23
 " Credits:	Hadley Siqueira <hadley.siqueira@gmail.com>
 "
 "		This version is a major rewrite by Zvezdan Petkovic.
@@ -74,7 +74,7 @@ set cpo&vim
 syn keyword HDStatement	False, None, True, true, null, false
 syn keyword HDStatement	as assert break continue del exec global
 syn keyword HDStatement	lambda nonlocal pass print return with yield new delete
-syn keyword HDStatement	class def function var const enum union struct nextgroup=HDFunction skipwhite
+syn keyword HDStatement	class def function var const enum union struct type alias nextgroup=HDFunction skipwhite
 syn keyword HDConditional	elif else if
 syn keyword HDRepeat	for while case others
 syn keyword HDOperator	and in is not or
@@ -212,7 +212,7 @@ if !exists("HD_no_builtin_highlight")
   syn keyword HDBuiltin	memoryview min next object oct open ord pow
   syn keyword HDBuiltin	print property range repr reversed round set println
   syn keyword HDBuiltin	setattr slice sorted staticmethod str
-  syn keyword HDBuiltin	sum super tuple type vars zip __import__
+  syn keyword HDBuiltin	sum super tuple vars zip __import__
   " HD 2 only
   syn keyword HDBuiltin	basestring cmp execfile file
   syn keyword HDBuiltin	long raw_input reduce reload unichr
