@@ -23,6 +23,16 @@ namespace haard {
 
             void build_function(Function* function);
 
+            void build_statement(Statement* statement);
+            void build_compound_statement(CompoundStatement* stmts);
+            void build_expression_statement(ExpressionStatement* statement);
+            void build_jump_statement(JumpStatement* statement);
+            void build_while_statement(WhileStatement* statement);
+            void build_for_statement(ForStatement* statement);
+            void build_branch_statement(BranchStatement* statement);
+
+            void build_expression(Expression* expression);
+
         private:
             void define_sources(Sources* sources);
             void define_sources_classes(Sources* sources);

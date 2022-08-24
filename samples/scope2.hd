@@ -27,6 +27,38 @@ class Node<T>:
 
 # type Callback_t : Widget* -> Event* -> void
 
+# enum Message:
+#     Quit
+#     Move(x : int, y : int)
+#     Write(str)
+#     ChangeColor(i32, i32, i32)
+# 
+# enum Message:
+#     Quit        
+#     Move        : {x : int, y : int}
+#     Write       : str
+#     ChangeColor : (i32, i32, i32)
+# 
+#     def to_str : str
+#         switch self:
+#         case Quit:
+#             return 'quit'
+# 
+#         case Move(x, y):
+#             return 'move to ({x}, {y})'
+# 
+#         case Write(s):
+#             return 'writing {s}'
+# 
+#         case ChangeColor(r, g, b):
+#             return 'painting with ({r}, {g}, {b})'
+
 class List<T>:
-    head : Node<T>*
-    tail : Node<T>*
+    head : Node<T>
+    tail : Node<T>
+
+    def init : void
+        head.next = &tail
+        head.prev = &tail
+        tail.next = &head
+        tail.prev = &head

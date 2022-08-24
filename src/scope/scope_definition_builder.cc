@@ -53,9 +53,129 @@ void ScopeDefinitionBuilder::build_class_methods(Class* klass) {
 }
 
 void ScopeDefinitionBuilder::build_function(Function* function) {
+    enter_scope(function->get_scope());
 
+    build_compound_statement(function->get_statements());
+
+    leave_scope();
 }
 
+// build statements
+void ScopeDefinitionBuilder::build_statement(Statement* statement) {
+    int kind = statement->get_kind();
+
+    switch (kind) {
+    case STMT_COMPOUND:
+        build_compound_statement((CompoundStatement*) statement);
+        break;
+
+    case STMT_WHILE:
+        build_while_statement((WhileStatement*) statement);
+        break;
+
+    case STMT_FOR:
+    case STMT_FOREACH:
+        build_for_statement((ForStatement*) statement);
+        break;
+
+    case STMT_EXPRESSION:
+        build_expression_statement((ExpressionStatement*) statement);
+        break;
+
+    case STMT_IF:
+    case STMT_ELIF:
+    case STMT_ELSE:
+        build_branch_statement((BranchStatement*) statement);
+        break;
+
+    case STMT_RETURN:
+        build_jump_statement((JumpStatement*) statement);
+        break;
+
+    case STMT_GOTO:
+        build_jump_statement((JumpStatement*) statement);
+        break;
+
+    case STMT_YIELD:
+        build_jump_statement((JumpStatement*) statement);
+        break;
+
+    case STMT_CONTINUE:
+        build_jump_statement((JumpStatement*) statement);
+        break;
+
+    case STMT_BREAK:
+        build_jump_statement((JumpStatement*) statement);
+        break;
+
+    case STMT_VAR_DECL:
+   //     build_variable_declaration((VarDeclaration*) statement);
+        break;
+    }
+}
+
+void ScopeDefinitionBuilder::build_compound_statement(CompoundStatement* stmts) {
+    for (int i = 0; i < stmts->statements_count(); ++i) {
+        build_statement(stmts->get_statement(i));
+    }
+}
+
+void ScopeDefinitionBuilder::build_expression_statement(ExpressionStatement* statement) {
+    build_expression(statement->get_expression());
+}
+
+void ScopeDefinitionBuilder::build_jump_statement(JumpStatement* statement) {
+    build_expression(statement->get_expression());
+}
+
+void ScopeDefinitionBuilder::build_while_statement(WhileStatement* statement) {
+    enter_scope(statement->get_scope());
+
+    build_expression(statement->get_condition());
+    build_compound_statement(statement->get_statements());
+
+    leave_scope();
+}
+
+void ScopeDefinitionBuilder::build_for_statement(ForStatement* statement) {
+    enter_scope(statement->get_scope());
+
+    if (statement->get_kind() == STMT_FOR) {
+        build_expression(statement->get_initialization());
+        build_expression(statement->get_condition());
+        build_expression(statement->get_increment());
+    }
+
+    build_compound_statement(statement->get_statements());
+    leave_scope();
+}
+
+void ScopeDefinitionBuilder::build_branch_statement(BranchStatement* statement) {
+    enter_scope(statement->get_scope());
+
+    if (statement->get_condition()) {
+        build_expression(statement->get_condition());
+    }
+
+    if (statement->get_true_statements()) {
+        build_statement(statement->get_true_statements());
+    }
+
+    leave_scope();
+
+    if (statement->get_false_statements()) {
+        build_statement(statement->get_false_statements());
+    }
+}
+
+// build expressions
+void ScopeDefinitionBuilder::build_expression(Expression* expression) {
+    if (expression == nullptr) {
+        return;
+    }
+}
+
+// define methods
 void ScopeDefinitionBuilder::define_sources(Sources* sources) {
     connect_sibling_scopes(sources);
 
