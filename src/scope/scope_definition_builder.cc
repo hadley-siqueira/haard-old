@@ -9,6 +9,9 @@ using namespace haard;
 ScopeDefinitionBuilder::ScopeDefinitionBuilder() {
     logger = nullptr;
     current_scope = nullptr;
+    current_class = nullptr;
+    current_function = nullptr;
+    var_counter = 0;
 }
 
 void ScopeDefinitionBuilder::build(Sources* sources) {
@@ -55,6 +58,7 @@ void ScopeDefinitionBuilder::build_class_methods(Class* klass) {
 void ScopeDefinitionBuilder::build_function(Function* function) {
     enter_scope(function->get_scope());
 
+    var_counter = 0;
     build_compound_statement(function->get_statements());
 
     leave_scope();
@@ -173,6 +177,102 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
     if (expression == nullptr) {
         return;
     }
+
+    int kind = expression->get_kind();
+    BinOp* bin = (BinOp*) expression;
+    UnOp* un = (UnOp*) expression;
+    Literal* literal = (Literal*) expression;
+    ExpressionList* exprlist = (ExpressionList*) expression;
+
+    switch (kind) {
+    case EXPR_ID:
+        build_identifier((Identifier*) expression);
+        break;
+
+    case EXPR_ASSIGN:
+        build_assignment(bin);
+        break;
+
+    case EXPR_LITERAL_BOOL:
+        build_literal(literal, TYPE_BOOL);
+        break;
+
+    case EXPR_LITERAL_INTEGER:
+        build_literal(literal, TYPE_INT);
+        break;
+
+    case EXPR_LITERAL_FLOAT:
+        build_literal(literal, TYPE_FLOAT);
+        break;
+
+    case EXPR_LITERAL_DOUBLE:
+        build_literal(literal, TYPE_DOUBLE);
+        break;
+
+    case EXPR_LITERAL_CHAR:
+        build_literal(literal, TYPE_CHAR);
+        break;
+
+    case EXPR_LITERAL_STRING:
+        build_literal(literal, TYPE_STR);
+        break;
+
+    case EXPR_LITERAL_SYMBOL:
+        build_literal(literal, TYPE_SYMBOL);
+        break;
+
+    }
+}
+
+void ScopeDefinitionBuilder::build_identifier(Identifier* id) {
+    Symbol* sym = current_scope->has(id->get_lexeme());
+
+    if (!sym) {
+        logger->error("id not in scope");
+    }
+
+    id->set_symbol(sym);
+}
+
+
+void ScopeDefinitionBuilder::build_assignment(BinOp* bin) {
+    build_expression(bin->get_right());
+
+    if (is_new_var_assign(bin)) {
+        create_new_var(bin);
+    }
+ 
+    build_expression(bin->get_left());
+}
+
+void ScopeDefinitionBuilder::build_literal(Literal* literal, int kind) {
+    literal->set_type(new Type(kind));
+}
+
+bool ScopeDefinitionBuilder::is_new_var_assign(BinOp* bin) {
+    if (bin->get_left()->get_kind() != EXPR_ID) {
+        return false;
+    }
+
+    Identifier* id = (Identifier*) bin->get_left();
+    Symbol* sym = current_scope->has(id->get_lexeme());
+
+    return sym == nullptr;
+}
+
+void ScopeDefinitionBuilder::create_new_var(BinOp* bin) {
+    Identifier* id = (Identifier*) bin->get_left();
+
+std::cout << "defining " << id->get_lexeme() << '\n';
+current_scope->debug();
+std::cout << std::endl;
+    Variable* var = new Variable(id);
+    var->set_type(bin->get_right()->get_type());
+    var->set_uid(var_counter++);
+    var->set_kind(VAR_LOCAL);
+    bin->set_initial_assign(true);
+    current_scope->define(var);
+    current_function->add_variable(var);
 }
 
 // define methods

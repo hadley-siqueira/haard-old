@@ -49,6 +49,7 @@ void Identifier::set_lexeme(const char* lexeme) {
 
 void Identifier::set_symbol(Symbol* symbol) {
     this->symbol = symbol;
+    set_type(symbol->get_type());
 }
 
 int Identifier::get_overloaded_index() {

@@ -57,6 +57,24 @@ Symbol* Scope::define(int kind, Variable* var) {
     return sym;
 }
 
+Symbol* Scope::define(Variable* var) {
+    Symbol* sym = nullptr;
+
+    if (var->get_kind() == VAR_LOCAL) {
+        sym = new Symbol(SYM_VARIABLE, var->get_name(), var);
+    } else if (var->get_kind() == VAR_PARAM) {
+        sym = new Symbol(SYM_PARAMETER, var->get_name(), var);
+    } else if (var->get_kind() == VAR_CLASS) {
+        sym = new Symbol(SYM_CLASS_VARIABLE, var->get_name(), var);
+    } else {
+        std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
+        exit(0);
+    }
+
+    symbols[var->get_name()] = sym;
+    return sym;
+}
+
 Symbol* Scope::define(TemplateType* type) {
     Symbol* sym = new Symbol(SYM_TEMPLATE, type->get_name(), type);
     symbols[type->get_name()] = sym;

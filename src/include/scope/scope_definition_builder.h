@@ -32,6 +32,9 @@ namespace haard {
             void build_branch_statement(BranchStatement* statement);
 
             void build_expression(Expression* expression);
+            void build_identifier(Identifier* id);
+            void build_assignment(BinOp* bin);
+            void build_literal(Literal* literal, int kind);
 
         private:
             void define_sources(Sources* sources);
@@ -59,11 +62,15 @@ namespace haard {
 
             void connect_sibling_scopes(Sources* sources);
 
-        public:
+        private:
             void link_type(Type* type);
             void link_named_type(NamedType* type);
             void link_function_type(FunctionType* type);
             void link_template_header(TemplateHeader* header);
+
+        private:
+            bool is_new_var_assign(BinOp* bin);
+            void create_new_var(BinOp* bin);
 
         public:
             void set_logger(Logger* logger);
@@ -76,6 +83,11 @@ namespace haard {
             Logger* logger;
             Scope* current_scope;
             std::stack<Scope*> scopes;
+
+            Function* current_function;
+            Class* current_class;
+
+            int var_counter;
     };
 }
 

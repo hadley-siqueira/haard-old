@@ -22,6 +22,7 @@ namespace haard {
             Symbol* define(Class* klass);
             Symbol* define(Function* func);
             Symbol* define(int kind, Variable* var);
+            Symbol* define(Variable* var);
             Symbol* define(TemplateType* type);
 
             bool has_parent();
