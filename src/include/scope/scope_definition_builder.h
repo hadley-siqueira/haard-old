@@ -88,6 +88,7 @@ namespace haard {
             Class* current_class;
 
             int var_counter;
+            int function_counter;
     };
 }
 

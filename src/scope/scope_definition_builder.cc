@@ -12,6 +12,7 @@ ScopeDefinitionBuilder::ScopeDefinitionBuilder() {
     current_class = nullptr;
     current_function = nullptr;
     var_counter = 0;
+    function_counter = 0;
 }
 
 void ScopeDefinitionBuilder::build(Sources* sources) {
@@ -371,6 +372,7 @@ void ScopeDefinitionBuilder::define_class_method(Function* method) {
     Symbol* sym = current_scope->local_has(method->get_name());
 
     define_method_signature(method);
+    method->set_uid(function_counter++);
 
     if (!sym) {
         logger->info(info_message_defining_method(method));
@@ -429,6 +431,7 @@ void ScopeDefinitionBuilder::define_function(Function* function) {
     Symbol* sym = current_scope->local_has(function->get_name());
 
     define_function_signature(function);
+    function->set_uid(function_counter++);
 
     if (!sym) {
         logger->info(info_message_defining_function(function));
