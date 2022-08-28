@@ -52,7 +52,9 @@ void ScopeDefinitionBuilder::build_class(Class* klass) {
 }
 
 void ScopeDefinitionBuilder::build_class_methods(Class* klass) {
-
+    for (int i = 0; i < klass->methods_count(); ++i) {
+        build_function(klass->get_method(i));
+    }
 }
 
 void ScopeDefinitionBuilder::build_function(Function* function) {
@@ -62,6 +64,7 @@ void ScopeDefinitionBuilder::build_function(Function* function) {
     var_counter = 0;
     build_compound_statement(function->get_statements());
 
+    std::cout << "scope for " << function->get_name() << std::endl;
     current_scope->debug();
     std::cout << std::endl;
     leave_scope();

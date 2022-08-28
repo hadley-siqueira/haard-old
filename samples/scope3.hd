@@ -1,3 +1,15 @@
+class Window:
+    x : int
+    y : int
+
+    def init : void
+        @nx : int
+        @ny : int
+
+        x = nx
+        y = ny
+        v = 2
+
 def sum : int
     @a : int
     @b : int
