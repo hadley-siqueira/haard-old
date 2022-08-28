@@ -57,10 +57,13 @@ void ScopeDefinitionBuilder::build_class_methods(Class* klass) {
 
 void ScopeDefinitionBuilder::build_function(Function* function) {
     enter_scope(function->get_scope());
+    current_function = function;
 
     var_counter = 0;
     build_compound_statement(function->get_statements());
 
+    current_scope->debug();
+    std::cout << std::endl;
     leave_scope();
 }
 
@@ -263,9 +266,6 @@ bool ScopeDefinitionBuilder::is_new_var_assign(BinOp* bin) {
 void ScopeDefinitionBuilder::create_new_var(BinOp* bin) {
     Identifier* id = (Identifier*) bin->get_left();
 
-std::cout << "defining " << id->get_lexeme() << '\n';
-current_scope->debug();
-std::cout << std::endl;
     Variable* var = new Variable(id);
     var->set_type(bin->get_right()->get_type());
     var->set_uid(var_counter++);
