@@ -11,6 +11,7 @@
 #include "printer/cpp_printer.h"
 #include "scope/scope_definition_builder.h"
 #include "scope/scope_builder.h"
+#include "ir/ir_builder.h"
 
 using namespace haard;
 
@@ -34,6 +35,7 @@ void Driver::run() {
     configure_search_path();
     parse_sources();
     semantic_analysis();
+    ir_generation();
 
     run_flags();
     logger.print();
@@ -92,6 +94,7 @@ void Driver::print_information() {
         std::cout << "\t\"" << search_path[i] << '"' << std::endl;
     }
 }
+
 void Driver::parse_sources() {
     const char* path;
 
@@ -111,6 +114,13 @@ void Driver::semantic_analysis() {
     def_builder.set_logger(&logger);
     def_builder.build(sources);
     // sym_builder.build_sources(sources);
+}
+
+void Driver::ir_generation() {
+    IRBuilder builder;
+
+    builder.set_logger(&logger);
+    builder.build(sources);
 }
 
 void Driver::parse_imports(Source* file) {

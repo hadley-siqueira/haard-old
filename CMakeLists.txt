@@ -64,6 +64,14 @@ set(AST_SRC
     src/ast/var_decl.cc
 )
 
+set(IR_SRC
+    src/ir/ir.cc
+    src/ir/ir_bin.cc
+    src/ir/ir_unary.cc
+    src/ir/ir_value.cc
+    src/ir/ir_builder.cc
+)
+
 set(PRINTER_SRC
     src/printer/printer.cc
     src/printer/cpp_printer.cc
@@ -87,6 +95,7 @@ set(SOURCES
     ${SCANNER_SRC}
     ${PARSER_SRC}
     ${AST_SRC}
+    ${IR_SRC}
     ${PRINTER_SRC}
     ${SCOPE_SRC}
     ${DRIVER_SRC}

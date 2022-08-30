@@ -718,6 +718,23 @@ namespace haard {
         SYM_PARAMETER,
         SYM_TEMPLATE
     } SymbolKind;
+
+    typedef enum IRValueKind {
+        IR_VALUE_TEMP,
+        IR_VALUE_LITERAL_BOOL,
+        IR_VALUE_LITERAL_INTEGER,
+        IR_VALUE_LITERAL_FLOAT,
+        IR_VALUE_LITERAL_DOUBLE,
+        IR_VALUE_LITERAL_CHAR,
+        IR_VALUE_LITERAL_STRING,
+        IR_VALUE_LITERAL_SYMBOL,
+    } IRValueKind;
+
+    typedef enum IRKind {
+        IR_ADD,
+        IR_ADDI,
+        IR_LI,
+    } IRKind;
 }
 
 #endif

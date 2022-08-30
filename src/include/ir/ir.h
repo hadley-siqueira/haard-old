@@ -1,6 +1,9 @@
 #ifndef HAARD_IR_H
 #define HAARD_IR_H
 
+#include <string>
+#include "defs.h"
+
 namespace haard {
     class IR {
         public:
@@ -10,7 +13,10 @@ namespace haard {
             void set_kind(int kind);
             int get_kind();
 
-        private:
+        public:
+            virtual std::string to_str();
+
+        protected:
             int kind;
     };
 }

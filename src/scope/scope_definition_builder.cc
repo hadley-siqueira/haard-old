@@ -227,7 +227,6 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
     case EXPR_LITERAL_SYMBOL:
         build_literal(literal, TYPE_SYMBOL);
         break;
-
     }
 }
 

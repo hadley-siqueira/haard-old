@@ -23,6 +23,7 @@ namespace haard {
             void run_flags();
             void parse_sources();
             void semantic_analysis();
+            void ir_generation();
 
             void parse_imports(Source* file);
             void parse_import(Import* import);

@@ -1,4 +1,4 @@
-#include "ir.h"
+#include "ir/ir.h"
 
 using namespace haard;
 
@@ -12,4 +12,8 @@ void IR::set_kind(int kind) {
 
 int IR::get_kind() {
     return kind;
+}
+
+std::string IR::to_str() {
+    return "unknown ir";
 }
