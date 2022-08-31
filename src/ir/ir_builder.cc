@@ -130,6 +130,10 @@ void IRBuilder::build_expression(Expression* expression) {
         build_assignment(bin);
         break;
 
+    case EXPR_PLUS:
+        build_plus(bin);
+        break;
+
     case EXPR_LITERAL_BOOL:
         build_literal(literal, IR_VALUE_LITERAL_BOOL);
         break;
@@ -166,6 +170,23 @@ void IRBuilder::build_identifier(Identifier* id) {
 
 void IRBuilder::build_assignment(BinOp* bin) {
 
+}
+
+void IRBuilder::build_plus(BinOp* bin) {
+    IR* ir;
+    IRValue* left;
+    IRValue* right;
+    IRValue* dst;
+
+    build_expression(bin->get_left());
+    left = last_value;
+
+    build_expression(bin->get_right());
+    right = last_value;
+
+    dst = new IRValue(IR_VALUE_TEMP, tmp_counter++);
+    ir = new IRBin(IR_ADD, dst, left, right);
+    last_value = dst;
 }
 
 void IRBuilder::build_literal(Literal* literal, int kind) {

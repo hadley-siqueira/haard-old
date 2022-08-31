@@ -30,6 +30,7 @@ namespace haard {
             void build_expression(Expression* expression);
             void build_identifier(Identifier* id);
             void build_assignment(BinOp* bin);
+            void build_plus(BinOp* bin);
             void build_literal(Literal* literal, int kind);
 
         public:
@@ -38,6 +39,7 @@ namespace haard {
         private:
             int tmp_counter = 0;
             Logger* logger;
+            IRValue* last_value;
     };
 }
 
