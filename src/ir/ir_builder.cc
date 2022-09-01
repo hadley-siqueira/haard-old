@@ -12,6 +12,10 @@ void IRBuilder::build(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
+
+    for (int i = 0; i < instructions.size(); ++i) {
+        std::cout << instructions[i]->to_str() << std::endl;
+    }
 }
 
 void IRBuilder::build_source(Source* source) {
@@ -87,11 +91,13 @@ void IRBuilder::build_statement(Statement* statement) {
 }
 
 void IRBuilder::build_compound_statement(CompoundStatement* stmts) {
-
+    for (int i = 0; i < stmts->statements_count(); ++i) {
+        build_statement(stmts->get_statement(i));
+    }
 }
 
 void IRBuilder::build_expression_statement(ExpressionStatement* statement) {
-
+    build_expression(statement->get_expression());
 }
 
 void IRBuilder::build_jump_statement(JumpStatement* statement) {
@@ -165,11 +171,32 @@ void IRBuilder::build_expression(Expression* expression) {
 }
 
 void IRBuilder::build_identifier(Identifier* id) {
+    IR* ir;
+    IRValue* ir_id;
+    IRValue* tmp;
 
+    ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
+    //tmp = new IRValue(IR_VALUE_TEMP, tmp_counter++);
+    //ir = new IRUnary(IR_COPY, tmp, ir_id);
+    //add_instruction(ir);
+    last_value = ir_id;
 }
 
 void IRBuilder::build_assignment(BinOp* bin) {
+    IR* ir;
+    IRValue* left;
+    IRValue* right;
+    IRValue* dst;
 
+    build_expression(bin->get_right());
+    right = last_value;
+
+    build_expression(bin->get_left());
+    left = last_value;
+
+    ir = new IRUnary(IR_COPY, left, right);
+    add_instruction(ir);
+    last_value = left;
 }
 
 void IRBuilder::build_plus(BinOp* bin) {
@@ -186,6 +213,7 @@ void IRBuilder::build_plus(BinOp* bin) {
 
     dst = new IRValue(IR_VALUE_TEMP, tmp_counter++);
     ir = new IRBin(IR_ADD, dst, left, right);
+    add_instruction(ir);
     last_value = dst;
 }
 
@@ -197,5 +225,11 @@ void IRBuilder::build_literal(Literal* literal, int kind) {
     ir_literal = new IRValue(kind, literal->get_lexeme());
     tmp = new IRValue(IR_VALUE_TEMP, tmp_counter++);
     ir = new IRUnary(IR_LI, tmp, ir_literal);
-    //ret = new IRConst(tmp, value);
+    add_instruction(ir);
+    last_value = tmp;
+}
+
+
+void IRBuilder::add_instruction(IR* instruction) {
+    instructions.push_back(instruction);
 }

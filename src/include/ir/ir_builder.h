@@ -1,6 +1,7 @@
 #ifndef HAARD_IR_BUILDER_H
 #define HAARD_IR_BUILDER_H
 
+#include <vector>
 #include "ast/ast.h"
 #include "ir/ir.h"
 #include "ir/ir_value.h"
@@ -37,9 +38,13 @@ namespace haard {
             void set_logger(Logger* logger);
 
         private:
+            void add_instruction(IR* instruction);
+
+        private:
             int tmp_counter = 0;
             Logger* logger;
             IRValue* last_value;
+            std::vector<IR*> instructions;
     };
 }
 

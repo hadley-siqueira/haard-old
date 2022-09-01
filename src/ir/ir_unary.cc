@@ -21,6 +21,10 @@ std::string IRUnary::to_str() {
         ss << "li " << dst->to_str() << ", " << src->to_str();
         break;
 
+    case IR_COPY:
+        ss << "copy " << dst->to_str() << ", " << src->to_str();
+        break;
+
     default:
         ss << "unknown unary ir";
         break;

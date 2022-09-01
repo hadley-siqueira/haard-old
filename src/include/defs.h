@@ -21,6 +21,7 @@
 #define BRIGHT_MAGENTA "\033[95m"
 #define BRIGHT_CYAN    "\033[96m"   
 #define BRIGHT_WHITE   "\033[97m"
+#define DBG do { std::cout << __FILE__ << ' ' << __LINE__ << std::endl; } while (0);
 
 namespace haard {
     typedef enum LogKind {
@@ -720,6 +721,7 @@ namespace haard {
     } SymbolKind;
 
     typedef enum IRValueKind {
+        IR_VALUE_VAR,
         IR_VALUE_TEMP,
         IR_VALUE_LITERAL_BOOL,
         IR_VALUE_LITERAL_INTEGER,
@@ -733,6 +735,7 @@ namespace haard {
     typedef enum IRKind {
         IR_ADD,
         IR_ADDI,
+        IR_COPY,
         IR_LI,
     } IRKind;
 }

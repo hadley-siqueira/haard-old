@@ -12,7 +12,7 @@ IRValue::IRValue() {
 
 IRValue::IRValue(int kind, const char* value) {
     this->kind = kind;
-    this->value = value;
+    this->value = StringPool::get(value);
 }
 
 IRValue::IRValue(int kind, int tmp) {
@@ -27,6 +27,10 @@ std::string IRValue::to_str() {
     std::stringstream ss;
 
     switch (kind) {
+    case IR_VALUE_VAR:
+        ss << '%' << value;
+        break;
+
     case IR_VALUE_TEMP:
         ss << '%' << value;
         break;
