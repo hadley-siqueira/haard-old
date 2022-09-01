@@ -10,7 +10,7 @@ IRUnary::IRUnary(int kind, IRValue* dst, IRValue* src) {
 }
 
 IRUnary::~IRUnary() {
-
+    delete dst;
 }
 
 std::string IRUnary::to_str() {

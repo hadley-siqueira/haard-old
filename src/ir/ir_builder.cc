@@ -8,6 +8,12 @@ IRBuilder::IRBuilder() {
     tmp_counter = 0;
 }
 
+IRBuilder::~IRBuilder() {
+    for (int i = 0; i < instructions.size(); ++i) {
+        delete instructions[i];
+    }
+}
+
 void IRBuilder::build(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
@@ -200,6 +206,10 @@ void IRBuilder::build_assignment(BinOp* bin) {
 }
 
 void IRBuilder::build_plus(BinOp* bin) {
+    build_binop(bin, IR_ADD);
+}
+
+void IRBuilder::build_binop(BinOp* bin, int kind) {
     IR* ir;
     IRValue* left;
     IRValue* right;
@@ -212,7 +222,7 @@ void IRBuilder::build_plus(BinOp* bin) {
     right = last_value;
 
     dst = new IRValue(IR_VALUE_TEMP, tmp_counter++);
-    ir = new IRBin(IR_ADD, dst, left, right);
+    ir = new IRBin(kind, dst, left, right);
     add_instruction(ir);
     last_value = dst;
 }
@@ -228,7 +238,6 @@ void IRBuilder::build_literal(Literal* literal, int kind) {
     add_instruction(ir);
     last_value = tmp;
 }
-
 
 void IRBuilder::add_instruction(IR* instruction) {
     instructions.push_back(instruction);

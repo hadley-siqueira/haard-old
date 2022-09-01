@@ -10,7 +10,7 @@ IRBin::IRBin(int kind, IRValue* dst, IRValue* src1, IRValue* src2) {
 }
 
 IRBin::~IRBin() {
-
+    delete dst;
 }
 
 std::string IRBin::to_str() {

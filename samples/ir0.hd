@@ -2,4 +2,4 @@ def main : void
     a = 0
     b = 1 + 2
     b
-    b = b + 1
+    b = b + 1 + a + b + 7

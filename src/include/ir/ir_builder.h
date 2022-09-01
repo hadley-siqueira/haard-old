@@ -13,6 +13,7 @@ namespace haard {
     class IRBuilder {
         public:
             IRBuilder();
+            ~IRBuilder();
 
         public:
             void build(Sources* sources);
@@ -30,8 +31,11 @@ namespace haard {
 
             void build_expression(Expression* expression);
             void build_identifier(Identifier* id);
+
             void build_assignment(BinOp* bin);
             void build_plus(BinOp* bin);
+            void build_binop(BinOp* bin, int kind);
+
             void build_literal(Literal* literal, int kind);
 
         public:
