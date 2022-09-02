@@ -200,6 +200,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_assignment(bin);
         break;
 
+    case EXPR_PLUS:
+        build_plus(bin);
+        break;
+
     case EXPR_LITERAL_BOOL:
         build_literal(literal, TYPE_BOOL);
         break;
@@ -249,6 +253,17 @@ void ScopeDefinitionBuilder::build_assignment(BinOp* bin) {
     }
  
     build_expression(bin->get_left());
+}
+
+void ScopeDefinitionBuilder::build_plus(BinOp* bin) {
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+
+    Type* tleft = bin->get_left()->get_type();
+    Type* tright = bin->get_right()->get_type();
+
+    // FIXME
+    bin->set_type(tleft);
 }
 
 void ScopeDefinitionBuilder::build_literal(Literal* literal, int kind) {

@@ -737,6 +737,9 @@ namespace haard {
         IR_ADDI,
         IR_COPY,
         IR_LI,
+        IR_LOAD,
+        IR_STORE,
+        IR_FRAME,
     } IRKind;
 }
 

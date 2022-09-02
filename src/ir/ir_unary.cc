@@ -10,7 +10,8 @@ IRUnary::IRUnary(int kind, IRValue* dst, IRValue* src) {
 }
 
 IRUnary::~IRUnary() {
-    delete dst;
+    // FIXME
+    // should be deleted from a basic block
 }
 
 std::string IRUnary::to_str() {
@@ -23,6 +24,18 @@ std::string IRUnary::to_str() {
 
     case IR_COPY:
         ss << "copy " << dst->to_str() << ", " << src->to_str();
+        break;
+
+    case IR_FRAME:
+        ss << "frame " << dst->to_str() << ", " << src->to_str();
+        break;
+
+    case IR_LOAD:
+        ss << "load " << dst->to_str() << ", " << src->to_str();
+        break;
+
+    case IR_STORE:
+        ss << "store " << dst->to_str() << ", " << src->to_str();
         break;
 
     default:

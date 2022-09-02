@@ -25,6 +25,7 @@ namespace haard {
             virtual std::string to_cpp();
             virtual std::string to_str();
             virtual Type* clone();
+            virtual bool is_primitive();
 
         protected:
             int kind;

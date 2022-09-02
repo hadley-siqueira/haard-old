@@ -276,3 +276,28 @@ Type* Type::clone() {
     return other;
 }
 
+bool Type::is_primitive() {
+    return kind == TYPE_U8
+        || kind == TYPE_U16
+        || kind == TYPE_U32
+        || kind == TYPE_U64
+        || kind == TYPE_I8
+        || kind == TYPE_I16
+        || kind == TYPE_I32
+        || kind == TYPE_I64
+        || kind == TYPE_VOID
+        || kind == TYPE_SYMBOL
+        || kind == TYPE_BOOL
+        || kind == TYPE_UCHAR
+        || kind == TYPE_CHAR
+        || kind == TYPE_USHORT
+        || kind == TYPE_SHORT
+        || kind == TYPE_UINT
+        || kind == TYPE_INT
+        || kind == TYPE_ULONG
+        || kind == TYPE_LONG
+        || kind == TYPE_FLOAT
+        || kind == TYPE_DOUBLE;
+}
+
+

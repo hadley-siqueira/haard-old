@@ -10,13 +10,15 @@ IRBin::IRBin(int kind, IRValue* dst, IRValue* src1, IRValue* src2) {
 }
 
 IRBin::~IRBin() {
-    delete dst;
+    // FIXME
+    // should be deleted from a basic block
 }
 
 std::string IRBin::to_str() {
     switch (kind) {
     case IR_ADD:
         return to_str1("add");
+
     }
 
     return "unknown ir_bin";

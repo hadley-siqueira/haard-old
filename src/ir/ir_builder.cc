@@ -122,7 +122,7 @@ void IRBuilder::build_branch_statement(BranchStatement* statement) {
 
 }
 
-void IRBuilder::build_expression(Expression* expression) {
+void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     if (expression == nullptr) {
         return;
     }
@@ -135,11 +135,11 @@ void IRBuilder::build_expression(Expression* expression) {
 
     switch (kind) {
     case EXPR_ID:
-        build_identifier((Identifier*) expression);
+        build_identifier((Identifier*) expression, lvalue);
         break;
 
     case EXPR_ASSIGN:
-        build_assignment(bin);
+        build_assignment(bin, lvalue);
         break;
 
     case EXPR_PLUS:
@@ -176,19 +176,37 @@ void IRBuilder::build_expression(Expression* expression) {
     }
 }
 
-void IRBuilder::build_identifier(Identifier* id) {
-    IR* ir;
+void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
+    IR* ir_addr;
+    IR* ir_load;
     IRValue* ir_id;
-    IRValue* tmp;
+    IRValue* tmp0;
+    IRValue* tmp1;
 
-    ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
-    //tmp = new IRValue(IR_VALUE_TEMP, tmp_counter++);
-    //ir = new IRUnary(IR_COPY, tmp, ir_id);
-    //add_instruction(ir);
-    last_value = ir_id;
+    if (lvalue) {
+        if (id->get_type()->is_primitive()) {
+            ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
+            tmp0 = new_temporary();
+            ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
+            add_instruction(ir_addr);
+            last_value = tmp0;
+        }
+    } else {
+        if (id->get_type()->is_primitive()) {
+            ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
+            tmp0 = new_temporary();
+            ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
+            tmp1 = new_temporary();
+            ir_load = new IRUnary(IR_LOAD, tmp1, tmp0);
+
+            add_instruction(ir_addr);
+            add_instruction(ir_load);
+            last_value = tmp1;
+        }
+    }
 }
 
-void IRBuilder::build_assignment(BinOp* bin) {
+void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     IR* ir;
     IRValue* left;
     IRValue* right;
@@ -197,10 +215,12 @@ void IRBuilder::build_assignment(BinOp* bin) {
     build_expression(bin->get_right());
     right = last_value;
 
-    build_expression(bin->get_left());
+    build_expression(bin->get_left(), true);
     left = last_value;
 
-    ir = new IRUnary(IR_COPY, left, right);
+    // FIXME
+    // on complex types, should call memcpy instead of a simple store
+    ir = new IRUnary(IR_STORE, left, right);
     add_instruction(ir);
     last_value = left;
 }
@@ -241,4 +261,8 @@ void IRBuilder::build_literal(Literal* literal, int kind) {
 
 void IRBuilder::add_instruction(IR* instruction) {
     instructions.push_back(instruction);
+}
+
+IRValue* IRBuilder::new_temporary() {
+    return new IRValue(IR_VALUE_TEMP, tmp_counter++);
 }

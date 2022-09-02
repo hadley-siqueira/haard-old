@@ -29,10 +29,10 @@ namespace haard {
             void build_for_statement(ForStatement* statement);
             void build_branch_statement(BranchStatement* statement);
 
-            void build_expression(Expression* expression);
-            void build_identifier(Identifier* id);
+            void build_expression(Expression* expression, bool lvalue=false);
+            void build_identifier(Identifier* id, bool lvalue=false);
 
-            void build_assignment(BinOp* bin);
+            void build_assignment(BinOp* bin, bool lvalue=false);
             void build_plus(BinOp* bin);
             void build_binop(BinOp* bin, int kind);
 
@@ -43,6 +43,7 @@ namespace haard {
 
         private:
             void add_instruction(IR* instruction);
+            IRValue* new_temporary();
 
         private:
             int tmp_counter = 0;
