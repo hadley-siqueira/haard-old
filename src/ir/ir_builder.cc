@@ -150,6 +150,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_address_of(un);
         break;
 
+    case EXPR_DEREFERENCE:
+        build_dereference(un, lvalue);
+        break;
+
     case EXPR_LITERAL_BOOL:
         build_literal(literal, IR_VALUE_LITERAL_BOOL);
         break;
@@ -238,6 +242,18 @@ void IRBuilder::build_plus(BinOp* bin) {
 
 void IRBuilder::build_address_of(UnOp* op) {
     build_expression(op->get_expression(), true);
+}
+
+void IRBuilder::build_dereference(UnOp* op, bool lvalue) {
+    build_expression(op->get_expression());
+
+    if (!lvalue) {
+        IRValue* tmp = new_temporary();
+        IR* ir_load = new IRUnary(IR_LOAD, tmp, last_value);
+
+        add_instruction(ir_load);
+        last_value = tmp;
+    }
 }
 
 void IRBuilder::build_binop(BinOp* bin, int kind) {

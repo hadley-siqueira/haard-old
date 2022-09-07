@@ -208,6 +208,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_address_of(un);
         break;
 
+    case EXPR_DEREFERENCE:
+        build_dereference(un);
+        break;
+
     case EXPR_LITERAL_BOOL:
         build_literal(literal, TYPE_BOOL);
         break;
@@ -279,6 +283,11 @@ void ScopeDefinitionBuilder::build_address_of(UnOp* op) {
     type = new IndirectionType(TYPE_POINTER, type);
 
     op->set_type(type);
+}
+
+void ScopeDefinitionBuilder::build_dereference(UnOp* op) {
+    build_expression(op->get_expression());
+    op->set_type(op->get_expression()->get_type());
 }
 
 void ScopeDefinitionBuilder::build_literal(Literal* literal, int kind) {

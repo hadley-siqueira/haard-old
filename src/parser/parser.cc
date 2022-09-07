@@ -816,7 +816,8 @@ Expression* Parser::parse_term_expression() {
     Expression* expr = parse_bitwise_or_expression();
 
     while (true) {
-        if (match(TK_TIMES)) {
+        if (next_token_same_line() && lookahead(TK_TIMES)) {
+            match(TK_TIMES);
             oper = matched;
             expr = new BinOp(EXPR_TIMES, oper, expr, parse_bitwise_or_expression());
         } else if (match(TK_DIVISION)) {

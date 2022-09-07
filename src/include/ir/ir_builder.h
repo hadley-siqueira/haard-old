@@ -35,7 +35,8 @@ namespace haard {
             void build_assignment(BinOp* bin, bool lvalue=false);
             void build_plus(BinOp* bin);
 
-            void build_address_of(UnOp* un);
+            void build_address_of(UnOp* op);
+            void build_dereference(UnOp* op, bool lvalue=false);
 
             void build_binop(BinOp* bin, int kind);
 

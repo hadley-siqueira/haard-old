@@ -1,0 +1,5 @@
+def main : void
+    a = 0
+    p1 = &a
+    a = *p1 + 1
+    *p1 = 3 + *p1 + *p1

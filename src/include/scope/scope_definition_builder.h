@@ -38,6 +38,8 @@ namespace haard {
             void build_plus(BinOp* bin);
 
             void build_address_of(UnOp* op);
+            void build_dereference(UnOp* op);
+
             void build_literal(Literal* literal, int kind);
 
         private:
