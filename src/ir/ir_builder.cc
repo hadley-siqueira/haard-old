@@ -146,6 +146,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_plus(bin);
         break;
 
+    case EXPR_ADDRESS_OF:
+        build_address_of(un);
+        break;
+
     case EXPR_LITERAL_BOOL:
         build_literal(literal, IR_VALUE_LITERAL_BOOL);
         break;
@@ -182,9 +186,12 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
     IRValue* ir_id;
     IRValue* tmp0;
     IRValue* tmp1;
+    Type* type;
+
+    type = id->get_type();
 
     if (lvalue) {
-        if (id->get_type()->is_primitive()) {
+        if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
             ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
             tmp0 = new_temporary();
             ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
@@ -192,7 +199,7 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
             last_value = tmp0;
         }
     } else {
-        if (id->get_type()->is_primitive()) {
+        if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
             ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
             tmp0 = new_temporary();
             ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
@@ -227,6 +234,10 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
 
 void IRBuilder::build_plus(BinOp* bin) {
     build_binop(bin, IR_ADD);
+}
+
+void IRBuilder::build_address_of(UnOp* op) {
+    build_expression(op->get_expression(), true);
 }
 
 void IRBuilder::build_binop(BinOp* bin, int kind) {

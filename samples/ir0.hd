@@ -5,3 +5,6 @@ def main : void
     b
     b = b + 1 + a + b + 7
 
+    ptr = &a
+    p2 = ptr
+

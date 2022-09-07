@@ -204,6 +204,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_plus(bin);
         break;
 
+    case EXPR_ADDRESS_OF:
+        build_address_of(un);
+        break;
+
     case EXPR_LITERAL_BOOL:
         build_literal(literal, TYPE_BOOL);
         break;
@@ -264,6 +268,17 @@ void ScopeDefinitionBuilder::build_plus(BinOp* bin) {
 
     // FIXME
     bin->set_type(tleft);
+}
+
+void ScopeDefinitionBuilder::build_address_of(UnOp* op) {
+    Type* type;
+
+    build_expression(op->get_expression());
+
+    type = op->get_expression()->get_type();
+    type = new IndirectionType(TYPE_POINTER, type);
+
+    op->set_type(type);
 }
 
 void ScopeDefinitionBuilder::build_literal(Literal* literal, int kind) {
