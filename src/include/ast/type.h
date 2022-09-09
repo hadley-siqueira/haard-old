@@ -26,6 +26,8 @@ namespace haard {
             virtual std::string to_str();
             virtual Type* clone();
             virtual bool is_primitive();
+            virtual Type* promote(Type* other);
+            virtual int rank();
 
         protected:
             int kind;

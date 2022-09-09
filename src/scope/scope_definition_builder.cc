@@ -204,6 +204,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_plus(bin);
         break;
 
+    case EXPR_MINUS:
+        build_minus(bin);
+        break;
+
     case EXPR_ADDRESS_OF:
         build_address_of(un);
         break;
@@ -269,6 +273,21 @@ void ScopeDefinitionBuilder::build_plus(BinOp* bin) {
 
     Type* tleft = bin->get_left()->get_type();
     Type* tright = bin->get_right()->get_type();
+
+    tleft = tleft->promote(tright);
+
+    // FIXME
+    bin->set_type(tleft);
+}
+
+void ScopeDefinitionBuilder::build_minus(BinOp* bin) {
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+
+    Type* tleft = bin->get_left()->get_type();
+    Type* tright = bin->get_right()->get_type();
+
+    tleft = tleft->promote(tright);
 
     // FIXME
     bin->set_type(tleft);

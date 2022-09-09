@@ -4,6 +4,7 @@
 using namespace haard;
 
 IRBin::IRBin(int kind, IRValue* dst, IRValue* src1, IRValue* src2) {
+    this->kind = kind;
     this->dst = dst;
     this->src1 = src1;
     this->src2 = src2;
@@ -18,6 +19,9 @@ std::string IRBin::to_str() {
     switch (kind) {
     case IR_ADD:
         return to_str1("add");
+
+    case IR_SUB:
+        return to_str1("sub");
 
     }
 

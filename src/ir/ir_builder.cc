@@ -146,6 +146,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_plus(bin);
         break;
 
+    case EXPR_MINUS:
+        build_minus(bin);
+        break;
+
     case EXPR_ADDRESS_OF:
         build_address_of(un);
         break;
@@ -197,22 +201,38 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
     if (lvalue) {
         if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
             ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
-            tmp0 = new_temporary();
-            ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
-            add_instruction(ir_addr);
-            last_value = tmp0;
+
+            if (alloca_map.count(ir_id->to_str()) > 0) {
+                last_value = alloca_map[ir_id->to_str()];
+            } else {
+                tmp0 = new_temporary();
+                ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
+                add_instruction(ir_addr);
+                last_value = tmp0;
+                alloca_map[ir_id->to_str()] = last_value;
+            }
         }
     } else {
         if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
             ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
-            tmp0 = new_temporary();
-            ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
-            tmp1 = new_temporary();
-            ir_load = new IRUnary(IR_LOAD, tmp1, tmp0);
 
-            add_instruction(ir_addr);
-            add_instruction(ir_load);
-            last_value = tmp1;
+            if (alloca_map.count(ir_id->to_str()) > 0) {
+                tmp0 = alloca_map[ir_id->to_str()];
+                tmp1 = new_temporary();
+                ir_load = new IRUnary(IR_LOAD, tmp1, tmp0);
+
+                add_instruction(ir_load);
+                last_value = tmp1;
+            } else {
+                tmp0 = new_temporary();
+                ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
+                tmp1 = new_temporary();
+                ir_load = new IRUnary(IR_LOAD, tmp1, tmp0);
+
+                add_instruction(ir_addr);
+                add_instruction(ir_load);
+                last_value = tmp1;
+            }
         }
     }
 }
@@ -238,6 +258,10 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
 
 void IRBuilder::build_plus(BinOp* bin) {
     build_binop(bin, IR_ADD);
+}
+
+void IRBuilder::build_minus(BinOp* bin) {
+    build_binop(bin, IR_SUB);
 }
 
 void IRBuilder::build_address_of(UnOp* op) {

@@ -300,4 +300,60 @@ bool Type::is_primitive() {
         || kind == TYPE_DOUBLE;
 }
 
+Type* Type::promote(Type* other) {
+    if (rank() > other->rank()) {
+        return this;
+    }
 
+    return other;
+}
+
+int Type::rank() {
+    switch (kind) {
+    case TYPE_I8:
+        return 0;
+
+    case TYPE_U8:
+        return 1;
+
+    case TYPE_I16:
+    case TYPE_SHORT:
+        return 2;
+
+    case TYPE_U16:
+    case TYPE_USHORT:
+        return 3;
+
+    case TYPE_CHAR:
+    case TYPE_BOOL:
+    case TYPE_UCHAR:
+    case TYPE_SYMBOL:
+    case TYPE_VOID:
+    case TYPE_STR:
+        return 4;
+
+    case TYPE_I32:
+    case TYPE_INT:
+        return 5;
+
+    case TYPE_U32:
+    case TYPE_UINT:
+        return 6;
+
+    case TYPE_LONG:
+    case TYPE_I64:
+        return 7;
+
+    case TYPE_U64:
+    case TYPE_ULONG:
+        return 8;
+
+    case TYPE_FLOAT:
+        return 9;
+
+    case TYPE_DOUBLE:
+        return 10;
+    }
+
+    return 10;
+}

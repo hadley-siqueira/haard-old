@@ -734,6 +734,7 @@ namespace haard {
 
     typedef enum IRKind {
         IR_ADD,
+        IR_SUB,
         IR_ADDI,
         IR_COPY,
         IR_LI,

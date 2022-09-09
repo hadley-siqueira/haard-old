@@ -2,6 +2,7 @@
 #define HAARD_IR_BUILDER_H
 
 #include <vector>
+#include <map>
 #include "ast/ast.h"
 #include "ir/ir.h"
 #include "ir/ir_value.h"
@@ -33,7 +34,9 @@ namespace haard {
             void build_identifier(Identifier* id, bool lvalue=false);
 
             void build_assignment(BinOp* bin, bool lvalue=false);
+
             void build_plus(BinOp* bin);
+            void build_minus(BinOp* bin);
 
             void build_address_of(UnOp* op);
             void build_dereference(UnOp* op, bool lvalue=false);
@@ -54,6 +57,7 @@ namespace haard {
             Logger* logger;
             IRValue* last_value;
             std::vector<IR*> instructions;
+            std::map<std::string, IRValue*> alloca_map;
     };
 }
 
