@@ -5,13 +5,11 @@ using namespace haard;
 
 IRBuilder::IRBuilder() {
     logger = nullptr;
-    tmp_counter = 0;
+    ctx = new IRContext();
 }
 
 IRBuilder::~IRBuilder() {
-    for (int i = 0; i < instructions.size(); ++i) {
-        delete instructions[i];
-    }
+    delete ctx;
 }
 
 void IRBuilder::build(Sources* sources) {
@@ -19,9 +17,7 @@ void IRBuilder::build(Sources* sources) {
         build_source(sources->get_source(i));
     }
 
-    for (int i = 0; i < instructions.size(); ++i) {
-        std::cout << instructions[i]->to_str() << std::endl;
-    }
+    ctx->debug();
 }
 
 void IRBuilder::build_source(Source* source) {
@@ -35,7 +31,6 @@ void IRBuilder::build_class(Class* klass) {
 }
 
 void IRBuilder::build_function(Function* function) {
-    tmp_counter = 0;
     build_compound_statement(function->get_statements());
 }
 
@@ -201,13 +196,13 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
     if (lvalue) {
         if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
             ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
+            //ir_id = ctx->get_var(id->get_lexeme());
 
             if (alloca_map.count(ir_id->to_str()) > 0) {
                 last_value = alloca_map[ir_id->to_str()];
             } else {
-                tmp0 = new_temporary();
-                ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
-                add_instruction(ir_addr);
+                tmp0 = ctx->new_temporary();
+                ir_addr = ctx->new_unary(IR_FRAME, tmp0, ir_id);
                 last_value = tmp0;
                 alloca_map[ir_id->to_str()] = last_value;
             }
@@ -218,19 +213,14 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
 
             if (alloca_map.count(ir_id->to_str()) > 0) {
                 tmp0 = alloca_map[ir_id->to_str()];
-                tmp1 = new_temporary();
-                ir_load = new IRUnary(IR_LOAD, tmp1, tmp0);
-
-                add_instruction(ir_load);
+                tmp1 = ctx->new_temporary();
+                ir_load = ctx->new_unary(IR_LOAD, tmp1, tmp0);
                 last_value = tmp1;
             } else {
-                tmp0 = new_temporary();
-                ir_addr = new IRUnary(IR_FRAME, tmp0, ir_id);
-                tmp1 = new_temporary();
-                ir_load = new IRUnary(IR_LOAD, tmp1, tmp0);
-
-                add_instruction(ir_addr);
-                add_instruction(ir_load);
+                tmp0 = ctx->new_temporary();
+                ir_addr = ctx->new_unary(IR_FRAME, tmp0, ir_id);
+                tmp1 = ctx->new_temporary();
+                ir_load = ctx->new_unary(IR_LOAD, tmp1, tmp0);
                 last_value = tmp1;
             }
         }
@@ -251,8 +241,7 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
 
     // FIXME
     // on complex types, should call memcpy instead of a simple store
-    ir = new IRUnary(IR_STORE, left, right);
-    add_instruction(ir);
+    ir = ctx->new_unary(IR_STORE, left, right);
     last_value = left;
 }
 
@@ -272,10 +261,8 @@ void IRBuilder::build_dereference(UnOp* op, bool lvalue) {
     build_expression(op->get_expression());
 
     if (!lvalue) {
-        IRValue* tmp = new_temporary();
-        IR* ir_load = new IRUnary(IR_LOAD, tmp, last_value);
-
-        add_instruction(ir_load);
+        IRValue* tmp = ctx->new_temporary();
+        IR* ir_load = ctx->new_unary(IR_LOAD, tmp, last_value);
         last_value = tmp;
     }
 }
@@ -292,9 +279,8 @@ void IRBuilder::build_binop(BinOp* bin, int kind) {
     build_expression(bin->get_right());
     right = last_value;
 
-    dst = new IRValue(IR_VALUE_TEMP, tmp_counter++);
-    ir = new IRBin(kind, dst, left, right);
-    add_instruction(ir);
+    dst = ctx->new_temporary();
+    ir = ctx->new_bin(kind, dst, left, right);
     last_value = dst;
 }
 
@@ -303,17 +289,11 @@ void IRBuilder::build_literal(Literal* literal, int kind) {
     IRValue* ir_literal;
     IRValue* tmp;
 
-    ir_literal = new IRValue(kind, literal->get_lexeme());
-    tmp = new IRValue(IR_VALUE_TEMP, tmp_counter++);
-    ir = new IRUnary(IR_LI, tmp, ir_literal);
-    add_instruction(ir);
+    ir_literal = ctx->get_literal(kind, literal->get_lexeme());
+    tmp = ctx->new_temporary();
+    ir = ctx->new_unary(IR_LI, tmp, ir_literal);
+    last_value = tmp;
+
     last_value = tmp;
 }
 
-void IRBuilder::add_instruction(IR* instruction) {
-    instructions.push_back(instruction);
-}
-
-IRValue* IRBuilder::new_temporary() {
-    return new IRValue(IR_VALUE_TEMP, tmp_counter++);
-}

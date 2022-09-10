@@ -70,6 +70,7 @@ set(IR_SRC
     src/ir/ir_unary.cc
     src/ir/ir_value.cc
     src/ir/ir_builder.cc
+    src/ir/ir_context.cc
 )
 
 set(PRINTER_SRC

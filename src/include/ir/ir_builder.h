@@ -8,6 +8,7 @@
 #include "ir/ir_value.h"
 #include "ir/ir_bin.h"
 #include "ir/ir_unary.h"
+#include "ir/ir_context.h"
 #include "log/logger.h"
 
 namespace haard {
@@ -48,15 +49,11 @@ namespace haard {
         public:
             void set_logger(Logger* logger);
 
-        private:
-            void add_instruction(IR* instruction);
-            IRValue* new_temporary();
 
         private:
-            int tmp_counter = 0;
             Logger* logger;
             IRValue* last_value;
-            std::vector<IR*> instructions;
+            IRContext* ctx;
             std::map<std::string, IRValue*> alloca_map;
     };
 }
