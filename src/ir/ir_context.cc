@@ -1,3 +1,4 @@
+#include <sstream>
 #include <iostream>
 #include "ir/ir_context.h"
 
@@ -58,4 +59,21 @@ void IRContext::debug() {
         IR* inst = *it;
         std::cout << inst->to_str() << std::endl;
     }
+}
+
+std::string IRContext::to_str() {
+    std::stringstream ss;
+    std::list<IR*>::iterator it;
+
+    for (it = instructions.begin(); it != instructions.end(); ++it) {
+        IR* inst = *it;
+
+        if (inst->get_kind() != IR_LABEL) {
+            ss << "    ";
+        }
+
+        ss << inst->to_str() << '\n';
+    }
+
+    return ss.str();
 }

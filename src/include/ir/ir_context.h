@@ -19,6 +19,9 @@ namespace haard {
             IRUnary* new_unary(int kind,IRValue* dst, IRValue* src);
             IRValue* get_literal(int kind, const char* lexeme);
             IRValue* new_temporary();
+
+            std::string to_str();
+
             void debug();
 
         private:

@@ -9,15 +9,15 @@ IRBuilder::IRBuilder() {
 }
 
 IRBuilder::~IRBuilder() {
-    delete ctx;
+    for (int i = 0; i < functions.size(); ++i) {
+        delete functions[i];
+    }
 }
 
 void IRBuilder::build(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
-
-    ctx->debug();
 }
 
 void IRBuilder::build_source(Source* source) {
@@ -31,7 +31,15 @@ void IRBuilder::build_class(Class* klass) {
 }
 
 void IRBuilder::build_function(Function* function) {
+    IRFunction* ir_func = new IRFunction();
+
+    ir_func->set_name(function->get_name());
+
+    functions.push_back(ir_func);
+    ctx = ir_func->get_context();
     build_compound_statement(function->get_statements());
+
+    std::cout << ir_func->to_str();
 }
 
 void IRBuilder::set_logger(Logger* logger) {

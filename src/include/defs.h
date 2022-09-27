@@ -733,6 +733,8 @@ namespace haard {
     } IRValueKind;
 
     typedef enum IRKind {
+        IR_FUNCTION,
+        IR_LABEL,
         IR_ADD,
         IR_SUB,
         IR_ADDI,
