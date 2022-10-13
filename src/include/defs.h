@@ -737,6 +737,8 @@ namespace haard {
         IR_LABEL,
         IR_ADD,
         IR_SUB,
+        IR_MUL,
+        IR_DIV,
         IR_ADDI,
         IR_COPY,
         IR_LI,

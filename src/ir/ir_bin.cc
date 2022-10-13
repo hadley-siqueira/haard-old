@@ -23,6 +23,12 @@ std::string IRBin::to_str() {
     case IR_SUB:
         return to_str1("sub");
 
+    case IR_MUL:
+        return to_str1("mul");
+
+    case IR_DIV:
+        return to_str1("div");
+
     }
 
     return "unknown ir_bin";

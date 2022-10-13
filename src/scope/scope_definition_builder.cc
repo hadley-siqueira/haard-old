@@ -208,6 +208,24 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_minus(bin);
         break;
 
+    case EXPR_TIMES:
+    case EXPR_DIVISION:
+    case EXPR_INTEGER_DIVISION:
+    case EXPR_MODULO:
+    case EXPR_POWER:
+    case EXPR_BITWISE_OR:
+    case EXPR_BITWISE_XOR:
+    case EXPR_BITWISE_AND:
+    case EXPR_SLL:
+    case EXPR_SRL:
+    case EXPR_SRA:
+        build_binop(bin);
+        break;
+
+    case EXPR_INCLUSIVE_RANGE:
+    case EXPR_EXCLUSIVE_RANGE:
+        break;
+
     case EXPR_ADDRESS_OF:
         build_address_of(un);
         break;
@@ -268,29 +286,11 @@ void ScopeDefinitionBuilder::build_assignment(BinOp* bin) {
 }
 
 void ScopeDefinitionBuilder::build_plus(BinOp* bin) {
-    build_expression(bin->get_left());
-    build_expression(bin->get_right());
-
-    Type* tleft = bin->get_left()->get_type();
-    Type* tright = bin->get_right()->get_type();
-
-    tleft = tleft->promote(tright);
-
-    // FIXME
-    bin->set_type(tleft);
+    build_binop(bin);
 }
 
 void ScopeDefinitionBuilder::build_minus(BinOp* bin) {
-    build_expression(bin->get_left());
-    build_expression(bin->get_right());
-
-    Type* tleft = bin->get_left()->get_type();
-    Type* tright = bin->get_right()->get_type();
-
-    tleft = tleft->promote(tright);
-
-    // FIXME
-    bin->set_type(tleft);
+    build_binop(bin);
 }
 
 void ScopeDefinitionBuilder::build_address_of(UnOp* op) {
@@ -307,6 +307,19 @@ void ScopeDefinitionBuilder::build_address_of(UnOp* op) {
 void ScopeDefinitionBuilder::build_dereference(UnOp* op) {
     build_expression(op->get_expression());
     op->set_type(op->get_expression()->get_type());
+}
+
+void ScopeDefinitionBuilder::build_binop(BinOp* bin) {
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+
+    Type* tleft = bin->get_left()->get_type();
+    Type* tright = bin->get_right()->get_type();
+
+    tleft = tleft->promote(tright);
+
+    // FIXME
+    bin->set_type(tleft);
 }
 
 void ScopeDefinitionBuilder::build_literal(Literal* literal, int kind) {
