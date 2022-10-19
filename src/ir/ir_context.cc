@@ -52,6 +52,17 @@ IRValue* IRContext::get_literal(int kind, const char* lexeme) {
     return values[lexeme];
 }
 
+IRValue* IRContext::get_var(Identifier* id) {
+    IRValue* v;
+    const char* lexeme = id->get_lexeme();
+
+    if (values.count(lexeme) == 0) {
+        values[lexeme] = new IRValue(IR_VALUE_VAR, lexeme);
+    }
+
+    return values[lexeme];
+}
+
 void IRContext::debug() {
     std::list<IR*>::iterator it;
 

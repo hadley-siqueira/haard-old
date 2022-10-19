@@ -5,7 +5,7 @@ using namespace haard;
 
 IRBuilder::IRBuilder() {
     logger = nullptr;
-    ctx = new IRContext();
+    //ctx = new IRContext();
 }
 
 IRBuilder::~IRBuilder() {
@@ -39,7 +39,7 @@ void IRBuilder::build_function(Function* function) {
     ctx = ir_func->get_context();
     build_compound_statement(function->get_statements());
 
-    std::cout << ir_func->to_str();
+    std::cout << ir_func->to_str() << std::endl;
 }
 
 void IRBuilder::set_logger(Logger* logger) {
@@ -207,8 +207,7 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
 
     if (lvalue) {
         if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-            ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
-            //ir_id = ctx->get_var(id->get_lexeme());
+            ir_id = ctx->get_var(id);
 
             if (alloca_map.count(ir_id->to_str()) > 0) {
                 last_value = alloca_map[ir_id->to_str()];
@@ -221,7 +220,8 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
         }
     } else {
         if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-            ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
+            //ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
+            ir_id = ctx->get_var(id);
 
             if (alloca_map.count(ir_id->to_str()) > 0) {
                 tmp0 = alloca_map[ir_id->to_str()];

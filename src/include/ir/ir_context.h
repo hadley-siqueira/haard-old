@@ -3,6 +3,7 @@
 
 #include <map>
 #include <list>
+#include "ast/ast.h"
 #include "ir/ir_value.h"
 #include "ir/ir_unary.h"
 #include "ir/ir_bin.h"
@@ -18,6 +19,7 @@ namespace haard {
             IRBin* new_bin(int kind, IRValue* dst, IRValue* src1, IRValue* src2);
             IRUnary* new_unary(int kind,IRValue* dst, IRValue* src);
             IRValue* get_literal(int kind, const char* lexeme);
+            IRValue* get_var(Identifier* id);
             IRValue* new_temporary();
 
             std::string to_str();
@@ -27,6 +29,7 @@ namespace haard {
         private:
             int tmp_counter;
             std::map<std::string, IRValue*> values;
+            std::map<std::string, IRValue*> alloca_map;
             std::list<IR*> instructions;
     };
 }
