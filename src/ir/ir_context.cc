@@ -88,3 +88,20 @@ std::string IRContext::to_str() {
 
     return ss.str();
 }
+
+std::string IRContext::to_cpp() {
+    std::stringstream ss;
+    std::list<IR*>::iterator it;
+
+    for (it = instructions.begin(); it != instructions.end(); ++it) {
+        IR* inst = *it;
+
+        if (inst->get_kind() != IR_LABEL) {
+            ss << "    ";
+        }
+
+        ss << inst->to_cpp() << '\n';
+    }
+
+    return ss.str();
+}

@@ -34,3 +34,19 @@ std::string IRFunction::to_str() {
 
     return ss.str();
 }
+
+std::string IRFunction::to_cpp() {
+    std::stringstream ss;
+
+    ss << "void " << name << "(";
+
+    for (int i = 0; i < params.size(); ++i) {
+        ss << params[i]->to_cpp() << ", ";
+    }
+
+    ss << ") {\n";
+    ss << ctx->to_cpp();
+    ss << "}\n";
+
+    return ss.str();
+}

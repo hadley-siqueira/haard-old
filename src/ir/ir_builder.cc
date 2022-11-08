@@ -5,6 +5,7 @@ using namespace haard;
 
 IRBuilder::IRBuilder() {
     logger = nullptr;
+    module = new IRModule();
     //ctx = new IRContext();
 }
 
@@ -18,6 +19,8 @@ void IRBuilder::build(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
+
+    std::cout << module->to_cpp() << std::endl;
 }
 
 void IRBuilder::build_source(Source* source) {
@@ -39,7 +42,7 @@ void IRBuilder::build_function(Function* function) {
     ctx = ir_func->get_context();
     build_compound_statement(function->get_statements());
 
-    std::cout << ir_func->to_str() << std::endl;
+    module->add_function(ir_func);
 }
 
 void IRBuilder::set_logger(Logger* logger) {

@@ -12,6 +12,7 @@ namespace haard {
 
         public:
             std::string to_str();
+            std::string to_cpp();
 
         private:
             int kind;

@@ -15,6 +15,7 @@ namespace haard {
             void set_name(std::string name);
             IRContext* get_context();
             std::string to_str();
+            std::string to_cpp();
 
         private:
             std::string name;

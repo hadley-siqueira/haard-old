@@ -45,3 +45,35 @@ std::string IRUnary::to_str() {
 
     return ss.str();
 }
+
+std::string IRUnary::to_cpp() {
+    std::stringstream ss;
+
+    switch (kind) {
+    case IR_LI:
+        ss << "u64 " << dst->to_cpp() << " = " << src->to_cpp() << ";";
+        break;
+
+    case IR_COPY:
+        ss << "copy " << dst->to_cpp() << ", " << src->to_cpp();
+        break;
+
+    case IR_FRAME:
+        ss << "frame " << dst->to_cpp() << ", " << src->to_cpp();
+        break;
+
+    case IR_LOAD:
+        ss << "u64 " << dst->to_cpp() << " = load64(" << src->to_cpp() << ");";
+        break;
+
+    case IR_STORE:
+        ss << "store64(" << dst->to_cpp() << ", " << src->to_cpp() << ");";
+        break;
+
+    default:
+        ss << "unknown unary ir";
+        break;
+    }
+
+    return ss.str();
+}

@@ -15,6 +15,7 @@ namespace haard {
 
         public:
             virtual std::string to_str();
+            virtual std::string to_cpp();
 
         protected:
             int kind;

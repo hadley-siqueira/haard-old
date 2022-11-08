@@ -72,6 +72,7 @@ set(IR_SRC
     src/ir/ir_builder.cc
     src/ir/ir_context.cc
     src/ir/ir_function.cc
+    src/ir/ir_module.cc
 )
 
 set(PRINTER_SRC

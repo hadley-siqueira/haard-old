@@ -11,9 +11,11 @@ namespace haard {
             ~IRBin();
 
             std::string to_str();
+            std::string to_cpp();
 
         private:
             std::string to_str1(std::string op);
+            std::string to_cpp1(std::string op);
 
         private:
             IRValue* dst;

@@ -48,3 +48,29 @@ std::string IRValue::to_str() {
 
     return ss.str();
 }
+
+std::string IRValue::to_cpp() {
+    std::stringstream ss;
+
+    switch (kind) {
+    case IR_VALUE_VAR:
+        ss << value;
+        break;
+
+    case IR_VALUE_TEMP:
+        ss << 't' << value;
+        break;
+
+    case IR_VALUE_LITERAL_BOOL:
+    case IR_VALUE_LITERAL_INTEGER:
+    case IR_VALUE_LITERAL_FLOAT:
+    case IR_VALUE_LITERAL_DOUBLE:
+    case IR_VALUE_LITERAL_CHAR:
+    case IR_VALUE_LITERAL_STRING:
+    case IR_VALUE_LITERAL_SYMBOL:
+        ss << value;
+        break;
+    }
+
+    return ss.str();
+}

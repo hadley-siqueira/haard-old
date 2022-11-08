@@ -23,6 +23,7 @@ namespace haard {
             IRValue* new_temporary();
 
             std::string to_str();
+            std::string to_cpp();
 
             void debug();
 

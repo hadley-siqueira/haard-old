@@ -10,6 +10,7 @@
 #include "ir/ir_unary.h"
 #include "ir/ir_context.h"
 #include "ir/ir_function.h"
+#include "ir/ir_module.h"
 #include "log/logger.h"
 
 namespace haard {
@@ -60,6 +61,7 @@ namespace haard {
             IRContext* ctx;
             std::map<std::string, IRValue*> alloca_map;
             std::vector<IRFunction*> functions;
+            IRModule* module;
     };
 }
 
