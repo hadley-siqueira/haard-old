@@ -357,3 +357,39 @@ int Type::rank() {
 
     return 10;
 }
+
+int Type::get_size_in_bytes() {
+    switch (kind) {
+    case TYPE_I8:
+    case TYPE_U8:
+    case TYPE_CHAR:
+    case TYPE_BOOL:
+    case TYPE_UCHAR:
+    case TYPE_VOID:
+        return 1;
+
+    case TYPE_I16:
+    case TYPE_SHORT:
+    case TYPE_U16:
+    case TYPE_USHORT:
+        return 2;
+
+    case TYPE_I32:
+    case TYPE_INT:
+    case TYPE_U32:
+    case TYPE_UINT:
+    case TYPE_FLOAT:
+        return 4;
+
+    case TYPE_LONG:
+    case TYPE_I64:
+    case TYPE_U64:
+    case TYPE_ULONG:
+    case TYPE_DOUBLE:
+    case TYPE_SYMBOL:
+    case TYPE_STR:
+        return 8;
+    }
+
+    return 0;
+}

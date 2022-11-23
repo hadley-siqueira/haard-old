@@ -42,3 +42,7 @@ Type* IndirectionType::clone() {
 std::string IndirectionType::to_str() {
     return subtype->to_str() + "*";
 }
+
+int IndirectionType::get_size_in_bytes() {
+    return 8;
+}

@@ -19,6 +19,7 @@ namespace haard {
             int get_column();
             const char* get_name();
             Type* get_type();
+            int get_size_in_bytes();
 
             void set_line(int line);
             void set_column(int column);

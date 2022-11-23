@@ -14,6 +14,7 @@ namespace haard {
         public:
             Type* get_subtype();
             bool equal(Type* type);
+            int get_size_in_bytes();
 
             Type* clone();
             std::string to_str();

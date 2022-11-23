@@ -165,3 +165,13 @@ void Class::set_template_header(TemplateHeader* header) {
 TemplateHeader* Class::get_template_header() {
     return template_header;
 }
+
+int Class::get_size_in_bytes() {
+    int sz = 0;
+
+    for (int i = 0; i < variables.size(); ++i) {
+        sz += variables[i]->get_size_in_bytes();
+    }
+
+    return sz;
+}

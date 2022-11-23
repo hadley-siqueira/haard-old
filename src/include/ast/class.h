@@ -28,6 +28,7 @@ namespace haard {
             Variable* get_variable(int idx);
             Scope* get_scope();
             NamedType* get_self_type();
+            int get_size_in_bytes();
 
             void set_from_token(Token& token);
             void set_name(const char* name);

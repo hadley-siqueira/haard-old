@@ -95,3 +95,7 @@ void NamedType::set_template_header(TemplateHeader* header) {
 TemplateHeader* NamedType::get_template_header() {
     return template_header;
 }
+
+int NamedType::get_size_in_bytes() {
+    return symbol->get_size_in_bytes();
+}

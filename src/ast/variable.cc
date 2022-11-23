@@ -43,6 +43,10 @@ Type* Variable::get_type() {
     return type;
 }
 
+int Variable::get_size_in_bytes() {
+    return type->get_size_in_bytes();
+}
+
 void Variable::set_line(int line) {
     this->line = line;
 }

@@ -59,7 +59,7 @@ std::string IRUnary::to_cpp() {
         break;
 
     case IR_FRAME:
-        ss << "frame " << dst->to_cpp() << ", " << src->to_cpp();
+        ss << "u64 " << dst->to_cpp() << " = 0; // frame to " << src->to_cpp();
         break;
 
     case IR_LOAD:

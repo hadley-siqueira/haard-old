@@ -28,6 +28,7 @@ namespace haard {
             virtual bool is_primitive();
             virtual Type* promote(Type* other);
             virtual int rank();
+            virtual int get_size_in_bytes();
 
         protected:
             int kind;

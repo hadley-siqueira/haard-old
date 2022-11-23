@@ -179,3 +179,25 @@ int Symbol::overloaded_count() {
 void* Symbol::get_overloaded(TypeList* types) {
     return nullptr;
 }
+
+int Symbol::get_size_in_bytes(int idx) {
+    Class* klass = (Class*) descriptors[idx];
+    Function* func = (Function*) descriptors[idx];
+    Variable* var = (Variable*) descriptors[idx];
+
+    switch (kind) {
+    case SYM_CLASS:
+        return klass->get_size_in_bytes();
+
+    case SYM_FUNCTION:
+    case SYM_METHOD:
+        return 0;
+
+    case SYM_PARAMETER:
+    case SYM_VARIABLE:
+    case SYM_CLASS_VARIABLE:
+        return var->get_size_in_bytes();
+    }
+
+    return 0;
+}
