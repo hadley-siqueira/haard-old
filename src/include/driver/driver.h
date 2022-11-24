@@ -20,6 +20,7 @@ namespace haard {
             void set_flags(int argc, char* argv[]);
 
         private:
+            void run_info_flags();
             void run_flags();
             void parse_sources();
             void semantic_analysis();
@@ -39,6 +40,8 @@ namespace haard {
             void set_root_path_from_main_file();
             std::vector<std::string> get_files_from_dir(std::string path);
 
+            void show_help();
+
         private:
             char path_delimiter;
             std::string main_path;
@@ -52,6 +55,7 @@ namespace haard {
             bool cpp_flag;
             bool pretty_flag;
             bool info_flag;
+            bool help_flag;
     };
 }
 

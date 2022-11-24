@@ -24,6 +24,7 @@ Driver::Driver() {
     cpp_flag = false;
     pretty_flag = false;
     info_flag = false;
+    help_flag = false;
 }
 
 Driver::~Driver() {
@@ -33,6 +34,9 @@ Driver::~Driver() {
 void Driver::run() {
     set_root_path_from_main_file();
     configure_search_path();
+
+    run_info_flags();
+
     parse_sources();
     semantic_analysis();
     ir_generation();
@@ -49,11 +53,17 @@ void Driver::run() {
     //build_ir();*/
 }
 
-void Driver::run_flags() {
+void Driver::run_info_flags() {
     if (info_flag) {
         print_information();
     }
 
+    if (help_flag) {
+        show_help();
+    }
+}
+
+void Driver::run_flags() {
     if (pretty_flag) {
         print_sources();
     }
@@ -79,6 +89,8 @@ void Driver::set_flags(int argc, char* argv[]) {
             pretty_flag = true;
         } else if (strcmp(argv[i], "-info") == 0) {
             info_flag = true;
+        } else if (strcmp(argv[i], "-h") == 0) {
+            help_flag = true;
         }
     }
 }
@@ -93,6 +105,8 @@ void Driver::print_information() {
     for (int i = 0; i < search_path.size(); ++i) {
         std::cout << "\t\"" << search_path[i] << '"' << std::endl;
     }
+
+    exit(0);
 }
 
 void Driver::parse_sources() {
@@ -293,4 +307,18 @@ std::vector<std::string> Driver::get_files_from_dir(std::string path) {
     }
 
     return files;
+}
+
+void Driver::show_help() {
+    const char msg[] = 
+        "Options:\n"
+        "    -h         Show this help message\n"
+        "    -o         Choose output name\n"
+        "    -i         Include search path\n"
+        "    -cpp       Generate high level C++\n"
+        "    -pretty    Pretty Print file\n"
+        "    -info      Show compiler info\n";
+        
+    std::cout << msg;
+    exit(0);
 }
