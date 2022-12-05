@@ -196,6 +196,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_identifier((Identifier*) expression);
         break;
 
+    case EXPR_CALL:
+        build_call(bin);
+        break;
+
     case EXPR_ASSIGN:
         build_assignment(bin);
         break;
@@ -267,6 +271,8 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
 void ScopeDefinitionBuilder::build_identifier(Identifier* id) {
     Symbol* sym = current_scope->has(id->get_lexeme());
 
+    std::cout << "trying link id " << id->get_lexeme() << " to symbol" << std::endl;
+
     if (!sym) {
         logger->error("id not in scope");
     }
@@ -283,6 +289,112 @@ void ScopeDefinitionBuilder::build_assignment(BinOp* bin) {
     }
  
     build_expression(bin->get_left());
+}
+
+void ScopeDefinitionBuilder::build_call(BinOp* bin) {
+    Type* tl;
+    Type* tr;
+    TypeList* ft;
+    TypeList* args;
+
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+
+    tl = bin->get_left()->get_type();
+    tr = bin->get_right()->get_type();
+
+    if (bin->get_left()->get_kind() == EXPR_ID) {
+        Identifier* id = (Identifier*) bin->get_left();
+        Symbol* sym = id->get_symbol();
+
+        if (tl->get_kind() == TYPE_FUNCTION) {
+            args = (TypeList*) tr;
+            int i = 0;
+            bool found = false;
+
+            for (i = 0; i < sym->overloaded_count(); ++i) {
+                Function* f = (Function*) sym->get_descriptor(i);
+                ft = (TypeList*) f->get_self_type();
+
+                if (ft->check_arguments_type(args)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                id->set_overloaded_index(i);
+            } else {
+                // FIXME
+                std::cout << "Error: function not overloaded with signature\n";
+                exit(0);
+            }
+
+            bin->set_type(ft->get_return_type());
+        } else if (tl->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS) {
+            bool found = false;
+            int i = 0;
+            Class* klass = (Class*) sym->get_descriptor();
+            args = (TypeList*) tr;
+
+            for (i = 0; i < klass->constructors_count(); ++i) {
+                Function* f = (Function*) klass->get_constructor(i);
+                ft = (TypeList*) f->get_self_type();
+
+                if (ft->check_arguments_type(args)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                // id->set_overloaded_index(i);
+            } else {
+                // FIXME
+                std::cout << "Error: constructor not overloaded with signature\n";
+                exit(0);
+            }
+
+            bin->set_type(sym->get_type());
+        } else {
+            // FIXME
+            std::cout << "Error: not a function to be called\n";
+            exit(0);
+        }
+    } else if (bin->get_left()->get_kind() == EXPR_DOT) {
+        BinOp* dot = (BinOp*) bin->get_left();
+        Identifier* id = (Identifier*) dot->get_right();
+        Symbol* sym = id->get_symbol();
+
+        if (tl->get_kind() == TYPE_FUNCTION) {
+            args = (TypeList*) tr;
+            int i = 0;
+            bool found = false;
+
+            for (i = 0; i < sym->overloaded_count(); ++i) {
+                Function* f = (Function*) sym->get_descriptor(i);
+                ft = (TypeList*) f->get_self_type();
+
+                if (ft->check_arguments_type(args)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                id->set_overloaded_index(i);
+            } else {
+                // FIXME
+                std::cout << "Error: function not overloaded with signature\n";
+                exit(0);
+            }
+
+            bin->set_type(ft->get_return_type());
+        }
+    } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
+        // FIXME assuming that is a function type
+        
+    }
 }
 
 void ScopeDefinitionBuilder::build_plus(BinOp* bin) {

@@ -39,9 +39,9 @@ void Driver::run() {
 
     parse_sources();
     semantic_analysis();
-    ir_generation();
 
     run_flags();
+    ir_generation();
     logger.print();
 /*
     parse_program();
@@ -70,6 +70,7 @@ void Driver::run_flags() {
 
     if (cpp_flag) {
         generate_cpp();
+        exit(0);
     }
 }
 
