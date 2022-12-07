@@ -44,6 +44,7 @@ namespace haard {
             void build_dereference(UnOp* op);
 
             void build_literal(Literal* literal, int kind);
+            void build_expression_list(ExpressionList* exprlist);
 
         private:
             void define_sources(Sources* sources);

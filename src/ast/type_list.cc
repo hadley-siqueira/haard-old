@@ -68,11 +68,14 @@ bool TypeList::equal(Type* type) {
 }
 
 bool TypeList::check_arguments_type(TypeList* args) {
+std::cout << "comparing " << args->types_count() << " == " << types_count() << std::endl;
     if (args->types_count() != types_count() - 1) {
         return false;
     }
 
     for (int i = 0; i < types.size() - 1; ++i) {
+std::cout << "comparing " << args->get_type(i)->to_str() << " == " <<
+types[i]->to_str() << std::endl;
         if (!args->get_type(i)->equal(types[i])) {
             return false;
         }

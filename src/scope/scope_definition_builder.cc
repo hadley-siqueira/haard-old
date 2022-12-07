@@ -265,6 +265,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
     case EXPR_LITERAL_SYMBOL:
         build_literal(literal, TYPE_SYMBOL);
         break;
+
+    case EXPR_ARGS:
+        build_expression_list(exprlist);
+        break;
     }
 }
 
@@ -295,6 +299,7 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
     Type* tl;
     Type* tr;
     TypeList* ft;
+    FunctionType* ftype;
     TypeList* args;
 
     build_expression(bin->get_left());
@@ -314,9 +319,9 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
 
             for (i = 0; i < sym->overloaded_count(); ++i) {
                 Function* f = (Function*) sym->get_descriptor(i);
-                ft = (TypeList*) f->get_self_type();
+                ftype = (FunctionType*) f->get_self_type();
 
-                if (ft->check_arguments_type(args)) {
+                if (ftype->check_arguments_type(args)) {
                     found = true;
                     break;
                 }
@@ -330,7 +335,7 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
                 exit(0);
             }
 
-            bin->set_type(ft->get_return_type());
+            bin->set_type(ftype->get_return_type());
         } else if (tl->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS) {
             bool found = false;
             int i = 0;
@@ -436,6 +441,21 @@ void ScopeDefinitionBuilder::build_binop(BinOp* bin) {
 
 void ScopeDefinitionBuilder::build_literal(Literal* literal, int kind) {
     literal->set_type(new Type(kind));
+}
+
+void ScopeDefinitionBuilder::build_expression_list(ExpressionList* exprlist) {
+    TypeList* types = new TypeList(TYPE_TUPLE);
+
+    if (exprlist->expressions_count() > 0) {
+        for (int i = 0; i < exprlist->expressions_count(); ++i) {
+            build_expression(exprlist->get_expression(i));
+            types->add_type(exprlist->get_expression(i)->get_type());
+        }
+    } else {
+        types->add_type(new Type(TYPE_VOID));
+    }
+
+    exprlist->set_type(types);
 }
 
 bool ScopeDefinitionBuilder::is_new_var_assign(BinOp* bin) {

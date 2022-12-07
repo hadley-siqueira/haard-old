@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "ast/type.h"
+#include "ast/type_list.h"
 #include "ast/template_header.h"
 
 namespace haard {
@@ -22,6 +23,7 @@ namespace haard {
             int templates_count();
             Type* get_template(int idx);
             TemplateHeader* get_template_header();
+            bool check_arguments_type(TypeList* args);
 
             // override
             bool equal(Type* type);

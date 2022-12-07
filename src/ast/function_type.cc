@@ -122,3 +122,16 @@ Type* FunctionType::get_template(int idx) {
     return nullptr;
 }
 
+bool FunctionType::check_arguments_type(TypeList* args) {
+    if (args->types_count() != ptypes.size()) {
+        return false;
+    }
+
+    for (int i = 0; i < ptypes.size(); ++i) {
+        if (!args->get_type(i)->equal(ptypes[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}

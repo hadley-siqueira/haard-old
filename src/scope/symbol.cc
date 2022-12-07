@@ -177,6 +177,18 @@ int Symbol::overloaded_count() {
 }
 
 void* Symbol::get_overloaded(TypeList* types) {
+    /*Function* f;
+    FunctionType* ft;
+
+    for (int i = 0; i < overloaded_count(); ++i) {
+        f = (Function*) descriptors[i];
+        ft = f->get_self_type();
+
+        if (ft->check_arguments_type(types)) {
+            return descriptors[i];
+        }
+    }*/
+
     return nullptr;
 }
 
