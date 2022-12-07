@@ -196,6 +196,22 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_identifier((Identifier*) expression);
         break;
 
+    case EXPR_PRE_INC:
+        build_pre_inc(un);
+        break;
+
+    case EXPR_PRE_DEC:
+        build_pre_dec(un);
+        break;
+
+    case EXPR_POS_INC:
+        build_pos_inc(un);
+        break;
+
+    case EXPR_POS_DEC:
+        build_pos_dec(un);
+        break;
+
     case EXPR_CALL:
         build_call(bin);
         break;
@@ -249,7 +265,6 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
     case EXPR_NE:
         build_not_equal(bin);
         break;
-
 
     case EXPR_INCLUSIVE_RANGE:
     case EXPR_EXCLUSIVE_RANGE:
@@ -318,6 +333,26 @@ void ScopeDefinitionBuilder::build_assignment(BinOp* bin) {
     }
  
     build_expression(bin->get_left());
+}
+
+void ScopeDefinitionBuilder::build_pre_inc(UnOp* op) {
+    build_expression(op->get_expression());
+    op->set_type(op->get_expression()->get_type());
+}
+
+void ScopeDefinitionBuilder::build_pre_dec(UnOp* op) {
+    build_expression(op->get_expression());
+    op->set_type(op->get_expression()->get_type());
+}
+
+void ScopeDefinitionBuilder::build_pos_inc(UnOp* op) {
+    build_expression(op->get_expression());
+    op->set_type(op->get_expression()->get_type());
+}
+
+void ScopeDefinitionBuilder::build_pos_dec(UnOp* op) {
+    build_expression(op->get_expression());
+    op->set_type(op->get_expression()->get_type());
 }
 
 void ScopeDefinitionBuilder::build_call(BinOp* bin) {
