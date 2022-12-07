@@ -38,7 +38,17 @@ namespace haard {
 
             void build_plus(BinOp* bin);
             void build_minus(BinOp* bin);
+
+            void build_greater_than(BinOp* bin);
+            void build_less_than(BinOp* bin);
+            void build_greater_or_equal_than(BinOp* bin);
+            void build_less_or_equal_than(BinOp* bin);
+
+            void build_equal(BinOp* bin);
+            void build_not_equal(BinOp* bin);
+
             void build_binop(BinOp* bin);
+            void build_relational(BinOp* bin);
 
             void build_address_of(UnOp* op);
             void build_dereference(UnOp* op);

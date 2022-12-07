@@ -2,5 +2,16 @@ import std.io
 
 def main : int
     v = read_int('enter a number: ')
+
+    if v > 5:
+        print('major')
+    else:
+        print('minor')
+        i = 0
+
+        while i < 10:
+            print(i)
+            i = i + 1
+
     print('hello, world!')
     return 0

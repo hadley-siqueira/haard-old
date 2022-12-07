@@ -226,6 +226,31 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_binop(bin);
         break;
 
+    case EXPR_GT:
+        build_greater_than(bin);
+        break;
+
+    case EXPR_LT:
+        build_less_than(bin);
+        break;
+
+    case EXPR_GE:
+        build_greater_or_equal_than(bin);
+        break;
+
+    case EXPR_LE:
+        build_less_or_equal_than(bin);
+        break;
+
+    case EXPR_EQ:
+        build_equal(bin);
+        break;
+
+    case EXPR_NE:
+        build_not_equal(bin);
+        break;
+
+
     case EXPR_INCLUSIVE_RANGE:
     case EXPR_EXCLUSIVE_RANGE:
         break;
@@ -410,6 +435,30 @@ void ScopeDefinitionBuilder::build_minus(BinOp* bin) {
     build_binop(bin);
 }
 
+void ScopeDefinitionBuilder::build_greater_than(BinOp* bin) {
+    build_relational(bin);
+}
+
+void ScopeDefinitionBuilder::build_less_than(BinOp* bin) {
+    build_relational(bin);
+}
+
+void ScopeDefinitionBuilder::build_greater_or_equal_than(BinOp* bin) {
+    build_relational(bin);
+}
+
+void ScopeDefinitionBuilder::build_less_or_equal_than(BinOp* bin) {
+    build_relational(bin);
+}
+
+void ScopeDefinitionBuilder::build_equal(BinOp* bin) {
+    build_relational(bin);
+}
+
+void ScopeDefinitionBuilder::build_not_equal(BinOp* bin) {
+    build_relational(bin);
+}
+
 void ScopeDefinitionBuilder::build_address_of(UnOp* op) {
     Type* type;
 
@@ -437,6 +486,14 @@ void ScopeDefinitionBuilder::build_binop(BinOp* bin) {
 
     // FIXME
     bin->set_type(tleft);
+}
+
+void ScopeDefinitionBuilder::build_relational(BinOp* bin) {
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+
+    // FIXME
+    bin->set_type(new Type(TYPE_BOOL));
 }
 
 void ScopeDefinitionBuilder::build_literal(Literal* literal, int kind) {
