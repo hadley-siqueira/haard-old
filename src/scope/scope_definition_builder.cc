@@ -307,6 +307,8 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         break;
 
     case EXPR_ARGS:
+    case EXPR_FOR_INIT:
+    case EXPR_FOR_INC:
         build_expression_list(exprlist);
         break;
     }
@@ -315,13 +317,11 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
 void ScopeDefinitionBuilder::build_identifier(Identifier* id) {
     Symbol* sym = current_scope->has(id->get_lexeme());
 
-    std::cout << "trying link id " << id->get_lexeme() << " to symbol" << std::endl;
-
     if (!sym) {
         logger->error("id not in scope");
     }
 
-    id->set_symbol(sym);
+    id->set_symbol(sym); 
 }
 
 

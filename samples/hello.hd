@@ -17,5 +17,8 @@ def main : int
             i++
             i--
 
+        for j = 0; j < 10; ++j:
+            print(j)
+
     print('hello, world!')
     return 0
