@@ -38,10 +38,14 @@ void Driver::run() {
     run_info_flags();
 
     parse_sources();
+    check_for_errors();
+
     semantic_analysis();
+    check_for_errors();
 
     run_flags();
     ir_generation();
+    check_for_errors();
     logger.print();
 /*
     parse_program();
@@ -322,4 +326,11 @@ void Driver::show_help() {
         
     std::cout << msg;
     exit(0);
+}
+
+void Driver::check_for_errors() {
+    if (logger.has_error()) {
+        logger.print();
+        exit(0);
+    }
 }

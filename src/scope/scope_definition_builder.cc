@@ -13,6 +13,7 @@ ScopeDefinitionBuilder::ScopeDefinitionBuilder() {
     current_function = nullptr;
     var_counter = 0;
     function_counter = 0;
+    class_counter = 0;
 }
 
 void ScopeDefinitionBuilder::build(Sources* sources) {
@@ -619,6 +620,7 @@ void ScopeDefinitionBuilder::define_class(Class* klass) {
 
     logger->info(info_message_defining_class(klass));
     sym = current_scope->local_has(klass->get_name());
+    klass->set_uid(class_counter++);
 
     if (!sym) {
         current_scope->define(klass);

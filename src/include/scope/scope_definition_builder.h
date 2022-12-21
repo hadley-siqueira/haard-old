@@ -114,6 +114,7 @@ namespace haard {
 
             int var_counter;
             int function_counter;
+            int class_counter;
     };
 }
 
