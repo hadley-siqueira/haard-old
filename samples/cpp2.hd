@@ -1,0 +1,24 @@
+class File:
+    descriptor : void*
+
+    def open : void
+        @path : str
+        @mode : str
+
+        $$'cv0_descriptor = fopen(p0_path.c_str(), p1_mode.c_str())'
+
+    def close : void
+        $$'fclose((FILE*) cv0_descriptor)'
+
+    def write : void
+        @buffer : str
+
+        $$'fprintf((FILE*) cv0_descriptor, "%s", p0_buffer.c_str())'
+
+def main : int
+    var f : File
+
+    #f.open('my_file.txt', "w")
+    #f.close()
+
+    return 0

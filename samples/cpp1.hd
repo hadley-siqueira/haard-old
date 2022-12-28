@@ -5,5 +5,7 @@ def main : int
     s = "hello "
     s2 = s + " world"
     sy = :test
+    sz = :test
+    sw = :post
     print(s2)
     print(sy)
