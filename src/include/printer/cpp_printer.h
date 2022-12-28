@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <set>
+#include <map>
 #include <stack>
 #include "ast/ast.h"
 
@@ -38,6 +39,7 @@ namespace haard {
             void print_double_dolar(UnOp* un);
             void print_identifier(Identifier* id);
             void print_literal(Literal* literal);
+            void print_literal_symbol(Literal* literal);
             void print_expression_list(std::string begin, std::string end, ExpressionList* tuple);
             void print_hash(ExpressionList* hash);
             void print_function_expression(FunctionExpression* function);
@@ -47,12 +49,15 @@ namespace haard {
             void indent();
             void dedent();
             void print_indentation();
+            void generate_symbols(std::stringstream& out);
             Function* main_function;
 
         private:
             int indent_c;
+            int symbol_counter;
             std::stringstream out;
             std::stringstream signatures;
+            std::map<std::string, int> symbol_map;
     };
 }
 

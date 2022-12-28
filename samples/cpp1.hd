@@ -1,0 +1,9 @@
+import std.io
+
+def main : int
+    n = 0
+    s = "hello "
+    s2 = s + " world"
+    sy = :test
+    print(s2)
+    print(sy)

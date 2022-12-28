@@ -7,6 +7,7 @@ using namespace haard;
 
 CppPrinter::CppPrinter() {
     indent_c = 0;
+    symbol_counter = 0;
     main_function = nullptr;
 }
  
@@ -19,8 +20,10 @@ std::string CppPrinter::to_str() {
     res << "#include <string>\n";
     res << "#include <sstream>\n";
     res << "#include <vector>\n";
-    res << "#include <map>\n";
+    res << "#include <map>\n\n";
+    res << "typedef char* sym;\n";
     res << '\n';
+    generate_symbols(res);
     res << signatures.str();
     res << '\n';
     res << out.str();
@@ -762,8 +765,11 @@ void CppPrinter::print_expression(Expression* expression) {
     case EXPR_LITERAL_DOUBLE:
     case EXPR_LITERAL_CHAR:
     case EXPR_LITERAL_STRING:
-    case EXPR_LITERAL_SYMBOL:
         print_literal(literal);
+        break;
+
+    case EXPR_LITERAL_SYMBOL:
+        print_literal_symbol(literal);
         break;
 
     case EXPR_LITERAL_NULL:
@@ -845,6 +851,15 @@ void CppPrinter::print_literal(Literal* literal) {
     } else {
         out << literal->get_lexeme();
     }
+}
+
+void CppPrinter::print_literal_symbol(Literal* literal) {
+    if (symbol_map.count(literal->get_lexeme()) == 0) {
+        symbol_map[literal->get_lexeme()] = symbol_counter;
+        symbol_counter++;
+    }
+
+    out << "sym" << symbol_map.at(literal->get_lexeme());
 }
 
 void CppPrinter::print_expression_list(std::string begin, std::string end, ExpressionList* tuple) {
@@ -934,3 +949,12 @@ void CppPrinter::print_indentation() {
     }
 }
 
+void CppPrinter::generate_symbols(std::stringstream& out) {
+    std::map<std::string, int>::iterator it;
+
+    for (it = symbol_map.begin(); it != symbol_map.end(); ++it) {
+        out << "sym sym" << it->second << " = \"" << it->first << "\";\n";
+    }
+
+    out << "\n";
+}

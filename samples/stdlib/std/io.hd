@@ -8,6 +8,11 @@ def print : void
 
     $$'std::cout << p0_n << std::endl'
 
+def print : void
+    @s : sym
+
+    $$'std::cout << p0_s << std::endl'
+
 def read_int : int
     v = 0
     $$'std::cin >> v0_v'

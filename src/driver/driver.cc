@@ -36,9 +36,11 @@ void Driver::run() {
     configure_search_path();
 
     run_info_flags();
-
+std::cout << "starting parsing...\n";
     parse_sources();
+std::cout << "ending parsing...\n";
     check_for_errors();
+
 
     semantic_analysis();
     check_for_errors();
