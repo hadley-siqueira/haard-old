@@ -121,7 +121,7 @@ void ScopeDefinitionBuilder::build_statement(Statement* statement) {
         break;
 
     case STMT_VAR_DECL:
-   //     build_variable_declaration((VarDeclaration*) statement);
+        build_variable_declaration((VarDeclaration*) statement);
         break;
     }
 }
@@ -178,6 +178,11 @@ void ScopeDefinitionBuilder::build_branch_statement(BranchStatement* statement) 
     if (statement->get_false_statements()) {
         build_statement(statement->get_false_statements());
     }
+}
+
+void ScopeDefinitionBuilder::build_variable_declaration(VarDeclaration *statement) {
+    link_type(statement->get_variable()->get_type());
+    build_expression(statement->get_expression());
 }
 
 // build expressions

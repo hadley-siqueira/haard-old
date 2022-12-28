@@ -19,6 +19,6 @@ def main : int
     var f : File
 
     #f.open('my_file.txt', "w")
-    #f.close()
+    f.close()
 
     return 0

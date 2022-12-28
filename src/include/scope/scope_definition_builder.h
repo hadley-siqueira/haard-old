@@ -30,6 +30,7 @@ namespace haard {
             void build_while_statement(WhileStatement* statement);
             void build_for_statement(ForStatement* statement);
             void build_branch_statement(BranchStatement* statement);
+            void build_variable_declaration(VarDeclaration* statement);
 
             void build_expression(Expression* expression);
             void build_identifier(Identifier* id);
