@@ -1,3 +1,5 @@
+import std.io
+
 class File:
     descriptor : void*
 
@@ -15,6 +17,12 @@ class File:
 
         $$'fprintf((FILE*) cv0_descriptor, "%s", p0_buffer.c_str())'
 
+    def write : void
+        @buffer : int
+
+        $$'fprintf((FILE*) cv0_descriptor, "%i", p0_buffer)'
+
+
 def main : int
     var f : File
     
@@ -22,4 +30,18 @@ def main : int
     f.write('hello, world!')
     f.close()
 
+    w = read_int('width: ')
+    h = read_int('height: ')
+
+    f.open('image.ppm', "w")
+    f.write('P3\n')
+    f.write(w)
+    f.write(" ")
+    f.write(h)
+    f.write("\n255\n")
+
+    for i = 0; i < w * h; ++i:
+        f.write('255 255 0\n')
+
+    f.close()
     return 0
