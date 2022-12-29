@@ -469,7 +469,7 @@ void CppPrinter::print_variable_declaration(VarDeclaration* decl) {
         exit(0);
     }
 
-    out << ' ' << var->get_name();
+    out << ' ' << var->get_cpp_name();
 
     if (decl->get_expression() != nullptr) {
         out << " = ";

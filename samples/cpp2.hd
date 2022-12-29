@@ -18,7 +18,8 @@ class File:
 def main : int
     var f : File
     
-    #f.open('my_file.txt', "w")
+    f.open('my_file.txt', "w")
+    f.write('hello, world!')
     f.close()
 
     return 0

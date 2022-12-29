@@ -422,9 +422,9 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
 
             for (i = 0; i < klass->constructors_count(); ++i) {
                 Function* f = (Function*) klass->get_constructor(i);
-                ft = (TypeList*) f->get_self_type();
+                ftype = (FunctionType*) f->get_self_type();
 
-                if (ft->check_arguments_type(args)) {
+                if (ftype->check_arguments_type(args)) {
                     found = true;
                     break;
                 }
@@ -456,9 +456,9 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
 
             for (i = 0; i < sym->overloaded_count(); ++i) {
                 Function* f = (Function*) sym->get_descriptor(i);
-                ft = (TypeList*) f->get_self_type();
+                ftype = (FunctionType*) f->get_self_type();
 
-                if (ft->check_arguments_type(args)) {
+                if (ftype->check_arguments_type(args)) {
                     found = true;
                     break;
                 }
@@ -468,11 +468,11 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
                 id->set_overloaded_index(i);
             } else {
                 // FIXME
-                std::cout << "Error: function not overloaded with signature\n";
+                std::cout << "Error: method not overloaded with signature\n";
                 exit(0);
             }
 
-            bin->set_type(ft->get_return_type());
+            bin->set_type(ftype->get_return_type());
         }
     } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
         // FIXME assuming that is a function type
@@ -491,13 +491,16 @@ void ScopeDefinitionBuilder::build_dot(BinOp *bin) {
     scope = tl->get_scope();
     field = (Identifier*) bin->get_right();
     symbol = scope->has_field(field->get_lexeme());
+
     std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
     std::cout << "fix me because the overloaded is not good, the type scope is not good and maybe some code"
                  "here will go to the call. Call must set the last overloaded index. Refactor call generation"
                  "handle method types\n";
 
     if (symbol) {
+        std::cout << "mtype: " << symbol->get_type()->get_kind() << ' ' << symbol->get_type()->to_cpp() << std::endl;
         field->set_type(symbol->get_type());
+        field->set_symbol(symbol);
         bin->set_type(symbol->get_type());
     } else {
         std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
