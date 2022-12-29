@@ -1,8 +1,11 @@
+import std.io
+
 class Memory:
     bytes : u8*
 
     def init : void
         bytes = null
+        bytes = new u8[1024]
 
     def write32 : void
         @addr  : u64
@@ -36,6 +39,13 @@ def main : int
     mem = Memory()
 
     mem.write32(0, 0x123)
+
+    # this doesn't work because function overloading isn't working
+    # print(mem.read32(0))
+
+    var v : int
+    v = mem.read32(0)
+    print(v)
 
     return 0
         
