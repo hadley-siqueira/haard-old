@@ -339,7 +339,7 @@ void ScopeDefinitionBuilder::build_identifier(Identifier* id) {
         logger->error("id not in scope");
     }
 
-    id->set_symbol(sym); 
+    id->set_symbol(sym);
 }
 
 
@@ -389,7 +389,9 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
     if (bin->get_left()->get_kind() == EXPR_ID) {
         Identifier* id = (Identifier*) bin->get_left();
         Symbol* sym = id->get_symbol();
-
+std::cout << "sym = " << sym->to_cpp() << std::endl;
+std::cout << "type sym = ";
+std::cout << sym->get_type()->to_cpp() << std::endl;
         if (tl->get_kind() == TYPE_FUNCTION) {
             args = (TypeList*) tr;
             int i = 0;
@@ -662,6 +664,7 @@ void ScopeDefinitionBuilder::define_source_functions(Source* source) {
 void ScopeDefinitionBuilder::define_class(Class* klass) {
     Class* other;
     Symbol* sym;
+    NamedType* self_type = new NamedType();
 
     logger->info(info_message_defining_class(klass));
     sym = current_scope->local_has(klass->get_name());
@@ -672,6 +675,10 @@ void ScopeDefinitionBuilder::define_class(Class* klass) {
     } else {
         logger->error(error_message_cant_define_class(klass, sym));
     }
+
+    self_type->set_name(klass->get_name());
+    link_type(self_type);
+    klass->set_self_type(self_type);
 }
 
 void ScopeDefinitionBuilder::define_class_variables(Class* klass) {

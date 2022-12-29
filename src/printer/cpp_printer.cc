@@ -773,7 +773,7 @@ void CppPrinter::print_expression(Expression* expression) {
         break;
 
     case EXPR_LITERAL_NULL:
-        out << "null";
+        out << "nullptr";
         break;
 
     case EXPR_TUPLE:

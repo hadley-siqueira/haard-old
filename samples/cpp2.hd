@@ -3,6 +3,9 @@ import std.io
 class File:
     descriptor : void*
 
+    def init : void
+        descriptor = null
+
     def open : void
         @path : str
         @mode : str
@@ -25,7 +28,8 @@ class File:
 
 def main : int
     var f : File
-    
+
+    fl = File()
     f.open('my_file.txt', "w")
     f.write('hello, world!')
     f.close()
