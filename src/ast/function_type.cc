@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sstream>
 #include "ast/function_type.h"
 
@@ -132,6 +133,17 @@ bool FunctionType::check_arguments_type(TypeList* args) {
             return false;
         }
     }
+
+    return true;
+}
+
+bool FunctionType::check_arguments_type_with_conversion(TypeList* args) {
+    if (args->types_count() != ptypes.size()) {
+        return false;
+    }
+
+    std::cout << __FILE__ << ' ' << __LINE__
+              << " fix me please\n";
 
     return true;
 }

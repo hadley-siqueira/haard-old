@@ -24,6 +24,7 @@ namespace haard {
             Type* get_template(int idx);
             TemplateHeader* get_template_header();
             bool check_arguments_type(TypeList* args);
+            bool check_arguments_type_with_conversion(TypeList* args);
 
             // override
             bool equal(Type* type);

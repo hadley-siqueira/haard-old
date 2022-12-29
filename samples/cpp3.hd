@@ -1,0 +1,41 @@
+class Memory:
+    bytes : u8*
+
+    def init : void
+        bytes = null
+
+    def write32 : void
+        @addr  : u64
+        @value : u32
+
+        ptr = bytes + addr
+
+        b0 = (value >> 0) & 0xff
+        b1 = (value >> 8) & 0xff
+        b2 = (value >> 16) & 0xff
+        b3 = (value >> 24) & 0xff
+
+        *(bytes + addr + 0) = b3
+        *(bytes + addr + 1) = b2
+        *(bytes + addr + 2) = b1
+        *(bytes + addr + 3) = b0
+
+    def read32 : u32
+        @addr : u64
+
+        var value : u32
+
+        value = (value << 8) | *(bytes + addr + 0)
+        value = (value << 8) | *(bytes + addr + 1)
+        value = (value << 8) | *(bytes + addr + 2)
+        value = (value << 8) | *(bytes + addr + 3)
+
+        return value
+
+def main : int
+    mem = Memory()
+
+    mem.write32(0, 0x123)
+
+    return 0
+        

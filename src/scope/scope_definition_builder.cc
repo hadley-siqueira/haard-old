@@ -226,6 +226,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_pos_dec(un);
         break;
 
+    case EXPR_PARENTHESIS:
+        build_parenthesis(un);
+        break;
+
     case EXPR_CALL:
         build_call(bin);
         break;
@@ -373,6 +377,11 @@ void ScopeDefinitionBuilder::build_pos_dec(UnOp* op) {
     op->set_type(op->get_expression()->get_type());
 }
 
+void ScopeDefinitionBuilder::build_parenthesis(UnOp* op) {
+    build_expression(op->get_expression());
+    op->set_type(op->get_expression()->get_type());
+}
+
 void ScopeDefinitionBuilder::build_call(BinOp* bin) {
     Type* tl;
     Type* tr;
@@ -389,9 +398,7 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
     if (bin->get_left()->get_kind() == EXPR_ID) {
         Identifier* id = (Identifier*) bin->get_left();
         Symbol* sym = id->get_symbol();
-std::cout << "sym = " << sym->to_cpp() << std::endl;
-std::cout << "type sym = ";
-std::cout << sym->get_type()->to_cpp() << std::endl;
+
         if (tl->get_kind() == TYPE_FUNCTION) {
             args = (TypeList*) tr;
             int i = 0;
@@ -404,6 +411,18 @@ std::cout << sym->get_type()->to_cpp() << std::endl;
                 if (ftype->check_arguments_type(args)) {
                     found = true;
                     break;
+                }
+            }
+
+            if (!found) {
+                for (i = 0; i < sym->overloaded_count(); ++i) {
+                    Function* f = (Function*) sym->get_descriptor(i);
+                    ftype = (FunctionType*) f->get_self_type();
+
+                    if (ftype->check_arguments_type_with_conversion(args)) {
+                        found = true;
+                        break;
+                    }
                 }
             }
 
@@ -429,6 +448,18 @@ std::cout << sym->get_type()->to_cpp() << std::endl;
                 if (ftype->check_arguments_type(args)) {
                     found = true;
                     break;
+                }
+            }
+
+            if (!found) {
+                for (i = 0; i < klass->constructors_count(); ++i) {
+                    Function* f = (Function*) klass->get_constructor(i);
+                    ftype = (FunctionType*) f->get_self_type();
+
+                    if (ftype->check_arguments_type_with_conversion(args)) {
+                        found = true;
+                        break;
+                    }
                 }
             }
 
@@ -463,6 +494,18 @@ std::cout << sym->get_type()->to_cpp() << std::endl;
                 if (ftype->check_arguments_type(args)) {
                     found = true;
                     break;
+                }
+            }
+
+            if (!found) {
+                for (i = 0; i < sym->overloaded_count(); ++i) {
+                    Function* f = (Function*) sym->get_descriptor(i);
+                    ftype = (FunctionType*) f->get_self_type();
+
+                    if (ftype->check_arguments_type_with_conversion(args)) {
+                        found = true;
+                        break;
+                    }
                 }
             }
 

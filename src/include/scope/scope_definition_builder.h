@@ -42,6 +42,7 @@ namespace haard {
             void build_pre_dec(UnOp* op);
             void build_pos_inc(UnOp* op);
             void build_pos_dec(UnOp* op);
+            void build_parenthesis(UnOp* op);
 
             void build_plus(BinOp* bin);
             void build_minus(BinOp* bin);
