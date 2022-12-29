@@ -5,6 +5,7 @@
 #include "defs.h"
 
 namespace haard {
+    class Scope;
     class Type {
         public:
             Type();
@@ -29,6 +30,7 @@ namespace haard {
             virtual Type* promote(Type* other);
             virtual int rank();
             virtual int get_size_in_bytes();
+            virtual Scope* get_scope();
 
         protected:
             int kind;

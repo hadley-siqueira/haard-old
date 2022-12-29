@@ -192,6 +192,17 @@ void* Symbol::get_overloaded(TypeList* types) {
     return nullptr;
 }
 
+Scope* Symbol::get_descriptor_scope(int idx) {
+    Class* klass = (Class*) descriptors[idx];
+
+    switch (kind) {
+    case SYM_CLASS:
+        return klass->get_scope();
+    }
+
+    return nullptr;
+}
+
 int Symbol::get_size_in_bytes(int idx) {
     Class* klass = (Class*) descriptors[idx];
     Function* func = (Function*) descriptors[idx];

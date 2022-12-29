@@ -393,3 +393,7 @@ int Type::get_size_in_bytes() {
 
     return 0;
 }
+
+Scope *Type::get_scope() {
+    return nullptr;
+}

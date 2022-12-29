@@ -157,7 +157,6 @@ void Class::set_source(Source* source) {
     this->source = source;
 }
 
-
 void Class::set_template_header(TemplateHeader* header) {
     template_header = header;
 }

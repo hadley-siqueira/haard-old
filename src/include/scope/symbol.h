@@ -8,6 +8,7 @@
 #include "ast/type_list.h"
 
 namespace haard {
+    class Scope;
     class Symbol {
         public:
             Symbol();
@@ -30,7 +31,9 @@ namespace haard {
             int overloaded_count();
             void* get_overloaded(TypeList* types);
 
-        private:
+            Scope* get_descriptor_scope(int idx=0);
+
+    private:
             int kind;
             const char* name;
             std::vector<void*> descriptors;

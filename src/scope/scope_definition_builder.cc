@@ -181,7 +181,15 @@ void ScopeDefinitionBuilder::build_branch_statement(BranchStatement* statement) 
 }
 
 void ScopeDefinitionBuilder::build_variable_declaration(VarDeclaration *statement) {
-    link_type(statement->get_variable()->get_type());
+    Variable* var = statement->get_variable();
+
+    link_type(var->get_type());
+
+    var->set_uid(var_counter++);
+    var->set_kind(VAR_LOCAL);
+    current_scope->define(statement->get_variable());
+    current_function->add_variable(var);
+
     build_expression(statement->get_expression());
 }
 
@@ -220,6 +228,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
 
     case EXPR_CALL:
         build_call(bin);
+        break;
+
+    case EXPR_DOT:
+        build_dot(bin);
         break;
 
     case EXPR_ASSIGN:
@@ -465,6 +477,31 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
     } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
         // FIXME assuming that is a function type
         
+    }
+}
+
+void ScopeDefinitionBuilder::build_dot(BinOp *bin) {
+    Scope* scope;
+    Symbol* symbol;
+    Identifier* field;
+    build_expression(bin->get_left());
+
+    Type* tl = bin->get_left()->get_type();
+
+    scope = tl->get_scope();
+    field = (Identifier*) bin->get_right();
+    symbol = scope->has_field(field->get_lexeme());
+    std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
+    std::cout << "fix me because the overloaded is not good, the type scope is not good and maybe some code"
+                 "here will go to the call. Call must set the last overloaded index. Refactor call generation"
+                 "handle method types\n";
+
+    if (symbol) {
+        field->set_type(symbol->get_type());
+        bin->set_type(symbol->get_type());
+    } else {
+        std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
+        exit(0);
     }
 }
 

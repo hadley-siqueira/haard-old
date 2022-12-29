@@ -35,6 +35,7 @@ void Scope::set_super(Scope* symtab) {
 Symbol* Scope::define(Class* klass) {
     Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
     symbols[klass->get_name()] = sym;
+
     return sym;
 }
 
@@ -48,12 +49,14 @@ Symbol* Scope::define(Function* func) {
     }
 
     symbols[func->get_name()] = sym;
+
     return sym;
 }
 
 Symbol* Scope::define(int kind, Variable* var) {
     Symbol* sym = new Symbol(kind, var->get_name(), var);
     symbols[var->get_name()] = sym;
+
     return sym;
 }
 
@@ -72,12 +75,16 @@ Symbol* Scope::define(Variable* var) {
     }
 
     symbols[var->get_name()] = sym;
+
+
     return sym;
 }
 
 Symbol* Scope::define(TemplateType* type) {
     Symbol* sym = new Symbol(SYM_TEMPLATE, type->get_name(), type);
     symbols[type->get_name()] = sym;
+
+
     return sym;
 }
 

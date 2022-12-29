@@ -99,3 +99,7 @@ TemplateHeader* NamedType::get_template_header() {
 int NamedType::get_size_in_bytes() {
     return symbol->get_size_in_bytes();
 }
+
+Scope* NamedType::get_scope() {
+    return symbol->get_descriptor_scope();
+}
