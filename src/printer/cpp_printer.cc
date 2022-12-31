@@ -90,6 +90,7 @@ void CppPrinter::print_class(Class* klass) {
     print_indentation();
 
     out << "class " << klass->get_cpp_name() << " {\npublic:\n";
+    signatures << "class " << klass->get_cpp_name() << ";\n";
     indent();
 
     if (klass->variables_count() > 0) {
@@ -145,7 +146,11 @@ void CppPrinter::print_function(Function* function) {
     print_indentation();
 
     out << function->get_cpp_signature();
-    signatures << function->get_cpp_signature() << ";\n";
+
+    if (!function->is_method()) {
+        signatures << function->get_cpp_signature() << ";\n";
+    }
+
     out << " {\n";
 //    print_type(function->get_return_type());
 //    out << " " << function->get_cpp_name();
@@ -940,10 +945,6 @@ void CppPrinter::print_new_expression(NewExpression* expr) {
 
     if (expr->has_arguments()) {
         print_expression_list("(", ")", expr->get_arguments());
-    } else if (expr->get_array_size()) {
-        out << "[";
-        print_expression(expr->get_array_size());
-        out << "]";
     }
 }
 

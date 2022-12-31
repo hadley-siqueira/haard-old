@@ -40,7 +40,19 @@ Type* IndirectionType::clone() {
 }
 
 std::string IndirectionType::to_str() {
-    return subtype->to_str() + "*";
+    if (kind == TYPE_POINTER) {
+        return subtype->to_str() + "*";
+    }
+
+    return subtype->to_str() + "&";
+}
+
+std::string IndirectionType::to_cpp() {
+    if (kind == TYPE_POINTER) {
+        return subtype->to_cpp() + "*";
+    }
+
+    return subtype->to_cpp() + "&";
 }
 
 int IndirectionType::get_size_in_bytes() {

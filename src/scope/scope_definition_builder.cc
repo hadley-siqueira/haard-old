@@ -356,11 +356,19 @@ void ScopeDefinitionBuilder::build_identifier(Identifier* id) {
 }
 
 void ScopeDefinitionBuilder::build_new(NewExpression* op) {
+    Type* type;
+
     link_type(op->get_new_type());
+    type = op->get_new_type();
 
     build_expression_list(op->get_arguments());
 
-    op->set_type(new IndirectionType(TYPE_POINTER, op->get_new_type()));
+    if (type->get_kind() == TYPE_ARRAY) {
+        ArrayListType* atype = (ArrayListType*) type;
+        op->set_type(new IndirectionType(TYPE_POINTER, atype->get_subtype()));
+    } else {
+        op->set_type(new IndirectionType(TYPE_POINTER, op->get_new_type()));
+    }
 }
 
 void ScopeDefinitionBuilder::build_delete(UnOp* op) {
@@ -618,8 +626,11 @@ void ScopeDefinitionBuilder::build_address_of(UnOp* op) {
 }
 
 void ScopeDefinitionBuilder::build_dereference(UnOp* op) {
+    IndirectionType* ptype;
+
     build_expression(op->get_expression());
-    op->set_type(op->get_expression()->get_type());
+    ptype = (IndirectionType*) op->get_expression()->get_type();
+    op->set_type(ptype->get_subtype());
 }
 
 void ScopeDefinitionBuilder::build_binop(BinOp* bin) {

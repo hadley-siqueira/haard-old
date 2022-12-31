@@ -58,6 +58,7 @@ namespace haard {
             int indent_c;
             int symbol_counter;
             std::stringstream out;
+            std::stringstream tail;
             std::stringstream signatures;
             std::map<std::string, int> symbol_map;
     };

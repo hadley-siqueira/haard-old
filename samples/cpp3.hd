@@ -8,7 +8,7 @@ class Memory:
         bytes = new u8[1024]
 
     def destroy : void
-        delete bytes
+        delete[] bytes
 
     def write32 : void
         @addr  : u64
@@ -40,6 +40,7 @@ class Memory:
 
 def main : int
     mem = Memory()
+    mem2 = new Memory()
 
     mem.write32(0, 0x123)
 

@@ -13,11 +13,9 @@ namespace haard {
         public:
             Type* get_new_type();
             ExpressionList* get_arguments();
-            Expression* get_array_size();
 
             void set_new_type(Type* type);
             void set_arguments(ExpressionList* args);
-            void set_array_size(Expression* expr);
 
             bool has_arguments();
 
@@ -26,7 +24,6 @@ namespace haard {
         private:
             Type* new_type;
             ExpressionList* args;
-            Expression* array_size;
     };
 }
 

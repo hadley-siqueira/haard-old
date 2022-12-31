@@ -1197,9 +1197,6 @@ NewExpression* Parser::parse_new_expression() {
     if (match(TK_LEFT_PARENTHESIS)) {
         expr->set_arguments(parse_argument_list());
         expect(TK_RIGHT_PARENTHESIS);
-    } else if (match(TK_LEFT_SQUARE_BRACKET)) {
-        expr->set_array_size(parse_expression());
-        expect(TK_RIGHT_SQUARE_BRACKET);
     }
 
     return expr;

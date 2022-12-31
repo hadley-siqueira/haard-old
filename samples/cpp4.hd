@@ -1,0 +1,42 @@
+def swap : void
+    @c1 : char*
+    @c2 : char*
+
+    tmp = *c1
+    *c1 = *c2
+    *c2 = tmp
+
+def number_to_char_array : void
+    @number : int
+    @buffer : char*
+
+    tmp = new char[10]
+
+    i = 0
+    while number > 0:
+        *(tmp + i) = number % 10
+        number = number / 10
+        i = i + 1
+
+    while i >= 0:
+        *buffer = *(tmp + i)
+        i = i - 1
+
+class String:
+    data : char*
+    last : char*
+    size : u64
+    capacity : u64
+
+    def init : void
+        data = new char[10]
+        size = 0
+        capacity = 10
+
+    def destroy : void
+        delete[] data
+
+    def append : void
+        @number : int
+
+        ++size     
