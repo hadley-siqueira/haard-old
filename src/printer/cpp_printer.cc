@@ -809,6 +809,14 @@ void CppPrinter::print_expression(Expression* expression) {
     case EXPR_NEW:
         print_new_expression((NewExpression*) expression);
         break;
+
+    case EXPR_DELETE:
+        print_delete_expression(un);
+        break;
+
+    case EXPR_DELETE_ARRAY:
+        print_delete_array_expression(un);
+        break;
     }
 }
 
@@ -932,7 +940,21 @@ void CppPrinter::print_new_expression(NewExpression* expr) {
 
     if (expr->has_arguments()) {
         print_expression_list("(", ")", expr->get_arguments());
+    } else if (expr->get_array_size()) {
+        out << "[";
+        print_expression(expr->get_array_size());
+        out << "]";
     }
+}
+
+void CppPrinter::print_delete_expression(UnOp *expr) {
+    out << "delete ";
+    print_expression(expr->get_expression());
+}
+
+void CppPrinter::print_delete_array_expression(UnOp *expr) {
+    out << "delete[] ";
+    print_expression(expr->get_expression());
 }
 
 void CppPrinter::indent() {

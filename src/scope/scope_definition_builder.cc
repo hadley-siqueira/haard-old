@@ -210,6 +210,15 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_identifier((Identifier*) expression);
         break;
 
+    case EXPR_NEW:
+        build_new((NewExpression*) expression);
+        break;
+
+    case EXPR_DELETE:
+    case EXPR_DELETE_ARRAY:
+        build_delete(un);
+        break;
+
     case EXPR_PRE_INC:
         build_pre_inc(un);
         break;
@@ -346,6 +355,18 @@ void ScopeDefinitionBuilder::build_identifier(Identifier* id) {
     id->set_symbol(sym);
 }
 
+void ScopeDefinitionBuilder::build_new(NewExpression* op) {
+    link_type(op->get_new_type());
+
+    build_expression_list(op->get_arguments());
+
+    op->set_type(new IndirectionType(TYPE_POINTER, op->get_new_type()));
+}
+
+void ScopeDefinitionBuilder::build_delete(UnOp* op) {
+    build_expression(op->get_expression());
+    op->set_type(op->get_expression()->get_type());
+}
 
 void ScopeDefinitionBuilder::build_assignment(BinOp* bin) {
     build_expression(bin->get_right());
@@ -627,6 +648,8 @@ void ScopeDefinitionBuilder::build_literal(Literal* literal, int kind) {
 }
 
 void ScopeDefinitionBuilder::build_expression_list(ExpressionList* exprlist) {
+    if (exprlist == nullptr) return;
+
     TypeList* types = new TypeList(TYPE_TUPLE);
 
     if (exprlist->expressions_count() > 0) {

@@ -955,6 +955,8 @@ Expression* Parser::parse_unary_expression() {
         expr = new UnOp(EXPR_DOUBLE_DOLAR, oper, parse_unary_expression());
     } else if (lookahead(TK_NEW)) {
         expr = parse_new_expression();
+    } else if (lookahead(TK_DELETE)) {
+        expr = parse_delete_expression();
     } else {
         expr = parse_postfix_expression();
     }
@@ -1195,8 +1197,28 @@ NewExpression* Parser::parse_new_expression() {
     if (match(TK_LEFT_PARENTHESIS)) {
         expr->set_arguments(parse_argument_list());
         expect(TK_RIGHT_PARENTHESIS);
+    } else if (match(TK_LEFT_SQUARE_BRACKET)) {
+        expr->set_array_size(parse_expression());
+        expect(TK_RIGHT_SQUARE_BRACKET);
     }
 
+    return expr;
+}
+
+Expression* Parser::parse_delete_expression() {
+    Token oper;
+    int kind = EXPR_DELETE;
+    UnOp* expr = nullptr;
+
+    expect(TK_DELETE);
+    oper = matched;
+
+    if (match(TK_LEFT_SQUARE_BRACKET)) {
+        kind = EXPR_DELETE_ARRAY;
+        expect(TK_RIGHT_SQUARE_BRACKET);
+    }
+
+    expr = new UnOp(kind, oper, parse_expression());
     return expr;
 }
 

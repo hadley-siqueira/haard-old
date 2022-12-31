@@ -683,6 +683,7 @@ namespace haard {
         EXPR_FUNCTION,
         EXPR_NEW,
         EXPR_DELETE,
+        EXPR_DELETE_ARRAY,
         EXPR_TEMPLATE
     } ExpressionKind;
 

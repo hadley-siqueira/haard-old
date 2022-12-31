@@ -7,6 +7,9 @@ class Memory:
         bytes = null
         bytes = new u8[1024]
 
+    def destroy : void
+        delete bytes
+
     def write32 : void
         @addr  : u64
         @value : u32

@@ -44,6 +44,8 @@ namespace haard {
             void print_hash(ExpressionList* hash);
             void print_function_expression(FunctionExpression* function);
             void print_new_expression(NewExpression* expr);
+            void print_delete_expression(UnOp* expr);
+            void print_delete_array_expression(UnOp* expr);
 
         private:
             void indent();
