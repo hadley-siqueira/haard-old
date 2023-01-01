@@ -1,4 +1,5 @@
 import std.io
+import std.cstring
 
 def swap : void
     @c1 : char*
@@ -7,28 +8,6 @@ def swap : void
     tmp = *c1
     *c1 = *c2
     *c2 = tmp
-
-def strlen : int
-    @buffer : char*
-
-    i = 0
-
-    while *buffer != '\0':
-        ++buffer
-        ++i
-
-    return i
-
-def strrev : void
-    @buffer : char*
-
-    len = strlen(buffer)
-    
-    for i = 0; i < len / 2; ++i:
-        temp = *(buffer + i)
-        *(buffer + i) = *(buffer + len - i - 1)
-        *(buffer + len - i - 1) = temp
-
 
 def number_to_char_array : void
     @number : int

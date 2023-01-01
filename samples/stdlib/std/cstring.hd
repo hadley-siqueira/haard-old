@@ -1,0 +1,31 @@
+def strlen : int
+    @buffer : char*
+
+    i = 0
+
+    while *buffer != '\0':
+        ++buffer
+        ++i
+
+    return i
+
+def strrev : void
+    @buffer : char*
+
+    len = strlen(buffer)
+    
+    for i = 0; i < len / 2; ++i:
+        temp = *(buffer + i)
+        *(buffer + i) = *(buffer + len - i - 1)
+        *(buffer + len - i - 1) = temp
+
+def strdup : char*
+    @buffer : char*
+
+    len = strlen(buffer)
+    copy = new char[len + 1]
+
+    for i = 0; i < len + 1; ++i:
+        copy[i] = buffer[i]
+
+    return copy
