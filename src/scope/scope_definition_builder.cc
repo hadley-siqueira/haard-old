@@ -239,6 +239,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_parenthesis(un);
         break;
 
+    case EXPR_INDEX:
+        build_index_access(bin);
+        break;
+
     case EXPR_CALL:
         build_call(bin);
         break;
@@ -579,6 +583,25 @@ void ScopeDefinitionBuilder::build_dot(BinOp *bin) {
     } else {
         std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
         exit(0);
+    }
+}
+
+void ScopeDefinitionBuilder::build_index_access(BinOp* bin) {
+    Type* tleft;
+    IndirectionType* ptype;
+    ArrayListType* atype;
+
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+
+    tleft = bin->get_left()->get_type();
+
+    if (tleft->get_kind() == TYPE_POINTER) {
+        ptype = (IndirectionType*) tleft;
+        bin->set_type(ptype->get_subtype());
+    } else if (tleft->get_kind() == TYPE_ARRAY) {
+        atype = (ArrayListType*) tleft;
+        bin->set_type(atype->get_subtype());
     }
 }
 

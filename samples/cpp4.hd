@@ -49,7 +49,7 @@ def number_to_char_array : void
         temp = *(buffer + i)
         *(buffer + i) = *(buffer + len - i - 1)
         *(buffer + len - i - 1) = temp
-
+        temp = buffer[i]
 
 class String:
     data : char*
@@ -111,7 +111,13 @@ def main : int
 
     for i = 0; i < 10; ++i:
         st.append(s)
+
+    for i = 0; i < 9; ++i:
+        s[i] = 'a' + i
+
+    s[9] = '\0'
     
     print(st.data)
+    print(s)
     st.destroy()
     delete[] s
