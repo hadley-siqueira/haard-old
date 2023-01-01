@@ -13,6 +13,11 @@ def print : void
 
     $$'std::cout << p0_s << std::endl'
 
+def print : void
+    @s : char*
+
+    $$'std::cout << p0_s << std::endl'
+
 def read_int : int
     v = 0
     $$'std::cin >> v0_v'

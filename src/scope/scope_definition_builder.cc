@@ -349,7 +349,7 @@ void ScopeDefinitionBuilder::build_identifier(Identifier* id) {
     Symbol* sym = current_scope->has(id->get_lexeme());
 
     if (!sym) {
-        logger->error("id not in scope");
+        logger->error_and_exit("id not in scope");
     }
 
     id->set_symbol(sym);
@@ -977,6 +977,10 @@ void ScopeDefinitionBuilder::link_type(Type* type) {
     case TYPE_FUNCTION:
         link_function_type((FunctionType*) type);
         break;
+
+    case TYPE_ARRAY:
+        link_array_list_type((ArrayListType*) type);
+        break;
     }
 }
 
@@ -1013,6 +1017,11 @@ void ScopeDefinitionBuilder::link_function_type(FunctionType* type) {
     }
 
     link_type(type->get_return_type());
+}
+
+void ScopeDefinitionBuilder::link_array_list_type(ArrayListType* type) {
+    link_type(type->get_subtype());
+    build_expression(type->get_expression());
 }
 
 void ScopeDefinitionBuilder::link_template_header(TemplateHeader* header) {
