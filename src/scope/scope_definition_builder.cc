@@ -42,6 +42,7 @@ void ScopeDefinitionBuilder::build_source(Source* source) {
 }
 
 void ScopeDefinitionBuilder::build_class(Class* klass) {
+    current_class = klass;
     enter_scope(klass->get_scope());
 
     define_class_template_header(klass);
@@ -51,6 +52,7 @@ void ScopeDefinitionBuilder::build_class(Class* klass) {
     build_class_methods(klass);
 
     leave_scope();
+    current_class = nullptr;
 }
 
 void ScopeDefinitionBuilder::build_class_methods(Class* klass) {
@@ -210,6 +212,10 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_identifier((Identifier*) expression);
         break;
 
+    case EXPR_THIS:
+        build_this((ThisExpression*) expression);
+        break;
+
     case EXPR_NEW:
         build_new((NewExpression*) expression);
         break;
@@ -357,6 +363,15 @@ void ScopeDefinitionBuilder::build_identifier(Identifier* id) {
     }
 
     id->set_symbol(sym);
+}
+
+void ScopeDefinitionBuilder::build_this(ThisExpression* expr) {
+    if (current_class == nullptr) {
+        std::cout << "Error: using this outside class";
+        exit(0);
+    }
+
+    expr->set_type(new IndirectionType(TYPE_POINTER, current_class->get_self_type()));
 }
 
 void ScopeDefinitionBuilder::build_new(NewExpression* op) {
@@ -562,10 +577,18 @@ void ScopeDefinitionBuilder::build_dot(BinOp *bin) {
     Scope* scope;
     Symbol* symbol;
     Identifier* field;
+    Type* tl;
+
     build_expression(bin->get_left());
 
-    Type* tl = bin->get_left()->get_type();
+    if (bin->get_left()->get_type()->get_kind() == TYPE_POINTER) {
+        IndirectionType* ptype = (IndirectionType*) bin->get_left()->get_type();
+        tl = ptype->get_subtype();
+    } else {
+        tl = bin->get_left()->get_type();
+    }
 
+    //tl = bin->get_left()->get_type();
     scope = tl->get_scope();
     field = (Identifier*) bin->get_right();
     symbol = scope->has_field(field->get_lexeme());

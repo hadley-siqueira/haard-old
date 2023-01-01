@@ -53,6 +53,7 @@ set(AST_SRC
     src/ast/expression_list.cc
     src/ast/template_expression.cc
     src/ast/new_expression.cc
+    src/ast/this_expression.cc
     src/ast/function_expression.cc
     src/ast/statement.cc
     src/ast/while_statement.cc

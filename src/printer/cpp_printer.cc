@@ -113,7 +113,6 @@ void CppPrinter::print_class(Class* klass) {
 
     print_class_constructors(klass);
     print_class_destructor(klass);
-    //print_indentation();
 
     out << "};\n";
     dedent();
@@ -476,6 +475,10 @@ void CppPrinter::print_expression(Expression* expression) {
         print_identifier((Identifier*) expression);
         break;
 
+    case EXPR_THIS:
+        print_this((ThisExpression*) expression);
+        break;
+
     case EXPR_SCOPE:
         print_expression(bin->get_left());
         out << "::";
@@ -737,9 +740,7 @@ void CppPrinter::print_expression(Expression* expression) {
         break;
 
     case EXPR_DOT:
-        print_expression(bin->get_left());
-        out << ".";
-        print_expression(bin->get_right());
+        print_dot(bin);
         break;
 
     case EXPR_LITERAL_BOOL:
@@ -803,6 +804,18 @@ void CppPrinter::print_expression(Expression* expression) {
     }
 }
 
+void CppPrinter::print_dot(BinOp* bin) {
+    print_expression(bin->get_left());
+
+    if (bin->get_left()->get_type()->get_kind() == TYPE_POINTER) {
+        out << "->";
+    } else {
+        out << ".";
+    }
+
+    print_expression(bin->get_right());
+}
+
 void CppPrinter::print_binop(std::string oper, BinOp* bin) {
     print_expression(bin->get_left());
     out << " " << oper << " ";
@@ -831,6 +844,10 @@ void CppPrinter::print_double_dolar(UnOp* un) {
 
 void CppPrinter::print_identifier(Identifier* id) {
     out << id->to_cpp();
+}
+
+void CppPrinter::print_this(ThisExpression* expr) {
+    out << "this";
 }
 
 void CppPrinter::print_literal(Literal* literal) {

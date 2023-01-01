@@ -11,6 +11,8 @@ class Image:
         height = h
         pixels = new u8[w * h * 4]
 
+        this.width = w
+
     def init : void
         width = 800
         height = 600
@@ -21,6 +23,8 @@ class Image:
 
 def main : int
     img = Image(800, 600)
+    img2 = new Image(800, 600)
+    img2.destroy()
     return 0
     
 

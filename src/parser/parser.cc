@@ -1081,6 +1081,8 @@ Expression* Parser::parse_primary_expression() {
         expr = new Literal(EXPR_LITERAL_BOOL, matched);
     } else if (match(TK_NULL)) {
         expr = new Literal(EXPR_LITERAL_NULL, matched);
+    } else if (match(TK_THIS)) {
+        expr = new ThisExpression(matched);
     } else if (lookahead(TK_ID)) {
         expr = parse_scope_expression();
 
