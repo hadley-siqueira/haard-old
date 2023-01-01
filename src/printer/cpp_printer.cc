@@ -978,10 +978,14 @@ void CppPrinter::print_class_constructors(Class* klass) {
 }
 
 void CppPrinter::print_class_destructor(Class *klass) {
+    Function* f = klass->get_destructor();
+
+    if (f == nullptr) {
+        return;
+    }
+
     print_indentation();
     out << '~' << klass->get_cpp_name();
-
-    Function* f = klass->get_destructor();
     print_parameters(f);
     print_indentation();
     out << "    " << f->get_cpp_name() << '(';

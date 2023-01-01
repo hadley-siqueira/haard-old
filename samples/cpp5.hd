@@ -25,6 +25,7 @@ def main : int
     img = Image(800, 600)
     img2 = new Image(800, 600)
     img2.destroy()
+    img.destroy()
     return 0
     
 
