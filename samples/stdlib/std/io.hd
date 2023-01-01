@@ -1,3 +1,5 @@
+import cpp4
+
 def print : void
     @s : str
 
@@ -17,6 +19,11 @@ def print : void
     @s : char*
 
     $$'std::cout << p0_s << std::endl'
+
+def print : void
+    @s : String
+
+    print(s.data)
 
 def read_int : int
     v = 0

@@ -54,7 +54,7 @@ bool NamedType::equal(Type* type) {
     }
 
     NamedType* other = (NamedType*) type;
-    return symbol != other->symbol;
+    return symbol->get_descriptor() == other->symbol->get_descriptor();
 }
 
 Symbol* NamedType::has_field(const char* name) {

@@ -117,7 +117,7 @@ def main : int
 
     s[9] = '\0'
     
-    print(st.data)
+    print(st)
     print(s)
     st.destroy()
     delete[] s
