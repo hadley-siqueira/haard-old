@@ -165,6 +165,14 @@ TemplateHeader* Class::get_template_header() {
     return template_header;
 }
 
+Function* Class::get_destructor() const {
+    return destructor;
+}
+
+void Class::set_destructor(Function* value) {
+    destructor = value;
+}
+
 int Class::get_size_in_bytes() {
     int sz = 0;
 

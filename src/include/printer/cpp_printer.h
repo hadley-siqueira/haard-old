@@ -47,6 +47,9 @@ namespace haard {
             void print_delete_expression(UnOp* expr);
             void print_delete_array_expression(UnOp* expr);
 
+            void print_class_constructors(Class* klass);
+            void print_class_destructor(Class* klass);
+
         private:
             void indent();
             void dedent();

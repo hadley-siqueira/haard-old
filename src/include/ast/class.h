@@ -56,7 +56,10 @@ namespace haard {
             void set_template_header(TemplateHeader* header);
             TemplateHeader* get_template_header();
 
-        private:
+            Function* get_destructor() const;
+            void set_destructor(Function* value);
+
+    private:
             int line;
             int column;
             int uid;

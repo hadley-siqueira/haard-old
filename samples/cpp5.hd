@@ -1,0 +1,26 @@
+class Image:
+    width  : int
+    height : int
+    pixels : u8*
+
+    def init : void
+        @w : int
+        @h : int
+
+        width = w
+        height = h
+        pixels = new u8[w * h * 4]
+
+    def init : void
+        width = 800
+        height = 600
+        pixels = new u8[width * height * 4]
+
+    def destroy : void
+        delete[] pixels
+
+def main : int
+    img = Image(800, 600)
+    return 0
+    
+

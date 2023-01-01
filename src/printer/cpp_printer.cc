@@ -109,33 +109,11 @@ void CppPrinter::print_class(Class* klass) {
             print_function(klass->get_method(i));
             out << '\n';
         }
-
-        out << '\n';
     }
 
-    for (int i = 0; i < klass->constructors_count(); ++i) {
-        print_indentation();
-        out << klass->get_cpp_name();
-
-        Function* f = klass->get_method(i);
-        print_parameters(f);
-        print_indentation();
-        out << "    " << f->get_cpp_name() << '(';
-
-        if (f->parameters_count() > 0) {
-            int j = 0;
-            for (j = 0; j < f->parameters_count() - 1; ++j) {
-                out << "p" << j << "_" << f->get_parameter(j)->get_name() << ", ";
-            }
-            out << "p" << j << "_" << f->get_parameter(j)->get_name();
-        }
-
-        out << ");\n";
-        print_indentation();
-        out << "}\n";
-
-        
-    }
+    print_class_constructors(klass);
+    print_class_destructor(klass);
+    //print_indentation();
 
     out << "};\n";
     dedent();
@@ -178,7 +156,7 @@ void CppPrinter::print_parameters(Function* function) {
         for (i = 0; i < function->parameters_count() - 1; ++i) {
             param = function->get_parameter(i);
             print_type(param->get_type());
-            out << ' ' << param->get_cpp_name();
+            out << ' ' << param->get_cpp_name() << ", ";
         }
 
         param = function->get_parameter(i);
@@ -956,6 +934,52 @@ void CppPrinter::print_delete_expression(UnOp *expr) {
 void CppPrinter::print_delete_array_expression(UnOp *expr) {
     out << "delete[] ";
     print_expression(expr->get_expression());
+}
+
+void CppPrinter::print_class_constructors(Class* klass) {
+    for (int i = 0; i < klass->constructors_count(); ++i) {
+        print_indentation();
+        out << klass->get_cpp_name();
+
+        Function* f = klass->get_method(i);
+        print_parameters(f);
+        print_indentation();
+        out << "    " << f->get_cpp_name() << '(';
+
+        if (f->parameters_count() > 0) {
+            int j = 0;
+            for (j = 0; j < f->parameters_count() - 1; ++j) {
+                out << "p" << j << "_" << f->get_parameter(j)->get_name() << ", ";
+            }
+            out << "p" << j << "_" << f->get_parameter(j)->get_name();
+        }
+
+        out << ");\n";
+        print_indentation();
+        out << "}\n\n";
+    }
+}
+
+void CppPrinter::print_class_destructor(Class *klass) {
+    print_indentation();
+    out << '~' << klass->get_cpp_name();
+
+    Function* f = klass->get_destructor();
+    print_parameters(f);
+    print_indentation();
+    out << "    " << f->get_cpp_name() << '(';
+
+    if (f->parameters_count() > 0) {
+        int j = 0;
+        for (j = 0; j < f->parameters_count() - 1; ++j) {
+            out << "p" << j << "_" << f->get_parameter(j)->get_name() << ", ";
+        }
+        out << "p" << j << "_" << f->get_parameter(j)->get_name();
+    }
+
+    out << ");\n";
+    print_indentation();
+    out << "}\n";
 }
 
 void CppPrinter::indent() {
