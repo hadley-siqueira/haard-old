@@ -1,0 +1,12 @@
+import std.io
+
+class Bar:
+    p : int
+
+class Foo:
+    p : Bar*
+
+def main : int
+    for i in 2..10:
+        i = i
+        print(i)

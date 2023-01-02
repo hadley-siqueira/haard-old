@@ -29,6 +29,7 @@ namespace haard {
             void build_jump_statement(JumpStatement* statement);
             void build_while_statement(WhileStatement* statement);
             void build_for_statement(ForStatement* statement);
+            void build_foreach_statement(ForStatement* statement);
             void build_branch_statement(BranchStatement* statement);
             void build_variable_declaration(VarDeclaration* statement);
 
@@ -41,6 +42,8 @@ namespace haard {
             void build_call(BinOp* bin);
             void build_dot(BinOp* bin);
             void build_index_access(BinOp* bin);
+            void build_expression_in(BinOp* bin);
+            void build_inclusive_range(BinOp* bin);
 
             void build_pre_inc(UnOp* op);
             void build_pre_dec(UnOp* op);

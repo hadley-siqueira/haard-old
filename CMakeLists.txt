@@ -89,6 +89,7 @@ set(SCOPE_SRC
     src/scope/symbol.cc
     src/scope/scope.cc
     src/scope/scope_definition_builder.cc
+    src/scope/class_scope_builder.cc
 )
 
 set(SOURCES

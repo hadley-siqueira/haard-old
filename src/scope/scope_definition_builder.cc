@@ -45,10 +45,10 @@ void ScopeDefinitionBuilder::build_class(Class* klass) {
     current_class = klass;
     enter_scope(klass->get_scope());
 
-    define_class_template_header(klass);
+   /* define_class_template_header(klass);
     define_class_super(klass);
     define_class_variables(klass);
-    define_class_methods(klass);
+    define_class_methods(klass);*/
     build_class_methods(klass);
 
     leave_scope();
@@ -88,8 +88,11 @@ void ScopeDefinitionBuilder::build_statement(Statement* statement) {
         break;
 
     case STMT_FOR:
-    case STMT_FOREACH:
         build_for_statement((ForStatement*) statement);
+        break;
+
+    case STMT_FOREACH:
+        build_foreach_statement((ForStatement*) statement);
         break;
 
     case STMT_EXPRESSION:
@@ -159,6 +162,27 @@ void ScopeDefinitionBuilder::build_for_statement(ForStatement* statement) {
         build_expression(statement->get_condition());
         build_expression(statement->get_increment());
     }
+
+    build_compound_statement(statement->get_statements());
+    leave_scope();
+}
+
+void ScopeDefinitionBuilder::build_foreach_statement(ForStatement* statement) {
+    BinOp* expr;
+    enter_scope(statement->get_scope());
+
+    expr = (BinOp*) statement->get_condition();
+    build_expression(expr->get_right());
+
+    if (is_new_var_assign(expr)) {
+        create_new_var(expr);
+    }
+
+    build_expression(expr->get_left());
+    /*
+    if (expr->get_left()->get_kind() == EXPR_ID) {
+        build_expression(expr->get_right());
+    }*/
 
     build_compound_statement(statement->get_statements());
     leave_scope();
@@ -307,10 +331,6 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_not_equal(bin);
         break;
 
-    case EXPR_INCLUSIVE_RANGE:
-    case EXPR_EXCLUSIVE_RANGE:
-        break;
-
     case EXPR_ADDRESS_OF:
         build_address_of(un);
         break;
@@ -347,6 +367,17 @@ void ScopeDefinitionBuilder::build_expression(Expression* expression) {
         build_literal(literal, TYPE_SYMBOL);
         break;
 
+    case EXPR_IN:
+        build_expression_in(bin);
+        break;
+
+    case EXPR_INCLUSIVE_RANGE:
+        build_inclusive_range(bin);
+        break;
+
+    case EXPR_EXCLUSIVE_RANGE:
+        break;
+
     case EXPR_ARGS:
     case EXPR_FOR_INIT:
     case EXPR_FOR_INC:
@@ -359,7 +390,8 @@ void ScopeDefinitionBuilder::build_identifier(Identifier* id) {
     Symbol* sym = current_scope->has(id->get_lexeme());
 
     if (!sym) {
-        logger->error_and_exit("id not in scope");
+        std::cout << id->get_lexeme();
+        logger->error_and_exit(" id not in scope");
     }
 
     id->set_symbol(sym);
@@ -573,7 +605,7 @@ void ScopeDefinitionBuilder::build_call(BinOp* bin) {
     }
 }
 
-void ScopeDefinitionBuilder::build_dot(BinOp *bin) {
+void ScopeDefinitionBuilder::build_dot(BinOp* bin) {
     Scope* scope;
     Symbol* symbol;
     Identifier* field;
@@ -604,7 +636,10 @@ void ScopeDefinitionBuilder::build_dot(BinOp *bin) {
         field->set_symbol(symbol);
         bin->set_type(symbol->get_type());
     } else {
-        std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
+        std::cout << "debbuging...\n";
+        std::cout << tl->to_cpp() << std::endl;
+        scope->debug();
+        std::cout << __FILE__ << ' ' << __LINE__ << ' ' << field->get_lexeme() << ' ' << field->get_line() << std::endl;
         exit(0);
     }
 }
@@ -626,6 +661,19 @@ void ScopeDefinitionBuilder::build_index_access(BinOp* bin) {
         atype = (ArrayListType*) tleft;
         bin->set_type(atype->get_subtype());
     }
+}
+
+void ScopeDefinitionBuilder::build_expression_in(BinOp* bin) {
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+    bin->set_type(new Type(TYPE_BOOL));
+}
+
+void ScopeDefinitionBuilder::build_inclusive_range(BinOp* bin) {
+    build_expression(bin->get_left());
+    build_expression(bin->get_right());
+    //FIXME should set a range type?
+    bin->set_type(bin->get_left()->get_type());
 }
 
 void ScopeDefinitionBuilder::build_plus(BinOp* bin) {
@@ -789,6 +837,7 @@ void ScopeDefinitionBuilder::define_class(Class* klass) {
     Symbol* sym;
     NamedType* self_type = new NamedType();
 
+    current_class = klass;
     logger->info(info_message_defining_class(klass));
     sym = current_scope->local_has(klass->get_name());
     klass->set_uid(class_counter++);
@@ -802,6 +851,16 @@ void ScopeDefinitionBuilder::define_class(Class* klass) {
     self_type->set_name(klass->get_name());
     link_type(self_type);
     klass->set_self_type(self_type);
+
+    enter_scope(klass->get_scope());
+    define_class_template_header(klass);
+    define_class_super(klass);
+    define_class_variables(klass);
+    define_class_methods(klass);
+    std::cout << klass->get_cpp_name() << " = ";
+    klass->get_scope()->debug();
+    leave_scope();
+    current_class = nullptr;
 }
 
 void ScopeDefinitionBuilder::define_class_variables(Class* klass) {

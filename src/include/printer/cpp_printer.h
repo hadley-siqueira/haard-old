@@ -27,6 +27,7 @@ namespace haard {
             void print_statement(Statement* statement);
             void print_while_statement(WhileStatement* statement);
             void print_for_statement(ForStatement* statement);
+            void print_foreach_statement(ForStatement* statement);
             void print_branch_statement(BranchStatement* statement);
             void print_jump_statement(std::string op, JumpStatement* statement);
             void print_compound_statement(CompoundStatement* statement);
@@ -62,9 +63,13 @@ namespace haard {
         private:
             int indent_c;
             int symbol_counter;
-            std::stringstream out;
+            std::stringstream* out;
             std::stringstream tail;
-            std::stringstream signatures;
+            std::stringstream res;
+            std::stringstream function_signatures;
+            std::stringstream classes_signatures;
+            std::stringstream function_bodies;
+            std::stringstream classes_bodies;
             std::map<std::string, int> symbol_map;
     };
 }

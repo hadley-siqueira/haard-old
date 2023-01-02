@@ -98,5 +98,4 @@ def main : int
     
     print(st)
     print(s)
-    st.destroy()
     delete[] s
