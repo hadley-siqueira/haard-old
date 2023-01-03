@@ -834,20 +834,19 @@ void ScopeBuilder::define_source_functions(Source* source) {
 }
 
 void ScopeBuilder::define_class(Class* klass) {
-    Class* other;
     Symbol* sym;
     NamedType* self_type = new NamedType();
 
     current_class = klass;
-    logger->info(info_message_defining_class(klass));
     sym = current_scope->local_has(klass->get_name());
-    klass->set_uid(class_counter++);
 
-    if (!sym) {
-        current_scope->define(klass);
-    } else {
+    if (sym != nullptr) {
         logger->error_and_exit(error_message_cant_define_class(klass, sym));
     }
+
+    current_scope->define(klass);
+    klass->set_uid(class_counter++);
+    logger->info(info_message_defining_class(klass));
 
     self_type->set_name(klass->get_name());
     link_type(self_type);
