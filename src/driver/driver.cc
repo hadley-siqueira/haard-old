@@ -9,7 +9,6 @@
 #include "driver/driver.h"
 #include "printer/printer.h"
 #include "printer/cpp_printer.h"
-#include "scope/scope_definition_builder.h"
 #include "scope/scope_builder.h"
 #include "ir/ir_builder.h"
 
@@ -129,7 +128,7 @@ void Driver::parse_sources() {
 }
 
 void Driver::semantic_analysis() {
-    ScopeDefinitionBuilder def_builder;
+    ScopeBuilder def_builder;
     //ScopeBuilder sym_builder;
 
     def_builder.set_logger(&logger);
