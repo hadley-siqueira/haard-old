@@ -9,7 +9,9 @@ Class::Class() {
     super_class = nullptr;
     self_type = nullptr;
     template_header = nullptr;
+    destructor = nullptr;
     scope = new Scope();
+    name = nullptr;
 }
 
 Class::~Class() {

@@ -95,7 +95,14 @@ void CppPrinter::print_class(Class* klass) {
     out = &classes_bodies;
     print_indentation();
 
-    *out << "class " << klass->get_cpp_name() << " {\npublic:\n";
+    *out << "class " << klass->get_cpp_name();
+
+    if (klass->get_super_class()) {
+        *out << " : public ";
+        *out << klass->get_super_class()->to_cpp();
+    }
+
+    *out << " {\npublic:\n";
     classes_signatures << "class " << klass->get_cpp_name() << ";\n";
     indent();
 
@@ -1033,7 +1040,7 @@ void CppPrinter::print_class_constructors(Class* klass) {
     }
 }
 
-void CppPrinter::print_class_destructor(Class *klass) {
+void CppPrinter::print_class_destructor(Class* klass) {
     Function* f = klass->get_destructor();
 
     if (f == nullptr) {

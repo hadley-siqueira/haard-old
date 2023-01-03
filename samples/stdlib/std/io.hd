@@ -1,4 +1,55 @@
-import cpp4
+import std.cstring
+
+class String:
+    data : char*
+    last : char*
+    size : u64
+    capacity : u64
+
+    def init : void
+        data = new char[10]
+        size = 0
+        capacity = 10
+
+    def destroy : void
+        delete[] data
+
+    def append : void
+        @s : char*
+
+        len = strlen(s)
+        resize(len)
+
+        i = 0
+        for i = 0; i < len; ++i:
+            *(data + size + i) = *(s + i)
+
+        *(data + size + i) = '\0'
+        size = size + len
+
+    def resize : void
+        if size >= capacity:
+            tmp = new char[size * 2]
+
+            for i = 0; i < size; ++i:
+                *(tmp + i) = *(data + i)
+
+            capacity = capacity * 2
+            delete[] data
+            data = tmp
+
+    def resize : void
+        @inc : int
+
+        if size + inc >= capacity:
+            tmp = new char[size * 2]
+
+            for i = 0; i < size; ++i:
+                *(tmp + i) = *(data + i)
+
+            capacity = capacity * 2 + inc
+            delete[] data
+            data = tmp
 
 def print : void
     @s : str
