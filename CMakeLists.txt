@@ -63,6 +63,7 @@ set(AST_SRC
     src/ast/compound_statement.cc
     src/ast/expression_statement.cc
     src/ast/var_decl.cc
+    src/ast/cast_expression.cc
 )
 
 set(IR_SRC

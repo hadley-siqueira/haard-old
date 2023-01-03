@@ -72,6 +72,7 @@ namespace haard {
             ExpressionList* parse_hash(Expression* key);
             NewExpression* parse_new_expression();
             Expression* parse_delete_expression();
+            Expression* parse_cast_expression();
 
             void advance();
             void expect(int kind);

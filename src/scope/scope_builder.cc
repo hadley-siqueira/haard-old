@@ -385,6 +385,10 @@ void ScopeBuilder::build_expression(Expression* expression) {
     case EXPR_FOR_INC:
         build_expression_list(exprlist);
         break;
+
+    case EXPR_CAST:
+        build_cast_expression((CastExpression*) expression);
+        break;
     }
 }
 
@@ -675,6 +679,12 @@ void ScopeBuilder::build_inclusive_range(BinOp* bin) {
     build_expression(bin->get_right());
     //FIXME should set a range type?
     bin->set_type(bin->get_left()->get_type());
+}
+
+void ScopeBuilder::build_cast_expression(CastExpression* expr) {
+    build_expression(expr->get_expression());
+    link_type(expr->get_cast_type());
+    expr->set_type(expr->get_cast_type());
 }
 
 void ScopeBuilder::build_plus(BinOp* bin) {

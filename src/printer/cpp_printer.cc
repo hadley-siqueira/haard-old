@@ -845,6 +845,10 @@ void CppPrinter::print_expression(Expression* expression) {
     case EXPR_DELETE_ARRAY:
         print_delete_array_expression(un);
         break;
+
+    case EXPR_CAST:
+        print_cast_expression((CastExpression*) expression);
+        break;
     }
 }
 
@@ -995,6 +999,14 @@ void CppPrinter::print_delete_expression(UnOp *expr) {
 void CppPrinter::print_delete_array_expression(UnOp *expr) {
     *out << "delete[] ";
     print_expression(expr->get_expression());
+}
+
+void CppPrinter::print_cast_expression(CastExpression* expr) {
+    *out << "((";
+    print_type(expr->get_cast_type());
+    *out << ") ";
+    print_expression(expr->get_expression());
+    *out << ")";
 }
 
 void CppPrinter::print_class_constructors(Class* klass) {

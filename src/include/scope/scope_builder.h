@@ -44,6 +44,7 @@ namespace haard {
             void build_index_access(BinOp* bin);
             void build_expression_in(BinOp* bin);
             void build_inclusive_range(BinOp* bin);
+            void build_cast_expression(CastExpression* expr);
 
             void build_pre_inc(UnOp* op);
             void build_pre_dec(UnOp* op);

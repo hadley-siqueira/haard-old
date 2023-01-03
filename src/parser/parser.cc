@@ -628,54 +628,54 @@ Expression* Parser::parse_expression() {
 
 Expression* Parser::parse_assignment_expression() {
     Token oper;
-    Expression* expr = parse_logical_or_expression();
+    Expression* expr = parse_cast_expression();
 
     while (true) {
         if (match(TK_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_BITWISE_AND_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_AND_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_BITWISE_AND_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_BITWISE_XOR_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_XOR_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_BITWISE_XOR_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_BITWISE_OR_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_OR_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_BITWISE_OR_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_BITWISE_NOT_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_NOT_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_BITWISE_NOT_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_DIVISION_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_DIVISION_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_DIVISION_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_INTEGER_DIVISION_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_INTEGER_DIVISIO_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_INTEGER_DIVISIO_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_MINUS_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_MINUS_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_MINUS_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_MODULO_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_MODULO_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_MODULO_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_PLUS_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_PLUS_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_PLUS_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_TIMES_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_TIMES_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_TIMES_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_SLL_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_SLL_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_SLL_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_SRA_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_SRA_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_SRA_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_SRL_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_SRL_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_SRL_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_SPECIAL_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_SPECIAL_ASSIGN, oper, expr, parse_logical_or_expression());
+            expr = new BinOp(EXPR_SPECIAL_ASSIGN, oper, expr, parse_cast_expression());
         } else {
             break;
         }
@@ -1218,6 +1218,16 @@ Expression* Parser::parse_delete_expression() {
     }
 
     expr = new UnOp(kind, oper, parse_expression());
+    return expr;
+}
+
+Expression *Parser::parse_cast_expression() {
+    Expression* expr = parse_logical_or_expression();
+
+    if (match(TK_AS)) {
+        expr = new CastExpression(expr, parse_type());
+    }
+
     return expr;
 }
 

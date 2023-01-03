@@ -49,6 +49,7 @@ namespace haard {
             void print_new_expression(NewExpression* expr);
             void print_delete_expression(UnOp* expr);
             void print_delete_array_expression(UnOp* expr);
+            void print_cast_expression(CastExpression* expr);
 
             void print_class_constructors(Class* klass);
             void print_class_destructor(Class* klass);

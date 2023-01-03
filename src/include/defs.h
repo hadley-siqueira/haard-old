@@ -689,7 +689,8 @@ namespace haard {
         EXPR_NEW,
         EXPR_DELETE,
         EXPR_DELETE_ARRAY,
-        EXPR_TEMPLATE
+        EXPR_TEMPLATE,
+        EXPR_CAST
     } ExpressionKind;
 
     typedef enum StatementKind {
