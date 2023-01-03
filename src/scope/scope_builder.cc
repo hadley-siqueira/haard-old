@@ -846,7 +846,7 @@ void ScopeBuilder::define_class(Class* klass) {
     if (!sym) {
         current_scope->define(klass);
     } else {
-        logger->error(error_message_cant_define_class(klass, sym));
+        logger->error_and_exit(error_message_cant_define_class(klass, sym));
     }
 
     self_type->set_name(klass->get_name());
@@ -886,9 +886,9 @@ void ScopeBuilder::define_class_variable(Variable* var) {
         link_type(var->get_type());
     } else {
         if (lsym == nullptr) {
-            logger->error("<red>error: </red>class variable already defined in super class");
+            logger->error_and_exit("<red>error: </red>class variable already defined in super class");
         } else {
-            logger->error("<red>error: </red>class variable already defined");
+            logger->error_and_exit("<red>error: </red>class variable already defined");
         }
     }
 }
@@ -912,7 +912,7 @@ void ScopeBuilder::define_class_method(Function* method) {
         logger->info(info_message_defining_method(method));
         define_overloaded_function(sym, method);
     } else {
-        logger->error("can't define method");
+        logger->error_and_exit("can't define method");
     }
 }
 
@@ -928,7 +928,7 @@ void ScopeBuilder::define_class_template_header(Class* klass) {
             TemplateType* t = (TemplateType*) header->get_type(i);
 
             if (current_scope->local_has(t->get_name())) {
-                logger->error("error: already used type on template header");
+                logger->error_and_exit("error: already used type on template header");
             } else {
                 current_scope->define(t);
             }
@@ -971,7 +971,7 @@ void ScopeBuilder::define_function(Function* function) {
         logger->info(info_message_defining_function(function));
         define_overloaded_function(sym, function);
     } else {
-        logger->error("can't define function");
+        logger->error_and_exit("can't define function");
     }
 }
 
@@ -999,7 +999,7 @@ void ScopeBuilder::define_function_template_header(Function* function) {
                 current_scope->define(type);
                 link_type(type->get_bind_type());
             } else {
-                logger->error("<red>error: </red>template name already defined");
+                logger->error_and_exit("<red>error: </red>template name already defined");
             }
         }
     }
@@ -1021,7 +1021,7 @@ void ScopeBuilder::define_function_parameters(Function* function) {
         } else if (sym->get_kind() != SYM_PARAMETER) {
             current_scope->define(SYM_PARAMETER, param);
         } else {
-            logger->error("<red>error: </red>parameter already defined");
+            logger->error_and_exit("<red>error: </red>parameter already defined");
         }
     }
 }
@@ -1055,7 +1055,7 @@ void ScopeBuilder::define_overloaded_function(Symbol* symbol, Function* function
         Function* other = (Function*) symbol->get_descriptor(i);
 
         if (function->same_signature(other)) {
-            logger->error("<red>error: </red>function with same signature");
+            logger->error_and_exit("<red>error: </red>function with same signature");
         }
     }
 
@@ -1095,7 +1095,7 @@ void ScopeBuilder::link_named_type(NamedType* type) {
     Symbol* sym = current_scope->has(type->get_name());
 
     if (!sym) {
-        logger->error("<red>error: </red> named type not in scope");
+        logger->error_and_exit("<red>error: </red> named type not in scope");
     }
 
     int kind = sym->get_kind();
@@ -1105,7 +1105,7 @@ void ScopeBuilder::link_named_type(NamedType* type) {
     } else if (kind == SYM_TEMPLATE) {
         type->set_symbol(sym);
     } else {
-        logger->error("error: named type not in scope but is another entity");
+        logger->error_and_exit("error: named type not in scope but is another entity");
     }
 
     if (header) {
