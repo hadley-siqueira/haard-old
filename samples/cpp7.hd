@@ -9,4 +9,5 @@ class Foo:
 def main : int
     for i in 2..10:
         i = i
+        i = j + 1
         print(i)

@@ -10,6 +10,7 @@
 
 namespace haard {
     std::string error_message_cant_define_class(Class* klass, Symbol* sym);
+    std::string error_message_id_not_in_scope(Source* source, Identifier* id);
 }
 
 #endif

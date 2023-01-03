@@ -120,6 +120,7 @@ namespace haard {
             Scope* current_scope;
             std::stack<Scope*> scopes;
 
+            Source* current_source;
             Function* current_function;
             Class* current_class;
 

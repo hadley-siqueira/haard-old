@@ -11,6 +11,7 @@ ScopeBuilder::ScopeBuilder() {
     current_scope = nullptr;
     current_class = nullptr;
     current_function = nullptr;
+    current_source = nullptr;
     var_counter = 0;
     function_counter = 0;
     class_counter = 0;
@@ -29,6 +30,7 @@ void ScopeBuilder::build_sources(Sources* sources) {
 
 void ScopeBuilder::build_source(Source* source) {
     enter_scope(source->get_scope());
+    current_source = source;
 
     for (int i = 0; i < source->classes_count(); ++i) {
         build_class(source->get_class(i));
@@ -38,6 +40,7 @@ void ScopeBuilder::build_source(Source* source) {
         build_function(source->get_function(i));
     }
 
+    current_source = nullptr;
     leave_scope();
 }
 
@@ -68,13 +71,9 @@ void ScopeBuilder::build_function(Function* function) {
     var_counter = 0;
     build_compound_statement(function->get_statements());
 
-    std::cout << "scope for " << function->get_name() << std::endl;
-    current_scope->debug();
-    std::cout << std::endl;
     leave_scope();
 }
 
-// build statements
 void ScopeBuilder::build_statement(Statement* statement) {
     int kind = statement->get_kind();
 
@@ -128,6 +127,10 @@ void ScopeBuilder::build_statement(Statement* statement) {
     case STMT_VAR_DECL:
         build_variable_declaration((VarDeclaration*) statement);
         break;
+
+    default:
+        std::cout << "unknown statement\n";
+        exit(0);
     }
 }
 
@@ -219,7 +222,6 @@ void ScopeBuilder::build_variable_declaration(VarDeclaration *statement) {
     build_expression(statement->get_expression());
 }
 
-// build expressions
 void ScopeBuilder::build_expression(Expression* expression) {
     if (expression == nullptr) {
         return;
@@ -390,8 +392,7 @@ void ScopeBuilder::build_identifier(Identifier* id) {
     Symbol* sym = current_scope->has(id->get_lexeme());
 
     if (!sym) {
-        std::cout << id->get_lexeme();
-        logger->error_and_exit(" id not in scope");
+        logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
     }
 
     id->set_symbol(sym);
