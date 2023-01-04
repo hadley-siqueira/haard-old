@@ -20,6 +20,7 @@ namespace haard {
             void print_import(Import* import);
             void print_class(Class* klass);
             void print_function(Function* function);
+            void print_method(Function* function);
             void print_parameters(Function* function);
             void print_type(Type* type);
             void print_type_list(std::string oper, TypeList* tlist);

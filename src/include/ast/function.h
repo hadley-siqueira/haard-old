@@ -40,6 +40,7 @@ namespace haard {
             void set_from_token(Token& token);
             void set_return_type(Type* type);
             void set_statements(CompoundStatement* statements);
+            void set_virtual(bool v);
 
             int get_uid();
             void set_uid(int uid);
@@ -56,6 +57,7 @@ namespace haard {
 
             bool is_template();
             bool is_method();
+            bool is_virtual();
             bool is_binded_with_types(TypeList* types);
             void bind_with(TypeList* types);
 
@@ -75,22 +77,31 @@ namespace haard {
             void set_class(Class* klass);
             Class* get_class();
 
-        private:
+            std::vector<std::string> get_annotations() const;
+            void set_annotations(const std::vector<std::string>& value);
+
+            Function* get_parent_method() const;
+            void set_parent_method(Function* value);
+
+    private:
             int uid;
             int line;
             int column;
             int overloaded_index;
             bool method_flag;
+            bool virtual_flag;
             const char* name;
             Type* return_type;
             FunctionType* self_type;
             TemplateHeader* template_header;
             CompoundStatement* statements;
+            Function* parent_method;
             Scope* scope;
             Source* source;
             Class* klass;
             std::vector<Variable*> parameters;
             std::vector<Variable*> variables;
+            std::vector<std::string> annotations;
             
     };
 }

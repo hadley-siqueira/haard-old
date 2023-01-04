@@ -59,6 +59,9 @@ namespace haard {
             Function* get_destructor() const;
             void set_destructor(Function* value);
 
+            std::vector<std::string> get_annotations() const;
+            void set_annotations(const std::vector<std::string>& value);
+
     private:
             int line;
             int column;
@@ -73,6 +76,7 @@ namespace haard {
             std::vector<Function*> methods;
             std::vector<Function*> constructors;
             std::vector<Variable*> variables;
+            std::vector<std::string> annotations;
     };
 }
 

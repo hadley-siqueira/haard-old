@@ -45,6 +45,7 @@ namespace haard {
             JumpStatement* parse_jump_statement(int tkind, int skind);
             CompoundStatement* parse_compound_statement();
             VarDeclaration* parse_variable_declaration();
+            void parse_annotation();
 
             Expression* parse_expression();
             Expression* parse_assignment_expression();
@@ -90,6 +91,7 @@ namespace haard {
             std::string path;
             std::vector<Token> tokens;
             std::stack<int> indent_stack;
+            std::vector<std::string> annotations;
             Token matched;
             Logger* logger;
     };

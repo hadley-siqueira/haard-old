@@ -910,6 +910,7 @@ void ScopeBuilder::define_class_methods(Class* klass) {
 
 void ScopeBuilder::define_class_method(Function* method) {
     Symbol* sym = current_scope->local_has(method->get_name());
+    Symbol* sym2 = current_scope->has_field(method->get_name());
 
     define_method_signature(method);
     method->set_uid(function_counter++);
@@ -922,6 +923,17 @@ void ScopeBuilder::define_class_method(Function* method) {
         define_overloaded_function(sym, method);
     } else {
         logger->error_and_exit("can't define method");
+    }
+
+    if (sym2) {
+        if (sym2->get_kind() == SYM_METHOD) {
+            Function* m = (Function*) sym2->get_descriptor();
+
+            if (m->is_virtual()) {
+                method->set_parent_method(m);
+                method->set_virtual(true);
+            }
+        }
     }
 }
 
@@ -1064,7 +1076,9 @@ void ScopeBuilder::define_overloaded_function(Symbol* symbol, Function* function
         Function* other = (Function*) symbol->get_descriptor(i);
 
         if (function->same_signature(other)) {
-            logger->error_and_exit("<red>error: </red>function with same signature");
+            std::string msg("<red>error: </red>function with same signature: ");
+            msg += function->get_name();
+            logger->error_and_exit(msg);
         }
     }
 

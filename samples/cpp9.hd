@@ -4,6 +4,7 @@ class Shape:
     def init : void
         pass
 
+    @virtual
     def draw : void
         var s : char* = "draw from shape"
         print(s)
@@ -22,7 +23,6 @@ class Rectangle(Shape):
     def draw : void
         var s : char* = "draw from rectangle"
         print(s)
-        
 
 def main : int
     s = Shape()
@@ -33,6 +33,7 @@ def main : int
 
     s2 = new Shape()
     r2 = new Rectangle()
+    r3 = new Rectangle() as Shape*
 
     s2.draw()
     r2.area()

@@ -149,20 +149,21 @@ void CppPrinter::print_function(Function* function) {
     }
 
     *out << " {\n";
-//    print_type(function->get_return_type());
-//    *out << " " << function->get_cpp_name();
 
     if (strcmp(function->get_name(), "main") == 0) {
         main_function = function;
     }
 
-    //print_parameters(function);
     indent();
     print_compound_statement(function->get_statements());
 
     dedent();
     print_indentation();
     *out << "}\n";
+}
+
+void CppPrinter::print_method(Function* function) {
+
 }
 
 void CppPrinter::print_parameters(Function* function) {

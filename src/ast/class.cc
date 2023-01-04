@@ -175,6 +175,14 @@ void Class::set_destructor(Function* value) {
     destructor = value;
 }
 
+std::vector<std::string> Class::get_annotations() const {
+    return annotations;
+}
+
+void Class::set_annotations(const std::vector<std::string>& value) {
+    annotations = value;
+}
+
 int Class::get_size_in_bytes() {
     int sz = 0;
 

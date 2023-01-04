@@ -39,6 +39,8 @@ Source* Parser::parse_source() {
             source->add_function(parse_function());
         } else if (lookahead(TK_CLASS)) {
             source->add_class(parse_class());
+        } else if (lookahead(TK_AT)) {
+            parse_annotation();
         } else if (match(TK_EOF)) {
             break;
         } else {
@@ -77,8 +79,13 @@ Import* Parser::parse_import() {
 }
 
 Class* Parser::parse_class() {
-    Token name;
+    //Token name;
     Class* klass = new Class();
+
+    if (annotations.size() > 0) {
+        klass->set_annotations(annotations);
+        annotations.clear();
+    }
 
     expect(TK_CLASS);
     expect(TK_ID);
@@ -101,6 +108,8 @@ Class* Parser::parse_class() {
             klass->add_method(parse_function());
         } else if (lookahead(TK_ID)){
             klass->add_variable(parse_class_variable());
+        } else if (lookahead(TK_AT)) {
+            parse_annotation();
         } else {
             break;
         }
@@ -143,6 +152,11 @@ Variable* Parser::parse_class_variable() {
 Function* Parser::parse_function() {
     Type* type;
     Function* function = new Function();
+
+    if (annotations.size() > 0) {
+        function->set_annotations(annotations);
+        annotations.clear();
+    }
 
     expect(TK_DEF);
     expect(TK_ID);
@@ -616,6 +630,12 @@ VarDeclaration* Parser::parse_variable_declaration() {
     }
 
     return decl;
+}
+
+void Parser::parse_annotation() {
+    expect(TK_AT);
+    expect(TK_ID);
+    annotations.push_back(matched.get_lexeme());
 }
 
 Expression* Parser::parse_expression() {

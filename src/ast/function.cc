@@ -10,6 +10,7 @@ Function::Function() {
     statements = nullptr;
     scope = new Scope();
     method_flag = false;
+    virtual_flag = false;
     template_header = nullptr;
     self_type = nullptr;
 }
@@ -43,6 +44,12 @@ const char* Function::get_name() {
 std::string Function::get_cpp_name() {
     std::stringstream ss;
 
+    if (is_virtual()) {
+        if (get_parent_method() != nullptr) {
+            return get_parent_method()->get_cpp_name();
+        }
+    }
+
     if (method_flag) {
         ss << 'm';
     } else {
@@ -55,6 +62,16 @@ std::string Function::get_cpp_name() {
 
 std::string Function::get_cpp_signature() {
     std::stringstream ss;
+
+    if (is_virtual()) {
+        if (get_parent_method() != nullptr) {
+            return get_parent_method()->get_cpp_signature();
+        }
+    }
+
+    if (annotations.size() > 0) {
+        ss << "virtual ";
+    }
 
     ss << return_type->to_cpp();
     ss << ' ';
@@ -125,6 +142,10 @@ void Function::set_statements(CompoundStatement* statements) {
     this->statements = statements;
 }
 
+void Function::set_virtual(bool v) {
+    virtual_flag = v;
+}
+
 int Function::get_uid() {
     return uid;
 }
@@ -182,6 +203,10 @@ bool Function::is_template() {
 
 bool Function::is_method() {
     return method_flag;
+}
+
+bool Function::is_virtual() {
+    return virtual_flag;
 }
 
 Function* Function::clone() {
@@ -326,4 +351,26 @@ void Function::set_class(Class* klass) {
 
 Class* Function::get_class() {
     return klass;
+}
+
+std::vector<std::string> Function::get_annotations() const {
+    return annotations;
+}
+
+void Function::set_annotations(const std::vector<std::string>& value) {
+    annotations = value;
+
+    for (int i = 0; i < annotations.size(); ++i) {
+        if (annotations[i].compare("virtual") == 0) {
+            virtual_flag = true;
+        }
+    }
+}
+
+Function* Function::get_parent_method() const {
+    return parent_method;
+}
+
+void Function::set_parent_method(Function* value) {
+    parent_method = value;
 }
