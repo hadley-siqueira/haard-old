@@ -47,6 +47,7 @@ void IRPrinter::print_function_body(IRFunction* function) {
 
 void IRPrinter::print_instruction(IR* ir) {
     IRBin* bin = (IRBin*) ir;
+    IRUnary* un = (IRUnary*) ir;
 
     switch (ir->get_kind()) {
     case IR_ADD:
@@ -55,6 +56,11 @@ void IRPrinter::print_instruction(IR* ir) {
 
     case IR_SUB:
         print_binop("sub", bin);
+        break;
+
+    case IR_LI:
+        *out << un->get_dst()->to_str() << " = li ";
+        *out << un->get_src()->to_str();
         break;
 
     default:
