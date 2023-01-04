@@ -1,12 +1,13 @@
 #include <iostream>
 #include "ir/ir_builder.h"
+#include "printer/ir_printer.h"
 
 using namespace haard;
 
 IRBuilder::IRBuilder() {
     logger = nullptr;
-    module = new IRModule();
-    //ctx = new IRContext();
+    current_module = new IRModule();
+    ctx = nullptr;
 }
 
 IRBuilder::~IRBuilder() {
@@ -19,14 +20,21 @@ void IRBuilder::build(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
-
-    std::cout << module->to_cpp() << std::endl;
 }
 
 void IRBuilder::build_source(Source* source) {
+    IRModule* module = new IRModule();
+    current_module = module;
+
     for (int i = 0; i < source->function_count(); ++i) {
         build_function(source->get_function(i));
     }
+
+    current_module = nullptr;
+    modules.push_back(module);
+    IRPrinter printer;
+
+    printer.print_module(module);
 }
 
 void IRBuilder::build_class(Class* klass) {
@@ -42,7 +50,7 @@ void IRBuilder::build_function(Function* function) {
     ctx = ir_func->get_context();
     build_compound_statement(function->get_statements());
 
-    module->add_function(ir_func);
+    current_module->add_function(ir_func);
 }
 
 void IRBuilder::set_logger(Logger* logger) {

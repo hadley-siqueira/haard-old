@@ -35,27 +35,24 @@ void Driver::run() {
     configure_search_path();
 
     run_info_flags();
-std::cout << "starting parsing...\n";
+    std::cout << "starting parsing...\n";
     parse_sources();
-std::cout << "ending parsing...\n";
+    std::cout << "ending parsing...\n";
     check_for_errors();
 
-
+    std::cout << "starting semantic analysis...\n";
     semantic_analysis();
     check_for_errors();
+    std::cout << "ending parsing...\n";
 
     run_flags();
+
+    std::cout << "starting ir generation...\n";
     ir_generation();
     check_for_errors();
-    logger.print();
-/*
-    parse_program();
-    build_scopes();
+    std::cout << "ir generation done...\n";
 
-    if (cpp_flag) {
-        build_cpp();
-    }
-    //build_ir();*/
+    logger.print();
 }
 
 void Driver::run_info_flags() {

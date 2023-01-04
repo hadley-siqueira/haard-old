@@ -14,10 +14,11 @@ namespace haard {
         public:
             void set_name(std::string name);
             IRContext* get_context();
-            std::string to_str();
-            std::string to_cpp();
 
-        private:
+            std::string get_name() const;
+            int parameters_count();
+
+    private:
             std::string name;
             std::vector<IRValue*> params;
             IRContext* ctx;

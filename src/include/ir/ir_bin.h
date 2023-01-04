@@ -10,14 +10,19 @@ namespace haard {
             IRBin(int kind, IRValue* dst=nullptr, IRValue* src1=nullptr, IRValue* src2=nullptr);
             ~IRBin();
 
-            std::string to_str();
-            std::string to_cpp();
+            IRValue* get_dst() const;
+            void set_dst(IRValue* value);
 
-        private:
-            std::string to_str1(std::string op);
-            std::string to_cpp1(std::string op);
+            IRValue* get_src1() const;
+            void set_src1(IRValue* value);
 
-        private:
+            IRValue* get_src2() const;
+            void set_src2(IRValue* value);
+
+    private:
+
+
+    private:
             IRValue* dst;
             IRValue* src1;
             IRValue* src2;

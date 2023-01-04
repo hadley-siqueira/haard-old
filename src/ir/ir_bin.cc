@@ -15,53 +15,26 @@ IRBin::~IRBin() {
     // should be deleted from a basic block
 }
 
-std::string IRBin::to_str() {
-    switch (kind) {
-    case IR_ADD:
-        return to_str1("add");
-
-    case IR_SUB:
-        return to_str1("sub");
-
-    case IR_MUL:
-        return to_str1("mul");
-
-    case IR_DIV:
-        return to_str1("div");
-
-    }
-
-    return "unknown ir_bin";
+IRValue *IRBin::get_dst() const {
+    return dst;
 }
 
-std::string IRBin::to_cpp() {
-    switch (kind) {
-    case IR_ADD:
-        return to_cpp1("+");
-
-    case IR_SUB:
-        return to_cpp1("-");
-
-    case IR_MUL:
-        return to_cpp1("*");
-
-    case IR_DIV:
-        return to_cpp1("/");
-    }
-
-    return "unknown ir_bin cpp";
+void IRBin::set_dst(IRValue *value) {
+    dst = value;
 }
 
-std::string IRBin::to_str1(std::string op) {
-    std::stringstream ss;
-
-    ss << op << " " << dst->to_str() << ", " << src1->to_str() << ", " << src2->to_str();
-    return ss.str();
+IRValue *IRBin::get_src1() const {
+    return src1;
 }
 
-std::string IRBin::to_cpp1(std::string op) {
-    std::stringstream ss;
+void IRBin::set_src1(IRValue *value) {
+    src1 = value;
+}
 
-    ss << "u64 " << dst->to_cpp() << " = " << src1->to_cpp() << " " << op << " " << src2->to_cpp() << ";";
-    return ss.str();
+IRValue *IRBin::get_src2() const {
+    return src2;
+}
+
+void IRBin::set_src2(IRValue *value) {
+    src2 = value;
 }

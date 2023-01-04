@@ -54,14 +54,14 @@ namespace haard {
         public:
             void set_logger(Logger* logger);
 
-
         private:
             Logger* logger;
             IRValue* last_value;
             IRContext* ctx;
             std::map<std::string, IRValue*> alloca_map;
             std::vector<IRFunction*> functions;
-            IRModule* module;
+            std::vector<IRModule*> modules;
+            IRModule* current_module;
     };
 }
 

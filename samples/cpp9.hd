@@ -9,6 +9,9 @@ class Shape:
         var s : char* = "draw from shape"
         print(s)
 
+    def foobar : void
+        print(5)
+
 class Rectangle(Shape):
     w : int
     h : int
@@ -23,6 +26,9 @@ class Rectangle(Shape):
     def draw : void
         var s : char* = "draw from rectangle"
         print(s)
+
+    def foobar : void
+        print(7)
 
 def main : int
     s = Shape()
@@ -41,5 +47,7 @@ def main : int
 
     s2 = r2
     s2.draw()
+    s2.foobar()
+    r2.foobar()
 
     return 0

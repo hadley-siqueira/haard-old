@@ -2,7 +2,7 @@
 #define HAARD_IR_CONTEXT_H
 
 #include <map>
-#include <list>
+#include <vector>
 #include "ast/ast.h"
 #include "ir/ir_value.h"
 #include "ir/ir_unary.h"
@@ -22,16 +22,14 @@ namespace haard {
             IRValue* get_var(Identifier* id);
             IRValue* new_temporary();
 
-            std::string to_str();
-            std::string to_cpp();
-
-            void debug();
+            int instructions_count();
+            IR* get_instruction(int i);
 
         private:
             int tmp_counter;
             std::map<std::string, IRValue*> values;
             std::map<std::string, IRValue*> alloca_map;
-            std::list<IR*> instructions;
+            std::vector<IR*> instructions;
     };
 }
 

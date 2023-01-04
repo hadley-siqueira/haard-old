@@ -10,11 +10,13 @@ namespace haard {
             IRUnary(int kind, IRValue* dst=nullptr, IRValue* src=nullptr);
             ~IRUnary();
 
-        public:
-            std::string to_str();
-            std::string to_cpp();
+            IRValue *get_dst() const;
+            void set_dst(IRValue *value);
 
-        private:
+            IRValue *get_src() const;
+            void set_src(IRValue *value);
+
+    private:
             IRValue* dst;
             IRValue* src;
     };

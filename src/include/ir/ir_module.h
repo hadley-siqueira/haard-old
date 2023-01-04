@@ -12,6 +12,8 @@ namespace haard {
 
         public:
             void add_function(IRFunction* func);
+            int functions_count();
+            IRFunction* get_function(int i);
             std::string to_cpp();
 
         private:

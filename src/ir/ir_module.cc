@@ -17,6 +17,18 @@ void IRModule::add_function(IRFunction* func) {
     functions.push_back(func);
 }
 
+int IRModule::functions_count() {
+    return functions.size();
+}
+
+IRFunction* IRModule::get_function(int i) {
+    if (i < functions_count()) {
+        return functions[i];
+    }
+
+    return nullptr;
+}
+
 std::string IRModule::to_cpp() {
     std::stringstream ss;
 

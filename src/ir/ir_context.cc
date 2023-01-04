@@ -9,11 +9,10 @@ IRContext::IRContext() {
 }
 
 IRContext::~IRContext() {
-    std::list<IR*>::iterator it;
     std::map<std::string, IRValue*>::iterator it2;
 
-    for (it = instructions.begin(); it != instructions.end(); ++it) {
-        delete *it;
+    for (int i = 0; i < instructions_count(); ++i) {
+        delete instructions[i];
     }
 
     for (it2 = values.begin(); it2 != values.end(); ++it2) {
@@ -63,45 +62,14 @@ IRValue* IRContext::get_var(Identifier* id) {
     return values[lexeme];
 }
 
-void IRContext::debug() {
-    std::list<IR*>::iterator it;
-
-    for (it = instructions.begin(); it != instructions.end(); ++it) {
-        IR* inst = *it;
-        std::cout << inst->to_str() << std::endl;
-    }
+int IRContext::instructions_count() {
+    return instructions.size();
 }
 
-std::string IRContext::to_str() {
-    std::stringstream ss;
-    std::list<IR*>::iterator it;
-
-    for (it = instructions.begin(); it != instructions.end(); ++it) {
-        IR* inst = *it;
-
-        if (inst->get_kind() != IR_LABEL) {
-            ss << "    ";
-        }
-
-        ss << inst->to_str() << '\n';
+IR *IRContext::get_instruction(int i) {
+    if (i < instructions_count()) {
+        return instructions[i];
     }
 
-    return ss.str();
-}
-
-std::string IRContext::to_cpp() {
-    std::stringstream ss;
-    std::list<IR*>::iterator it;
-
-    for (it = instructions.begin(); it != instructions.end(); ++it) {
-        IR* inst = *it;
-
-        if (inst->get_kind() != IR_LABEL) {
-            ss << "    ";
-        }
-
-        ss << inst->to_cpp() << '\n';
-    }
-
-    return ss.str();
+    return nullptr;
 }

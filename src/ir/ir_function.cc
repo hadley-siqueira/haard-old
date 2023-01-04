@@ -20,33 +20,10 @@ void IRFunction::set_name(std::string name) {
     this->name = name;
 }
 
-std::string IRFunction::to_str() {
-    std::stringstream ss;
-
-    ss << "def " << name << "(";
-
-    for (int i = 0; i < params.size(); ++i) {
-        ss << params[i]->to_str() << ", ";
-    }
-
-    ss << "):\n";
-    ss << ctx->to_str();
-
-    return ss.str();
+std::string IRFunction::get_name() const {
+    return name;
 }
 
-std::string IRFunction::to_cpp() {
-    std::stringstream ss;
-
-    ss << "void " << name << "(";
-
-    for (int i = 0; i < params.size(); ++i) {
-        ss << params[i]->to_cpp() << ", ";
-    }
-
-    ss << ") {\n";
-    ss << ctx->to_cpp();
-    ss << "}\n";
-
-    return ss.str();
+int IRFunction::parameters_count() {
+    return params.size();
 }
