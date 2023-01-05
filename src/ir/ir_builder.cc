@@ -1,6 +1,7 @@
 #include <iostream>
 #include "ir/ir_builder.h"
 #include "printer/ir_printer.h"
+#include "vm/irvm.h"
 
 using namespace haard;
 
@@ -51,6 +52,10 @@ void IRBuilder::build_function(Function* function) {
     build_compound_statement(function->get_statements());
 
     current_module->add_function(ir_func);
+
+    IrVM vm;
+    vm.execute_function(ir_func);
+    vm.dump_memory();
 }
 
 void IRBuilder::set_logger(Logger* logger) {
@@ -224,7 +229,7 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
                 last_value = alloca_map[ir_id->to_str()];
             } else {
                 tmp0 = ctx->new_temporary();
-                ir_addr = ctx->new_unary(IR_FRAME, tmp0, ir_id);
+                ir_addr = ctx->new_unary(IR_ALLOCA, tmp0, ir_id);
                 last_value = tmp0;
                 alloca_map[ir_id->to_str()] = last_value;
             }
@@ -241,7 +246,7 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
                 last_value = tmp1;
             } else {
                 tmp0 = ctx->new_temporary();
-                ir_addr = ctx->new_unary(IR_FRAME, tmp0, ir_id);
+                ir_addr = ctx->new_unary(IR_ALLOCA, tmp0, ir_id);
                 tmp1 = ctx->new_temporary();
                 ir_load = ctx->new_unary(IR_LOAD, tmp1, tmp0);
                 last_value = tmp1;
@@ -264,7 +269,7 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
 
     // FIXME
     // on complex types, should call memcpy instead of a simple store
-    ir = ctx->new_unary(IR_STORE, left, right);
+    ir = ctx->new_unary(IR_STORE, right, left);
     last_value = left;
 }
 

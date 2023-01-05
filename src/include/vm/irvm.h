@@ -14,6 +14,9 @@ namespace haard {
             void execute_function(IRFunction* function);
             void execute(IR* ir);
 
+            void dump_memory();
+            void dump_values();
+
         private:
             uint64_t load64(uint64_t addr);
             void store64(uint64_t addr, uint64_t value);
@@ -24,7 +27,7 @@ namespace haard {
         private:
             std::stack<std::map<std::string, uint64_t>> values_stack;
             std::stack<uint64_t> ip_stack;
-            std::map<std::string, uint64_t>* current_values;
+            std::map<std::string, uint64_t> current_values;
             uint64_t sp;
             uint64_t ip;
             uint8_t* mem;

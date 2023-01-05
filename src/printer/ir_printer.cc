@@ -49,6 +49,7 @@ void IRPrinter::print_instruction(IR* ir) {
     IRBin* bin = (IRBin*) ir;
     IRUnary* un = (IRUnary*) ir;
 
+    std::cout << "exec..\n";
     switch (ir->get_kind()) {
     case IR_ADD:
         print_binop("add", bin);
@@ -73,7 +74,7 @@ void IRPrinter::print_instruction(IR* ir) {
         *out << un->get_src()->to_str();
         break;
 
-    case IR_FRAME:
+    case IR_ALLOCA:
         *out << un->get_dst()->to_str() << " = alloca ";
         *out << un->get_src()->to_str();
         break;
