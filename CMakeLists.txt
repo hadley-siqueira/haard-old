@@ -93,6 +93,10 @@ set(SCOPE_SRC
     src/scope/scope_builder.cc
 )
 
+set(IRVM_SRC
+    src/vm/irvm.cc
+)
+
 set(SOURCES
     src/main.cc
     ${UTILS_SRC}
@@ -104,6 +108,7 @@ set(SOURCES
     ${IR_SRC}
     ${PRINTER_SRC}
     ${SCOPE_SRC}
+    ${IRVM_SRC}
     ${DRIVER_SRC}
 )
 

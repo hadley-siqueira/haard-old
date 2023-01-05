@@ -63,8 +63,23 @@ void IRPrinter::print_instruction(IR* ir) {
         *out << un->get_src()->to_str();
         break;
 
+    case IR_LOAD:
+        *out << un->get_dst()->to_str() << " = load ";
+        *out << un->get_src()->to_str();
+        break;
+
+    case IR_STORE:
+        *out << "store " << un->get_dst()->to_str() << ", ";
+        *out << un->get_src()->to_str();
+        break;
+
+    case IR_FRAME:
+        *out << un->get_dst()->to_str() << " = alloca ";
+        *out << un->get_src()->to_str();
+        break;
+
     default:
-        *out << "%0 = add %0, %0";
+        *out << "%0 = unknown %0, %0";
         break;
     }
 }
