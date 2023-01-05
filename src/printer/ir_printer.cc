@@ -49,7 +49,6 @@ void IRPrinter::print_instruction(IR* ir) {
     IRBin* bin = (IRBin*) ir;
     IRUnary* un = (IRUnary*) ir;
 
-    std::cout << "exec..\n";
     switch (ir->get_kind()) {
     case IR_ADD:
         print_binop("add", bin);
