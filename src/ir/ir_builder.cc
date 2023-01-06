@@ -1,7 +1,6 @@
 #include <iostream>
 #include "ir/ir_builder.h"
 #include "printer/ir_printer.h"
-#include "vm/irvm.h"
 
 using namespace haard;
 
@@ -52,14 +51,18 @@ void IRBuilder::build_function(Function* function) {
     build_compound_statement(function->get_statements());
 
     current_module->add_function(ir_func);
-
-    IrVM vm;
-    vm.execute_function(ir_func);
-    vm.dump_memory();
 }
 
 void IRBuilder::set_logger(Logger* logger) {
     this->logger = logger;
+}
+
+std::vector<IRModule *> IRBuilder::get_modules() const {
+    return modules;
+}
+
+void IRBuilder::set_modules(const std::vector<IRModule *>& value) {
+    modules = value;
 }
 
 void IRBuilder::build_statement(Statement* statement) {

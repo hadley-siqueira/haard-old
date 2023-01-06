@@ -54,7 +54,10 @@ namespace haard {
         public:
             void set_logger(Logger* logger);
 
-        private:
+            std::vector<IRModule *> get_modules() const;
+            void set_modules(const std::vector<IRModule *>& value);
+
+    private:
             Logger* logger;
             IRValue* last_value;
             IRContext* ctx;

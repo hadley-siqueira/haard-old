@@ -1,0 +1,7 @@
+def main : void
+    a = 7
+    ptr = &a
+    ptr = 16
+    *ptr = 123
+    ptr = 17
+    *ptr = 10

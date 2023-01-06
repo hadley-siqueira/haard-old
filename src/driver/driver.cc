@@ -11,6 +11,7 @@
 #include "printer/cpp_printer.h"
 #include "scope/scope_builder.h"
 #include "ir/ir_builder.h"
+#include "vm/irvm.h"
 
 using namespace haard;
 
@@ -138,6 +139,12 @@ void Driver::ir_generation() {
 
     builder.set_logger(&logger);
     builder.build(sources);
+
+    auto module = builder.get_modules().front();
+
+    IrVM vm;
+    vm.execute_function(module->get_function("main"));
+    vm.dump_memory();
 }
 
 void Driver::parse_imports(Source* file) {

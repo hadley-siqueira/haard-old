@@ -14,10 +14,11 @@ namespace haard {
             void add_function(IRFunction* func);
             int functions_count();
             IRFunction* get_function(int i);
-            std::string to_cpp();
+            IRFunction* get_function(const char* name);
 
         private:
             std::vector<IRFunction*> functions;
+            std::map<std::string, IRFunction*> functions_map;
     };
 }
 

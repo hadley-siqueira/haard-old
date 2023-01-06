@@ -6,6 +6,7 @@
 #include <cstdint>
 #include "ir/ir.h"
 #include "ir/ir_function.h"
+#include "vm/irvm_context.h"
 
 namespace haard {
     class IrVM {
@@ -14,7 +15,7 @@ namespace haard {
             void execute_function(IRFunction* function);
             void execute(IR* ir);
 
-            void dump_memory();
+            void dump_memory(int n_bytes=40);
             void dump_values();
 
         private:
@@ -25,11 +26,13 @@ namespace haard {
             void restore_context();
 
         private:
+            std::stack<IrVMContext> context_stack;
             std::stack<std::map<std::string, uint64_t>> values_stack;
             std::stack<uint64_t> ip_stack;
             std::map<std::string, uint64_t> current_values;
             uint64_t sp;
             uint64_t ip;
+            uint64_t fp;
             uint8_t* mem;
     };
 }

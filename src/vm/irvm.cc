@@ -5,7 +5,7 @@
 
 using namespace haard;
 
-#define MEM_SIZE 8 * 5
+#define MEM_SIZE 8 * 1000
 
 IrVM::IrVM() {
     ip = 0;
@@ -79,12 +79,10 @@ void IrVM::execute(IR* ir) {
         ip++;
         break;
     }
-
-    dump_values();
 }
 
-void IrVM::dump_memory() {
-    for (int i = MEM_SIZE - 1; i >= 0; --i) {
+void IrVM::dump_memory(int n_bytes) {
+    for (int i = MEM_SIZE - 1; i >= MEM_SIZE - n_bytes; --i) {
         printf("%x = %x\n", i, mem[i]);
     }
 }
@@ -108,7 +106,19 @@ uint64_t IrVM::load64(uint64_t addr) {
 void IrVM::store64(uint64_t addr, uint64_t value) {
     uint64_t* ptr = (uint64_t*) addr;
 
-    *ptr = value;
+    switch (addr) {
+    case 0x10:
+        printf("%lli", value);
+        break;
+
+    case 0x11:
+        printf("%c", value);
+        break;
+
+    default:
+        *ptr = value;
+        break;
+    }
 }
 
 void IrVM::save_context() {
@@ -119,6 +129,13 @@ void IrVM::save_context() {
 
     ip = 0;
     current_values = values;
+
+    IrVMContext ctx;
+    ctx.set_ip(ip);
+    ctx.set_fp(fp);
+    ctx.set_sp(sp);
+    ctx.set_values(current_values);
+    context_stack.push(ctx);
 }
 
 void IrVM::restore_context() {

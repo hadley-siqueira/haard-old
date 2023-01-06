@@ -95,6 +95,7 @@ set(SCOPE_SRC
 
 set(IRVM_SRC
     src/vm/irvm.cc
+    src/vm/irvm_context.cc
 )
 
 set(SOURCES
