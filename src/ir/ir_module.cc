@@ -4,7 +4,7 @@
 using namespace haard;
 
 IRModule::IRModule() {
-
+    main_function = nullptr;
 }
 
 IRModule::~IRModule() {
@@ -36,4 +36,12 @@ IRFunction* IRModule::get_function(const char* name) {
     }
 
     return nullptr;
+}
+
+IRFunction *IRModule::get_main_function() const {
+    return main_function;
+}
+
+void IRModule::set_main_function(IRFunction* value) {
+    main_function = value;
 }

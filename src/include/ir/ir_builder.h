@@ -50,6 +50,7 @@ namespace haard {
             void build_binop(BinOp* bin, int kind);
 
             void build_literal(Literal* literal, int kind);
+            void build_literal_integer(Literal* literal);
 
         public:
             void set_logger(Logger* logger);

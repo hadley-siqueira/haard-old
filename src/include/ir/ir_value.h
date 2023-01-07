@@ -13,7 +13,14 @@ namespace haard {
         public:
             std::string to_str();
 
-        private:
+            int get_kind() const;
+            void set_kind(int value);
+
+            const char* get_value() const;
+            void set_value(const char* value);
+            uint64_t to_u64();
+;
+    private:
             int kind;
             const char* value;
     };

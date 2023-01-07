@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include "vm/irvm.h"
 #include "ir/ir_unary.h"
 #include "ir/ir_bin.h"
@@ -38,7 +39,8 @@ void IrVM::execute(IR* ir) {
 
     switch (ir->get_kind()) {
     case IR_LI:
-        src1_value = atoi(un->get_src()->to_str().c_str());
+        //src1_value = atoi(un->get_src()->to_str().c_str());
+        src1_value = un->get_src()->to_u64();
         current_values[un->get_dst()->to_str()] = src1_value;
         ip++;
         break;

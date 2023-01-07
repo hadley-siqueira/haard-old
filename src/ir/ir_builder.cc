@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include "ir/ir_builder.h"
 #include "printer/ir_printer.h"
 
@@ -48,9 +49,18 @@ void IRBuilder::build_function(Function* function) {
 
     functions.push_back(ir_func);
     ctx = ir_func->get_context();
+
+    for (int i = 0; i < function->parameters_count(); ++i) {
+        ir_func->add_parameter(ctx->new_temporary());
+    }
+
     build_compound_statement(function->get_statements());
 
     current_module->add_function(ir_func);
+
+    if (strcmp(function->get_name(), "main") == 0) {
+        current_module->set_main_function(ir_func);
+    }
 }
 
 void IRBuilder::set_logger(Logger* logger) {
@@ -329,6 +339,19 @@ void IRBuilder::build_literal(Literal* literal, int kind) {
     IRValue* tmp;
 
     ir_literal = ctx->get_literal(kind, literal->get_lexeme());
+    tmp = ctx->new_temporary();
+    ir = ctx->new_unary(IR_LI, tmp, ir_literal);
+    last_value = tmp;
+
+    last_value = tmp;
+}
+
+void IRBuilder::build_literal_integer(Literal* literal) {
+    IR* ir;
+    IRValue* ir_literal;
+    IRValue* tmp;
+
+    ir_literal = ctx->get_literal(IR_VALUE_LITERAL_INTEGER, literal->get_lexeme());
     tmp = ctx->new_temporary();
     ir = ctx->new_unary(IR_LI, tmp, ir_literal);
     last_value = tmp;

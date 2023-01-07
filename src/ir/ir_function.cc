@@ -27,3 +27,7 @@ std::string IRFunction::get_name() const {
 int IRFunction::parameters_count() {
     return params.size();
 }
+
+void IRFunction::add_parameter(IRValue* param) {
+    params.push_back(param);
+}

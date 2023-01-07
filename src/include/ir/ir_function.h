@@ -18,6 +18,8 @@ namespace haard {
             std::string get_name() const;
             int parameters_count();
 
+            void add_parameter(IRValue* param);
+
     private:
             std::string name;
             std::vector<IRValue*> params;

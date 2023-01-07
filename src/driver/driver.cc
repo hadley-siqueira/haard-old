@@ -144,7 +144,7 @@ void Driver::ir_generation() {
     auto module = builder.get_modules().front();
 
     IrVM vm;
-    vm.execute_function(module->get_function("main"));
+    vm.execute_function(module->get_main_function());
     vm.dump_memory();
 }
 

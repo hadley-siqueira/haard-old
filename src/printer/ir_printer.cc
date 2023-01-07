@@ -33,6 +33,7 @@ void IRPrinter::print_function(IRFunction* function) {
     indent();
     print_function_body(function);
     dedent();
+    *out << "\n";
 }
 
 void IRPrinter::print_function_body(IRFunction* function) {
