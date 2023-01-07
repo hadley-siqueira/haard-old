@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sstream>
 #include <cstring>
 #include "ir/ir_value.h"
@@ -113,9 +114,30 @@ uint64_t conv64(const char* value) {
     return res;
 }
 
+uint64_t char2u64(const char* value) {
+    uint64_t res = 0;
+
+    if (value[1] == '\\') {
+        if (value[2] == 'n') {
+            res = '\n';
+        } else if (value[2] == 't') {
+            res = '\t';
+        } else if (value[2] == '\\') {
+            res = '\\';
+        } else if (value[2] == '\'') {
+            res = '\'';
+        }
+    } else {
+        res = value[1];
+    }
+
+    return res;
+}
+
 uint64_t IRValue::to_u64() {
     uint64_t res = 0;
 
+    //std::cout << "CONV = " << value << std::endl;
     switch (kind) {
     case IR_VALUE_LITERAL_BOOL:
         if (strcmp(value, "true") == 0) {
@@ -124,7 +146,7 @@ uint64_t IRValue::to_u64() {
         break;
 
     case IR_VALUE_LITERAL_CHAR:
-        res = value[1];
+        res = char2u64(value);
         break;
 
     case IR_VALUE_LITERAL_INTEGER:
