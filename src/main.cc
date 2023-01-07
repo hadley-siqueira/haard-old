@@ -25,7 +25,7 @@ void test_scanner(std::string path) {
 void test_parser(std::string path) {
     Parser parser;
     Printer printer;
-    Source* src = parser.read(path);
+    Source* src = parser.read(path, "");
     printer.print_source(src);
 
     std::cout << printer.to_str();

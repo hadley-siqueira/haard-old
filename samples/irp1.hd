@@ -1,4 +1,9 @@
+import std.io
+
 def main : void
+    @argc : int
+    @argv : char**
+
     a = 7
     ptr = &a
     ptr = 16

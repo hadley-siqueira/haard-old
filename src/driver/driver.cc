@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
@@ -180,6 +181,8 @@ void Driver::parse_simple_import(Import* import) {
 }
 
 Source* Driver::parse_file(const char* path) {
+    std::string relative_path;
+
     if (!file_exists(path)) {
         std::cout << "Error: file '" << path << "' doesn't exist\n";
         exit(0);
@@ -189,7 +192,8 @@ Source* Driver::parse_file(const char* path) {
 
     if (!sources->has_source(path)) {
         Parser parser(&logger);
-        sources->add_source(path, parser.read(path));
+        relative_path = build_relative_path(path);
+        sources->add_source(path, parser.read(path, relative_path));
     }
 
     return sources->get_source(path);
@@ -338,4 +342,36 @@ void Driver::check_for_errors() {
         logger.print();
         exit(0);
     }
+}
+
+std::string Driver::build_relative_path(std::string path) {
+    int i;
+    int j;
+    bool found;
+    std::string s;
+
+    for (i = 0; i < search_path.size(); ++i) {
+        found = true;
+
+        for (j = 0; j < search_path[i].size(); ++j) {
+            if (search_path[i][j] != path[j]) {
+                found = false;
+            }
+        }
+
+        if (found) {
+            // -3 to remove '.hd'
+            for (j = j + 1; j < path.size() - 3; ++j) {
+                if (path[j] == path_delimiter) {
+                    s += ".";
+                } else {
+                    s += path[j];
+                }
+            }
+
+            break;
+        }
+    }
+
+    return s;
 }

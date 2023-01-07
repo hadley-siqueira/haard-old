@@ -122,6 +122,31 @@ Scope* Function::get_scope() {
     return scope;
 }
 
+std::string Function::get_qualified_name() {
+    int i;
+    std::stringstream ss;
+
+    ss << source->get_relative_path() << ".";
+    ss << name << "<";
+
+    if (parameters_count() > 0) {
+        for (i = 0; i < parameters_count() - 1; ++i) {
+            ss << get_parameter(i)->get_type()->get_qualified_name();
+            ss << ", ";
+        }
+
+        ss << get_parameter(i)->get_type()->get_qualified_name();
+    } else {
+        ss << "void";
+    }
+
+    ss << ">";
+
+    // std.io.print
+
+    return ss.str();
+}
+
 void Function::set_line(int line) {
     this->line = line;
 }

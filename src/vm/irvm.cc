@@ -108,11 +108,11 @@ void IrVM::store64(uint64_t addr, uint64_t value) {
 
     switch (addr) {
     case 0x10:
-        printf("%lli", value);
+        printf("%lu", value);
         break;
 
     case 0x11:
-        printf("%c", value);
+        printf("%c", (char) value);
         break;
 
     default:

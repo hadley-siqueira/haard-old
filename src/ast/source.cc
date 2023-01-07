@@ -85,3 +85,11 @@ int Source::function_count() {
 int Source::classes_count() {
     return classes.size();
 }
+
+const char *Source::get_relative_path() const {
+    return relative_path;
+}
+
+void Source::set_relative_path(const char *value) {
+    relative_path = value;
+}

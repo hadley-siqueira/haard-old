@@ -16,7 +16,7 @@ namespace haard {
             Parser(Logger* logger);
 
         public:
-            Source* read(std::string path);
+            Source* read(std::string path, std::string relative_path);
 
         private:
             Source* parse_source();

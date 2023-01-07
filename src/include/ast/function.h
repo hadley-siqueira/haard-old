@@ -33,6 +33,7 @@ namespace haard {
             Type* get_return_type();
             CompoundStatement* get_statements();
             Scope* get_scope();
+            std::string get_qualified_name();
 
             void set_line(int line);
             void set_column(int column);

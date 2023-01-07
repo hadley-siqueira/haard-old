@@ -55,6 +55,10 @@ int Type::get_column() {
     return column;
 }
 
+std::string Type::get_qualified_name() {
+    return to_str();
+}
+
 void Type::set_kind(int kind) {
     this->kind = kind;
 }

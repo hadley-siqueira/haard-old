@@ -16,7 +16,7 @@ Parser::Parser(Logger* logger) {
     this->logger = logger;
 }
 
-Source* Parser::read(std::string path) {
+Source* Parser::read(std::string path, std::string relative_path) {
     Scanner s;
     Source* source = nullptr;
 
@@ -25,6 +25,7 @@ Source* Parser::read(std::string path) {
     tokens = s.read(path);
     source = parse_source();
     source->set_path(StringPool::get(path));
+    source->set_relative_path(StringPool::get(relative_path));
 
     return source;
 }

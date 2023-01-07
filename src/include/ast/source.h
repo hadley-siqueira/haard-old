@@ -32,8 +32,12 @@ namespace haard {
             int function_count();
             int classes_count();
 
-        private:
+            const char* get_relative_path() const;
+            void set_relative_path(const char* value);
+
+    private:
             const char* path;
+            const char* relative_path;
             std::vector<Import*> imports;
             std::vector<Function*> functions;
             std::vector<Class*> classes;

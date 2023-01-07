@@ -44,7 +44,7 @@ void IRBuilder::build_class(Class* klass) {
 void IRBuilder::build_function(Function* function) {
     IRFunction* ir_func = new IRFunction();
 
-    ir_func->set_name(function->get_name());
+    ir_func->set_name(function->get_qualified_name());
 
     functions.push_back(ir_func);
     ctx = ir_func->get_context();

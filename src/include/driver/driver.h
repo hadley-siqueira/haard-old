@@ -40,6 +40,7 @@ namespace haard {
             void set_root_path_from_main_file();
             std::vector<std::string> get_files_from_dir(std::string path);
             void check_for_errors();
+            std::string build_relative_path(std::string path);
 
             void show_help();
 

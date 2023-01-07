@@ -17,6 +17,7 @@ namespace haard {
             int get_kind();
             int get_line();
             int get_column();
+            virtual std::string get_qualified_name();
 
             void set_kind(int kind);
             void set_line(int line);
