@@ -1,5 +1,6 @@
 #include <iostream>
 #include "printer/ir_printer.h"
+#include "ir/ir_call.h"
 
 using namespace haard;
 
@@ -49,6 +50,7 @@ void IRPrinter::print_function_body(IRFunction* function) {
 void IRPrinter::print_instruction(IR* ir) {
     IRBin* bin = (IRBin*) ir;
     IRUnary* un = (IRUnary*) ir;
+    IRCall* call = (IRCall*) ir;
 
     switch (ir->get_kind()) {
     case IR_ADD:
@@ -77,6 +79,31 @@ void IRPrinter::print_instruction(IR* ir) {
     case IR_ALLOCA:
         *out << un->get_dst()->to_str() << " = alloca ";
         *out << un->get_src()->to_str();
+        break;
+
+    case IR_RETURN:
+        *out << "return";
+
+        if (un->get_src()) {
+            *out << " " << un->get_src()->to_str();
+        }
+
+        break;
+
+    case IR_CALL:
+        *out << "call " << call->get_name() << "(";
+
+        if (call->arguments_count() > 0) {
+            int i;
+
+            for (i = 0; i < call->arguments_count() - 1; ++i) {
+                *out << call->get_argument(i)->to_str() << ", ";
+            }
+
+            *out << call->get_argument(i)->to_str();
+        }
+
+        *out << ")";
         break;
 
     default:

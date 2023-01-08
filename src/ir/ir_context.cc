@@ -41,6 +41,10 @@ IRValue* IRContext::new_temporary() {
     return v;
 }
 
+void IRContext::add_instruction(IR* instruction) {
+    instructions.push_back(instruction);
+}
+
 IRValue* IRContext::get_literal(int kind, const char* lexeme) {
     IRValue* v;
 

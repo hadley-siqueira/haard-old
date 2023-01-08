@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include "ir/ir_builder.h"
+#include "ir/ir_call.h"
 #include "printer/ir_printer.h"
 
 using namespace haard;
@@ -44,6 +45,7 @@ void IRBuilder::build_class(Class* klass) {
 
 void IRBuilder::build_function(Function* function) {
     IRFunction* ir_func = new IRFunction();
+    alloca_map = std::map<std::string, IRValue*>();
 
     ir_func->set_name(function->get_qualified_name());
 
@@ -103,7 +105,7 @@ void IRBuilder::build_statement(Statement* statement) {
         break;
 
     case STMT_RETURN:
-        build_jump_statement((JumpStatement*) statement);
+        build_return_statement((JumpStatement*) statement);
         break;
 
     case STMT_GOTO:
@@ -154,6 +156,15 @@ void IRBuilder::build_branch_statement(BranchStatement* statement) {
 
 }
 
+void IRBuilder::build_return_statement(JumpStatement* statement) {
+    if (statement->get_expression()) {
+        build_expression(statement->get_expression());
+        ctx->new_unary(IR_RETURN, nullptr, last_value);
+    } else {
+        ctx->new_unary(IR_RETURN, nullptr, nullptr);
+    }
+}
+
 void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     if (expression == nullptr) {
         return;
@@ -168,6 +179,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     switch (kind) {
     case EXPR_ID:
         build_identifier((Identifier*) expression, lvalue);
+        break;
+
+    case EXPR_CALL:
+        build_call(bin);
         break;
 
     case EXPR_ASSIGN:
@@ -264,6 +279,33 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
                 ir_load = ctx->new_unary(IR_LOAD, tmp1, tmp0);
                 last_value = tmp1;
             }
+        }
+    }
+}
+
+void IRBuilder::build_call(BinOp* bin) {
+    IRCall* call = new IRCall();
+    build_call_arguments(call, (ExpressionList*) bin->get_right());
+
+    if (bin->get_left()->get_kind() == EXPR_ID) {
+        Identifier* id = (Identifier*) bin->get_left();
+        Function* f = (Function*) id->get_symbol()->get_descriptor();
+        std::string name = f->get_qualified_name();
+
+        call->set_name(name);
+        ctx->add_instruction(call);
+    }
+}
+
+void IRBuilder::build_call_arguments(IRCall* call, ExpressionList* args) {
+    if (args == nullptr) {
+        return;
+    }
+
+    if (args->expressions_count() > 0) {
+        for (int i = 0; i < args->expressions_count(); ++i) {
+            build_expression(args->get_expression(i));
+            call->add_argument(last_value);
         }
     }
 }

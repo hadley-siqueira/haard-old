@@ -21,6 +21,7 @@ namespace haard {
             IRValue* get_literal(int kind, const char* lexeme);
             IRValue* get_var(Identifier* id);
             IRValue* new_temporary();
+            void add_instruction(IR* instruction);
 
             int instructions_count();
             IR* get_instruction(int i);

@@ -8,6 +8,7 @@
 #include "ir/ir_value.h"
 #include "ir/ir_bin.h"
 #include "ir/ir_unary.h"
+#include "ir/ir_call.h"
 #include "ir/ir_context.h"
 #include "ir/ir_function.h"
 #include "ir/ir_module.h"
@@ -32,9 +33,13 @@ namespace haard {
             void build_while_statement(WhileStatement* statement);
             void build_for_statement(ForStatement* statement);
             void build_branch_statement(BranchStatement* statement);
+            void build_return_statement(JumpStatement* statement);
 
             void build_expression(Expression* expression, bool lvalue=false);
             void build_identifier(Identifier* id, bool lvalue=false);
+
+            void build_call(BinOp* bin);
+            void build_call_arguments(IRCall* call, ExpressionList* args);
 
             void build_assignment(BinOp* bin, bool lvalue=false);
 

@@ -19,10 +19,7 @@ namespace haard {
             IRValue* get_src2() const;
             void set_src2(IRValue* value);
 
-    private:
-
-
-    private:
+        private:
             IRValue* dst;
             IRValue* src1;
             IRValue* src2;

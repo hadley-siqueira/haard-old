@@ -752,6 +752,8 @@ namespace haard {
         IR_LOAD,
         IR_STORE,
         IR_ALLOCA,
+        IR_CALL,
+        IR_RETURN
     } IRKind;
 }
 
