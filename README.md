@@ -239,7 +239,7 @@ def swap<T> : void
     *p1 = *p2
     *p2 = tmp
 
-def createMatrix : int**
+def create_matrix : int**
     @n : int
     @m : int
 
@@ -258,7 +258,7 @@ def main : void
     b = 3
     swap<int>(&a, &b)
 
-    matrix = createMatrix(10, 20)
+    matrix = create_matrix(10, 20)
 
     pixel = Pixel()
 
@@ -287,16 +287,14 @@ class Player:
         @x    : int
         @y    : int
 
-        @life = life
-        @x = x
-        @y = y
-
-    def isAlive : bool
-        return @life > 0 # I am still deciding if the @ will be mandatory
+        this.life = life
+        this.x = x
+        this.y = y
 
     def is_alive : bool
-        return this.life > 0 # Still deciding if the this will be mandatory
+        return life > 0 
 
-    def getPosition : Position
-        return Position(@x, @y)
+
+    def get_position : Position
+        return Position(x, y)
 ```
