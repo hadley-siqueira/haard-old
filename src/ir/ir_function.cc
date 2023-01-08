@@ -28,6 +28,14 @@ int IRFunction::parameters_count() {
     return params.size();
 }
 
+IRValue* IRFunction::get_parameter(int idx) {
+    if (idx < parameters_count()) {
+        return params[idx];
+    }
+
+    return nullptr;
+}
+
 void IRFunction::add_parameter(IRValue* param) {
     params.push_back(param);
 }

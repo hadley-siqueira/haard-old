@@ -53,7 +53,17 @@ void IRBuilder::build_function(Function* function) {
     ctx = ir_func->get_context();
 
     for (int i = 0; i < function->parameters_count(); ++i) {
-        ir_func->add_parameter(ctx->new_temporary());
+        IRValue* p = ctx->new_temporary();
+
+        ir_func->add_parameter(p);
+
+        IRValue* ir_id = ctx->get_var(function->get_parameter(i)->get_name());
+        IRValue* tmp0 = ctx->new_temporary();
+        IR* ir_addr = ctx->new_unary(IR_ALLOCA, tmp0, ir_id);
+        last_value = tmp0;
+        alloca_map[ir_id->to_str()] = last_value;
+
+        ctx->new_unary(IR_STORE, p, tmp0);
     }
 
     build_compound_statement(function->get_statements());
@@ -294,6 +304,11 @@ void IRBuilder::build_call(BinOp* bin) {
 
         call->set_name(name);
         ctx->add_instruction(call);
+    }
+
+    if (bin->get_type()->get_kind() != TYPE_VOID) {
+        call->set_dst(ctx->new_temporary());
+        last_value = call->get_dst();
     }
 }
 

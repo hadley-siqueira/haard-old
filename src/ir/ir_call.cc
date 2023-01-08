@@ -4,6 +4,7 @@ using namespace haard;
 
 IRCall::IRCall() {
     set_kind(IR_CALL);
+    dst = nullptr;
 }
 
 void IRCall::add_argument(IRValue* value) {
@@ -28,4 +29,12 @@ std::string IRCall::get_name() const {
 
 void IRCall::set_name(const std::string& value) {
     name = value;
+}
+
+IRValue* IRCall::get_dst() const {
+    return dst;
+}
+
+void IRCall::set_dst(IRValue* value) {
+    dst = value;
 }

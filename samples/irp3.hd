@@ -1,3 +1,19 @@
+def println : void
+    @n : int
+
+    p = &n
+    p = 0x10
+    *p = n
+    p = 0x11
+    *p = '\n'
+
+def read_int : int
+    a = 0
+    p = &a
+
+    p = 0x10
+    return *p
+
 def sum : int
     @a : int
     @b : int
@@ -8,6 +24,6 @@ def sum : int
 def main : void
     a = 2
     b = 3
-    d = 0
-    c = a + b
-    sum(a, b)
+    a = read_int()
+    d = sum(a, b)
+    println(d)

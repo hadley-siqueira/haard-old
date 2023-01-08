@@ -17,6 +17,7 @@ namespace haard {
 
             std::string get_name() const;
             int parameters_count();
+            IRValue* get_parameter(int idx);
 
             void add_parameter(IRValue* param);
 

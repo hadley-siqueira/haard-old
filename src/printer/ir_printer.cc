@@ -91,6 +91,10 @@ void IRPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_CALL:
+        if (call->get_dst()) {
+            *out << call->get_dst()->to_str() << " = ";
+        }
+
         *out << "call " << call->get_name() << "(";
 
         if (call->arguments_count() > 0) {

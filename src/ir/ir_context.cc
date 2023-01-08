@@ -56,8 +56,18 @@ IRValue* IRContext::get_literal(int kind, const char* lexeme) {
 }
 
 IRValue* IRContext::get_var(Identifier* id) {
-    IRValue* v;
+    //IRValue* v;
     const char* lexeme = id->get_lexeme();
+
+    if (values.count(lexeme) == 0) {
+        values[lexeme] = new IRValue(IR_VALUE_VAR, lexeme);
+    }
+
+    return values[lexeme];
+}
+
+IRValue *IRContext::get_var(const char* name) {
+    const char* lexeme = name;
 
     if (values.count(lexeme) == 0) {
         values[lexeme] = new IRValue(IR_VALUE_VAR, lexeme);

@@ -20,6 +20,7 @@ namespace haard {
             IRUnary* new_unary(int kind,IRValue* dst, IRValue* src);
             IRValue* get_literal(int kind, const char* lexeme);
             IRValue* get_var(Identifier* id);
+            IRValue* get_var(const char* name);
             IRValue* new_temporary();
             void add_instruction(IR* instruction);
 

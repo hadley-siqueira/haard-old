@@ -18,9 +18,13 @@ namespace haard {
             std::string get_name() const;
             void set_name(const std::string& value);
 
+            IRValue* get_dst() const;
+            void set_dst(IRValue* value);
+
     private:
             std::string name;
             std::vector<IRValue*> args;
+            IRValue* dst;
     };
 }
 
