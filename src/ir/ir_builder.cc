@@ -2,6 +2,7 @@
 #include <cstring>
 #include "ir/ir_builder.h"
 #include "ir/ir_call.h"
+#include "ir/ir_label.h"
 #include "printer/ir_printer.h"
 
 using namespace haard;
@@ -88,6 +89,8 @@ void IRBuilder::set_modules(const std::vector<IRModule *>& value) {
 }
 
 void IRBuilder::build_statement(Statement* statement) {
+    if (statement == nullptr) return;
+
     int kind = statement->get_kind();
 
     switch (kind) {
@@ -110,6 +113,9 @@ void IRBuilder::build_statement(Statement* statement) {
 
     case STMT_IF:
     case STMT_ELIF:
+        build_if((BranchStatement*) statement);
+        break;
+
     case STMT_ELSE:
         build_branch_statement((BranchStatement*) statement);
         break;
@@ -164,6 +170,25 @@ void IRBuilder::build_for_statement(ForStatement* statement) {
 
 void IRBuilder::build_branch_statement(BranchStatement* statement) {
 
+}
+
+void IRBuilder::build_if(BranchStatement* statement) {
+    IRValue* cond;
+    IRLabel* fb = ctx->new_label();
+    IRLabel* after = ctx->new_label();
+
+    IRValue* fb_label = ctx->new_label_value(fb->get_label());
+    IRValue* after_label = ctx->new_label_value(after->get_label());
+
+    build_expression(statement->get_condition());
+    cond = last_value;
+    ctx->new_bin(IR_BZ, nullptr, cond, fb_label);
+
+    build_statement(statement->get_true_statements());
+    ctx->new_unary(IR_GOTO, nullptr, after_label);
+    ctx->add_instruction(fb);
+    build_statement(statement->get_false_statements());
+    ctx->add_instruction(after);
 }
 
 void IRBuilder::build_return_statement(JumpStatement* statement) {

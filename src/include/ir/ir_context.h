@@ -7,6 +7,7 @@
 #include "ir/ir_value.h"
 #include "ir/ir_unary.h"
 #include "ir/ir_bin.h"
+#include "ir/ir_label.h"
 #include "ir/ir.h"
 
 namespace haard {
@@ -22,6 +23,8 @@ namespace haard {
             IRValue* get_var(Identifier* id);
             IRValue* get_var(const char* name);
             IRValue* new_temporary();
+            IRValue* new_label_value(const char* value);
+            IRLabel* new_label();
             void add_instruction(IR* instruction);
 
             int instructions_count();
@@ -29,6 +32,7 @@ namespace haard {
 
         private:
             int tmp_counter;
+            int label_counter;
             std::map<std::string, IRValue*> values;
             std::map<std::string, IRValue*> alloca_map;
             std::vector<IR*> instructions;

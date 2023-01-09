@@ -51,6 +51,7 @@ void IRPrinter::print_instruction(IR* ir) {
     IRBin* bin = (IRBin*) ir;
     IRUnary* un = (IRUnary*) ir;
     IRCall* call = (IRCall*) ir;
+    IRLabel* label = (IRLabel*) ir;
 
     switch (ir->get_kind()) {
     case IR_ADD:
@@ -108,6 +109,18 @@ void IRPrinter::print_instruction(IR* ir) {
         }
 
         *out << ")";
+        break;
+
+    case IR_BZ:
+        *out << "bz " << bin->get_src1()->to_str() << ", " << bin->get_src2()->to_str();
+        break;
+
+    case IR_GOTO:
+        *out << "goto " << un->get_src()->to_str();
+        break;
+
+    case IR_LABEL:
+        *out << "\n" << label->get_label() << ":";
         break;
 
     default:

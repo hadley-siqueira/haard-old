@@ -730,6 +730,7 @@ namespace haard {
     typedef enum IRValueKind {
         IR_VALUE_VAR,
         IR_VALUE_TEMP,
+        IR_VALUE_LABEL,
         IR_VALUE_LITERAL_BOOL,
         IR_VALUE_LITERAL_INTEGER,
         IR_VALUE_LITERAL_FLOAT,
@@ -753,7 +754,9 @@ namespace haard {
         IR_STORE,
         IR_ALLOCA,
         IR_CALL,
-        IR_RETURN
+        IR_RETURN,
+        IR_BZ,
+        IR_GOTO,
     } IRKind;
 }
 

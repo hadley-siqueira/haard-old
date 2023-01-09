@@ -44,6 +44,7 @@ std::string IRValue::to_str() {
     case IR_VALUE_LITERAL_CHAR:
     case IR_VALUE_LITERAL_STRING:
     case IR_VALUE_LITERAL_SYMBOL:
+    case IR_VALUE_LABEL:
         ss << value;
         break;
     }

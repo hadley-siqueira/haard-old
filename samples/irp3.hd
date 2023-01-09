@@ -22,8 +22,14 @@ def sum : int
     return c
 
 def main : void
-    a = 2
-    b = 3
+    a = 0
+    b = 0
     a = read_int()
+
+    if a:
+        a = a + 1
+    elif a:
+        a = a + 2
+
     d = sum(a, b)
     println(d)

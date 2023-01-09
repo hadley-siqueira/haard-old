@@ -1,11 +1,13 @@
 #include <sstream>
 #include <iostream>
 #include "ir/ir_context.h"
+#include "utils/string_pool.h"
 
 using namespace haard;
 
 IRContext::IRContext() {
     tmp_counter = 0;
+    label_counter = 0;
 }
 
 IRContext::~IRContext() {
@@ -39,6 +41,28 @@ IRValue* IRContext::new_temporary() {
     
     values[v->to_str()] = v;
     return v;
+}
+
+IRValue* IRContext::new_label_value(const char* value) {
+    IRValue* label = new IRValue(IR_VALUE_LABEL, value);
+
+    if (values.count(value) == 0) {
+        label = new IRValue(IR_VALUE_LABEL, value);
+        values[value] = label;
+    }
+
+    return values[value];
+}
+
+IRLabel* IRContext::new_label() {
+    std::stringstream ss;
+
+    IRLabel* label = new IRLabel();
+    ss << "L" << label_counter;
+    ++label_counter;
+
+    label->set_label(StringPool::get(ss.str().c_str()));
+    return label;
 }
 
 void IRContext::add_instruction(IR* instruction) {

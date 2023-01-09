@@ -21,6 +21,7 @@ void IrVM::execute_module(IRModule* module) {
 }
 
 void IrVM::execute_function(IRFunction* function) {
+    IRLabel* label;
     IRContext* ctx = function->get_context();
 
     save_context();
@@ -30,6 +31,13 @@ void IrVM::execute_function(IRFunction* function) {
     }
 
     args.clear();
+
+    for (int i = 0; i < ctx->instructions_count(); ++i) {
+        if (ctx->get_instruction(i)->get_kind() == IR_LABEL) {
+            label = (IRLabel*) ctx->get_instruction(i);
+            values[label->get_label()] = i;
+        }
+    }
 
     while (ip >= 0 && ip < ctx->instructions_count()) {
         execute(ctx->get_instruction(ip));
@@ -107,6 +115,25 @@ void IrVM::execute(IR* ir) {
         }
 
         ++ip;
+        break;
+
+    case IR_GOTO:
+        ip = values[un->get_src()->to_str()];
+        break;
+
+    case IR_LABEL:
+        ++ip;
+        break;
+
+    case IR_BZ:
+        value = values[bin->get_src1()->to_str()];
+
+        if (value == 0) {
+            ip = values[bin->get_src2()->to_str()];
+        } else {
+            ++ip;
+        }
+
         break;
 
     default:

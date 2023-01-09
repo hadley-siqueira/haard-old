@@ -17,7 +17,3 @@ int IR::get_kind() {
 std::string IR::to_str() {
     return "unknown ir";
 }
-
-std::string IR::to_cpp() {
-    return "unknown ir cpp";
-}
