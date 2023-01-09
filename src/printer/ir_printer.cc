@@ -58,6 +58,10 @@ void IRPrinter::print_instruction(IR* ir) {
         print_binop("cmp.eq", bin);
         break;
 
+    case IR_NE:
+        print_binop("cmp.ne", bin);
+        break;
+
     case IR_LT:
         print_binop("cmp.lt", bin);
         break;

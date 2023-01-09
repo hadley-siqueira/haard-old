@@ -47,6 +47,8 @@ namespace haard {
             void build_assignment(BinOp* bin, bool lvalue=false);
 
             void build_equal(BinOp* bin);
+            void build_not_equal(BinOp* bin);
+
             void build_less_than(BinOp* bin);
 
             void build_plus(BinOp* bin);

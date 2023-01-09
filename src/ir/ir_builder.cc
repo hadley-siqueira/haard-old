@@ -232,6 +232,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_equal(bin);
         break;
 
+    case EXPR_NE:
+        build_not_equal(bin);
+        break;
+
     case EXPR_LT:
         build_less_than(bin);
         break;
@@ -382,6 +386,10 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
 
 void IRBuilder::build_equal(BinOp* bin) {
     build_binop(bin, IR_EQ);
+}
+
+void IRBuilder::build_not_equal(BinOp* bin) {
+    build_binop(bin, IR_NE);
 }
 
 void IRBuilder::build_less_than(BinOp* bin) {

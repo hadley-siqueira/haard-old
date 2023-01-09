@@ -63,6 +63,13 @@ void IrVM::execute(IR* ir) {
         ip++;
         break;
 
+    case IR_NE:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value != src2_value;
+        ip++;
+        break;
+
     case IR_LT:
         src1_value = values[bin->get_src1()->to_str()];
         src2_value = values[bin->get_src2()->to_str()];

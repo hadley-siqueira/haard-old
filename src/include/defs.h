@@ -744,6 +744,7 @@ namespace haard {
         IR_FUNCTION,
         IR_LABEL,
         IR_EQ,
+        IR_NE,
         IR_LT,
         IR_ADD,
         IR_SUB,
