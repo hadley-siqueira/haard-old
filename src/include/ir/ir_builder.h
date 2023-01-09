@@ -35,6 +35,7 @@ namespace haard {
             void build_branch_statement(BranchStatement* statement);
 
             void build_if(BranchStatement* statement);
+            void build_else(BranchStatement* statement);
             void build_return_statement(JumpStatement* statement);
 
             void build_expression(Expression* expression, bool lvalue=false);
@@ -44,6 +45,9 @@ namespace haard {
             void build_call_arguments(IRCall* call, ExpressionList* args);
 
             void build_assignment(BinOp* bin, bool lvalue=false);
+
+            void build_equal(BinOp* bin);
+            void build_less_than(BinOp* bin);
 
             void build_plus(BinOp* bin);
             void build_minus(BinOp* bin);

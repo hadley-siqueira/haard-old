@@ -21,15 +21,28 @@ def sum : int
     c = a + b
     return c
 
+def fib : int
+    @n : int
+
+    if n == 0:
+        return 1
+    elif n == 1:
+        return 1
+    else:
+        return fib(n - 1) + fib(n - 2)
+
 def main : void
     a = 0
     b = 0
     a = read_int()
 
-    if a:
+    if a == 0:
         a = a + 1
-    elif a:
+    elif a == 1:
         a = a + 2
+    else:
+        a = a + 3
 
     d = sum(a, b)
     println(d)
+    println(fib(7))

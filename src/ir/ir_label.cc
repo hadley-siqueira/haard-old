@@ -13,13 +13,3 @@ const char* IRLabel::get_label() const {
 void IRLabel::set_label(const char* value) {
     this->label = value;
 }
-
-int IRLabel::get_address() const
-{
-    return address;
-}
-
-void IRLabel::set_address(int value)
-{
-    address = value;
-}

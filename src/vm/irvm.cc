@@ -56,6 +56,20 @@ void IrVM::execute(IR* ir) {
     IRCall* call = (IRCall*) ir;
 
     switch (ir->get_kind()) {
+    case IR_EQ:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value == src2_value;
+        ip++;
+        break;
+
+    case IR_LT:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value < src2_value;
+        ip++;
+        break;
+
     case IR_LI:
         //src1_value = atoi(un->get_src()->to_str().c_str());
         src1_value = un->get_src()->to_u64();

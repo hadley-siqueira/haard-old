@@ -12,12 +12,8 @@ namespace haard {
             const char* get_label() const;
             void set_label(const char* value);
 
-            int get_address() const;
-            void set_address(int value);
-
     private:
             const char* label;
-            int address;
     };
 }
 

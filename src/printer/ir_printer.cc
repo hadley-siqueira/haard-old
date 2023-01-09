@@ -54,6 +54,14 @@ void IRPrinter::print_instruction(IR* ir) {
     IRLabel* label = (IRLabel*) ir;
 
     switch (ir->get_kind()) {
+    case IR_EQ:
+        print_binop("cmp.eq", bin);
+        break;
+
+    case IR_LT:
+        print_binop("cmp.lt", bin);
+        break;
+
     case IR_ADD:
         print_binop("add", bin);
         break;

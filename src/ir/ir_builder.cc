@@ -117,7 +117,7 @@ void IRBuilder::build_statement(Statement* statement) {
         break;
 
     case STMT_ELSE:
-        build_branch_statement((BranchStatement*) statement);
+        build_else((BranchStatement*) statement);
         break;
 
     case STMT_RETURN:
@@ -191,6 +191,10 @@ void IRBuilder::build_if(BranchStatement* statement) {
     ctx->add_instruction(after);
 }
 
+void IRBuilder::build_else(BranchStatement* statement) {
+    build_statement(statement->get_true_statements());
+}
+
 void IRBuilder::build_return_statement(JumpStatement* statement) {
     if (statement->get_expression()) {
         build_expression(statement->get_expression());
@@ -222,6 +226,14 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
 
     case EXPR_ASSIGN:
         build_assignment(bin, lvalue);
+        break;
+
+    case EXPR_EQ:
+        build_equal(bin);
+        break;
+
+    case EXPR_LT:
+        build_less_than(bin);
         break;
 
     case EXPR_PLUS:
@@ -366,6 +378,14 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     // on complex types, should call memcpy instead of a simple store
     ir = ctx->new_unary(IR_STORE, right, left);
     last_value = left;
+}
+
+void IRBuilder::build_equal(BinOp* bin) {
+    build_binop(bin, IR_EQ);
+}
+
+void IRBuilder::build_less_than(BinOp* bin) {
+    build_binop(bin, IR_LT);
 }
 
 void IRBuilder::build_plus(BinOp* bin) {
