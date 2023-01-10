@@ -32,6 +32,7 @@ namespace haard {
             virtual int rank();
             virtual int get_size_in_bytes();
             virtual Scope* get_scope();
+            virtual bool is_signed();
 
         protected:
             int kind;

@@ -743,13 +743,25 @@ namespace haard {
     typedef enum IRKind {
         IR_FUNCTION,
         IR_LABEL,
+
         IR_EQ,
         IR_NE,
+
         IR_LT,
+        IR_GT,
+        IR_LE,
+        IR_GE,
+        IR_ULT,
+        IR_UGT,
+        IR_ULE,
+        IR_UGE,
+
         IR_ADD,
         IR_SUB,
+
         IR_MUL,
         IR_DIV,
+
         IR_ADDI,
         IR_COPY,
         IR_LI,

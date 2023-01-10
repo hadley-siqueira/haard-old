@@ -66,6 +66,34 @@ void IRPrinter::print_instruction(IR* ir) {
         print_binop("cmp.lt", bin);
         break;
 
+    case IR_GT:
+        print_binop("cmp.gt", bin);
+        break;
+
+    case IR_LE:
+        print_binop("cmp.le", bin);
+        break;
+
+    case IR_GE:
+        print_binop("cmp.ge", bin);
+        break;
+
+    case IR_ULT:
+        print_binop("cmp.ult", bin);
+        break;
+
+    case IR_UGT:
+        print_binop("cmp.ugt", bin);
+        break;
+
+    case IR_ULE:
+        print_binop("cmp.ule", bin);
+        break;
+
+    case IR_UGE:
+        print_binop("cmp.uge", bin);
+        break;
+
     case IR_ADD:
         print_binop("add", bin);
         break;

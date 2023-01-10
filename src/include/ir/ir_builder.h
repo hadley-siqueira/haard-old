@@ -50,6 +50,9 @@ namespace haard {
             void build_not_equal(BinOp* bin);
 
             void build_less_than(BinOp* bin);
+            void build_greater_than(BinOp* bin);
+            void build_less_than_or_equal(BinOp* bin);
+            void build_greater_than_or_equal(BinOp* bin);
 
             void build_plus(BinOp* bin);
             void build_minus(BinOp* bin);

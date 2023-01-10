@@ -73,7 +73,56 @@ void IrVM::execute(IR* ir) {
     case IR_LT:
         src1_value = values[bin->get_src1()->to_str()];
         src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = (int64_t) src1_value < (int64_t) src2_value;
+        ip++;
+        break;
+
+    case IR_GT:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = (int64_t) src1_value > (int64_t) src2_value;
+        ip++;
+        break;
+
+    case IR_LE:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = (int64_t) src1_value <= (int64_t) src2_value;
+        ip++;
+        break;
+
+    case IR_GE:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = (int64_t) src1_value >= (int64_t) src2_value;
+        ip++;
+        break;
+
+    case IR_ULT:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
         values[bin->get_dst()->to_str()] = src1_value < src2_value;
+        ip++;
+        break;
+
+    case IR_UGT:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value > src2_value;
+        ip++;
+        break;
+
+    case IR_ULE:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value <= src2_value;
+        ip++;
+        break;
+
+    case IR_UGE:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value >= src2_value;
         ip++;
         break;
 

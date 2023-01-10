@@ -13,5 +13,18 @@ def main : void
     b = 1
     a = b == 0
     println(a)
+
     a = b != 0
+    println(a)
+
+    a = b > 0
+    println(a)
+
+    a = b < 0
+    println(a)
+
+    a = b >= 0
+    println(a)
+
+    a = b <= 0
     println(a)

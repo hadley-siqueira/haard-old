@@ -401,3 +401,19 @@ int Type::get_size_in_bytes() {
 Scope *Type::get_scope() {
     return nullptr;
 }
+
+bool Type::is_signed() {
+    switch (kind) {
+    case TYPE_U8:
+    case TYPE_UCHAR:
+    case TYPE_U16:
+    case TYPE_USHORT:
+    case TYPE_U32:
+    case TYPE_UINT:
+    case TYPE_U64:
+    case TYPE_ULONG:
+        return false;
+    }
+
+    return true;
+}

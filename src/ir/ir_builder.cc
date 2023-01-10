@@ -240,6 +240,18 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_less_than(bin);
         break;
 
+    case EXPR_GT:
+        build_greater_than(bin);
+        break;
+
+    case EXPR_LE:
+        build_less_than_or_equal(bin);
+        break;
+
+    case EXPR_GE:
+        build_greater_than_or_equal(bin);
+        break;
+
     case EXPR_PLUS:
         build_plus(bin);
         break;
@@ -393,7 +405,47 @@ void IRBuilder::build_not_equal(BinOp* bin) {
 }
 
 void IRBuilder::build_less_than(BinOp* bin) {
-    build_binop(bin, IR_LT);
+    bool f1 = bin->get_left()->get_type()->is_signed();
+    bool f2 = bin->get_right()->get_type()->is_signed();
+
+    if (f1 && f2) {
+        build_binop(bin, IR_LT);
+    } else {
+        build_binop(bin, IR_ULT);
+    }
+}
+
+void IRBuilder::build_greater_than(BinOp* bin) {
+    bool f1 = bin->get_left()->get_type()->is_signed();
+    bool f2 = bin->get_right()->get_type()->is_signed();
+
+    if (f1 && f2) {
+        build_binop(bin, IR_GT);
+    } else {
+        build_binop(bin, IR_UGT);
+    }
+}
+
+void IRBuilder::build_less_than_or_equal(BinOp* bin) {
+    bool f1 = bin->get_left()->get_type()->is_signed();
+    bool f2 = bin->get_right()->get_type()->is_signed();
+
+    if (f1 && f2) {
+        build_binop(bin, IR_LE);
+    } else {
+        build_binop(bin, IR_ULE);
+    }
+}
+
+void IRBuilder::build_greater_than_or_equal(BinOp* bin) {
+    bool f1 = bin->get_left()->get_type()->is_signed();
+    bool f2 = bin->get_right()->get_type()->is_signed();
+
+    if (f1 && f2) {
+        build_binop(bin, IR_GE);
+    } else {
+        build_binop(bin, IR_UGE);
+    }
 }
 
 void IRBuilder::build_plus(BinOp* bin) {
