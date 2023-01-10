@@ -67,6 +67,7 @@ void IRBuilder::build_function(Function* function) {
     }
 
     build_compound_statement(function->get_statements());
+    ctx->new_unary(IR_RETURN, nullptr, nullptr);
 
     current_module->add_function(ir_func);
 
@@ -302,6 +303,18 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
 }
 
 void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
+    Type* type;
+
+    type = id->get_type();
+
+    if (lvalue) {
+        build_identifier_lvalue(id);
+    } else {
+        build_identifier_rvalue(id);
+    }
+}
+
+void IRBuilder::build_identifier_lvalue(Identifier* id) {
     IR* ir_addr;
     IR* ir_load;
     IRValue* ir_id;
@@ -311,36 +324,45 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
 
     type = id->get_type();
 
-    if (lvalue) {
-        if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-            ir_id = ctx->get_var(id);
+    if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
+        ir_id = ctx->get_var(id);
 
-            if (ctx->has_alloca(ir_id->to_str())) {
-                last_value = ctx->get_alloca_value(ir_id->to_str());
-            } else {
-                tmp0 = ctx->new_temporary();
-                ir_addr = ctx->new_unary(IR_ALLOCA, tmp0, ir_id);
-                last_value = tmp0;
-                ctx->set_alloca_value(ir_id->to_str(), last_value);
-            }
+        if (ctx->has_alloca(ir_id->to_str())) {
+            last_value = ctx->get_alloca_value(ir_id->to_str());
+        } else {
+            tmp0 = ctx->new_temporary();
+            ir_addr = ctx->new_unary(IR_ALLOCA, tmp0, ir_id);
+            last_value = tmp0;
+            ctx->set_alloca_value(ir_id->to_str(), last_value);
         }
-    } else {
-        if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-            //ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
-            ir_id = ctx->get_var(id);
+    }
+}
 
-            if (ctx->has_alloca(ir_id->to_str())) {
-                tmp0 = ctx->get_alloca_value(ir_id->to_str());
-                tmp1 = ctx->new_temporary();
-                ir_load = ctx->new_unary(IR_LOAD64, tmp1, tmp0);
-                last_value = tmp1;
-            } else {
-                tmp0 = ctx->new_temporary();
-                ir_addr = ctx->new_unary(IR_ALLOCA, tmp0, ir_id);
-                tmp1 = ctx->new_temporary();
-                ir_load = ctx->new_unary(IR_LOAD64, tmp1, tmp0);
-                last_value = tmp1;
-            }
+void IRBuilder::build_identifier_rvalue(Identifier* id) {
+    IR* ir_addr;
+    IR* ir_load;
+    IRValue* ir_id;
+    IRValue* tmp0;
+    IRValue* tmp1;
+    Type* type;
+
+    type = id->get_type();
+
+    if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
+        //ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
+        ir_id = ctx->get_var(id);
+
+        if (ctx->has_alloca(ir_id->to_str())) {
+            tmp0 = ctx->get_alloca_value(ir_id->to_str());
+            tmp1 = ctx->new_temporary();
+            ir_load = ctx->new_unary(IR_LOAD64, tmp1, tmp0);
+            last_value = tmp1;
+        } else {
+            tmp0 = ctx->new_temporary();
+            ir_addr = ctx->new_unary(IR_ALLOCA, tmp0, ir_id);
+            tmp1 = ctx->new_temporary();
+            ir_load = ctx->new_unary(IR_LOAD64, tmp1, tmp0);
+            last_value = tmp1;
         }
     }
 }

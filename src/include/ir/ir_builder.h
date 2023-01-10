@@ -39,7 +39,10 @@ namespace haard {
             void build_return_statement(JumpStatement* statement);
 
             void build_expression(Expression* expression, bool lvalue=false);
+
             void build_identifier(Identifier* id, bool lvalue=false);
+            void build_identifier_lvalue(Identifier* id);
+            void build_identifier_rvalue(Identifier* id);
 
             void build_call(BinOp* bin);
             void build_call_arguments(IRCall* call, ExpressionList* args);
