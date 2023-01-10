@@ -30,6 +30,10 @@ namespace haard {
             int instructions_count();
             IR* get_instruction(int i);
 
+            void set_alloca_value(std::string name, IRValue* value);
+            IRValue* get_alloca_value(std::string name);
+            bool has_alloca(std::string name);
+
         private:
             int tmp_counter;
             int label_counter;

@@ -153,7 +153,7 @@ void IrVM::execute(IR* ir) {
         ip++;
         break;
 
-    case IR_LOAD:
+    case IR_LOAD64:
         values[un->get_dst()->to_str()] = load64(values[un->get_src()->to_str()]);
         ip++;
         break;
@@ -229,8 +229,56 @@ void IrVM::dump_values() {
 }
 
 uint64_t IrVM::load64(uint64_t addr) {
-    uint64_t v;
     uint64_t* ptr = (uint64_t*) addr;
+
+    if (is_special_load_address(addr)) {
+        return load_special_address(addr);
+    }
+
+    return *ptr;
+}
+
+uint64_t IrVM::load32(uint64_t addr) {
+    uint32_t* ptr = (uint32_t*) addr;
+
+    if (is_special_load_address(addr)) {
+        return load_special_address(addr);
+    }
+
+    return *ptr;
+}
+
+uint64_t IrVM::load16(uint64_t addr) {
+    uint16_t* ptr = (uint16_t*) addr;
+
+    if (is_special_load_address(addr)) {
+        return load_special_address(addr);
+    }
+
+    return *ptr;
+}
+
+uint64_t IrVM::load8(uint64_t addr) {
+    uint8_t* ptr = (uint8_t*) addr;
+
+    if (is_special_load_address(addr)) {
+        return load_special_address(addr);
+    }
+
+    return *ptr;
+}
+
+bool IrVM::is_special_load_address(uint64_t addr) {
+    switch (addr) {
+    case 0x10:
+        return true;
+    }
+
+    return false;
+}
+
+uint64_t IrVM::load_special_address(uint64_t addr) {
+    uint64_t v;
 
     switch (addr) {
     case 0x10:
@@ -241,7 +289,7 @@ uint64_t IrVM::load64(uint64_t addr) {
         break;
     }
 
-    return *ptr;
+    return 0;
 }
 
 void IrVM::store64(uint64_t addr, uint64_t value) {

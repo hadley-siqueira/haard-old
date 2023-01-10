@@ -765,8 +765,14 @@ namespace haard {
         IR_ADDI,
         IR_COPY,
         IR_LI,
-        IR_LOAD,
+
+        IR_LOAD64,
+        IR_LOAD32,
+        IR_LOAD16,
+        IR_LOAD8,
+
         IR_STORE,
+
         IR_ALLOCA,
         IR_CALL,
         IR_RETURN,

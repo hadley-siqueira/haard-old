@@ -107,7 +107,7 @@ void IRPrinter::print_instruction(IR* ir) {
         *out << un->get_src()->to_str();
         break;
 
-    case IR_LOAD:
+    case IR_LOAD64:
         *out << un->get_dst()->to_str() << " = load ";
         *out << un->get_src()->to_str();
         break;

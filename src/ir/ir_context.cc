@@ -111,3 +111,15 @@ IR *IRContext::get_instruction(int i) {
 
     return nullptr;
 }
+
+void IRContext::set_alloca_value(std::string name, IRValue* value) {
+    alloca_map[name] = value;
+}
+
+IRValue* IRContext::get_alloca_value(std::string name) {
+    return alloca_map[name];
+}
+
+bool IRContext::has_alloca(std::string name) {
+    return alloca_map.count(name) > 0;
+}
