@@ -52,12 +52,23 @@ void IRBuilder::build_function(Function* function) {
     functions.push_back(ir_func);
     ctx = ir_func->get_context();
 
+    build_function_parameters(function, ir_func);
+    build_function_body(function);
+
+    current_module->add_function(ir_func);
+
+    if (strcmp(function->get_name(), "main") == 0) {
+        current_module->set_main_function(ir_func);
+    }
+}
+
+void IRBuilder::build_function_parameters(Function* function,IRFunction* ir_func) {
     for (int i = 0; i < function->parameters_count(); ++i) {
         IRValue* p = ctx->new_temporary();
 
         ir_func->add_parameter(p);
 
-        IRValue* ir_id = ctx->get_var(function->get_parameter(i)->get_name());
+        IRValue* ir_id = ctx->get_var(function->get_parameter(i)->get_unique_name());
         IRValue* tmp0 = ctx->new_temporary();
         IR* ir_addr = ctx->new_unary(IR_ALLOCA, tmp0, ir_id);
         last_value = tmp0;
@@ -65,15 +76,11 @@ void IRBuilder::build_function(Function* function) {
 
         ctx->new_unary(IR_STORE, p, tmp0);
     }
+}
 
+void IRBuilder::build_function_body(Function* function) {
     build_compound_statement(function->get_statements());
     ctx->new_unary(IR_RETURN, nullptr, nullptr);
-
-    current_module->add_function(ir_func);
-
-    if (strcmp(function->get_name(), "main") == 0) {
-        current_module->set_main_function(ir_func);
-    }
 }
 
 void IRBuilder::set_logger(Logger* logger) {
@@ -316,16 +323,14 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
 
 void IRBuilder::build_identifier_lvalue(Identifier* id) {
     IR* ir_addr;
-    IR* ir_load;
     IRValue* ir_id;
     IRValue* tmp0;
-    IRValue* tmp1;
     Type* type;
 
     type = id->get_type();
 
     if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-        ir_id = ctx->get_var(id);
+        ir_id = ctx->get_var(id->get_unique_name());
 
         if (ctx->has_alloca(ir_id->to_str())) {
             last_value = ctx->get_alloca_value(ir_id->to_str());
@@ -350,7 +355,7 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
 
     if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
         //ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
-        ir_id = ctx->get_var(id);
+        ir_id = ctx->get_var(id->get_unique_name());
 
         if (ctx->has_alloca(ir_id->to_str())) {
             tmp0 = ctx->get_alloca_value(ir_id->to_str());

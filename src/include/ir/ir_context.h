@@ -19,11 +19,10 @@ namespace haard {
         public:
             IRBin* new_bin(int kind, IRValue* dst, IRValue* src1, IRValue* src2);
             IRUnary* new_unary(int kind,IRValue* dst, IRValue* src);
-            IRValue* get_literal(int kind, const char* lexeme);
-            IRValue* get_var(Identifier* id);
-            IRValue* get_var(const char* name);
+            IRValue* get_literal(int kind, std::string lexeme);
+            IRValue* get_var(std::string name);
             IRValue* new_temporary();
-            IRValue* new_label_value(const char* value);
+            IRValue* new_label_value(std::string value);
             IRLabel* new_label();
             void add_instruction(IR* instruction);
 

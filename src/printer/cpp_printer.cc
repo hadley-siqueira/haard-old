@@ -176,12 +176,12 @@ void CppPrinter::print_parameters(Function* function) {
         for (i = 0; i < function->parameters_count() - 1; ++i) {
             param = function->get_parameter(i);
             print_type(param->get_type());
-            *out << ' ' << param->get_cpp_name() << ", ";
+            *out << ' ' << param->get_unique_name() << ", ";
         }
 
         param = function->get_parameter(i);
         print_type(param->get_type());
-        *out << ' ' << param->get_cpp_name();
+        *out << ' ' << param->get_unique_name();
     }
 
     *out << ") {\n";
@@ -503,7 +503,7 @@ void CppPrinter::print_variable_declaration(VarDeclaration* decl) {
         exit(0);
     }
 
-    *out << ' ' << var->get_cpp_name();
+    *out << ' ' << var->get_unique_name();
 
     if (decl->get_expression() != nullptr) {
         *out << " = ";
@@ -899,7 +899,7 @@ void CppPrinter::print_double_dolar(UnOp* un) {
 }
 
 void CppPrinter::print_identifier(Identifier* id) {
-    *out << id->to_cpp();
+    *out << id->get_unique_name();
 }
 
 void CppPrinter::print_this(ThisExpression* expr) {

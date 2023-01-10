@@ -12,9 +12,9 @@ IRValue::IRValue() {
     value = nullptr;
 }
 
-IRValue::IRValue(int kind, const char* value) {
+IRValue::IRValue(int kind, std::string& name) {
     this->kind = kind;
-    this->value = StringPool::get(value);
+    this->value = name;
 }
 
 IRValue::IRValue(int kind, int tmp) {
@@ -60,7 +60,7 @@ void IRValue::set_kind(int value) {
     kind = value;
 }
 
-const char* IRValue::get_value() const {
+std::string IRValue::get_value() const {
     return value;
 }
 
@@ -68,9 +68,9 @@ void IRValue::set_value(const char* value) {
     value = value;
 }
 
-uint64_t conv64(const char* value) {
+uint64_t conv64(std::string value) {
     uint64_t res = 0;
-    int len = strlen(value);
+    int len = value.size();
 
     if (len > 2) {
         if (value[0] == '0' && value[1] == 'b') {
@@ -115,7 +115,7 @@ uint64_t conv64(const char* value) {
     return res;
 }
 
-uint64_t char2u64(const char* value) {
+uint64_t char2u64(std::string value) {
     uint64_t res = 0;
 
     if (value[1] == '\\') {
@@ -141,7 +141,8 @@ uint64_t IRValue::to_u64() {
     //std::cout << "CONV = " << value << std::endl;
     switch (kind) {
     case IR_VALUE_LITERAL_BOOL:
-        if (strcmp(value, "true") == 0) {
+        //if (strcmp(value, "true") == 0) {
+        if (value == "true") {
             res = 1;
         }
         break;

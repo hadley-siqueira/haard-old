@@ -82,11 +82,11 @@ std::string Function::get_cpp_signature() {
 
         for (i = 0; i < parameters_count() - 1; ++i) {
             ss << get_parameter(i)->get_type()->to_cpp();
-            ss << ' ' << get_parameter(i)->get_cpp_name() << ", ";
+            ss << ' ' << get_parameter(i)->get_unique_name() << ", ";
         }
 
         ss << get_parameter(i)->get_type()->to_cpp();
-        ss << ' ' << get_parameter(i)->get_cpp_name();
+        ss << ' ' << get_parameter(i)->get_unique_name();
     }
 
     ss << ')';

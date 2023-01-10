@@ -60,7 +60,7 @@ void Identifier::set_overloaded_index(int idx) {
     overloaded_index = idx;
 }
 
-std::string Identifier::to_cpp() {
+std::string Identifier::get_unique_name() {
     return symbol->to_cpp(overloaded_index);
 }
 

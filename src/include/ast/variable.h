@@ -32,7 +32,7 @@ namespace haard {
 
             void set_kind(int kind);
             int get_kind();
-            std::string get_cpp_name();
+            std::string get_unique_name();
 
             Variable* clone();
 

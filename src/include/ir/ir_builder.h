@@ -24,7 +24,10 @@ namespace haard {
             void build(Sources* sources);
             void build_source(Source* source);
             void build_class(Class* klass);
+
             void build_function(Function* function);
+            void build_function_parameters(Function* function, IRFunction* ir_func);
+            void build_function_body(Function* function);
 
             void build_statement(Statement* statement);
             void build_compound_statement(CompoundStatement* stmts);

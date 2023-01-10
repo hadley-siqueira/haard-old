@@ -7,7 +7,7 @@ namespace haard {
     class IRValue {
         public:
             IRValue();
-            IRValue(int kind, const char* value);
+            IRValue(int kind, std::string& value);
             IRValue(int kind, int tmp);
 
         public:
@@ -16,13 +16,13 @@ namespace haard {
             int get_kind() const;
             void set_kind(int value);
 
-            const char* get_value() const;
+            std::string get_value() const;
             void set_value(const char* value);
             uint64_t to_u64();
 ;
     private:
             int kind;
-            const char* value;
+            std::string value;
     };
 }
 

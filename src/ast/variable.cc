@@ -85,7 +85,7 @@ int Variable::get_kind() {
     return kind;
 }
 
-std::string Variable::get_cpp_name() {
+std::string Variable::get_unique_name() {
     std::stringstream ss;
 
     switch (kind) {

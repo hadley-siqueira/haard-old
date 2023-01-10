@@ -165,7 +165,7 @@ std::string Symbol::to_cpp(int idx) {
     case SYM_PARAMETER:
     case SYM_VARIABLE:
     case SYM_CLASS_VARIABLE:
-        ss << var->get_cpp_name();
+        ss << var->get_unique_name();
         break;
     }
 

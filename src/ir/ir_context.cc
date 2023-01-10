@@ -43,7 +43,7 @@ IRValue* IRContext::new_temporary() {
     return v;
 }
 
-IRValue* IRContext::new_label_value(const char* value) {
+IRValue* IRContext::new_label_value(std::string value) {
     IRValue* label = new IRValue(IR_VALUE_LABEL, value);
 
     if (values.count(value) == 0) {
@@ -69,7 +69,7 @@ void IRContext::add_instruction(IR* instruction) {
     instructions.push_back(instruction);
 }
 
-IRValue* IRContext::get_literal(int kind, const char* lexeme) {
+IRValue* IRContext::get_literal(int kind, std::string lexeme) {
     IRValue* v;
 
     if (values.count(lexeme) == 0) {
@@ -79,25 +79,14 @@ IRValue* IRContext::get_literal(int kind, const char* lexeme) {
     return values[lexeme];
 }
 
-IRValue* IRContext::get_var(Identifier* id) {
-    //IRValue* v;
-    const char* lexeme = id->get_lexeme();
+IRValue *IRContext::get_var(std::string name) {
+    const char* lexeme = name.c_str();
 
-    if (values.count(lexeme) == 0) {
-        values[lexeme] = new IRValue(IR_VALUE_VAR, lexeme);
+    if (values.count(name) == 0) {
+        values[name] = new IRValue(IR_VALUE_VAR, name);
     }
 
-    return values[lexeme];
-}
-
-IRValue *IRContext::get_var(const char* name) {
-    const char* lexeme = name;
-
-    if (values.count(lexeme) == 0) {
-        values[lexeme] = new IRValue(IR_VALUE_VAR, lexeme);
-    }
-
-    return values[lexeme];
+    return values[name];
 }
 
 int IRContext::instructions_count() {

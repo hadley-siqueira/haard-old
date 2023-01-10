@@ -26,7 +26,7 @@ namespace haard {
             int get_overloaded_index();
             void set_overloaded_index(int idx);
 
-            std::string to_cpp();
+            std::string get_unique_name();
 
             Expression* clone();
             
