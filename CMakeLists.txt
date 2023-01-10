@@ -70,6 +70,7 @@ set(IR_SRC
     src/ir/ir.cc
     src/ir/ir_bin.cc
     src/ir/ir_unary.cc
+    src/ir/ir_alloca.cc
     src/ir/ir_call.cc
     src/ir/ir_label.cc
     src/ir/ir_value.cc

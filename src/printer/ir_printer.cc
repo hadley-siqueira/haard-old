@@ -52,6 +52,7 @@ void IRPrinter::print_instruction(IR* ir) {
     IRUnary* un = (IRUnary*) ir;
     IRCall* call = (IRCall*) ir;
     IRLabel* label = (IRLabel*) ir;
+    IRAlloca* alloca = (IRAlloca*) ir;
 
     switch (ir->get_kind()) {
     case IR_EQ:
@@ -118,8 +119,9 @@ void IRPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_ALLOCA:
-        *out << un->get_dst()->to_str() << " = alloca ";
-        *out << un->get_src()->to_str();
+        *out << alloca->get_dst()->to_str() << " = alloca ";
+        *out << alloca->get_name() << ", ";
+        *out << alloca->get_size() << ", " << alloca->get_align();
         break;
 
     case IR_RETURN:

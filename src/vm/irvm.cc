@@ -58,6 +58,7 @@ void IrVM::execute(IR* ir) {
     IRBin* bin = (IRBin*) ir;
     IRUnary* un = (IRUnary*) ir;
     IRCall* call = (IRCall*) ir;
+    IRAlloca* alloca = (IRAlloca*) ir;
 
     switch (ir->get_kind()) {
     case IR_EQ:
@@ -152,8 +153,8 @@ void IrVM::execute(IR* ir) {
         break;
 
     case IR_ALLOCA:
-        sp = sp - 8;
-        values[un->get_dst()->to_str()] = sp;
+        sp = sp - alloca->get_size();
+        values[alloca->get_dst()->to_str()] = sp;
         ip++;
         break;
 

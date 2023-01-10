@@ -36,6 +36,21 @@ IRUnary* IRContext::new_unary(int kind,IRValue* dst, IRValue* src) {
     return ir;
 }
 
+IRAlloca* IRContext::new_alloca(std::string name, int size, int align) {
+    IRAlloca* alloca = new IRAlloca();
+    IRValue* dst = new_temporary();
+
+    alloca->set_dst(dst);
+    alloca->set_name(name);
+    alloca->set_size(size);
+    alloca->set_align(align);
+
+    alloca_map[name] = dst;
+
+    instructions.push_back(alloca);
+    return alloca;
+}
+
 IRValue* IRContext::new_temporary() {
     IRValue* v = new IRValue(IR_VALUE_TEMP, tmp_counter++);
     
@@ -77,16 +92,6 @@ IRValue* IRContext::get_literal(int kind, std::string lexeme) {
     }
 
     return values[lexeme];
-}
-
-IRValue *IRContext::get_var(std::string name) {
-    const char* lexeme = name.c_str();
-
-    if (values.count(name) == 0) {
-        values[name] = new IRValue(IR_VALUE_VAR, name);
-    }
-
-    return values[name];
 }
 
 int IRContext::instructions_count() {

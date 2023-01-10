@@ -30,7 +30,7 @@ std::string IRValue::to_str() {
 
     switch (kind) {
     case IR_VALUE_VAR:
-        ss << '%' << value;
+        ss << '@' << value;
         break;
 
     case IR_VALUE_TEMP:
