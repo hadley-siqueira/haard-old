@@ -354,7 +354,6 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
     type = id->get_type();
 
     if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-        //ir_id = new IRValue(IR_VALUE_VAR, id->get_lexeme());
         ir_id = ctx->get_var(id->get_unique_name());
 
         if (ctx->has_alloca(ir_id->to_str())) {
@@ -362,7 +361,7 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
             tmp1 = ctx->new_temporary();
             ir_load = ctx->new_unary(IR_LOAD64, tmp1, tmp0);
             last_value = tmp1;
-        } else {
+        } else {std::cout << "UH OH\n"; exit(0);
             tmp0 = ctx->new_temporary();
             ir_addr = ctx->new_unary(IR_ALLOCA, tmp0, ir_id);
             tmp1 = ctx->new_temporary();

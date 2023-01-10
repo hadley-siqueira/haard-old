@@ -26,8 +26,12 @@ void IrVM::execute_function(IRFunction* function) {
 
     save_context();
 
-    for (int i = 0; i < function->parameters_count(); ++i) {
-        values[function->get_parameter(i)->to_str()] = args[i];
+    // FIXME: it fails when calling main function with argc, argv because
+    // argc and argv are not set by the irvm/driver
+    if (args.size() > 0) {
+        for (int i = 0; i < function->parameters_count(); ++i) {
+            values[function->get_parameter(i)->to_str()] = args[i];
+        }
     }
 
     args.clear();
