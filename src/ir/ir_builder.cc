@@ -351,8 +351,10 @@ void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
 void IRBuilder::build_identifier_lvalue(Identifier* id) {
     IRAlloca* alloca;
     Type* type;
+    int size;
 
     type = id->get_type();
+    size = type->get_size_in_bytes();
 
     if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
         std::string name = id->get_unique_name();
@@ -360,7 +362,7 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
         if (ctx->has_alloca(name)) {
             last_value = ctx->get_alloca_value(name);
         } else {
-            alloca = ctx->new_alloca(name);
+            alloca = ctx->new_alloca(name, size);
             last_value = alloca->get_dst();
         }
     }
