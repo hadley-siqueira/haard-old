@@ -181,7 +181,21 @@ void IRBuilder::build_jump_statement(JumpStatement* statement) {
 }
 
 void IRBuilder::build_while_statement(WhileStatement* statement) {
+    IRValue* cond;
+    IRLabel* begin = ctx->new_label();
+    IRLabel* after = ctx->new_label();
 
+    IRValue* begin_label = ctx->new_label_value(begin->get_label());
+    IRValue* after_label = ctx->new_label_value(after->get_label());
+
+    ctx->add_instruction(begin);
+    build_expression(statement->get_condition());
+    cond = last_value;
+    ctx->new_bin(IR_BZ, nullptr, cond, after_label);
+
+    build_statement(statement->get_statements());
+    ctx->new_unary(IR_GOTO, nullptr, begin_label);
+    ctx->add_instruction(after);
 }
 
 void IRBuilder::build_for_statement(ForStatement* statement) {

@@ -1,0 +1,20 @@
+def println : void
+    @n : int
+
+    p = &n
+    p = 0x10
+    *p = n
+    p = 0x11
+    *p = '\n'
+
+
+def main : void
+    i = 0
+
+    while i < 10:
+        println(i)
+
+        if i == 5:
+            println(777)
+
+        i = i + 1
