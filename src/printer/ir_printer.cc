@@ -109,12 +109,42 @@ void IRPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_LOAD64:
-        *out << un->get_dst()->to_str() << " = load ";
+        *out << un->get_dst()->to_str() << " = ld ";
         *out << un->get_src()->to_str();
         break;
 
-    case IR_STORE:
-        *out << "store " << un->get_dst()->to_str() << ", ";
+    case IR_LOAD32:
+        *out << un->get_dst()->to_str() << " = lw ";
+        *out << un->get_src()->to_str();
+        break;
+
+    case IR_LOAD16:
+        *out << un->get_dst()->to_str() << " = lh ";
+        *out << un->get_src()->to_str();
+        break;
+
+    case IR_LOAD8:
+        *out << un->get_dst()->to_str() << " = lb ";
+        *out << un->get_src()->to_str();
+        break;
+
+    case IR_STORE64:
+        *out << "sd " << un->get_dst()->to_str() << ", ";
+        *out << un->get_src()->to_str();
+        break;
+
+    case IR_STORE32:
+        *out << "sw " << un->get_dst()->to_str() << ", ";
+        *out << un->get_src()->to_str();
+        break;
+
+    case IR_STORE16:
+        *out << "sh " << un->get_dst()->to_str() << ", ";
+        *out << un->get_src()->to_str();
+        break;
+
+    case IR_STORE8:
+        *out << "sb " << un->get_dst()->to_str() << ", ";
         *out << un->get_src()->to_str();
         break;
 

@@ -771,7 +771,10 @@ namespace haard {
         IR_LOAD16,
         IR_LOAD8,
 
-        IR_STORE,
+        IR_STORE64,
+        IR_STORE32,
+        IR_STORE16,
+        IR_STORE8,
 
         IR_ALLOCA,
         IR_CALL,

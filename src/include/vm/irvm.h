@@ -29,9 +29,14 @@ namespace haard {
             uint64_t load8(uint64_t addr);
 
             bool is_special_load_address(uint64_t addr);
+            bool is_special_store_address(uint64_t addr);
             uint64_t load_special_address(uint64_t addr);
+            void store_special_address(uint64_t addr, uint64_t value);
 
             void store64(uint64_t addr, uint64_t value);
+            void store32(uint64_t addr, uint64_t value);
+            void store16(uint64_t addr, uint64_t value);
+            void store8(uint64_t addr, uint64_t value);
 
             void save_context();
             void restore_context();

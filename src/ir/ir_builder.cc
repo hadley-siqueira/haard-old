@@ -65,6 +65,8 @@ void IRBuilder::build_function(Function* function) {
 void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_func) {
     int size;
     int align;
+    std::string name;
+    Variable* var;
 
     for (int i = 0; i < function->parameters_count(); ++i) {
         IRValue* p = ctx->new_temporary();
@@ -72,9 +74,20 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
 
         ir_func->add_parameter(p);
 
-        std::string name = function->get_parameter(i)->get_unique_name();
-        alloca = ctx->new_alloca(name);
-        ctx->new_unary(IR_STORE, p, alloca->get_dst());
+        var = function->get_parameter(i);
+        name = var->get_unique_name();
+        size = var->get_type()->get_size_in_bytes();
+        alloca = ctx->new_alloca(name, size);
+
+        if (size == 1) {
+            ctx->new_unary(IR_STORE8, p, alloca->get_dst());
+        } else if (size == 2) {
+            ctx->new_unary(IR_STORE16, p, alloca->get_dst());
+        } else if (size == 4) {
+            ctx->new_unary(IR_STORE32, p, alloca->get_dst());
+        } else {
+            ctx->new_unary(IR_STORE64, p, alloca->get_dst());
+        }
     }
 }
 
@@ -344,8 +357,10 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
     IRValue* tmp0;
     IRValue* tmp1;
     Type* type;
+    int size;
 
     type = id->get_type();
+    size = type->get_size_in_bytes();
 
     if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
         std::string name = id->get_unique_name();
@@ -353,7 +368,17 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
         if (ctx->has_alloca(name)) {
             tmp0 = ctx->get_alloca_value(name);
             tmp1 = ctx->new_temporary();
-            ir_load = ctx->new_unary(IR_LOAD64, tmp1, tmp0);
+
+            if (size == 1) {
+                ir_load = ctx->new_unary(IR_LOAD8, tmp1, tmp0);
+            } else if (size == 2) {
+                ir_load = ctx->new_unary(IR_LOAD16, tmp1, tmp0);
+            } else if (size == 4) {
+                ir_load = ctx->new_unary(IR_LOAD32, tmp1, tmp0);
+            } else {
+                ir_load = ctx->new_unary(IR_LOAD64, tmp1, tmp0);
+            }
+
             last_value = tmp1;
         }
     }
@@ -395,17 +420,27 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     IR* ir;
     IRValue* left;
     IRValue* right;
-    IRValue* dst;
+    int size;
 
     build_expression(bin->get_right());
     right = last_value;
 
     build_expression(bin->get_left(), true);
     left = last_value;
+    size = bin->get_left()->get_type()->get_size_in_bytes();
 
     // FIXME
     // on complex types, should call memcpy instead of a simple store
-    ir = ctx->new_unary(IR_STORE, right, left);
+    if (size == 1) {
+        ctx->new_unary(IR_STORE8, right, left);
+    } else if (size == 2) {
+        ctx->new_unary(IR_STORE16, right, left);
+    } else if (size == 4) {
+        ctx->new_unary(IR_STORE32, right, left);
+    } else {
+        ctx->new_unary(IR_STORE64, right, left);
+    }
+
     last_value = left;
 }
 
@@ -482,11 +517,28 @@ void IRBuilder::build_address_of(UnOp* op) {
 }
 
 void IRBuilder::build_dereference(UnOp* op, bool lvalue) {
+    Type* type;
+    int size;
     build_expression(op->get_expression());
+
+    type = op->get_type();
+    size = type->get_size_in_bytes();
 
     if (!lvalue) {
         IRValue* tmp = ctx->new_temporary();
-        IR* ir_load = ctx->new_unary(IR_LOAD64, tmp, last_value);
+
+        IR* ir_load;
+
+        if (size == 1) {
+            ir_load = ctx->new_unary(IR_LOAD8, tmp, last_value);
+        } else if (size == 2) {
+            ir_load = ctx->new_unary(IR_LOAD16, tmp, last_value);
+        } else if (size == 4) {
+            ir_load = ctx->new_unary(IR_LOAD32, tmp, last_value);
+        } else {
+            ir_load = ctx->new_unary(IR_LOAD64, tmp, last_value);
+        }
+
         last_value = tmp;
     }
 }

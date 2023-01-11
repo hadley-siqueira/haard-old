@@ -163,10 +163,46 @@ void IrVM::execute(IR* ir) {
         ip++;
         break;
 
-    case IR_STORE:
+    case IR_LOAD32:
+        values[un->get_dst()->to_str()] = load32(values[un->get_src()->to_str()]);
+        ip++;
+        break;
+
+    case IR_LOAD16:
+        values[un->get_dst()->to_str()] = load16(values[un->get_src()->to_str()]);
+        ip++;
+        break;
+
+    case IR_LOAD8:
+        values[un->get_dst()->to_str()] = load8(values[un->get_src()->to_str()]);
+        ip++;
+        break;
+
+    case IR_STORE64:
         addr = values[un->get_src()->to_str()];
         value = values[un->get_dst()->to_str()];
         store64(addr, value);
+        ip++;
+        break;
+
+    case IR_STORE32:
+        addr = values[un->get_src()->to_str()];
+        value = values[un->get_dst()->to_str()];
+        store32(addr, value);
+        ip++;
+        break;
+
+    case IR_STORE16:
+        addr = values[un->get_src()->to_str()];
+        value = values[un->get_dst()->to_str()];
+        store16(addr, value);
+        ip++;
+        break;
+
+    case IR_STORE8:
+        addr = values[un->get_src()->to_str()];
+        value = values[un->get_dst()->to_str()];
+        store8(addr, value);
         ip++;
         break;
 
@@ -282,6 +318,16 @@ bool IrVM::is_special_load_address(uint64_t addr) {
     return false;
 }
 
+bool IrVM::is_special_store_address(uint64_t addr) {
+    switch (addr) {
+    case 0x10:
+    case 0x11:
+        return true;
+    }
+
+    return false;
+}
+
 uint64_t IrVM::load_special_address(uint64_t addr) {
     uint64_t v;
 
@@ -297,9 +343,7 @@ uint64_t IrVM::load_special_address(uint64_t addr) {
     return 0;
 }
 
-void IrVM::store64(uint64_t addr, uint64_t value) {
-    uint64_t* ptr = (uint64_t*) addr;
-
+void IrVM::store_special_address(uint64_t addr, uint64_t value) {
     switch (addr) {
     case 0x10:
         printf("%lu", value);
@@ -308,10 +352,46 @@ void IrVM::store64(uint64_t addr, uint64_t value) {
     case 0x11:
         printf("%c", (char) value);
         break;
+    }
+}
 
-    default:
+void IrVM::store64(uint64_t addr, uint64_t value) {
+    uint64_t* ptr = (uint64_t*) addr;
+
+    if (is_special_store_address(addr)) {
+        store_special_address(addr, value);
+    } else {
         *ptr = value;
-        break;
+    }
+}
+
+void IrVM::store32(uint64_t addr, uint64_t value) {
+    uint32_t* ptr = (uint32_t*) addr;
+
+    if (is_special_store_address(addr)) {
+        store_special_address(addr, value);
+    } else {
+        *ptr = value & 0x0ffffffff;
+    }
+}
+
+void IrVM::store16(uint64_t addr, uint64_t value) {
+    uint16_t* ptr = (uint16_t*) addr;
+
+    if (is_special_store_address(addr)) {
+        store_special_address(addr, value);
+    } else {
+        *ptr = value & 0x0ffff;
+    }
+}
+
+void IrVM::store8(uint64_t addr, uint64_t value) {
+    uint8_t* ptr = (uint8_t*) addr;
+
+    if (is_special_store_address(addr)) {
+        store_special_address(addr, value);
+    } else {
+        *ptr = value & 0x0ff;
     }
 }
 
