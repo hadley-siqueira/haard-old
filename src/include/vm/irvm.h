@@ -7,6 +7,7 @@
 #include "ir/ir.h"
 #include "ir/ir_function.h"
 #include "ir/ir_module.h"
+#include "ir/ir_modules.h"
 #include "vm/irvm_context.h"
 
 namespace haard {
@@ -15,7 +16,7 @@ namespace haard {
             IrVM();
 
         public:
-            void execute_module(IRModule* module);
+            void execute_modules(IRModules *module);
             void execute_function(IRFunction* function);
             void execute(IR* ir);
 
@@ -50,7 +51,7 @@ namespace haard {
             uint8_t* mem;
             std::vector<uint64_t> args;
             uint64_t return_value;
-            IRModule* module;
+            IRModules* modules;
     };
 }
 

@@ -12,6 +12,7 @@
 #include "ir/ir_context.h"
 #include "ir/ir_function.h"
 #include "ir/ir_module.h"
+#include "ir/ir_modules.h"
 #include "log/logger.h"
 
 namespace haard {
@@ -77,15 +78,14 @@ namespace haard {
         public:
             void set_logger(Logger* logger);
 
-            std::vector<IRModule *> get_modules() const;
-            void set_modules(const std::vector<IRModule *>& value);
+            IRModules* get_modules() const;
 
     private:
             Logger* logger;
             IRValue* last_value;
             IRContext* ctx;
             std::vector<IRFunction*> functions;
-            std::vector<IRModule*> modules;
+            IRModules* modules;
             IRModule* current_module;
     };
 }

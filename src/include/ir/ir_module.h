@@ -19,7 +19,7 @@ namespace haard {
             IRFunction* get_main_function() const;
             void set_main_function(IRFunction* value);
 
-    private:
+        private:
             std::vector<IRFunction*> functions;
             std::map<std::string, IRFunction*> functions_map;
             IRFunction* main_function;

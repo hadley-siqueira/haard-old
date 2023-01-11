@@ -1,12 +1,4 @@
-def println : void
-    @n : int
-
-    p = &n
-    p = 0x10
-    *p = n
-    p = 0x11
-    *p = '\n'
-
+import std.io
 
 def main : void
     i = 0

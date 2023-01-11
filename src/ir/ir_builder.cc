@@ -9,7 +9,8 @@ using namespace haard;
 
 IRBuilder::IRBuilder() {
     logger = nullptr;
-    current_module = new IRModule();
+    current_module = nullptr;
+    modules = new IRModules();
     ctx = nullptr;
 }
 
@@ -34,7 +35,7 @@ void IRBuilder::build_source(Source* source) {
     }
 
     current_module = nullptr;
-    modules.push_back(module);
+    modules->add_module(module);
     IRPrinter printer;
 
     printer.print_module(module);
@@ -100,12 +101,8 @@ void IRBuilder::set_logger(Logger* logger) {
     this->logger = logger;
 }
 
-std::vector<IRModule *> IRBuilder::get_modules() const {
+IRModules* IRBuilder::get_modules() const {
     return modules;
-}
-
-void IRBuilder::set_modules(const std::vector<IRModule *>& value) {
-    modules = value;
 }
 
 void IRBuilder::build_statement(Statement* statement) {

@@ -16,8 +16,9 @@ IrVM::IrVM() {
     sp = (uint64_t) mem + MEM_SIZE;
 }
 
-void IrVM::execute_module(IRModule* module) {
-    this->module = module;
+void IrVM::execute_modules(IRModules* modules) {
+    this->modules = modules;
+    execute_function(modules->get_main_function());
 }
 
 void IrVM::execute_function(IRFunction* function) {
@@ -219,7 +220,7 @@ void IrVM::execute(IR* ir) {
             args.push_back(values[call->get_argument(i)->to_str()]);
         }
 
-        execute_function(module->get_function(call->get_name().c_str()));
+        execute_function(modules->get_function(call->get_name().c_str()));
 
         if (call->get_dst()) {
             values[call->get_dst()->to_str()] = return_value;

@@ -141,11 +141,10 @@ void Driver::ir_generation() {
     builder.set_logger(&logger);
     builder.build(sources);
 
-    auto module = builder.get_modules().front();
+    auto modules = builder.get_modules();
 
     IrVM vm;
-    vm.execute_module(module);
-    vm.execute_function(module->get_main_function());
+    vm.execute_modules(modules);
     //vm.dump_memory();
 }
 
