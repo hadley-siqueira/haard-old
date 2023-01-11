@@ -85,8 +85,6 @@ void IRContext::add_instruction(IR* instruction) {
 }
 
 IRValue* IRContext::get_literal(int kind, std::string lexeme) {
-    IRValue* v;
-
     if (values.count(lexeme) == 0) {
         values[lexeme] = new IRValue(kind, lexeme);
     }

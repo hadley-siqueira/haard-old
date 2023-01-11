@@ -2,6 +2,7 @@
 #define HAARD_IR_PRINTER_H
 
 #include <sstream>
+#include "ir/ir_modules.h"
 #include "ir/ir_module.h"
 #include "ir/ir_function.h"
 
@@ -11,6 +12,7 @@ namespace haard {
             IRPrinter();
 
         public:
+            void print_modules(IRModules* modules);
             void print_module(IRModule* module);
             void print_function(IRFunction* function);
             void print_function_body(IRFunction* function);

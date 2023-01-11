@@ -7,17 +7,33 @@
 
 using namespace haard;
 
-#define MEM_SIZE 8 * 1000
+#define MEM_SIZE 1024 * 1024
 
 IrVM::IrVM() {
     ip = 0;
     fp = 0;
+    string_addr_counter = 0;
+
     mem = new uint8_t[MEM_SIZE];
     sp = (uint64_t) mem + MEM_SIZE;
+
 }
 
 void IrVM::execute_modules(IRModules* modules) {
     this->modules = modules;
+
+    for (int i = 0; i < modules->strings_count(); ++i) {
+        std::string s = modules->get_string(i);
+        string_address_map[s] = (uint64_t) &mem[string_addr_counter];
+
+        for (int j = 1; j < s.size() - 1; ++j) {
+            char c = s[j];
+            mem[string_addr_counter++] = c;
+        }
+
+        mem[string_addr_counter++] = '\0';
+    }
+
     execute_function(modules->get_main_function());
 }
 
@@ -133,8 +149,12 @@ void IrVM::execute(IR* ir) {
         break;
 
     case IR_LI:
-        //src1_value = atoi(un->get_src()->to_str().c_str());
-        src1_value = un->get_src()->to_u64();
+        if (un->get_src()->get_kind() == IR_VALUE_LITERAL_STRING) {
+            src1_value = string_address_map[un->get_src()->get_value()];
+        } else {
+            src1_value = un->get_src()->to_u64();
+        }
+
         values[un->get_dst()->to_str()] = src1_value;
         ip++;
         break;
@@ -323,6 +343,7 @@ bool IrVM::is_special_store_address(uint64_t addr) {
     switch (addr) {
     case 0x10:
     case 0x11:
+    case 0x12:
         return true;
     }
 
@@ -352,6 +373,10 @@ void IrVM::store_special_address(uint64_t addr, uint64_t value) {
 
     case 0x11:
         printf("%c", (char) value);
+        break;
+
+    case 0x12:
+        printf("%s", (char*) value);
         break;
     }
 }

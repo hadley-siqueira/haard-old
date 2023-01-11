@@ -52,6 +52,9 @@ namespace haard {
             std::vector<uint64_t> args;
             uint64_t return_value;
             IRModules* modules;
+
+            int string_addr_counter;
+            std::map<std::string, uint64_t> string_address_map;
     };
 }
 

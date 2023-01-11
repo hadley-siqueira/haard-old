@@ -24,6 +24,9 @@ void IRBuilder::build(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
+
+    IRPrinter printer;
+    printer.print_modules(modules);
 }
 
 void IRBuilder::build_source(Source* source) {
@@ -36,9 +39,6 @@ void IRBuilder::build_source(Source* source) {
 
     current_module = nullptr;
     modules->add_module(module);
-    IRPrinter printer;
-
-    printer.print_module(module);
 }
 
 void IRBuilder::build_class(Class* klass) {
@@ -324,7 +324,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         break;
 
     case EXPR_LITERAL_STRING:
-        build_literal(literal, IR_VALUE_LITERAL_STRING);
+        build_literal_string(literal);
         break;
 
     case EXPR_LITERAL_SYMBOL:
@@ -582,8 +582,6 @@ void IRBuilder::build_literal(Literal* literal, int kind) {
     tmp = ctx->new_temporary();
     ir = ctx->new_unary(IR_LI, tmp, ir_literal);
     last_value = tmp;
-
-    last_value = tmp;
 }
 
 void IRBuilder::build_literal_integer(Literal* literal) {
@@ -595,7 +593,10 @@ void IRBuilder::build_literal_integer(Literal* literal) {
     tmp = ctx->new_temporary();
     ir = ctx->new_unary(IR_LI, tmp, ir_literal);
     last_value = tmp;
+}
 
-    last_value = tmp;
+void IRBuilder::build_literal_string(Literal* literal) {
+    build_literal(literal, IR_VALUE_LITERAL_STRING);
+    modules->add_string_literal(literal->get_lexeme());
 }
 

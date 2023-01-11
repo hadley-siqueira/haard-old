@@ -362,7 +362,7 @@ void ScopeBuilder::build_expression(Expression* expression) {
         break;
 
     case EXPR_LITERAL_STRING:
-        build_literal(literal, TYPE_STR);
+        build_literal_string(literal);
         break;
 
     case EXPR_LITERAL_SYMBOL:
@@ -761,6 +761,11 @@ void ScopeBuilder::build_relational(BinOp* bin) {
 
 void ScopeBuilder::build_literal(Literal* literal, int kind) {
     literal->set_type(new Type(kind));
+}
+
+void ScopeBuilder::build_literal_string(Literal* literal) {
+    literal->set_type(new IndirectionType(TYPE_POINTER, new Type(TYPE_CHAR)));
+    //build_literal(literal, TYPE_STR);
 }
 
 void ScopeBuilder::build_expression_list(ExpressionList* exprlist) {

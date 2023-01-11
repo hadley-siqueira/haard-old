@@ -74,6 +74,7 @@ namespace haard {
 
             void build_literal(Literal* literal, int kind);
             void build_literal_integer(Literal* literal);
+            void build_literal_string(Literal* literal);
 
         public:
             void set_logger(Logger* logger);

@@ -9,6 +9,18 @@ IRPrinter::IRPrinter() {
     out = &functions;
 }
 
+void IRPrinter::print_modules(IRModules* modules) {
+    for (int i = 0; i < modules->strings_count(); ++i) {
+        *out << "%str" << i << " = " << modules->get_string(i) << "\n";
+    }
+
+    *out << '\n';
+
+    for (int i = 0; i < modules->modules_count(); ++i) {
+        print_module(modules->get_module(i));
+    }
+}
+
 void IRPrinter::print_module(IRModule* module) {
     for (int i = 0; i < module->functions_count(); ++i) {
         print_function(module->get_function(i));
