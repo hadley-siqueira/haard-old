@@ -141,9 +141,6 @@ std::string Function::get_qualified_name() {
     }
 
     ss << ">";
-
-    // std.io.print
-
     return ss.str();
 }
 

@@ -1,108 +1,45 @@
-import std.cstring
+def print : void
+    @c : char
 
-class String:
-    data : char*
-    last : char*
-    size : u64
-    capacity : u64
+    ptr = &c
+    ptr = 0x11
+    *ptr = c
 
-    def init : void
-        data = new char[10]
-        size = 0
-        capacity = 10
-
-    def destroy : void
-        delete[] data
-
-    def append : void
-        @s : char*
-
-        len = strlen(s)
-        resize(len)
-
-        i = 0
-        for i = 0; i < len; ++i:
-            *(data + size + i) = *(s + i)
-
-        *(data + size + i) = '\0'
-        size = size + len
-
-    def resize : void
-        if size >= capacity:
-            tmp = new char[size * 2]
-
-            for i = 0; i < size; ++i:
-                *(tmp + i) = *(data + i)
-
-            capacity = capacity * 2
-            delete[] data
-            data = tmp
-
-    def resize : void
-        @inc : int
-
-        if size + inc >= capacity:
-            tmp = new char[size * 2]
-
-            for i = 0; i < size; ++i:
-                *(tmp + i) = *(data + i)
-
-            capacity = capacity * 2 + inc
-            delete[] data
-            data = tmp
-
-def println : void
+def print : void
     @n : int
 
     p = &n
     p = 0x10
     *p = n
-    p = 0x11
-    *p = '\n'
 
-def printlnn : void
+def print : void
     @s : char*
 
-    c = 'a'
-    ptr = &c
-    ptr = 0x12
-    *ptr = s
-    ptr = 0x11
-    *ptr = '\n'
+    while *s != '\0':
+        print(*s)
+        ++s
 
-def print : void
-    @s : str
-
-    $$'std::cout << p0_s << std::endl'
-
-def print : void
+def println : void
     @n : int
 
-    $$'std::cout << p0_n << std::endl'
+    print(n)
+    print('\n')
 
-def print : void
-    @s : sym
-
-    $$'std::cout << p0_s << std::endl'
-
-def print : void
+def println : void
     @s : char*
 
-    $$'std::cout << p0_s << std::endl'
-
-def print : void
-    @s : String
-
-    print(s.data)
+    print(s)
+    print('\n')
 
 def read_int : int
     v = 0
-    $$'std::cin >> v0_v'
-    return v
+    ptr = &v
+    ptr = 0x10
+    return *ptr
 
 def read_int : int
-    @msg : str
+    @msg : char*
 
-    $$'std::cout << p0_msg'
+    print(msg)
     return read_int()
 

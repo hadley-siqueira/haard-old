@@ -402,7 +402,7 @@ void IRBuilder::build_call(BinOp* bin) {
 
     if (bin->get_left()->get_kind() == EXPR_ID) {
         Identifier* id = (Identifier*) bin->get_left();
-        Function* f = (Function*) id->get_symbol()->get_descriptor();
+        Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
         std::string name = f->get_qualified_name();
 
         call->set_name(name);

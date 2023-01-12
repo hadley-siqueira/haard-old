@@ -45,7 +45,7 @@ void Driver::run() {
     std::cout << "starting semantic analysis...\n";
     semantic_analysis();
     check_for_errors();
-    std::cout << "ending parsing...\n";
+    std::cout << "ending semantic analysis...\n";
 
     run_flags();
 

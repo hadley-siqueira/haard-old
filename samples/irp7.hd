@@ -6,7 +6,10 @@ def main : void
     msg = "the string has a length of: "
     sz = strlen(s)
 
-    printlnn("the string has a length of: ")
-    printlnn(msg)
+    println("the string has a length of: ")
+    println(msg)
     println(sz)
 
+    v = read_int('Please enter a number: ')
+    print('You entered the number ')
+    println(v)

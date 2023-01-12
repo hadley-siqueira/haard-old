@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ast/indirection_type.h"
 
 using namespace haard;
