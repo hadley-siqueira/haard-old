@@ -81,16 +81,6 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
         size = var->get_type()->get_size_in_bytes();
         alloca = ctx->new_alloca(name, size);
         ctx->new_store(size, alloca->get_dst(), p);
-        /*
-        if (size == 1) {
-            ctx->new_unary(IR_STORE8, p, alloca->get_dst());
-        } else if (size == 2) {
-            ctx->new_unary(IR_STORE16, p, alloca->get_dst());
-        } else if (size == 4) {
-            ctx->new_unary(IR_STORE32, p, alloca->get_dst());
-        } else {
-            ctx->new_unary(IR_STORE64, p, alloca->get_dst());
-        }*/
     }
 }
 
@@ -392,21 +382,21 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
 }
 
 void IRBuilder::build_pre_inc(UnOp* un) {
-    IRValue* left;
-    IRValue* right;
-    IRValue* dst;
-    IRValue* ir_literal;
+    int size;
+    IRValue* addr;
+    IRValue* cst;
+    IRMemory* load;
+    IRBin* add;
 
     build_expression(un->get_expression(), true);
-    left = last_value;
+    size = un->get_expression()->get_type()->get_size_in_bytes();
 
-    ir_literal = ctx->get_literal(IR_VALUE_LITERAL_INTEGER, "1");
-    right = ctx->new_temporary();
-    ctx->new_unary(IR_LI, right, ir_literal);
-
-    dst = ctx->new_temporary();
-    ctx->new_bin(IR_ADD, dst, left, right);
-    last_value = dst;
+    addr = last_value;
+    load = ctx->new_load(size, addr);
+    cst = ctx->get_literal(IR_VALUE_LITERAL_INTEGER, "1");
+    add  = ctx->new_binary(IR_ADDI, load->get_dst(), cst);
+    ctx->new_store(size, addr, add->get_dst());
+    last_value = add->get_dst();
 }
 
 void IRBuilder::build_call(BinOp* bin) {

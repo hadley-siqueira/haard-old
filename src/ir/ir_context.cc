@@ -86,6 +86,16 @@ IRMemory* IRContext::new_store(int size, IRValue* dst, IRValue* src) {
     return store;
 }
 
+IRBin* IRContext::new_binary(int kind, IRValue* src1, IRValue* src2) {
+    IRBin* bin;
+    IRValue* dst = new_temporary();
+
+    bin = new IRBin(kind, dst, src1, src2);
+    add_instruction(bin);
+
+    return bin;
+}
+
 IRValue* IRContext::new_temporary() {
     IRValue* v = new IRValue(IR_VALUE_TEMP, tmp_counter++);
     

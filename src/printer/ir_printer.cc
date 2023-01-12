@@ -114,6 +114,10 @@ void IRPrinter::print_instruction(IR* ir) {
         print_binop("add", bin);
         break;
 
+    case IR_ADDI:
+        print_binop("addi", bin);
+        break;
+
     case IR_SUB:
         print_binop("sub", bin);
         break;

@@ -24,6 +24,7 @@ namespace haard {
             IRAlloca* new_alloca(std::string name, int size=8, int align=8);
             IRMemory* new_load(int size, IRValue* src);
             IRMemory* new_store(int size, IRValue* dst, IRValue* src);
+            IRBin* new_binary(int kind, IRValue* src1, IRValue* src2);
 
             IRValue* get_literal(int kind, std::string lexeme);
             IRValue* new_temporary();

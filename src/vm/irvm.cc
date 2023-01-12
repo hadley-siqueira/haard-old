@@ -167,6 +167,13 @@ void IrVM::execute(IR* ir) {
         ip++;
         break;
 
+    case IR_ADDI:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = bin->get_src2()->to_u64();
+        values[bin->get_dst()->to_str()] = src1_value + src2_value;
+        ip++;
+        break;
+
     case IR_SUB:
         src1_value = values[bin->get_src1()->to_str()];
         src2_value = values[bin->get_src2()->to_str()];
