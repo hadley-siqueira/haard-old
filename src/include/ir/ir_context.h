@@ -23,6 +23,7 @@ namespace haard {
             IRUnary* new_unary(int kind,IRValue* dst, IRValue* src);
             IRAlloca* new_alloca(std::string name, int size=8, int align=8);
             IRMemory* new_load(int size, IRValue* src);
+            IRMemory* new_store(int size, IRValue* dst, IRValue* src);
 
             IRValue* get_literal(int kind, std::string lexeme);
             IRValue* new_temporary();

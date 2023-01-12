@@ -69,6 +69,23 @@ IRMemory* IRContext::new_load(int size, IRValue *src) {
     return load;
 }
 
+IRMemory* IRContext::new_store(int size, IRValue* dst, IRValue* src) {
+    IRMemory* store;
+
+    if (size == 1) {
+        store = new IRMemory(IR_STORE8, dst, src);
+    } else if (size == 2) {
+        store = new IRMemory(IR_STORE16, dst, src);
+    } else if (size == 4) {
+        store = new IRMemory(IR_STORE32, dst, src);
+    } else {
+        store = new IRMemory(IR_STORE64, dst, src);
+    }
+
+    add_instruction(store);
+    return store;
+}
+
 IRValue* IRContext::new_temporary() {
     IRValue* v = new IRValue(IR_VALUE_TEMP, tmp_counter++);
     

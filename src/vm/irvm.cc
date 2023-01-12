@@ -201,29 +201,29 @@ void IrVM::execute(IR* ir) {
         break;
 
     case IR_STORE64:
-        addr = values[un->get_src()->to_str()];
-        value = values[un->get_dst()->to_str()];
+        addr = values[mem->get_dst()->to_str()];
+        value = values[mem->get_src()->to_str()];
         store64(addr, value);
         ip++;
         break;
 
     case IR_STORE32:
-        addr = values[un->get_src()->to_str()];
-        value = values[un->get_dst()->to_str()];
+        addr = values[mem->get_dst()->to_str()];
+        value = values[mem->get_src()->to_str()];
         store32(addr, value);
         ip++;
         break;
 
     case IR_STORE16:
-        addr = values[un->get_src()->to_str()];
-        value = values[un->get_dst()->to_str()];
+        addr = values[mem->get_dst()->to_str()];
+        value = values[mem->get_src()->to_str()];
         store16(addr, value);
         ip++;
         break;
 
     case IR_STORE8:
-        addr = values[un->get_src()->to_str()];
-        value = values[un->get_dst()->to_str()];
+        addr = values[mem->get_dst()->to_str()];
+        value = values[mem->get_src()->to_str()];
         store8(addr, value);
         ip++;
         break;

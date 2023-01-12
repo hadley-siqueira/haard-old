@@ -80,7 +80,8 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
         name = var->get_unique_name();
         size = var->get_type()->get_size_in_bytes();
         alloca = ctx->new_alloca(name, size);
-
+        ctx->new_store(size, alloca->get_dst(), p);
+        /*
         if (size == 1) {
             ctx->new_unary(IR_STORE8, p, alloca->get_dst());
         } else if (size == 2) {
@@ -89,7 +90,7 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
             ctx->new_unary(IR_STORE32, p, alloca->get_dst());
         } else {
             ctx->new_unary(IR_STORE64, p, alloca->get_dst());
-        }
+        }*/
     }
 }
 
@@ -441,7 +442,7 @@ void IRBuilder::build_call_arguments(IRCall* call, ExpressionList* args) {
 }
 
 void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
-    IR* ir;
+    IRMemory* store;
     IRValue* left;
     IRValue* right;
     int size;
@@ -451,20 +452,12 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
 
     build_expression(bin->get_left(), true);
     left = last_value;
+
     size = bin->get_left()->get_type()->get_size_in_bytes();
 
     // FIXME
     // on complex types, should call memcpy instead of a simple store
-    if (size == 1) {
-        ctx->new_unary(IR_STORE8, right, left);
-    } else if (size == 2) {
-        ctx->new_unary(IR_STORE16, right, left);
-    } else if (size == 4) {
-        ctx->new_unary(IR_STORE32, right, left);
-    } else {
-        ctx->new_unary(IR_STORE64, right, left);
-    }
-
+    store = ctx->new_store(size, left, right);
     last_value = left;
 }
 

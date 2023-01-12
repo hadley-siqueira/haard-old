@@ -144,23 +144,23 @@ void IRPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_STORE64:
-        *out << "sd " << un->get_dst()->to_str() << ", ";
-        *out << un->get_src()->to_str();
+        *out << "sd " << mem->get_dst()->to_str() << ", ";
+        *out << mem->get_src()->to_str();
         break;
 
     case IR_STORE32:
-        *out << "sw " << un->get_dst()->to_str() << ", ";
-        *out << un->get_src()->to_str();
+        *out << "sw " << mem->get_dst()->to_str() << ", ";
+        *out << mem->get_src()->to_str();
         break;
 
     case IR_STORE16:
-        *out << "sh " << un->get_dst()->to_str() << ", ";
-        *out << un->get_src()->to_str();
+        *out << "sh " << mem->get_dst()->to_str() << ", ";
+        *out << mem->get_src()->to_str();
         break;
 
     case IR_STORE8:
-        *out << "sb " << un->get_dst()->to_str() << ", ";
-        *out << un->get_src()->to_str();
+        *out << "sb " << mem->get_dst()->to_str() << ", ";
+        *out << mem->get_src()->to_str();
         break;
 
     case IR_ALLOCA:
