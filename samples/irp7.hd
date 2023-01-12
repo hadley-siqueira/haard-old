@@ -1,0 +1,12 @@
+import std.io
+import std.cstring
+
+def main : void
+    s = "Hello, world!"
+    msg = "the string has a length of: "
+    sz = strlen(s)
+
+    printlnn("the string has a length of: ")
+    printlnn(msg)
+    println(sz)
+

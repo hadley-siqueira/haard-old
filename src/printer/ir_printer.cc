@@ -9,6 +9,10 @@ IRPrinter::IRPrinter() {
     out = &functions;
 }
 
+std::string IRPrinter::get_output() {
+    return (*out).str();
+}
+
 void IRPrinter::print_modules(IRModules* modules) {
     for (int i = 0; i < modules->strings_count(); ++i) {
         *out << "%str" << i << " = " << modules->get_string(i) << "\n";
@@ -25,8 +29,6 @@ void IRPrinter::print_module(IRModule* module) {
     for (int i = 0; i < module->functions_count(); ++i) {
         print_function(module->get_function(i));
     }
-
-    std::cout << out->str();
 }
 
 void IRPrinter::print_function(IRFunction* function) {

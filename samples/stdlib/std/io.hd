@@ -60,6 +60,16 @@ def println : void
     p = 0x11
     *p = '\n'
 
+def printlnn : void
+    @s : char*
+
+    c = 'a'
+    ptr = &c
+    ptr = 0x12
+    *ptr = s
+    ptr = 0x11
+    *ptr = '\n'
+
 def print : void
     @s : str
 

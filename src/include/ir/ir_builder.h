@@ -48,6 +48,8 @@ namespace haard {
             void build_identifier_lvalue(Identifier* id);
             void build_identifier_rvalue(Identifier* id);
 
+            void build_pre_inc(UnOp* un);
+
             void build_call(BinOp* bin);
             void build_call_arguments(IRCall* call, ExpressionList* args);
 

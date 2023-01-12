@@ -127,6 +127,8 @@ uint64_t char2u64(std::string value) {
             res = '\\';
         } else if (value[2] == '\'') {
             res = '\'';
+        } else if (value[2] == '0') {
+            res = '\0';
         }
     } else {
         res = value[1];

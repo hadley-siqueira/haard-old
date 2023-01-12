@@ -12,6 +12,7 @@ namespace haard {
             IRPrinter();
 
         public:
+            std::string get_output();
             void print_modules(IRModules* modules);
             void print_module(IRModule* module);
             void print_function(IRFunction* function);

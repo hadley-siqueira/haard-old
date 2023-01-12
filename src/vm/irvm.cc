@@ -16,7 +16,6 @@ IrVM::IrVM() {
 
     mem = new uint8_t[MEM_SIZE];
     sp = (uint64_t) mem + MEM_SIZE;
-
 }
 
 void IrVM::execute_modules(IRModules* modules) {

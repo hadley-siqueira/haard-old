@@ -27,6 +27,7 @@ void IRBuilder::build(Sources* sources) {
 
     IRPrinter printer;
     printer.print_modules(modules);
+    std::cout << printer.get_output();
 }
 
 void IRBuilder::build_source(Source* source) {
@@ -251,6 +252,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_identifier((Identifier*) expression, lvalue);
         break;
 
+    case EXPR_PRE_INC:
+        build_pre_inc(un);
+        break;
+
     case EXPR_CALL:
         build_call(bin);
         break;
@@ -395,6 +400,24 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
             last_value = tmp1;
         }
     }
+}
+
+void IRBuilder::build_pre_inc(UnOp* un) {
+    IRValue* left;
+    IRValue* right;
+    IRValue* dst;
+    IRValue* ir_literal;
+
+    build_expression(un->get_expression(), true);
+    left = last_value;
+
+    ir_literal = ctx->get_literal(IR_VALUE_LITERAL_INTEGER, "1");
+    right = ctx->new_temporary();
+    ctx->new_unary(IR_LI, right, ir_literal);
+
+    dst = ctx->new_temporary();
+    ctx->new_bin(IR_ADD, dst, left, right);
+    last_value = dst;
 }
 
 void IRBuilder::build_call(BinOp* bin) {

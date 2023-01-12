@@ -4,8 +4,10 @@ def strlen : int
     i = 0
 
     while *buffer != '\0':
-        ++buffer
-        ++i
+#        ++buffer
+#        ++i
+        buffer = buffer + 1
+        i = i + 1
 
     return i
 
