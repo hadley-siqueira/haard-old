@@ -252,7 +252,8 @@ void IrVM::execute(IR* ir) {
             args.push_back(values[call->get_argument(i)->to_str()]);
         }
 
-        execute_function(modules->get_function(call->get_name().c_str()));
+        //execute_function(modules->get_function(call->get_name().c_str()));
+        execute_function(get_function(call->get_name()));
 
         if (call->get_dst()) {
             values[call->get_dst()->to_str()] = return_value;
@@ -454,4 +455,12 @@ void IrVM::restore_context() {
     values = context_stack.top().get_values();
 
     context_stack.pop();
+}
+
+IRFunction* IrVM::get_function(std::string name) {
+    if (function_map.count(name) == 0) {
+        function_map[name] = modules->get_function(name.c_str());
+    }
+
+    return function_map[name];
 }
