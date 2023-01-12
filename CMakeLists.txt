@@ -73,6 +73,7 @@ set(IR_SRC
     src/ir/ir_alloca.cc
     src/ir/ir_call.cc
     src/ir/ir_label.cc
+    src/ir/ir_memory.cc
     src/ir/ir_value.cc
     src/ir/ir_builder.cc
     src/ir/ir_context.cc

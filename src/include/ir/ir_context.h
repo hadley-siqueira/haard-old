@@ -9,6 +9,7 @@
 #include "ir/ir_bin.h"
 #include "ir/ir_label.h"
 #include "ir/ir_alloca.h"
+#include "ir/ir_memory.h"
 #include "ir/ir.h"
 
 namespace haard {
@@ -21,6 +22,7 @@ namespace haard {
             IRBin* new_bin(int kind, IRValue* dst, IRValue* src1, IRValue* src2);
             IRUnary* new_unary(int kind,IRValue* dst, IRValue* src);
             IRAlloca* new_alloca(std::string name, int size=8, int align=8);
+            IRMemory* new_load(int size, IRValue* src);
 
             IRValue* get_literal(int kind, std::string lexeme);
             IRValue* new_temporary();

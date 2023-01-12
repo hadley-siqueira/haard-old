@@ -47,8 +47,26 @@ IRAlloca* IRContext::new_alloca(std::string name, int size, int align) {
 
     alloca_map[name] = dst;
 
-    instructions.push_back(alloca);
+    add_instruction(alloca);
     return alloca;
+}
+
+IRMemory* IRContext::new_load(int size, IRValue *src) {
+    IRMemory* load;
+    IRValue* dst = new_temporary();
+
+    if (size == 1) {
+        load = new IRMemory(IR_LOAD8, dst, src);
+    } else if (size == 2) {
+        load = new IRMemory(IR_LOAD16, dst, src);
+    } else if (size == 4) {
+        load = new IRMemory(IR_LOAD32, dst, src);
+    } else {
+        load = new IRMemory(IR_LOAD64, dst, src);
+    }
+
+    add_instruction(load);
+    return load;
 }
 
 IRValue* IRContext::new_temporary() {

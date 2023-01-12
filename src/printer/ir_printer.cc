@@ -67,6 +67,7 @@ void IRPrinter::print_instruction(IR* ir) {
     IRCall* call = (IRCall*) ir;
     IRLabel* label = (IRLabel*) ir;
     IRAlloca* alloca = (IRAlloca*) ir;
+    IRMemory* mem = (IRMemory*) ir;
 
     switch (ir->get_kind()) {
     case IR_EQ:
@@ -123,23 +124,23 @@ void IRPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_LOAD64:
-        *out << un->get_dst()->to_str() << " = ld ";
-        *out << un->get_src()->to_str();
+        *out << mem->get_dst()->to_str() << " = ld ";
+        *out << mem->get_src()->to_str();
         break;
 
     case IR_LOAD32:
-        *out << un->get_dst()->to_str() << " = lw ";
-        *out << un->get_src()->to_str();
+        *out << mem->get_dst()->to_str() << " = lw ";
+        *out << mem->get_src()->to_str();
         break;
 
     case IR_LOAD16:
-        *out << un->get_dst()->to_str() << " = lh ";
-        *out << un->get_src()->to_str();
+        *out << mem->get_dst()->to_str() << " = lh ";
+        *out << mem->get_src()->to_str();
         break;
 
     case IR_LOAD8:
-        *out << un->get_dst()->to_str() << " = lb ";
-        *out << un->get_src()->to_str();
+        *out << mem->get_dst()->to_str() << " = lb ";
+        *out << mem->get_src()->to_str();
         break;
 
     case IR_STORE64:

@@ -4,6 +4,7 @@
 #include "ir/ir_unary.h"
 #include "ir/ir_bin.h"
 #include "ir/ir_call.h"
+#include "ir/ir_memory.h"
 
 using namespace haard;
 
@@ -75,6 +76,7 @@ void IrVM::execute(IR* ir) {
     IRUnary* un = (IRUnary*) ir;
     IRCall* call = (IRCall*) ir;
     IRAlloca* alloca = (IRAlloca*) ir;
+    IRMemory* mem = (IRMemory*) ir;
 
     switch (ir->get_kind()) {
     case IR_EQ:
@@ -179,22 +181,22 @@ void IrVM::execute(IR* ir) {
         break;
 
     case IR_LOAD64:
-        values[un->get_dst()->to_str()] = load64(values[un->get_src()->to_str()]);
+        values[mem->get_dst()->to_str()] = load64(values[mem->get_src()->to_str()]);
         ip++;
         break;
 
     case IR_LOAD32:
-        values[un->get_dst()->to_str()] = load32(values[un->get_src()->to_str()]);
+        values[mem->get_dst()->to_str()] = load32(values[mem->get_src()->to_str()]);
         ip++;
         break;
 
     case IR_LOAD16:
-        values[un->get_dst()->to_str()] = load16(values[un->get_src()->to_str()]);
+        values[mem->get_dst()->to_str()] = load16(values[mem->get_src()->to_str()]);
         ip++;
         break;
 
     case IR_LOAD8:
-        values[un->get_dst()->to_str()] = load8(values[un->get_src()->to_str()]);
+        values[mem->get_dst()->to_str()] = load8(values[mem->get_src()->to_str()]);
         ip++;
         break;
 

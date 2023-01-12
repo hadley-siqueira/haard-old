@@ -10,10 +10,10 @@ namespace haard {
             IRUnary(int kind, IRValue* dst=nullptr, IRValue* src=nullptr);
             ~IRUnary();
 
-            IRValue *get_dst() const;
+            IRValue* get_dst() const;
             void set_dst(IRValue *value);
 
-            IRValue *get_src() const;
+            IRValue* get_src() const;
             void set_src(IRValue *value);
 
     private:

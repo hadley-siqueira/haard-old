@@ -371,9 +371,8 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
 }
 
 void IRBuilder::build_identifier_rvalue(Identifier* id) {
-    IR* ir_load;
+    IRMemory* load;
     IRValue* tmp0;
-    IRValue* tmp1;
     Type* type;
     int size;
 
@@ -385,19 +384,8 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
 
         if (ctx->has_alloca(name)) {
             tmp0 = ctx->get_alloca_value(name);
-            tmp1 = ctx->new_temporary();
-
-            if (size == 1) {
-                ir_load = ctx->new_unary(IR_LOAD8, tmp1, tmp0);
-            } else if (size == 2) {
-                ir_load = ctx->new_unary(IR_LOAD16, tmp1, tmp0);
-            } else if (size == 4) {
-                ir_load = ctx->new_unary(IR_LOAD32, tmp1, tmp0);
-            } else {
-                ir_load = ctx->new_unary(IR_LOAD64, tmp1, tmp0);
-            }
-
-            last_value = tmp1;
+            load = ctx->new_load(size, tmp0);
+            last_value = load->get_dst();
         }
     }
 }
@@ -553,6 +541,7 @@ void IRBuilder::build_address_of(UnOp* op) {
 }
 
 void IRBuilder::build_dereference(UnOp* op, bool lvalue) {
+    IRMemory* load;
     Type* type;
     int size;
     build_expression(op->get_expression());
@@ -561,21 +550,8 @@ void IRBuilder::build_dereference(UnOp* op, bool lvalue) {
     size = type->get_size_in_bytes();
 
     if (!lvalue) {
-        IRValue* tmp = ctx->new_temporary();
-
-        IR* ir_load;
-
-        if (size == 1) {
-            ir_load = ctx->new_unary(IR_LOAD8, tmp, last_value);
-        } else if (size == 2) {
-            ir_load = ctx->new_unary(IR_LOAD16, tmp, last_value);
-        } else if (size == 4) {
-            ir_load = ctx->new_unary(IR_LOAD32, tmp, last_value);
-        } else {
-            ir_load = ctx->new_unary(IR_LOAD64, tmp, last_value);
-        }
-
-        last_value = tmp;
+        load = ctx->new_load(size, last_value);
+        last_value = load->get_dst();
     }
 }
 
