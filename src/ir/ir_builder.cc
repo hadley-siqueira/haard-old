@@ -15,9 +15,7 @@ IRBuilder::IRBuilder() {
 }
 
 IRBuilder::~IRBuilder() {
-    for (int i = 0; i < functions.size(); ++i) {
-        delete functions[i];
-    }
+
 }
 
 void IRBuilder::build(Sources* sources) {
@@ -51,7 +49,6 @@ void IRBuilder::build_function(Function* function) {
 
     ir_func->set_name(function->get_qualified_name());
 
-    functions.push_back(ir_func);
     ctx = ir_func->get_context();
 
     build_function_parameters(function, ir_func);

@@ -146,6 +146,8 @@ void Driver::ir_generation() {
     IrVM vm;
     vm.execute_modules(modules);
     //vm.dump_memory();
+
+    delete modules;
 }
 
 void Driver::parse_imports(Source* file) {

@@ -19,6 +19,10 @@ IrVM::IrVM() {
     sp = (uint64_t) mem + MEM_SIZE;
 }
 
+IrVM::~IrVM() {
+    delete[] mem;
+}
+
 void IrVM::execute_modules(IRModules* modules) {
     this->modules = modules;
 

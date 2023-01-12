@@ -87,7 +87,6 @@ namespace haard {
             Logger* logger;
             IRValue* last_value;
             IRContext* ctx;
-            std::vector<IRFunction*> functions;
             IRModules* modules;
             IRModule* current_module;
     };

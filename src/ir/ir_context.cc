@@ -104,11 +104,8 @@ IRValue* IRContext::new_temporary() {
 }
 
 IRValue* IRContext::new_label_value(std::string value) {
-    IRValue* label = new IRValue(IR_VALUE_LABEL, value);
-
     if (values.count(value) == 0) {
-        label = new IRValue(IR_VALUE_LABEL, value);
-        values[value] = label;
+        values[value] = new IRValue(IR_VALUE_LABEL, value);
     }
 
     return values[value];

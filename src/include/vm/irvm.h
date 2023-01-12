@@ -14,6 +14,7 @@ namespace haard {
     class IrVM {
         public:
             IrVM();
+            ~IrVM();
 
         public:
             void execute_modules(IRModules *module);
