@@ -21,6 +21,6 @@ def main : void
     strcpy(inv, buffer)
 
     println(buffer)
+    strrev(inv)
     println(inv)
-    #strrev(inv)
     

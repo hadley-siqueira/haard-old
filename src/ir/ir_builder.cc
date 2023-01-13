@@ -355,6 +355,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     case EXPR_CAST:
         build_cast(cast);
         break;
+
+    case EXPR_PARENTHESIS:
+        build_expression(un->get_expression(), lvalue);
+        break;
     }
 }
 
