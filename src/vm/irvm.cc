@@ -344,7 +344,7 @@ uint64_t IrVM::load32(uint64_t addr) {
     }
 
     if (*ptr & (1 << 31)) {
-        v = ~v;
+        v = 0xffffffff00000000;
     }
 
     v = v | (*ptr & 0x0ffffffff);
@@ -360,7 +360,7 @@ uint64_t IrVM::load16(uint64_t addr) {
     }
 
     if (*ptr & (1 << 15)) {
-        v = ~v;
+        v = 0xffffffffffff0000;
     }
 
     v = v | (*ptr & 0x0ffff);
@@ -376,7 +376,7 @@ uint64_t IrVM::load8(uint64_t addr) {
     }
 
     if (*ptr & (1 << 7)) {
-        v = ~v;
+        v = 0xffffffffffffff00;
     }
 
     v = v | (*ptr & 0x0ff);
