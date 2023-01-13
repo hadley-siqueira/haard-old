@@ -47,7 +47,7 @@ IRAlloca* IRContext::new_alloca(std::string name, int size, int align) {
 
     alloca_map[name] = dst;
 
-    add_instruction(alloca);
+    allocas.push_back(alloca);
     return alloca;
 }
 
@@ -169,4 +169,18 @@ IRValue* IRContext::get_alloca_value(std::string name) {
 
 bool IRContext::has_alloca(std::string name) {
     return alloca_map.count(name) > 0;
+}
+
+void IRContext::move_allocas_to_instructions() {
+    std::vector<IR*> tmp;
+
+    for (int i = 0; i < allocas.size(); ++i) {
+        tmp.push_back(allocas[i]);
+    }
+
+    for (int i = 0; i < instructions_count(); ++i) {
+        tmp.push_back(get_instruction(i));
+    }
+
+    instructions = tmp;
 }

@@ -53,6 +53,7 @@ void IRBuilder::build_function(Function* function) {
 
     build_function_parameters(function, ir_func);
     build_function_body(function);
+    ctx->move_allocas_to_instructions();
 
     current_module->add_function(ir_func);
 
@@ -407,6 +408,12 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
             load = ctx->new_load(size, tmp0);
             last_value = load->get_dst();
         }
+    } else if (type->get_kind() == TYPE_ARRAY) {
+        std::string name = id->get_unique_name();
+
+        if (ctx->has_alloca(name)) {
+            last_value = ctx->get_alloca_value(name);
+        }
     }
 }
 
@@ -474,9 +481,13 @@ void IRBuilder::build_index_access(BinOp* bin, bool lvalue) {
     IRValue* offset;
     IRMemory* load;
 
-    build_expression(bin->get_left(), true);
-    base = last_value;
+    if (bin->get_left()->get_type()->get_kind() == TYPE_ARRAY) {
+        build_expression(bin->get_left(), true);
+    } else if (bin->get_left()->get_type()->get_kind() == TYPE_POINTER) {
+        build_expression(bin->get_left());
+    }
 
+    base = last_value;
     build_expression(bin->get_right());
     offset = last_value;
 

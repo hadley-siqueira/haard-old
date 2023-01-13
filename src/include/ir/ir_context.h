@@ -39,6 +39,7 @@ namespace haard {
             void set_alloca_value(std::string name, IRValue* value);
             IRValue* get_alloca_value(std::string name);
             bool has_alloca(std::string name);
+            void move_allocas_to_instructions();
 
         private:
             int tmp_counter;
@@ -46,6 +47,7 @@ namespace haard {
             std::map<std::string, IRValue*> values;
             std::map<std::string, IRValue*> alloca_map;
             std::vector<IR*> instructions;
+            std::vector<IRAlloca*> allocas;
     };
 }
 
