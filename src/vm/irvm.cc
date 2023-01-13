@@ -185,6 +185,27 @@ void IrVM::execute(IR* ir) {
         ip++;
         break;
 
+    case IR_MUL:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value * src2_value;
+        ip++;
+        break;
+
+    case IR_DIV:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value / src2_value;
+        ip++;
+        break;
+
+    case IR_MODULO:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value % src2_value;
+        ip++;
+        break;
+
     case IR_ALLOCA:
         sp = sp - alloca->get_size();
         values[alloca->get_dst()->to_str()] = sp;
@@ -381,7 +402,7 @@ uint64_t IrVM::load_special_address(uint64_t addr) {
 void IrVM::store_special_address(uint64_t addr, uint64_t value) {
     switch (addr) {
     case 0x10:
-        printf("%lu", value);
+        printf("%i", (int) value);
         break;
 
     case 0x11:

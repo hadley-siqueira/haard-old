@@ -761,6 +761,7 @@ namespace haard {
 
         IR_MUL,
         IR_DIV,
+        IR_MODULO,
 
         IR_ADDI,
         IR_COPY,

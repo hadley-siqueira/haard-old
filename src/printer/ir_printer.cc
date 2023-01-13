@@ -122,6 +122,18 @@ void IRPrinter::print_instruction(IR* ir) {
         print_binop("sub", bin);
         break;
 
+    case IR_MUL:
+        print_binop("mul", bin);
+        break;
+
+    case IR_DIV:
+        print_binop("div", bin);
+        break;
+
+    case IR_MODULO:
+        print_binop("mod", bin);
+        break;
+
     case IR_LI:
         *out << un->get_dst()->to_str() << " = li ";
         *out << un->get_src()->to_str();

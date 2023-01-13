@@ -516,6 +516,10 @@ void IRBuilder::build_division(BinOp* bin) {
     build_binop(bin, IR_DIV);
 }
 
+void IRBuilder::build_modulo(BinOp* bin) {
+    build_binop(bin, IR_MODULO);
+}
+
 void IRBuilder::build_address_of(UnOp* op) {
     build_expression(op->get_expression(), true);
 }

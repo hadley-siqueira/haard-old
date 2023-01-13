@@ -1,0 +1,7 @@
+import std.io
+
+def main : void
+    n1 = read_int('Enter first number: ')
+    n2 = read_int('Enter second number: ')
+    m = n1 * n2
+    println(m)

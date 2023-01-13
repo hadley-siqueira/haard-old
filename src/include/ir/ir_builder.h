@@ -68,6 +68,7 @@ namespace haard {
 
             void build_times(BinOp* bin);
             void build_division(BinOp* bin);
+            void build_modulo(BinOp* bin);
 
             void build_address_of(UnOp* op);
             void build_dereference(UnOp* op, bool lvalue=false);
