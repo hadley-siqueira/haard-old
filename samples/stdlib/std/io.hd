@@ -20,6 +20,12 @@ def print : void
         ++s
 
 def println : void
+    @c : char
+
+    print(c)
+    print('\n')
+
+def println : void
     @n : int
 
     print(n)

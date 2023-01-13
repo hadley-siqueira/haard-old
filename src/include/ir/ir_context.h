@@ -25,6 +25,7 @@ namespace haard {
             IRMemory* new_load(int size, IRValue* src);
             IRMemory* new_store(int size, IRValue* dst, IRValue* src);
             IRBin* new_binary(int kind, IRValue* src1, IRValue* src2);
+            IRUnary* new_load_immediate(int kind, std::string value);
 
             IRValue* get_literal(int kind, std::string lexeme);
             IRValue* new_temporary();

@@ -9,15 +9,30 @@ def strlen : int
 
     return i
 
+def strcpy : void
+    @dest : char*
+    @src : char*
+
+    while *src != '\0':
+        *dest = *src
+        ++dest
+        ++src
+
+    *dest = '\0'
+
 def strrev : void
     @buffer : char*
 
     len = strlen(buffer)
     
-    for i = 0; i < len / 2; ++i:
+    i = 0
+    while i < len / 2:
+    #for i = 0; i < len / 2; ++i:
+    
         temp = *(buffer + i)
         *(buffer + i) = *(buffer + len - i - 1)
         *(buffer + len - i - 1) = temp
+        i = i + 1
 
 def strdup : char*
     @buffer : char*

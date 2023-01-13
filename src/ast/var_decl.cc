@@ -10,7 +10,6 @@ VarDeclaration::VarDeclaration() {
 
 VarDeclaration::~VarDeclaration() {
     delete expr;
-    delete var;
 }
 
 Variable* VarDeclaration::get_variable() {

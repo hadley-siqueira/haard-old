@@ -212,14 +212,18 @@ void ScopeBuilder::build_branch_statement(BranchStatement* statement) {
 void ScopeBuilder::build_variable_declaration(VarDeclaration *statement) {
     Variable* var = statement->get_variable();
 
-    link_type(var->get_type());
+    build_expression(statement->get_expression());
+
+    if (var->get_type() == nullptr) {
+        var->set_type(statement->get_expression()->get_type());
+    } else {
+        link_type(var->get_type());
+    }
 
     var->set_uid(var_counter++);
     var->set_kind(VAR_LOCAL);
     current_scope->define(statement->get_variable());
     current_function->add_variable(var);
-
-    build_expression(statement->get_expression());
 }
 
 void ScopeBuilder::build_expression(Expression* expression) {

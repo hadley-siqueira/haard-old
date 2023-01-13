@@ -15,7 +15,15 @@ namespace haard {
         public:
             Expression* get_expression();
             Type* get_subtype();
+
+            /* virtual */
+            bool equal(Type* type);
+            std::string to_str();
             Type* clone();
+            bool is_primitive();
+            Type* promote(Type* other);
+            int rank();
+            int get_size_in_bytes();
             
         private:
             Expression* expression;

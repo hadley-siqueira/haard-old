@@ -13,6 +13,7 @@ namespace haard {
         public:
             const char* get_lexeme();
             Expression* clone();
+            uint64_t to_u64();
 
         private:
             const char* lexeme;

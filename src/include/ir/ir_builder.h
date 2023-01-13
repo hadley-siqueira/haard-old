@@ -37,6 +37,7 @@ namespace haard {
             void build_while_statement(WhileStatement* statement);
             void build_for_statement(ForStatement* statement);
             void build_branch_statement(BranchStatement* statement);
+            void build_variable_declaration(VarDeclaration* statement);
 
             void build_if(BranchStatement* statement);
             void build_else(BranchStatement* statement);
@@ -53,6 +54,7 @@ namespace haard {
 
             void build_call(BinOp* bin);
             void build_call_arguments(IRCall* call, ExpressionList* args);
+            void build_index_access(BinOp* bin, bool lvalue=false);
 
             void build_assignment(BinOp* bin, bool lvalue=false);
 

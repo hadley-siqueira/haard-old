@@ -1,4 +1,5 @@
 #include "ast/literal.h"
+#include "utils/utils.h"
 
 using namespace haard;
 
@@ -26,4 +27,30 @@ Expression* Literal::clone() {
     other->column = column;
 
     return other;
+}
+
+uint64_t Literal::to_u64() {
+    uint64_t res = 0;
+    std::string value(lexeme);
+
+    switch (kind) {
+    case EXPR_LITERAL_BOOL:
+        if (value == "true") {
+            res = 1;
+        }
+        break;
+
+    case EXPR_LITERAL_CHAR:
+        res = char2u64(value);
+        break;
+
+    case EXPR_LITERAL_INTEGER:
+        res = conv64(value);
+        break;
+
+    default:
+        break;
+    }
+
+    return res;
 }

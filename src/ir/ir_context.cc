@@ -96,6 +96,19 @@ IRBin* IRContext::new_binary(int kind, IRValue* src1, IRValue* src2) {
     return bin;
 }
 
+IRUnary* IRContext::new_load_immediate(int kind, std::string value) {
+    IRUnary* li;
+    IRValue* dst;
+    IRValue* src;
+
+    dst = new_temporary();
+    src = get_literal(kind, value);
+    li = new IRUnary(IR_LI, dst, src);
+    add_instruction(li);
+
+    return li;
+}
+
 IRValue* IRContext::new_temporary() {
     IRValue* v = new IRValue(IR_VALUE_TEMP, tmp_counter++);
     

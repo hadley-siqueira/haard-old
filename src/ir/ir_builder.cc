@@ -147,7 +147,7 @@ void IRBuilder::build_statement(Statement* statement) {
         break;
 
     case STMT_VAR_DECL:
-   //     build_variable_declaration((VarDeclaration*) statement);
+        build_variable_declaration((VarDeclaration*) statement);
         break;
     }
 }
@@ -190,6 +190,21 @@ void IRBuilder::build_for_statement(ForStatement* statement) {
 
 void IRBuilder::build_branch_statement(BranchStatement* statement) {
 
+}
+
+void IRBuilder::build_variable_declaration(VarDeclaration* statement) {
+    int size;
+    int align;
+    std::string name;
+    Variable* var;
+    IRAlloca* alloca;
+
+    build_expression(statement->get_expression());
+
+    var = statement->get_variable();
+    name = var->get_unique_name();
+    size = var->get_type()->get_size_in_bytes();
+    alloca = ctx->new_alloca(name, size);
 }
 
 void IRBuilder::build_if(BranchStatement* statement) {
@@ -247,6 +262,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
 
     case EXPR_CALL:
         build_call(bin);
+        break;
+
+    case EXPR_INDEX:
+        build_index_access(bin, lvalue);
         break;
 
     case EXPR_ASSIGN:
@@ -340,10 +359,6 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
 }
 
 void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
-    Type* type;
-
-    type = id->get_type();
-
     if (lvalue) {
         build_identifier_lvalue(id);
     } else {
@@ -359,7 +374,7 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
     type = id->get_type();
     size = type->get_size_in_bytes();
 
-    if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
+    if (type->is_primitive() || type->get_kind() == TYPE_POINTER || type->get_kind() == TYPE_ARRAY) {
         std::string name = id->get_unique_name();
 
         if (ctx->has_alloca(name)) {
@@ -403,8 +418,8 @@ void IRBuilder::build_pre_inc(UnOp* un) {
 
     addr = last_value;
     load = ctx->new_load(size, addr);
-    cst = ctx->get_literal(IR_VALUE_LITERAL_INTEGER, "1");
-    add  = ctx->new_binary(IR_ADDI, load->get_dst(), cst);
+    cst = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, "1")->get_dst();
+    add  = ctx->new_binary(IR_ADD, load->get_dst(), cst);
     ctx->new_store(size, addr, add->get_dst());
     last_value = add->get_dst();
 }
@@ -441,6 +456,42 @@ void IRBuilder::build_call_arguments(IRCall* call, ExpressionList* args) {
         for (int i = 0; i < args->expressions_count(); ++i) {
             build_expression(args->get_expression(i));
             call->add_argument(last_value);
+        }
+    }
+}
+
+void IRBuilder::build_index_access(BinOp* bin, bool lvalue) {
+    std::stringstream ss;
+    int size_in_bytes;
+    IRValue* size;
+    IRValue* base;
+    IRValue* index;
+    IRValue* addr;
+    IRValue* offset;
+    IRMemory* load;
+
+    build_expression(bin->get_left(), true);
+    base = last_value;
+
+    build_expression(bin->get_right());
+    offset = last_value;
+
+    size_in_bytes = bin->get_type()->get_size_in_bytes();
+    ss << size_in_bytes;
+
+    size = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, ss.str())->get_dst();
+    index = ctx->new_binary(IR_MUL, offset, size)->get_dst();
+    addr = ctx->new_binary(IR_ADD, base, index)->get_dst();
+
+    if (lvalue) {
+        last_value = addr;
+    } else {
+        if (bin->get_type()->is_primitive()) {
+            load = ctx->new_load(size_in_bytes, addr);
+            last_value = load->get_dst();
+        } else {
+            std::cout << __FILE__ << "\nERROR\n";
+            exit(0);
         }
     }
 }
@@ -574,25 +625,14 @@ void IRBuilder::build_binop(BinOp* bin, int kind) {
 }
 
 void IRBuilder::build_literal(Literal* literal, int kind) {
-    IR* ir;
-    IRValue* ir_literal;
-    IRValue* tmp;
+    IRUnary* li;
 
-    ir_literal = ctx->get_literal(kind, literal->get_lexeme());
-    tmp = ctx->new_temporary();
-    ir = ctx->new_unary(IR_LI, tmp, ir_literal);
-    last_value = tmp;
+    li = ctx->new_load_immediate(kind, literal->get_lexeme());
+    last_value = li->get_dst();
 }
 
 void IRBuilder::build_literal_integer(Literal* literal) {
-    IR* ir;
-    IRValue* ir_literal;
-    IRValue* tmp;
-
-    ir_literal = ctx->get_literal(IR_VALUE_LITERAL_INTEGER, literal->get_lexeme());
-    tmp = ctx->new_temporary();
-    ir = ctx->new_unary(IR_LI, tmp, ir_literal);
-    last_value = tmp;
+    build_literal(literal, IR_VALUE_LITERAL_INTEGER);
 }
 
 void IRBuilder::build_literal_string(Literal* literal) {
