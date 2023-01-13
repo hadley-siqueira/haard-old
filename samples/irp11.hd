@@ -1,0 +1,17 @@
+import std.io
+
+def main : void
+    for i = 0; i < 10; ++i:
+        println(i)
+
+    for i = 0, j = 0; i < 10; ++i:
+        print(i)
+        print(' ')
+        println(j)
+
+    println("----")
+
+    for i = 0, j = 0; i < 10; ++i, j = i * 2:
+        print(i)
+        print(' ')
+        println(j)

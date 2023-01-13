@@ -110,8 +110,10 @@ void IRBuilder::build_statement(Statement* statement) {
         break;
 
     case STMT_FOR:
-    case STMT_FOREACH:
         build_for_statement((ForStatement*) statement);
+        break;
+
+    case STMT_FOREACH:
         break;
 
     case STMT_EXPRESSION:
@@ -186,7 +188,42 @@ void IRBuilder::build_while_statement(WhileStatement* statement) {
 }
 
 void IRBuilder::build_for_statement(ForStatement* statement) {
+    IRValue* cond;
+    IRLabel* begin = ctx->new_label();
+    IRLabel* after = ctx->new_label();
 
+    IRValue* begin_label = ctx->new_label_value(begin->get_label());
+    IRValue* after_label = ctx->new_label_value(after->get_label());
+
+    build_for_init(statement);
+
+    ctx->add_instruction(begin);
+    build_expression(statement->get_condition());
+
+    cond = last_value;
+    ctx->new_bin(IR_BZ, nullptr, cond, after_label);
+
+    build_statement(statement->get_statements());
+    build_for_inc(statement);
+
+    ctx->new_unary(IR_GOTO, nullptr, begin_label);
+    ctx->add_instruction(after);
+}
+
+void IRBuilder::build_for_init(ForStatement* statement) {
+    ExpressionList* exprs = statement->get_initialization();
+
+    for (int i = 0; i < exprs->expressions_count(); ++i) {
+        build_expression(exprs->get_expression(i));
+    }
+}
+
+void IRBuilder::build_for_inc(ForStatement* statement) {
+    ExpressionList* exprs = statement->get_increment();
+
+    for (int i = 0; i < exprs->expressions_count(); ++i) {
+        build_expression(exprs->get_expression(i));
+    }
 }
 
 void IRBuilder::build_branch_statement(BranchStatement* statement) {
