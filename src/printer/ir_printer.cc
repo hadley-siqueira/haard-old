@@ -130,8 +130,8 @@ void IRPrinter::print_instruction(IR* ir) {
         print_binop("div", bin);
         break;
 
-    case IR_MODULO:
-        print_binop("mod", bin);
+    case IR_REM:
+        print_binop("rem", bin);
         break;
 
     case IR_LI:

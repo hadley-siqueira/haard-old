@@ -5,3 +5,7 @@ def main : void
     n2 = read_int('Enter second number: ')
     m = n1 * n2
     println(m)
+    n = n1 / n2
+    println(n)
+    println(n1 / n2)
+    println(n1 % n2)

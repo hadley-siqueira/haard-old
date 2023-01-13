@@ -289,6 +289,14 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_times(bin);
         break;
 
+    case EXPR_DIVISION:
+        build_division(bin);
+        break;
+
+    case EXPR_MODULO:
+        build_modulo(bin);
+        break;
+
     case EXPR_ADDRESS_OF:
         build_address_of(un);
         break;
@@ -526,7 +534,7 @@ void IRBuilder::build_division(BinOp* bin) {
 }
 
 void IRBuilder::build_modulo(BinOp* bin) {
-    build_binop(bin, IR_MODULO);
+    build_binop(bin, IR_REM);
 }
 
 void IRBuilder::build_address_of(UnOp* op) {
