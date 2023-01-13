@@ -233,6 +233,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     BinOp* bin = (BinOp*) expression;
     UnOp* un = (UnOp*) expression;
     Literal* literal = (Literal*) expression;
+    CastExpression* cast = (CastExpression*) expression;
     ExpressionList* exprlist = (ExpressionList*) expression;
 
     switch (kind) {
@@ -323,6 +324,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     case EXPR_LITERAL_SYMBOL:
         build_literal(literal, IR_VALUE_LITERAL_SYMBOL);
         break;
+
+    case EXPR_CAST:
+        build_cast(cast);
+        break;
     }
 }
 
@@ -394,6 +399,10 @@ void IRBuilder::build_pre_inc(UnOp* un) {
     add  = ctx->new_binary(IR_ADDI, load->get_dst(), cst);
     ctx->new_store(size, addr, add->get_dst());
     last_value = add->get_dst();
+}
+
+void IRBuilder::build_cast(CastExpression* cast) {
+    build_expression(cast->get_expression());
 }
 
 void IRBuilder::build_call(BinOp* bin) {

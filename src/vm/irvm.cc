@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <inttypes.h>
 #include "vm/irvm.h"
 #include "ir/ir_unary.h"
 #include "ir/ir_bin.h"
@@ -336,32 +337,50 @@ uint64_t IrVM::load64(uint64_t addr) {
 
 uint64_t IrVM::load32(uint64_t addr) {
     uint32_t* ptr = (uint32_t*) addr;
+    uint64_t v = 0;
 
     if (is_special_load_address(addr)) {
         return load_special_address(addr);
     }
 
-    return *ptr;
+    if (*ptr & (1 << 31)) {
+        v = ~v;
+    }
+
+    v = v | (*ptr & 0x0ffffffff);
+    return v;
 }
 
 uint64_t IrVM::load16(uint64_t addr) {
     uint16_t* ptr = (uint16_t*) addr;
+    uint64_t v = 0;
 
     if (is_special_load_address(addr)) {
         return load_special_address(addr);
     }
 
-    return *ptr;
+    if (*ptr & (1 << 15)) {
+        v = ~v;
+    }
+
+    v = v | (*ptr & 0x0ffff);
+    return v;
 }
 
 uint64_t IrVM::load8(uint64_t addr) {
     uint8_t* ptr = (uint8_t*) addr;
+    uint64_t v = 0;
 
     if (is_special_load_address(addr)) {
         return load_special_address(addr);
     }
 
-    return *ptr;
+    if (*ptr & (1 << 7)) {
+        v = ~v;
+    }
+
+    v = v | (*ptr & 0x0ff);
+    return v;
 }
 
 bool IrVM::is_special_load_address(uint64_t addr) {
