@@ -34,6 +34,7 @@ namespace haard {
             void build_variable_declaration(VarDeclaration* statement);
 
             void build_expression(Expression* expression);
+
             void build_identifier(Identifier* id);
             void build_this(ThisExpression* expr);
             void build_new(NewExpression* op);
@@ -55,16 +56,24 @@ namespace haard {
             void build_logical_or(BinOp* op);
             void build_logical_and(BinOp* op);
 
-            void build_plus(BinOp* bin);
-            void build_minus(BinOp* bin);
+            void build_equal(BinOp* bin);
+            void build_not_equal(BinOp* bin);
 
             void build_greater_than(BinOp* bin);
             void build_less_than(BinOp* bin);
             void build_greater_or_equal_than(BinOp* bin);
             void build_less_or_equal_than(BinOp* bin);
 
-            void build_equal(BinOp* bin);
-            void build_not_equal(BinOp* bin);
+            void build_plus(BinOp* bin);
+            void build_minus(BinOp* bin);
+
+            void build_bitwise_or(BinOp* bin);
+            void build_bitwise_xor(BinOp* bin);
+            void build_bitwise_and(BinOp* bin);
+
+            void build_sll(BinOp* bin);
+            void build_srl(BinOp* bin);
+            void build_sra(BinOp* bin);
 
             void build_binop(BinOp* bin);
             void build_relational(BinOp* bin);

@@ -1,0 +1,37 @@
+import std.io
+
+def println_bin : void
+    @n : int
+
+    print("0b")
+    for i = 31; i >= 0; i = i - 1:
+        if n & 1 << i:
+            print('1')
+        else:
+            print('0')
+    print('\n')
+
+def println_hex : void
+    @n : int
+
+    c = '0'
+    print("0x")
+
+    for i = 28; i >= 0; i = i - 4:
+        v = n >> i & 0xf
+        if v < 10:
+            c = '0' + v
+        else:
+            c = 'a' + v - 10
+        print(c)
+
+    print('\n')
+
+def main : void
+    n = read_int('Enter a number: ')
+
+    print("The binary is: ")
+    println_bin(n)
+
+    print("The hexadecimal is: ")
+    println_hex(n)

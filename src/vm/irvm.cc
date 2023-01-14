@@ -221,6 +221,48 @@ void IrVM::execute(IR* ir) {
         ip++;
         break;
 
+    case IR_BITWISE_OR:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value | src2_value;
+        ip++;
+        break;
+
+    case IR_BITWISE_XOR:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value ^ src2_value;
+        ip++;
+        break;
+
+    case IR_BITWISE_AND:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value & src2_value;
+        ip++;
+        break;
+
+    case IR_SLL:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value << src2_value;
+        ip++;
+        break;
+
+    case IR_SRL:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = src1_value >> src2_value;
+        ip++;
+        break;
+
+    case IR_SRA:
+        src1_value = values[bin->get_src1()->to_str()];
+        src2_value = values[bin->get_src2()->to_str()];
+        values[bin->get_dst()->to_str()] = (int64_t) src1_value >> src2_value;
+        ip++;
+        break;
+
     case IR_ALLOCA:
         sp = sp - alloca->get_size();
         values[alloca->get_dst()->to_str()] = sp;

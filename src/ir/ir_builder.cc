@@ -370,6 +370,30 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_modulo(bin);
         break;
 
+    case EXPR_BITWISE_OR:
+        build_bitwise_or(bin);
+        break;
+
+    case EXPR_BITWISE_XOR:
+        build_bitwise_xor(bin);
+        break;
+
+    case EXPR_BITWISE_AND:
+        build_bitwise_and(bin);
+        break;
+
+    case EXPR_SLL:
+        build_sll(bin);
+        break;
+
+    case EXPR_SRL:
+        build_srl(bin);
+        break;
+
+    case EXPR_SRA:
+        build_sra(bin);
+        break;
+
     case EXPR_ADDRESS_OF:
         build_address_of(un);
         break;
@@ -710,6 +734,30 @@ void IRBuilder::build_division(BinOp* bin) {
 
 void IRBuilder::build_modulo(BinOp* bin) {
     build_binop(bin, IR_REM);
+}
+
+void IRBuilder::build_bitwise_or(BinOp* bin) {
+    build_binop(bin, IR_BITWISE_OR);
+}
+
+void IRBuilder::build_bitwise_xor(BinOp* bin) {
+    build_binop(bin, IR_BITWISE_XOR);
+}
+
+void IRBuilder::build_bitwise_and(BinOp* bin) {
+    build_binop(bin, IR_BITWISE_AND);
+}
+
+void IRBuilder::build_sll(BinOp* bin) {
+    build_binop(bin, IR_SLL);
+}
+
+void IRBuilder::build_srl(BinOp* bin) {
+    build_binop(bin, IR_SRL);
+}
+
+void IRBuilder::build_sra(BinOp* bin) {
+    build_binop(bin, IR_SRA);
 }
 
 void IRBuilder::build_address_of(UnOp* op) {

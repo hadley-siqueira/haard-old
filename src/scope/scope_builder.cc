@@ -291,28 +291,6 @@ void ScopeBuilder::build_expression(Expression* expression) {
         build_assignment(bin);
         break;
 
-    case EXPR_PLUS:
-        build_plus(bin);
-        break;
-
-    case EXPR_MINUS:
-        build_minus(bin);
-        break;
-
-    case EXPR_TIMES:
-    case EXPR_DIVISION:
-    case EXPR_INTEGER_DIVISION:
-    case EXPR_MODULO:
-    case EXPR_POWER:
-    case EXPR_BITWISE_OR:
-    case EXPR_BITWISE_XOR:
-    case EXPR_BITWISE_AND:
-    case EXPR_SLL:
-    case EXPR_SRL:
-    case EXPR_SRA:
-        build_binop(bin);
-        break;
-
     case EXPR_LOGICAL_OR:
     case EXPR_LOGICAL_OR_OPER:
         build_logical_or(bin);
@@ -321,6 +299,14 @@ void ScopeBuilder::build_expression(Expression* expression) {
     case EXPR_LOGICAL_AND:
     case EXPR_LOGICAL_AND_OPER:
         build_logical_and(bin);
+        break;
+
+    case EXPR_EQ:
+        build_equal(bin);
+        break;
+
+    case EXPR_NE:
+        build_not_equal(bin);
         break;
 
     case EXPR_GT:
@@ -339,12 +325,44 @@ void ScopeBuilder::build_expression(Expression* expression) {
         build_less_or_equal_than(bin);
         break;
 
-    case EXPR_EQ:
-        build_equal(bin);
+    case EXPR_PLUS:
+        build_plus(bin);
         break;
 
-    case EXPR_NE:
-        build_not_equal(bin);
+    case EXPR_MINUS:
+        build_minus(bin);
+        break;
+
+    case EXPR_TIMES:
+    case EXPR_DIVISION:
+    case EXPR_INTEGER_DIVISION:
+    case EXPR_MODULO:
+    case EXPR_POWER:
+        build_binop(bin);
+        break;
+
+    case EXPR_BITWISE_OR:
+        build_bitwise_or(bin);
+        break;
+
+    case EXPR_BITWISE_XOR:
+        build_bitwise_xor(bin);
+        break;
+
+    case EXPR_BITWISE_AND:
+        build_bitwise_and(bin);
+        break;
+
+    case EXPR_SLL:
+        build_sll(bin);
+        break;
+
+    case EXPR_SRL:
+        build_sll(bin);
+        break;
+
+    case EXPR_SRA:
+        build_sra(bin);
         break;
 
     case EXPR_ADDRESS_OF:
@@ -714,6 +732,30 @@ void ScopeBuilder::build_plus(BinOp* bin) {
 }
 
 void ScopeBuilder::build_minus(BinOp* bin) {
+    build_binop(bin);
+}
+
+void ScopeBuilder::build_bitwise_or(BinOp* bin) {
+    build_binop(bin);
+}
+
+void ScopeBuilder::build_bitwise_xor(BinOp* bin) {
+    build_binop(bin);
+}
+
+void ScopeBuilder::build_bitwise_and(BinOp* bin) {
+    build_binop(bin);
+}
+
+void ScopeBuilder::build_sll(BinOp* bin) {
+    build_binop(bin);
+}
+
+void ScopeBuilder::build_srl(BinOp* bin) {
+    build_binop(bin);
+}
+
+void ScopeBuilder::build_sra(BinOp* bin) {
     build_binop(bin);
 }
 

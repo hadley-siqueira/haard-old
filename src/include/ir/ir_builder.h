@@ -80,6 +80,14 @@ namespace haard {
             void build_division(BinOp* bin);
             void build_modulo(BinOp* bin);
 
+            void build_bitwise_or(BinOp* bin);
+            void build_bitwise_xor(BinOp* bin);
+            void build_bitwise_and(BinOp* bin);
+
+            void build_sll(BinOp* bin);
+            void build_srl(BinOp* bin);
+            void build_sra(BinOp* bin);
+
             void build_address_of(UnOp* op);
             void build_dereference(UnOp* op, bool lvalue=false);
 

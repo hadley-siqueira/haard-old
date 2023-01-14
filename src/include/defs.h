@@ -763,6 +763,14 @@ namespace haard {
         IR_DIV,
         IR_REM,
 
+        IR_BITWISE_OR,
+        IR_BITWISE_XOR,
+        IR_BITWISE_AND,
+
+        IR_SLL,
+        IR_SRL,
+        IR_SRA,
+
         IR_ADDI,
         IR_COPY,
         IR_LI,
