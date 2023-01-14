@@ -219,6 +219,10 @@ void IRPrinter::print_instruction(IR* ir) {
         *out << "bz " << branch->get_src1()->to_str() << ", " << branch->get_label()->to_str();
         break;
 
+    case IR_BNZ:
+        *out << "bnz " << branch->get_src1()->to_str() << ", " << branch->get_label()->to_str();
+        break;
+
     case IR_GOTO:
         *out << "goto " << branch->get_label()->to_str();
         break;

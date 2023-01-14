@@ -781,6 +781,7 @@ namespace haard {
         IR_CALL,
         IR_RETURN,
         IR_BZ,
+        IR_BNZ,
         IR_GOTO,
     } IRKind;
 }

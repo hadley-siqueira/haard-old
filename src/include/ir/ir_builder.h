@@ -62,6 +62,7 @@ namespace haard {
 
             void build_assignment(BinOp* bin, bool lvalue=false);
 
+            void build_logical_or(BinOp* bin);
             void build_logical_and(BinOp* bin);
 
             void build_equal(BinOp* bin);

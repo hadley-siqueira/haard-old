@@ -316,6 +316,17 @@ void IrVM::execute(IR* ir) {
 
         break;
 
+    case IR_BNZ:
+        value = values[branch->get_src1()->to_str()];
+
+        if (value != 0) {
+            ip = values[branch->get_label()->to_str()];
+        } else {
+            ++ip;
+        }
+
+        break;
+
     default:
         ip++;
         break;

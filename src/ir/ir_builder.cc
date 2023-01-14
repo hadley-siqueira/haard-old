@@ -316,6 +316,11 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_assignment(bin, lvalue);
         break;
 
+    case EXPR_LOGICAL_OR:
+    case EXPR_LOGICAL_OR_OPER:
+        build_logical_or(bin);
+        break;
+
     case EXPR_LOGICAL_AND:
     case EXPR_LOGICAL_AND_OPER:
         build_logical_and(bin);
@@ -577,6 +582,35 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     // on complex types, should call memcpy instead of a simple store
     store = ctx->new_store(size, left, right);
     last_value = left;
+}
+
+void IRBuilder::build_logical_or(BinOp* bin) {
+    IRLabel* tb = ctx->new_label();
+    IRLabel* af = ctx->new_label();
+    IRValue* true_label = ctx->new_label_value(tb->get_label());
+    IRValue* after_label = ctx->new_label_value(af->get_label());
+    IRUnary* li;
+    IRValue* alloca_addr;
+    int size = 1;
+
+    alloca_addr = ctx->new_tmp_alloca(size)->get_dst();
+
+    build_expression(bin->get_left());
+    ctx->new_branch(IR_BNZ, last_value, true_label);
+
+    build_expression(bin->get_right());
+    ctx->new_branch(IR_BNZ, last_value, true_label);
+
+    li = ctx->new_load_immediate(IR_VALUE_LITERAL_BOOL, "false");
+    ctx->new_store(size, alloca_addr, li->get_dst());
+    ctx->new_branch(IR_GOTO, after_label);
+
+    ctx->add_instruction(tb);
+    li = ctx->new_load_immediate(IR_VALUE_LITERAL_BOOL, "true");
+    ctx->new_store(size, alloca_addr, li->get_dst());
+
+    ctx->add_instruction(af);
+    last_value = ctx->new_load(size, alloca_addr)->get_dst();
 }
 
 void IRBuilder::build_logical_and(BinOp* bin) {
