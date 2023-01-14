@@ -23,6 +23,7 @@ namespace haard {
             IRBin* new_bin(int kind, IRValue* dst, IRValue* src1, IRValue* src2);
             IRUnary* new_unary(int kind,IRValue* dst, IRValue* src);
             IRAlloca* new_alloca(std::string name, int size=8, int align=8);
+            IRAlloca* new_tmp_alloca(int size=8, int align=8);
             IRMemory* new_load(int size, IRValue* src);
             IRMemory* new_store(int size, IRValue* dst, IRValue* src);
             IRBin* new_binary(int kind, IRValue* src1, IRValue* src2);
@@ -47,6 +48,7 @@ namespace haard {
         private:
             int tmp_counter;
             int label_counter;
+            int alloca_tmp_counter;
             std::map<std::string, IRValue*> values;
             std::map<std::string, IRValue*> alloca_map;
             std::vector<IR*> instructions;

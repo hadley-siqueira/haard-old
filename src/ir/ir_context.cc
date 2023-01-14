@@ -8,6 +8,7 @@ using namespace haard;
 IRContext::IRContext() {
     tmp_counter = 0;
     label_counter = 0;
+    alloca_tmp_counter = 0;
 }
 
 IRContext::~IRContext() {
@@ -49,6 +50,15 @@ IRAlloca* IRContext::new_alloca(std::string name, int size, int align) {
 
     allocas.push_back(alloca);
     return alloca;
+}
+
+IRAlloca* IRContext::new_tmp_alloca(int size, int align) {
+    std::stringstream ss;
+
+    ss << "%alloca" << alloca_tmp_counter;
+    ++alloca_tmp_counter;
+
+    return new_alloca(ss.str(), size, align);
 }
 
 IRMemory* IRContext::new_load(int size, IRValue *src) {

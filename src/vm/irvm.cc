@@ -6,6 +6,7 @@
 #include "ir/ir_bin.h"
 #include "ir/ir_call.h"
 #include "ir/ir_memory.h"
+#include "printer/ir_printer.h"
 
 using namespace haard;
 
@@ -84,6 +85,12 @@ void IrVM::execute(IR* ir) {
     IRMemory* mem = (IRMemory*) ir;
     IRBranch* branch = (IRBranch*) ir;
 
+    /*IRPrinter p;
+    p.print_instruction(ir);
+    std::cout << "executing: " << p.get_output() << '\n';
+    dump_values();
+    dump_memory(12);*/
+
     switch (ir->get_kind()) {
     case IR_EQ:
         src1_value = values[bin->get_src1()->to_str()];
@@ -109,7 +116,13 @@ void IrVM::execute(IR* ir) {
     case IR_GT:
         src1_value = values[bin->get_src1()->to_str()];
         src2_value = values[bin->get_src2()->to_str()];
-        values[bin->get_dst()->to_str()] = (int64_t) src1_value > (int64_t) src2_value;
+
+        if ((int64_t) src1_value > (int64_t) src2_value) {
+            values[bin->get_dst()->to_str()] = 1;
+        } else {
+            values[bin->get_dst()->to_str()] = 0;
+        }
+        //values[bin->get_dst()->to_str()] = (int64_t) src1_value > (int64_t) src2_value;
         ip++;
         break;
 
@@ -275,7 +288,6 @@ void IrVM::execute(IR* ir) {
             args.push_back(values[call->get_argument(i)->to_str()]);
         }
 
-        //execute_function(modules->get_function(call->get_name().c_str()));
         execute_function(get_function(call->get_name()));
 
         if (call->get_dst()) {
@@ -286,7 +298,6 @@ void IrVM::execute(IR* ir) {
         break;
 
     case IR_GOTO:
-        //ip = values[un->get_src()->to_str()];
         ip = values[branch->get_label()->to_str()];
         break;
 
@@ -295,11 +306,9 @@ void IrVM::execute(IR* ir) {
         break;
 
     case IR_BZ:
-        //value = values[bin->get_src1()->to_str()];
         value = values[branch->get_src1()->to_str()];
 
         if (value == 0) {
-            //ip = values[bin->get_src2()->to_str()];
             ip = values[branch->get_label()->to_str()];
         } else {
             ++ip;

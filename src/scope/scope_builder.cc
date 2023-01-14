@@ -313,6 +313,11 @@ void ScopeBuilder::build_expression(Expression* expression) {
         build_binop(bin);
         break;
 
+    case EXPR_LOGICAL_AND:
+    case EXPR_LOGICAL_AND_OPER:
+        build_logical_and(bin);
+        break;
+
     case EXPR_GT:
         build_greater_than(bin);
         break;

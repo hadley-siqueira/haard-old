@@ -1,0 +1,10 @@
+import std.io
+
+def main : void
+    a = read_int('Enter a: ')
+    b = read_int('Enter b: ')
+
+    if a < b and a == 7:
+        println("true")
+    else:
+        println("false")
