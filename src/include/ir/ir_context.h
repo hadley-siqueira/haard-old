@@ -10,6 +10,7 @@
 #include "ir/ir_label.h"
 #include "ir/ir_alloca.h"
 #include "ir/ir_memory.h"
+#include "ir/ir_branch.h"
 #include "ir/ir.h"
 
 namespace haard {
@@ -26,6 +27,8 @@ namespace haard {
             IRMemory* new_store(int size, IRValue* dst, IRValue* src);
             IRBin* new_binary(int kind, IRValue* src1, IRValue* src2);
             IRUnary* new_load_immediate(int kind, std::string value);
+            IRBranch* new_branch(int kind, IRValue* cond, IRValue* label);
+            IRBranch* new_branch(int kind, IRValue* label);
 
             IRValue* get_literal(int kind, std::string lexeme);
             IRValue* new_temporary();

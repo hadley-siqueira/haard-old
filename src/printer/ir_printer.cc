@@ -68,6 +68,7 @@ void IRPrinter::print_instruction(IR* ir) {
     IRLabel* label = (IRLabel*) ir;
     IRAlloca* alloca = (IRAlloca*) ir;
     IRMemory* mem = (IRMemory*) ir;
+    IRBranch* branch = (IRBranch*) ir;
 
     switch (ir->get_kind()) {
     case IR_EQ:
@@ -215,11 +216,11 @@ void IRPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_BZ:
-        *out << "bz " << bin->get_src1()->to_str() << ", " << bin->get_src2()->to_str();
+        *out << "bz " << branch->get_src1()->to_str() << ", " << branch->get_label()->to_str();
         break;
 
     case IR_GOTO:
-        *out << "goto " << un->get_src()->to_str();
+        *out << "goto " << branch->get_label()->to_str();
         break;
 
     case IR_LABEL:

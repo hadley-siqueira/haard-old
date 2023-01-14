@@ -180,10 +180,12 @@ void IRBuilder::build_while_statement(WhileStatement* statement) {
     ctx->add_instruction(begin);
     build_expression(statement->get_condition());
     cond = last_value;
-    ctx->new_bin(IR_BZ, nullptr, cond, after_label);
+    //ctx->new_bin(IR_BZ, nullptr, cond, after_label);
+    ctx->new_branch(IR_BZ, cond, after_label);
 
     build_statement(statement->get_statements());
-    ctx->new_unary(IR_GOTO, nullptr, begin_label);
+    //ctx->new_unary(IR_GOTO, nullptr, begin_label);
+    ctx->new_branch(IR_GOTO, begin_label);
     ctx->add_instruction(after);
 }
 
@@ -201,12 +203,14 @@ void IRBuilder::build_for_statement(ForStatement* statement) {
     build_expression(statement->get_condition());
 
     cond = last_value;
-    ctx->new_bin(IR_BZ, nullptr, cond, after_label);
+    //ctx->new_bin(IR_BZ, nullptr, cond, after_label);
+    ctx->new_branch(IR_BZ, cond, after_label);
 
     build_statement(statement->get_statements());
     build_for_inc(statement);
 
-    ctx->new_unary(IR_GOTO, nullptr, begin_label);
+    //ctx->new_unary(IR_GOTO, nullptr, begin_label);
+    ctx->new_branch(IR_GOTO, begin_label);
     ctx->add_instruction(after);
 }
 
@@ -255,10 +259,12 @@ void IRBuilder::build_if(BranchStatement* statement) {
 
     build_expression(statement->get_condition());
     cond = last_value;
-    ctx->new_bin(IR_BZ, nullptr, cond, fb_label);
+    //ctx->new_bin(IR_BZ, nullptr, cond, fb_label);
+    ctx->new_branch(IR_BZ, cond, fb_label);
 
     build_statement(statement->get_true_statements());
-    ctx->new_unary(IR_GOTO, nullptr, after_label);
+    //ctx->new_unary(IR_GOTO, nullptr, after_label);
+    ctx->new_branch(IR_GOTO, after_label);
     ctx->add_instruction(fb);
     build_statement(statement->get_false_statements());
     ctx->add_instruction(after);
@@ -566,6 +572,11 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     // on complex types, should call memcpy instead of a simple store
     store = ctx->new_store(size, left, right);
     last_value = left;
+}
+
+void IRBuilder::build_logical_and(BinOp* bin) {
+    build_expression(bin->get_left());
+    //ctx->new_branch(IR_BZ, cond,)
 }
 
 void IRBuilder::build_equal(BinOp* bin) {

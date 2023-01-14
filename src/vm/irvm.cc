@@ -82,6 +82,7 @@ void IrVM::execute(IR* ir) {
     IRCall* call = (IRCall*) ir;
     IRAlloca* alloca = (IRAlloca*) ir;
     IRMemory* mem = (IRMemory*) ir;
+    IRBranch* branch = (IRBranch*) ir;
 
     switch (ir->get_kind()) {
     case IR_EQ:
@@ -285,7 +286,8 @@ void IrVM::execute(IR* ir) {
         break;
 
     case IR_GOTO:
-        ip = values[un->get_src()->to_str()];
+        //ip = values[un->get_src()->to_str()];
+        ip = values[branch->get_label()->to_str()];
         break;
 
     case IR_LABEL:
@@ -293,10 +295,12 @@ void IrVM::execute(IR* ir) {
         break;
 
     case IR_BZ:
-        value = values[bin->get_src1()->to_str()];
+        //value = values[bin->get_src1()->to_str()];
+        value = values[branch->get_src1()->to_str()];
 
         if (value == 0) {
-            ip = values[bin->get_src2()->to_str()];
+            //ip = values[bin->get_src2()->to_str()];
+            ip = values[branch->get_label()->to_str()];
         } else {
             ++ip;
         }

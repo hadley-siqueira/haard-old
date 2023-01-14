@@ -471,6 +471,14 @@ void ScopeBuilder::build_parenthesis(UnOp* op) {
     op->set_type(op->get_expression()->get_type());
 }
 
+void ScopeBuilder::build_logical_or(BinOp* op) {
+    build_relational(op);
+}
+
+void ScopeBuilder::build_logical_and(BinOp* op) {
+    build_relational(op);
+}
+
 void ScopeBuilder::build_call(BinOp* bin) {
     Type* tl;
     Type* tr;

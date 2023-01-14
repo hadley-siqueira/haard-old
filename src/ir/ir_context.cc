@@ -109,6 +109,19 @@ IRUnary* IRContext::new_load_immediate(int kind, std::string value) {
     return li;
 }
 
+IRBranch* IRContext::new_branch(int kind, IRValue* cond, IRValue* label) {
+    IRBranch* branch;
+
+    branch = new IRBranch(kind, cond, label);
+    add_instruction(branch);
+
+    return branch;
+}
+
+IRBranch* IRContext::new_branch(int kind, IRValue* label) {
+    return new_branch(kind, nullptr, label);
+}
+
 IRValue* IRContext::new_temporary() {
     IRValue* v = new IRValue(IR_VALUE_TEMP, tmp_counter++);
     
