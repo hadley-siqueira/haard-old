@@ -757,7 +757,11 @@ void IRBuilder::build_srl(BinOp* bin) {
 }
 
 void IRBuilder::build_sra(BinOp* bin) {
-    build_binop(bin, IR_SRA);
+    if (bin->get_left()->get_type()->is_signed()) {
+        build_binop(bin, IR_SRA);
+    } else {
+        build_binop(bin, IR_SRL);
+    }
 }
 
 void IRBuilder::build_address_of(UnOp* op) {
