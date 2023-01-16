@@ -38,10 +38,20 @@ class Point7(Point6):
 
 class Point8(Point7):
     p3 : Point3[5]
+    ptr : int*
 
     @virtual
     def calculate : int
         return x
+
+class Node:
+    data  : int
+    left  : Node*
+    right : Node*
+
+class Tree:
+    root : Node*
+    height : long
 
 def main : void
     var p : Point
@@ -54,4 +64,6 @@ def main : void
     var p6 : Point6
     var p7 : Point7
     var p8 : Point8
+    var n : Node
+    var t : Tree
 
