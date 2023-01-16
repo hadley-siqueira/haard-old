@@ -102,3 +102,7 @@ int ArrayListType::get_size_in_bytes() {
 
     return size;
 }
+
+int ArrayListType::get_alignment() {
+    return subtype->get_alignment();
+}

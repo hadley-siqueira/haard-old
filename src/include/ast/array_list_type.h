@@ -24,6 +24,7 @@ namespace haard {
             Type* promote(Type* other);
             int rank();
             int get_size_in_bytes();
+            int get_alignment();
             
         private:
             Expression* expression;

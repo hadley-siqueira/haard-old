@@ -5,9 +5,23 @@ class Point:
     y : int
     z : int
     kk : char
+    a  : long
+    aa : char
 
     def init : void
         pass
 
+class Point2(Point):
+    foo : int
+    bar : char
+
+class Point3:
+    p0 : Point
+    p1 : Point2
+
 def main : void
     var p : Point
+    var p2 : Point2
+    var p3 : Point3
+    var pa : Point[5]
+    var arr : Point3[10]
