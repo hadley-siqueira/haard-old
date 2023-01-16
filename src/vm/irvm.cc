@@ -264,6 +264,9 @@ void IrVM::execute(IR* ir) {
         break;
 
     case IR_ALLOCA:
+        while (sp % alloca->get_align() != 0) {
+            --sp;
+        }
         sp = sp - alloca->get_size();
         values[alloca->get_dst()->to_str()] = sp;
         ip++;

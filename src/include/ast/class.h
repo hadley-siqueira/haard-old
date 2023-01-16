@@ -39,6 +39,7 @@ namespace haard {
 
             void add_method(Function* method);
             void add_variable(Variable* var);
+            void calculate_variables_offset();
 
             int methods_count();
             int variables_count();

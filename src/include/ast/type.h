@@ -31,6 +31,7 @@ namespace haard {
             virtual Type* promote(Type* other);
             virtual int rank();
             virtual int get_size_in_bytes();
+            virtual int get_alignment();
             virtual Scope* get_scope();
             virtual bool is_signed();
 

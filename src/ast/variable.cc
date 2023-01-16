@@ -121,3 +121,13 @@ Variable* Variable::clone() {
 
     return other;
 }
+
+int Variable::get_offset() const
+{
+    return offset;
+}
+
+void Variable::set_offset(int value)
+{
+    offset = value;
+}

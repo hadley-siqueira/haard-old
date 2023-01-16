@@ -36,10 +36,14 @@ namespace haard {
 
             Variable* clone();
 
-        private:
+            int get_offset() const;
+            void set_offset(int value);
+
+    private:
             int uid;
             int line;
             int column;
+            int offset;
             bool constant;
             int kind;
             const char* name;

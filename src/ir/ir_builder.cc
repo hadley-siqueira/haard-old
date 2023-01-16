@@ -77,7 +77,8 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
         var = function->get_parameter(i);
         name = var->get_unique_name();
         size = var->get_type()->get_size_in_bytes();
-        alloca = ctx->new_alloca(name, size);
+        align = var->get_type()->get_alignment();
+        alloca = ctx->new_alloca(name, size, align);
         ctx->new_store(size, alloca->get_dst(), p);
     }
 }
@@ -246,7 +247,8 @@ void IRBuilder::build_variable_declaration(VarDeclaration* statement) {
     var = statement->get_variable();
     name = var->get_unique_name();
     size = var->get_type()->get_size_in_bytes();
-    alloca = ctx->new_alloca(name, size);
+    align = var->get_type()->get_alignment();
+    alloca = ctx->new_alloca(name, size, align);
 }
 
 void IRBuilder::build_if(BranchStatement* statement) {
@@ -452,9 +454,11 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
     IRAlloca* alloca;
     Type* type;
     int size;
+    int align;
 
     type = id->get_type();
     size = type->get_size_in_bytes();
+    align = type->get_alignment();
 
     if (type->is_primitive() || type->get_kind() == TYPE_POINTER || type->get_kind() == TYPE_ARRAY) {
         std::string name = id->get_unique_name();
@@ -462,7 +466,7 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
         if (ctx->has_alloca(name)) {
             last_value = ctx->get_alloca_value(name);
         } else {
-            alloca = ctx->new_alloca(name, size);
+            alloca = ctx->new_alloca(name, size, align);
             last_value = alloca->get_dst();
         }
     }

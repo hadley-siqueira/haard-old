@@ -131,6 +131,26 @@ void Class::add_variable(Variable* var) {
     var->set_kind(VAR_CLASS);
 }
 
+void Class::calculate_variables_offset() {
+    int size = 0;
+    int offset = 0;
+    int align = 0;
+    Variable* var;
+
+    for (int i = 0; i < variables_count(); ++i) {
+        var = get_variable(i);
+        size = var->get_type()->get_size_in_bytes();
+        align = var->get_type()->get_alignment();
+
+        while (offset % align != 0) {
+            ++offset;
+        }
+
+        var->set_offset(offset);
+        offset += size;
+    }
+}
+
 int Class::methods_count() {
     return methods.size();
 }

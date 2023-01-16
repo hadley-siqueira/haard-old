@@ -398,7 +398,11 @@ int Type::get_size_in_bytes() {
     return 0;
 }
 
-Scope *Type::get_scope() {
+int Type::get_alignment() {
+    return get_size_in_bytes();
+}
+
+Scope* Type::get_scope() {
     return nullptr;
 }
 
