@@ -273,3 +273,12 @@ int Class::get_alignment() const {
 int Class::get_size_in_bytes() {
     return size_in_bytes;
 }
+
+std::string Class::get_qualified_name() {
+    int i;
+    std::stringstream ss;
+
+    ss << source->get_relative_path() << "." << name;
+
+    return ss.str();
+}

@@ -1,0 +1,16 @@
+import std.io
+
+class Point:
+    x : int
+    y : int
+
+    def init : void
+        x = 7
+        y = 0
+
+        println(x)
+
+def main : void
+    var p : Point
+
+    p.init()

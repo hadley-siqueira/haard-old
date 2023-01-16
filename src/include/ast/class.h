@@ -29,6 +29,7 @@ namespace haard {
             Scope* get_scope();
             NamedType* get_self_type();
             int get_size_in_bytes();
+            std::string get_qualified_name();
 
 
             void set_from_token(Token& token);

@@ -27,7 +27,10 @@ namespace haard {
             IRMemory* new_load(int size, IRValue* src);
             IRMemory* new_store(int size, IRValue* dst, IRValue* src);
             IRBin* new_binary(int kind, IRValue* src1, IRValue* src2);
+
             IRUnary* new_load_immediate(int kind, std::string value);
+            IRUnary* new_load_immediate(int kind, int value);
+
             IRBranch* new_branch(int kind, IRValue* cond, IRValue* label);
             IRBranch* new_branch(int kind, IRValue* label);
 

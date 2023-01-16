@@ -57,8 +57,9 @@ namespace haard {
             void build_cast(CastExpression* cast);
 
             void build_call(BinOp* bin);
-            void build_call_arguments(IRCall* call, ExpressionList* args);
+            void build_call_arguments(IRCall* call, ExpressionList* args, IRValue *this_ptr=nullptr);
             void build_index_access(BinOp* bin, bool lvalue=false);
+            void build_member_access(BinOp* bin, bool lvalue=false);
 
             void build_assignment(BinOp* bin, bool lvalue=false);
 

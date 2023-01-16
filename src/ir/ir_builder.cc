@@ -36,12 +36,18 @@ void IRBuilder::build_source(Source* source) {
         build_function(source->get_function(i));
     }
 
+    for (int i = 0; i < source->classes_count(); ++i) {
+        build_class(source->get_class(i));
+    }
+
     current_module = nullptr;
     modules->add_module(module);
 }
 
 void IRBuilder::build_class(Class* klass) {
-
+    for (int i = 0; i < klass->methods_count(); ++i) {
+        build_function(klass->get_method(i));
+    }
 }
 
 void IRBuilder::build_function(Function* function) {
@@ -67,6 +73,20 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
     int align;
     std::string name;
     Variable* var;
+
+    // add this hidden parameter
+    if (function->is_method()) {
+        IRValue* p = ctx->new_temporary();
+        IRAlloca* alloca;
+
+        ir_func->add_parameter(p);
+
+        name = "this";
+        size = ARCH_WORD_SIZE;
+        align = ARCH_WORD_SIZE;
+        alloca = ctx->new_alloca(name, size, align);
+        ctx->new_store(size, alloca->get_dst(), p);
+    }
 
     for (int i = 0; i < function->parameters_count(); ++i) {
         IRValue* p = ctx->new_temporary();
@@ -314,6 +334,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_index_access(bin, lvalue);
         break;
 
+    case EXPR_DOT:
+        build_member_access(bin, lvalue);
+        break;
+
     case EXPR_ASSIGN:
         build_assignment(bin, lvalue);
         break;
@@ -455,20 +479,31 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
     Type* type;
     int size;
     int align;
+    int kind;
 
-    type = id->get_type();
-    size = type->get_size_in_bytes();
-    align = type->get_alignment();
+    kind = id->get_symbol()->get_kind();
 
-    if (type->is_primitive() || type->get_kind() == TYPE_POINTER || type->get_kind() == TYPE_ARRAY) {
-        std::string name = id->get_unique_name();
+    if (kind == SYM_VARIABLE || kind == SYM_PARAMETER) {
+        type = id->get_type();
+        size = type->get_size_in_bytes();
+        align = type->get_alignment();
 
-        if (ctx->has_alloca(name)) {
-            last_value = ctx->get_alloca_value(name);
-        } else {
-            alloca = ctx->new_alloca(name, size, align);
-            last_value = alloca->get_dst();
+        if (type->is_primitive() || type->get_kind() == TYPE_POINTER || type->get_kind() == TYPE_ARRAY || type->get_kind() == TYPE_NAMED) {
+            std::string name = id->get_unique_name();
+
+            if (ctx->has_alloca(name)) {
+                last_value = ctx->get_alloca_value(name);
+            } else {
+                alloca = ctx->new_alloca(name, size, align);
+                last_value = alloca->get_dst();
+            }
         }
+    } else if (kind == SYM_CLASS_VARIABLE) {
+        IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
+        Variable* var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+        IRValue* offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
+        IRValue* add = ctx->new_binary(IR_ADD, this_ptr, offset)->get_dst();
+        last_value = add;
     }
 }
 
@@ -477,23 +512,42 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
     IRValue* tmp0;
     Type* type;
     int size;
+    int kind;
+
+    kind = id->get_symbol()->get_kind();
 
     type = id->get_type();
     size = type->get_size_in_bytes();
 
-    if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-        std::string name = id->get_unique_name();
+    if (kind == SYM_VARIABLE || kind == SYM_PARAMETER) {
+        if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
+            std::string name = id->get_unique_name();
 
-        if (ctx->has_alloca(name)) {
-            tmp0 = ctx->get_alloca_value(name);
-            load = ctx->new_load(size, tmp0);
-            last_value = load->get_dst();
+            if (ctx->has_alloca(name)) {
+                tmp0 = ctx->get_alloca_value(name);
+                load = ctx->new_load(size, tmp0);
+                last_value = load->get_dst();
+            }
+        } else if (type->get_kind() == TYPE_ARRAY) {
+            std::string name = id->get_unique_name();
+
+            if (ctx->has_alloca(name)) {
+                last_value = ctx->get_alloca_value(name);
+            }
         }
-    } else if (type->get_kind() == TYPE_ARRAY) {
-        std::string name = id->get_unique_name();
-
-        if (ctx->has_alloca(name)) {
-            last_value = ctx->get_alloca_value(name);
+    } else if (kind == SYM_CLASS_VARIABLE) {
+        if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
+            IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
+            Variable* var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+            IRValue* offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
+            IRValue* add = ctx->new_binary(IR_ADD, this_ptr, offset)->get_dst();
+            last_value = ctx->new_load(size, add)->get_dst();
+        } else if (type->get_kind() == TYPE_ARRAY) {
+            IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
+            Variable* var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+            IRValue* offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
+            IRValue* add = ctx->new_binary(IR_ADD, this_ptr, offset)->get_dst();
+            last_value = add;
         }
     }
 }
@@ -522,7 +576,14 @@ void IRBuilder::build_cast(CastExpression* cast) {
 
 void IRBuilder::build_call(BinOp* bin) {
     IRCall* call = new IRCall();
-    build_call_arguments(call, (ExpressionList*) bin->get_right());
+
+    /* refactor:
+     * always call build_expression for left side:
+     *      if is id and function or member, just grab the name
+     *      if it is a dot
+     *          if a member variable, returns its address and use as this
+     *          if a method, returns name and last value (?)
+     */
 
     if (bin->get_left()->get_kind() == EXPR_ID) {
         Identifier* id = (Identifier*) bin->get_left();
@@ -530,6 +591,23 @@ void IRBuilder::build_call(BinOp* bin) {
         std::string name = f->get_qualified_name();
 
         call->set_name(name);
+
+        build_call_arguments(call, (ExpressionList*) bin->get_right());
+        ctx->add_instruction(call);
+    } else if (bin->get_left()->get_kind() == EXPR_DOT) {
+        IRValue* this_ptr;
+
+        build_expression(bin->get_left(), true);
+        this_ptr = last_value;
+
+        BinOp* dot = (BinOp*) bin->get_left();
+        Identifier* id = (Identifier*) dot->get_right();
+        Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+        std::string name = f->get_qualified_name();
+
+        call->set_name(name);
+
+        build_call_arguments(call, (ExpressionList*) bin->get_right(), this_ptr);
         ctx->add_instruction(call);
     }
 
@@ -539,7 +617,11 @@ void IRBuilder::build_call(BinOp* bin) {
     }
 }
 
-void IRBuilder::build_call_arguments(IRCall* call, ExpressionList* args) {
+void IRBuilder::build_call_arguments(IRCall* call, ExpressionList* args, IRValue* this_ptr) {
+    if (this_ptr) {
+        call->add_argument(this_ptr);
+    }
+
     if (args == nullptr) {
         return;
     }
@@ -589,6 +671,28 @@ void IRBuilder::build_index_access(BinOp* bin, bool lvalue) {
             std::cout << __FILE__ << "\nERROR\n";
             exit(0);
         }
+    }
+}
+
+void IRBuilder::build_member_access(BinOp* bin, bool lvalue) {
+    Identifier* id;
+    Class* klass;
+    Variable* var;
+
+    build_expression(bin->get_left(), true);
+    id = (Identifier*) bin->get_right();
+
+    if (lvalue) {
+        if (id->get_symbol()->get_kind() == SYM_CLASS_VARIABLE) {
+            IRValue* base = last_value;
+            IRValue* offset;
+
+            var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+            offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
+            ctx->new_binary(IR_ADD, base, offset);
+        }
+    } else {
+
     }
 }
 

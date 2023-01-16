@@ -119,6 +119,13 @@ IRUnary* IRContext::new_load_immediate(int kind, std::string value) {
     return li;
 }
 
+IRUnary* IRContext::new_load_immediate(int kind, int value) {
+    std::stringstream s;
+
+    s << value;
+    return new_load_immediate(kind, s.str());
+}
+
 IRBranch* IRContext::new_branch(int kind, IRValue* cond, IRValue* label) {
     IRBranch* branch;
 

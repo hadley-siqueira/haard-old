@@ -126,8 +126,13 @@ std::string Function::get_qualified_name() {
     int i;
     std::stringstream ss;
 
-    ss << source->get_relative_path() << ".";
-    ss << name << "<";
+    if (is_method()) {
+        ss << klass->get_qualified_name() << "#" << name;
+    } else {
+        ss << source->get_relative_path() << "." << name;
+    }
+
+    ss << "<";
 
     if (parameters_count() > 0) {
         for (i = 0; i < parameters_count() - 1; ++i) {
