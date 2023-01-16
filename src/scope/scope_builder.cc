@@ -131,6 +131,7 @@ void ScopeBuilder::build_statement(Statement* statement) {
 
     default:
         std::cout << "unknown statement\n";
+        DBG;
         exit(0);
     }
 }
@@ -438,6 +439,7 @@ void ScopeBuilder::build_identifier(Identifier* id) {
 void ScopeBuilder::build_this(ThisExpression* expr) {
     if (current_class == nullptr) {
         std::cout << "Error: using this outside class";
+        DBG;
         exit(0);
     }
 
@@ -557,6 +559,7 @@ void ScopeBuilder::build_call(BinOp* bin) {
             } else {
                 // FIXME
                 std::cout << "Error: function not overloaded with signature\n";
+                DBG;
                 exit(0);
             }
 
@@ -594,6 +597,7 @@ void ScopeBuilder::build_call(BinOp* bin) {
             } else {
                 // FIXME
                 std::cout << "Error: constructor not overloaded with signature\n";
+                DBG;
                 exit(0);
             }
 
@@ -601,6 +605,7 @@ void ScopeBuilder::build_call(BinOp* bin) {
         } else {
             // FIXME
             std::cout << "Error: not a function to be called\n";
+            DBG;
             exit(0);
         }
     } else if (bin->get_left()->get_kind() == EXPR_DOT) {
@@ -640,6 +645,7 @@ void ScopeBuilder::build_call(BinOp* bin) {
             } else {
                 // FIXME
                 std::cout << "Error: method not overloaded with signature\n";
+                DBG;
                 exit(0);
             }
 
@@ -685,7 +691,8 @@ void ScopeBuilder::build_dot(BinOp* bin) {
         std::cout << "debbuging...\n";
         std::cout << tl->to_cpp() << std::endl;
         scope->debug();
-        std::cout << __FILE__ << ' ' << __LINE__ << ' ' << field->get_lexeme() << ' ' << field->get_line() << std::endl;
+        std::cout << field->get_lexeme() << ' ' << field->get_line() << std::endl;
+        DBG;
         exit(0);
     }
 }

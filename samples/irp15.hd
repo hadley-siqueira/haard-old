@@ -9,6 +9,13 @@ class Point:
         y = 0
 
         println(x)
+        print_fields()
+
+    def print_fields : void
+        print("x = ")
+        println(x)
+        print("y = ")
+        println(y)
 
 def main : void
     var p : Point

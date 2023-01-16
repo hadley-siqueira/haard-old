@@ -585,7 +585,7 @@ void IRBuilder::build_call(BinOp* bin) {
      *          if a method, returns name and last value (?)
      */
 
-    if (bin->get_left()->get_kind() == EXPR_ID) {
+    if (is_function_call(bin)) {
         Identifier* id = (Identifier*) bin->get_left();
         Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
         std::string name = f->get_qualified_name();
@@ -593,6 +593,16 @@ void IRBuilder::build_call(BinOp* bin) {
         call->set_name(name);
 
         build_call_arguments(call, (ExpressionList*) bin->get_right());
+        ctx->add_instruction(call);
+    } else if (is_method_call(bin)) {
+        Identifier* id = (Identifier*) bin->get_left();
+        Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+        std::string name = f->get_qualified_name();
+
+        call->set_name(name);
+        IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
+
+        build_call_arguments(call, (ExpressionList*) bin->get_right(), this_ptr);
         ctx->add_instruction(call);
     } else if (bin->get_left()->get_kind() == EXPR_DOT) {
         IRValue* this_ptr;
@@ -668,7 +678,7 @@ void IRBuilder::build_index_access(BinOp* bin, bool lvalue) {
             load = ctx->new_load(size_in_bytes, addr);
             last_value = load->get_dst();
         } else {
-            std::cout << __FILE__ << "\nERROR\n";
+            DBG;
             exit(0);
         }
     }
@@ -922,5 +932,27 @@ void IRBuilder::build_literal_integer(Literal* literal) {
 void IRBuilder::build_literal_string(Literal* literal) {
     build_literal(literal, IR_VALUE_LITERAL_STRING);
     modules->add_string_literal(literal->get_lexeme());
+}
+
+bool IRBuilder::is_function_call(BinOp* bin) {
+    Identifier* id;
+
+    if (bin->get_left()->get_kind() == EXPR_ID) {
+        id = (Identifier*) bin->get_left();
+        return id->get_symbol()->get_kind() == SYM_FUNCTION;
+    }
+
+    return false;
+}
+
+bool IRBuilder::is_method_call(BinOp* bin) {
+    Identifier* id;
+
+    if (bin->get_left()->get_kind() == EXPR_ID) {
+        id = (Identifier*) bin->get_left();
+        return id->get_symbol()->get_kind() == SYM_METHOD;
+    }
+
+    return false;
 }
 

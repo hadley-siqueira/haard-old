@@ -98,6 +98,10 @@ namespace haard {
             void build_literal_integer(Literal* literal);
             void build_literal_string(Literal* literal);
 
+        private:
+            bool is_function_call(BinOp* bin);
+            bool is_method_call(BinOp* bin);
+
         public:
             void set_logger(Logger* logger);
 
