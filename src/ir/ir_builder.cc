@@ -586,24 +586,9 @@ void IRBuilder::build_call(BinOp* bin) {
      */
 
     if (is_function_call(bin)) {
-        Identifier* id = (Identifier*) bin->get_left();
-        Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
-        std::string name = f->get_qualified_name();
-
-        call->set_name(name);
-
-        build_call_arguments(call, (ExpressionList*) bin->get_right());
-        ctx->add_instruction(call);
+        build_function_call(bin, call);
     } else if (is_method_call(bin)) {
-        Identifier* id = (Identifier*) bin->get_left();
-        Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
-        std::string name = f->get_qualified_name();
-
-        call->set_name(name);
-        IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
-
-        build_call_arguments(call, (ExpressionList*) bin->get_right(), this_ptr);
-        ctx->add_instruction(call);
+        build_method_call(bin, call);
     } else if (bin->get_left()->get_kind() == EXPR_DOT) {
         IRValue* this_ptr;
 
@@ -642,6 +627,29 @@ void IRBuilder::build_call_arguments(IRCall* call, ExpressionList* args, IRValue
             call->add_argument(last_value);
         }
     }
+}
+
+void IRBuilder::build_function_call(BinOp* bin, IRCall* call) {
+    Identifier* id = (Identifier*) bin->get_left();
+    Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+    std::string name = f->get_qualified_name();
+
+    call->set_name(name);
+
+    build_call_arguments(call, (ExpressionList*) bin->get_right());
+    ctx->add_instruction(call);
+}
+
+void IRBuilder::build_method_call(BinOp* bin, IRCall* call) {
+    Identifier* id = (Identifier*) bin->get_left();
+    Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+    std::string name = f->get_qualified_name();
+
+    call->set_name(name);
+    IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
+
+    build_call_arguments(call, (ExpressionList*) bin->get_right(), this_ptr);
+    ctx->add_instruction(call);
 }
 
 void IRBuilder::build_index_access(BinOp* bin, bool lvalue) {

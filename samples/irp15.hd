@@ -17,7 +17,12 @@ class Point:
         print("y = ")
         println(y)
 
+class Line:
+    p0 : Point
+    p1 : Point
+
 def main : void
     var p : Point
+    var l : Line
 
     p.init()

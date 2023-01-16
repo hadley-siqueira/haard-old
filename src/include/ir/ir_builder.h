@@ -58,6 +58,9 @@ namespace haard {
 
             void build_call(BinOp* bin);
             void build_call_arguments(IRCall* call, ExpressionList* args, IRValue *this_ptr=nullptr);
+            void build_function_call(BinOp* bin, IRCall* call);
+            void build_method_call(BinOp* bin, IRCall* call);
+
             void build_index_access(BinOp* bin, bool lvalue=false);
             void build_member_access(BinOp* bin, bool lvalue=false);
 
