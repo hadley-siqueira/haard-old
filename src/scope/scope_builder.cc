@@ -53,6 +53,7 @@ void ScopeBuilder::build_class(Class* klass) {
     define_class_variables(klass);
     define_class_methods(klass);*/
     build_class_methods(klass);
+    klass->calculate_variables_offset();
 
     leave_scope();
     current_class = nullptr;

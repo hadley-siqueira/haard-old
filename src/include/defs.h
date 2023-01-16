@@ -23,6 +23,8 @@
 #define BRIGHT_WHITE   "\033[97m"
 #define DBG do { std::cout << __FILE__ << ' ' << __LINE__ << std::endl; } while (0);
 
+#define ARCH_WORD_SIZE 8
+
 namespace haard {
     typedef enum LogKind {
         LOG_WARNING,

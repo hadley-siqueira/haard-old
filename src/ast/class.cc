@@ -135,12 +135,22 @@ void Class::calculate_variables_offset() {
     int size = 0;
     int offset = 0;
     int align = 0;
+    int max_align = 0;
     Variable* var;
+
+    if (has_super_class()) {
+        offset = super_class->get_size_in_bytes();
+        max_align = super_class->get_alignment();
+    }
 
     for (int i = 0; i < variables_count(); ++i) {
         var = get_variable(i);
         size = var->get_type()->get_size_in_bytes();
         align = var->get_type()->get_alignment();
+
+        if (align > max_align) {
+            max_align = align;
+        }
 
         while (offset % align != 0) {
             ++offset;
@@ -149,6 +159,13 @@ void Class::calculate_variables_offset() {
         var->set_offset(offset);
         offset += size;
     }
+
+    while (offset % max_align != 0) {
+        ++offset;
+    }
+
+    size_in_bytes = offset;
+    alignment = max_align;
 }
 
 int Class::methods_count() {
@@ -203,12 +220,14 @@ void Class::set_annotations(const std::vector<std::string>& value) {
     annotations = value;
 }
 
+void Class::set_alignment(int value) {
+    alignment = value;
+}
+
+int Class::get_alignment() const {
+    return alignment;
+}
+
 int Class::get_size_in_bytes() {
-    int sz = 0;
-
-    for (int i = 0; i < variables.size(); ++i) {
-        sz += variables[i]->get_size_in_bytes();
-    }
-
-    return sz;
+    return size_in_bytes;
 }

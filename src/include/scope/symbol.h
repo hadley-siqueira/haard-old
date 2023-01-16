@@ -20,6 +20,7 @@ namespace haard {
             void* get_descriptor(int idx=0);
             Type* get_type(int idx=0);
             int get_size_in_bytes(int idx=0);
+            int get_alignment(int idx=0);
 
             void set_kind(int kind);
             void set_name(const char* name);

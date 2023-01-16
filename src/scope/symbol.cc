@@ -224,3 +224,25 @@ int Symbol::get_size_in_bytes(int idx) {
 
     return 0;
 }
+
+int Symbol::get_alignment(int idx) {
+    Class* klass = (Class*) descriptors[idx];
+    Function* func = (Function*) descriptors[idx];
+    Variable* var = (Variable*) descriptors[idx];
+
+    switch (kind) {
+    case SYM_CLASS:
+        return klass->get_alignment();
+
+    case SYM_FUNCTION:
+    case SYM_METHOD:
+        return 0;
+
+    case SYM_PARAMETER:
+    case SYM_VARIABLE:
+    case SYM_CLASS_VARIABLE:
+        return var->get_type()->get_alignment();
+    }
+
+    return 0;
+}

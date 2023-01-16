@@ -100,6 +100,10 @@ int NamedType::get_size_in_bytes() {
     return symbol->get_size_in_bytes();
 }
 
+int NamedType::get_alignment() {
+    return symbol->get_alignment();
+}
+
 Scope* NamedType::get_scope() {
     return symbol->get_descriptor_scope();
 }

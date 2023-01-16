@@ -21,6 +21,7 @@ namespace haard {
             void set_name(const char* id);
             void set_symbol(Symbol* symbol);
             int get_size_in_bytes();
+            int get_alignment();
             Scope* get_scope();
 
             Symbol* has_field(const char* name);

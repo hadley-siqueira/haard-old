@@ -1,0 +1,13 @@
+class Point:
+    w : char
+    k : char
+    x : int
+    y : int
+    z : int
+    kk : char
+
+    def init : void
+        pass
+
+def main : void
+    var p : Point

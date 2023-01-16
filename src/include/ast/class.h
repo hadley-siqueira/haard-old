@@ -63,10 +63,15 @@ namespace haard {
             std::vector<std::string> get_annotations() const;
             void set_annotations(const std::vector<std::string>& value);
 
+            int get_alignment() const;
+            void set_alignment(int value);
+
     private:
             int line;
             int column;
             int uid;
+            int size_in_bytes;
+            int alignment;
             const char* name;
             Type* super_class;
             TemplateHeader* template_header;

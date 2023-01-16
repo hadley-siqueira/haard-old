@@ -57,5 +57,5 @@ std::string IndirectionType::to_cpp() {
 }
 
 int IndirectionType::get_size_in_bytes() {
-    return 8;
+    return ARCH_WORD_SIZE;
 }
