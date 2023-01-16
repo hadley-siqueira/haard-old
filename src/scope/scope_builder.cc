@@ -1005,6 +1005,10 @@ void ScopeBuilder::define_class_method(Function* method) {
             }
         }
     }
+
+    if (method->is_virtual()) {
+        current_class->set_virtual(true);
+    }
 }
 
 void ScopeBuilder::define_method_signature(Function* method) {

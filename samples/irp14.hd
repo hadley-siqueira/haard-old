@@ -19,9 +19,31 @@ class Point3:
     p0 : Point
     p1 : Point2
 
+class Point4:
+    x : int
+    k : char
+
+    @virtual
+    def calculate : int
+        return x
+
+class Point5(Point4):
+    pass
+
+class Point6(Point4):
+    z : int
+
+class Point7(Point6):
+    ww : int
+
 def main : void
     var p : Point
     var p2 : Point2
     var p3 : Point3
     var pa : Point[5]
     var arr : Point3[10]
+    var p4 : Point4
+    var p5 : Point5
+    var p6 : Point6
+    var p7 : Point7
+

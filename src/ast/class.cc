@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cstring>
 #include <sstream>
 #include "ast/class.h"
@@ -12,6 +13,7 @@ Class::Class() {
     destructor = nullptr;
     scope = new Scope();
     name = nullptr;
+    is_virtual_flag = false;
 }
 
 Class::~Class() {
@@ -99,6 +101,16 @@ bool Class::has_super_class() {
     return super_class != nullptr;
 }
 
+Class* Class::get_super_class_descriptor() {
+    Class* super = nullptr;
+
+    if (has_super_class()) {
+        super = (Class*) ((NamedType*) super_class)->get_symbol()->get_descriptor();
+    }
+
+    return super;
+}
+
 int Class::get_uid() {
     return uid;
 }
@@ -138,9 +150,17 @@ void Class::calculate_variables_offset() {
     int max_align = 0;
     Variable* var;
 
+    // if has a super class, the super class already calculated vtable pointer etc
+    // if doesn't have super class, need to check if need vtable ptr
     if (has_super_class()) {
-        offset = super_class->get_size_in_bytes();
+        Class* parent = get_super_class_descriptor();
+        offset = super_class->get_size_in_bytes() - parent->get_remaining_pad();
         max_align = super_class->get_alignment();
+    } else {
+        if (is_virtual()) {
+            offset = ARCH_WORD_SIZE;
+            max_align = ARCH_WORD_SIZE;
+        }
     }
 
     for (int i = 0; i < variables_count(); ++i) {
@@ -160,8 +180,14 @@ void Class::calculate_variables_offset() {
         offset += size;
     }
 
+    // the remaining pad is used to calculate children class offsets
+    // Maybe a child class can use the space left by the parent to
+    // store one of its variables
+    remaining_pad = 0;
+
     while (offset % max_align != 0) {
         ++offset;
+        ++remaining_pad;
     }
 
     size_in_bytes = offset;
@@ -222,6 +248,22 @@ void Class::set_annotations(const std::vector<std::string>& value) {
 
 void Class::set_alignment(int value) {
     alignment = value;
+}
+
+void Class::set_virtual(bool flag) {
+    is_virtual_flag = flag;
+}
+
+bool Class::is_virtual() {
+    return is_virtual_flag;
+}
+
+int Class::get_remaining_pad() const {
+    return remaining_pad;
+}
+
+void Class::set_remaining_pad(int value) {
+    remaining_pad = value;
 }
 
 int Class::get_alignment() const {

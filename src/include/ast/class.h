@@ -30,6 +30,7 @@ namespace haard {
             NamedType* get_self_type();
             int get_size_in_bytes();
 
+
             void set_from_token(Token& token);
             void set_name(const char* name);
             void set_line(int line);
@@ -53,6 +54,7 @@ namespace haard {
             Type* get_super_class();
             void set_super_class(Type* type);
             bool has_super_class();
+            Class* get_super_class_descriptor();
 
             void set_template_header(TemplateHeader* header);
             TemplateHeader* get_template_header();
@@ -66,12 +68,20 @@ namespace haard {
             int get_alignment() const;
             void set_alignment(int value);
 
+            void set_virtual(bool flag);
+            bool is_virtual();
+
+            int get_remaining_pad() const;
+            void set_remaining_pad(int value);
+
     private:
             int line;
             int column;
             int uid;
             int size_in_bytes;
             int alignment;
+            int remaining_pad;
+            bool is_virtual_flag;
             const char* name;
             Type* super_class;
             TemplateHeader* template_header;

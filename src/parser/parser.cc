@@ -111,15 +111,15 @@ Class* Parser::parse_class() {
             klass->add_variable(parse_class_variable());
         } else if (lookahead(TK_AT)) {
             parse_annotation();
+        } else if (match(TK_PASS)) {
+            break;
         } else {
             break;
         }
     }
 
     dedent();
-
     return klass;
-
 }
 
 TemplateHeader* Parser::parse_template_header() {
