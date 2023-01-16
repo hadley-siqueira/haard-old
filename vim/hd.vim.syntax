@@ -1,25 +1,10 @@
 " Vim syntax file
 " Language:	Haard
 " Maintainer:	Hadley Siqueira <hadley.siqueira@gmail.com>
-" Last Change:	2022 Aug 23
+" Last Change:	2023 Jan 16
 " Credits:	Hadley Siqueira <hadley.siqueira@gmail.com>
 "
-"		This version is a major rewrite by Zvezdan Petkovic.
-"
-"		- introduced highlighting of doctests
-"		- updated keywords, built-ins, and exceptions
-"		- corrected regular expressions for
-"
-"		  * functions
-"		  * decorators
-"		  * strings
-"		  * escapes
-"		  * numbers
-"		  * space error
-"
-"		- corrected synchronization
-"		- more highlighting is ON by default, except
-"		- space error highlighting is OFF by default
+"		This version is based on Python by Zvezdan Petkovic.
 "
 " Optional highlighting can be controlled using these variables.
 "
@@ -71,9 +56,9 @@ set cpo&vim
 "   built-in below (use 'from __future__ import print_function' in 2)
 " - async and await were added in HD 3.5 and are soft keywords.
 "
-syn keyword HDStatement	False, None, True, true, null, false
+syn keyword HDStatement	true, null, false
 syn keyword HDStatement	as assert break continue del exec global
-syn keyword HDStatement	lambda nonlocal pass print return with yield new delete
+syn keyword HDStatement	lambda nonlocal pass return with yield new delete
 syn keyword HDStatement	class def function var const enum union struct type alias nextgroup=HDFunction skipwhite
 syn keyword HDConditional	elif else if
 syn keyword HDRepeat	for while case others
@@ -199,28 +184,12 @@ endif
 if !exists("HD_no_builtin_highlight")
   " built-in constants
   " 'False', 'True', and 'None' are also reserved words in HD 3
-  syn keyword HDBuiltin	False True None true false null
+  syn keyword HDBuiltin	true false null
   syn keyword HDBuiltin	NotImplemented Ellipsis __debug__
   " built-in functions
-  syn keyword HDBuiltin i8 i16 i32 i64 u8 u16 u32 u64 double char
-  syn keyword HDBuiltin	abs all any bin bool bytearray callable chr
-  syn keyword HDBuiltin	classmethod compile complex delattr dict dir
-  syn keyword HDBuiltin	divmod enumerate eval filter float format
-  syn keyword HDBuiltin	frozenset getattr globals hasattr hash
-  syn keyword HDBuiltin	help hex id input int isinstance
-  syn keyword HDBuiltin	issubclass iter len list locals map max
-  syn keyword HDBuiltin	memoryview min next object oct open ord pow
-  syn keyword HDBuiltin	print property range repr reversed round set println
-  syn keyword HDBuiltin	setattr slice sorted staticmethod str
-  syn keyword HDBuiltin	sum super tuple vars zip __import__
+  syn keyword HDBuiltin i8 i16 i32 i64 u8 u16 u32 u64 
+  syn keyword HDBuiltin bool char uchar short ushort int uint long ulong float double sym str
   " HD 2 only
-  syn keyword HDBuiltin	basestring cmp execfile file
-  syn keyword HDBuiltin	long raw_input reduce reload unichr
-  syn keyword HDBuiltin	unicode xrange
-  " HD 3 only
-  syn keyword HDBuiltin	ascii bytes exec
-  " non-essential built-in functions; HD 2 only
-  syn keyword HDBuiltin	apply buffer coerce intern
   " avoid highlighting attributes as builtins
   syn match   HDAttribute	/\.\h\w*/hs=s+1 contains=ALLBUT,HDBuiltin transparent
 endif

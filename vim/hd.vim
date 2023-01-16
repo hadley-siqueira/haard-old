@@ -1,25 +1,10 @@
 " Vim syntax file
-" Language:	HD
-" Maintainer:	Hadley Siqueira <hdhzero@gmail.com>
-" Last Change:	2016 Jul 07
-" Credits:	Hadley Siqueira <hdhzero@gmail.com>
+" Language:	Haard
+" Maintainer:	Hadley Siqueira <hadley.siqueira@gmail.com>
+" Last Change:	2023 Jan 16
+" Credits:	Hadley Siqueira <hadley.siqueira@gmail.com>
 "
-"		This version is a major rewrite by Zvezdan Petkovic.
-"
-"		- introduced highlighting of doctests
-"		- updated keywords, built-ins, and exceptions
-"		- corrected regular expressions for
-"
-"		  * functions
-"		  * decorators
-"		  * strings
-"		  * escapes
-"		  * numbers
-"		  * space error
-"
-"		- corrected synchronization
-"		- more highlighting is ON by default, except
-"		- space error highlighting is OFF by default
+"		This version is based on Python by Zvezdan Petkovic.
 "
 " Optional highlighting can be controlled using these variables.
 "
@@ -71,12 +56,12 @@ set cpo&vim
 "   built-in below (use 'from __future__ import print_function' in 2)
 " - async and await were added in HD 3.5 and are soft keywords.
 "
-syn keyword HDStatement	False, None, True
+syn keyword HDStatement	true, null, false
 syn keyword HDStatement	as assert break continue del exec global
-syn keyword HDStatement	lambda nonlocal pass print return with yield
-syn keyword HDStatement	class def function enum union record nextgroup=HDFunction skipwhite
+syn keyword HDStatement	lambda nonlocal pass return with yield new delete
+syn keyword HDStatement	class def function var const enum union struct type alias nextgroup=HDFunction skipwhite
 syn keyword HDConditional	elif else if
-syn keyword HDRepeat	for while
+syn keyword HDRepeat	for while case others
 syn keyword HDOperator	and in is not or
 syn keyword HDException	except finally raise try
 syn keyword HDInclude	from import
@@ -84,16 +69,38 @@ syn keyword HDAsync		async await
 
 " Decorators (new in HD 2.4)
 syn match   HDDecorator	"@" display nextgroup=HDFunction skipwhite
+syn match   HDDecorator	"$" display nextgroup=HDFunction skipwhite
 " The zero-length non-grouping match before the function name is
 " extremely important in HDFunction.  Without it, everything is
 " interpreted as a function inside the contained environment of
 " doctests.
 " A dot must be allowed because of @MyClass.myfunc decorators.
 syn match   HDFunction
-      \ "\%(\%(enum\s\|union\s\|function\s\|record\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained
+      \ "\%(\%(enum\s\|union\s\|function\s\|struct\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained
 
 syn match   HDComment	"#.*$" contains=HDTodo,@Spell
 syn keyword HDTodo		FIXME NOTE NOTES TODO contained
+
+syn match  rubySymbol		"[]})\"':]\@<!:\%(\^\|\~\|<<\|<=>\|<=\|<\|===\|[=!]=\|[=!]\~\|!\|>>\|>=\|>\||\|-@\|-\|/\|\[]=\|\[]\|\*\*\|\*\|&\|%\|+@\|+\|`\)"
+syn match  rubySymbol		"[]})\"':]\@<!:\$\%(-.\|[`~<=>_,;:!?/.'"@$*\&+0]\)"
+syn match  rubySymbol		"[]})\"':]\@<!:\%(\$\|@@\=\)\=\%(\h\|[^\x00-\x7F]\)\%(\w\|[^\x00-\x7F]\)*"
+syn match  rubySymbol		"[]})\"':]\@<!:\%(\h\|[^\x00-\x7F]\)\%(\w\|[^\x00-\x7F]\)*\%([?!=]>\@!\)\="
+syn match  rubySymbol		"\%([{(,]\_s*\)\@<=\l\w*[!?]\=::\@!"he=e-1
+syn match  rubySymbol		"[]})\"':]\@<!\%(\h\|[^\x00-\x7F]\)\%(\w\|[^\x00-\x7F]\)*[!?]\=:\s\@="he=e-1
+syn match  rubySymbol		"\%([{(,]\_s*\)\@<=[[:space:],{]\l\w*[!?]\=::\@!"hs=s+1,he=e-1
+syn match  rubySymbol		"[[:space:],{]\%(\h\|[^\x00-\x7F]\)\%(\w\|[^\x00-\x7F]\)*[!?]\=:\s\@="hs=s+1,he=e-1
+syn region rubySymbol		start="[]})\"':]\@<!:'"  end="'"  skip="\\\\\|\\'"  contains=rubyQuoteEscape fold
+syn region rubySymbol		start="[]})\"':]\@<!:\"" end="\"" skip="\\\\\|\\\"" contains=@rubyStringSpecial fold
+
+syn region rubySymbol matchgroup=rubySymbolDelimiter start="%s\z([~`!@#$%^&*_\-+=|\:;"',.? /]\)"   end="\z1" skip="\\\\\|\\\z1" fold
+syn region rubySymbol matchgroup=rubySymbolDelimiter start="%s{"				   end="}"   skip="\\\\\|\\}"	fold contains=rubyNestedCurlyBraces,rubyDelimEscape
+syn region rubySymbol matchgroup=rubySymbolDelimiter start="%s<"				   end=">"   skip="\\\\\|\\>"	fold contains=rubyNestedAngleBrackets,rubyDelimEscape
+syn region rubySymbol matchgroup=rubySymbolDelimiter start="%s\["				   end="\]"  skip="\\\\\|\\\]"	fold contains=rubyNestedSquareBrackets,rubyDelimEscape
+syn region rubySymbol matchgroup=rubySymbolDelimiter start="%s("				   end=")"   skip="\\\\\|\\)"	fold contains=rubyNestedParentheses,rubyDelimEscape
+
+
+hi def link rubySymbol			Constant
+
 
 " Triple-quoted strings can contain doctests.
 syn region  HDString matchgroup=HDQuotes
@@ -177,27 +184,12 @@ endif
 if !exists("HD_no_builtin_highlight")
   " built-in constants
   " 'False', 'True', and 'None' are also reserved words in HD 3
-  syn keyword HDBuiltin	False True None
+  syn keyword HDBuiltin	true false null
   syn keyword HDBuiltin	NotImplemented Ellipsis __debug__
   " built-in functions
-  syn keyword HDBuiltin	abs all any bin bool bytearray callable chr
-  syn keyword HDBuiltin	classmethod compile complex delattr dict dir
-  syn keyword HDBuiltin	divmod enumerate eval filter float format
-  syn keyword HDBuiltin	frozenset getattr globals hasattr hash
-  syn keyword HDBuiltin	help hex id input int isinstance
-  syn keyword HDBuiltin	issubclass iter len list locals map max
-  syn keyword HDBuiltin	memoryview min next object oct open ord pow
-  syn keyword HDBuiltin	print property range repr reversed round set
-  syn keyword HDBuiltin	setattr slice sorted staticmethod str
-  syn keyword HDBuiltin	sum super tuple type vars zip __import__
+  syn keyword HDBuiltin i8 i16 i32 i64 u8 u16 u32 u64 
+  syn keyword HDBuiltin bool char uchar short ushort int uint long ulong float double sym str
   " HD 2 only
-  syn keyword HDBuiltin	basestring cmp execfile file
-  syn keyword HDBuiltin	long raw_input reduce reload unichr
-  syn keyword HDBuiltin	unicode xrange
-  " HD 3 only
-  syn keyword HDBuiltin	ascii bytes exec
-  " non-essential built-in functions; HD 2 only
-  syn keyword HDBuiltin	apply buffer coerce intern
   " avoid highlighting attributes as builtins
   syn match   HDAttribute	/\.\h\w*/hs=s+1 contains=ALLBUT,HDBuiltin transparent
 endif
