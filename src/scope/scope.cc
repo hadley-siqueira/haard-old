@@ -129,10 +129,16 @@ Symbol* Scope::has_field(const char* name) {
 }
 
 Symbol* Scope::has(const char* name) {
-    Symbol* sym;
+    Symbol* sym = nullptr;
 
     if (symbols.count(name) > 0) {
         return symbols[name];
+    }
+
+    sym = has_field(name);
+
+    if (sym) {
+        return sym;
     }
 
     if (has_parent()) {
@@ -149,7 +155,7 @@ Symbol* Scope::has(const char* name) {
         }
     }
 
-    return nullptr;
+    return sym;
 }
 
 Symbol* Scope::has_class(const char* name) {

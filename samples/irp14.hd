@@ -36,6 +36,13 @@ class Point6(Point4):
 class Point7(Point6):
     ww : int
 
+class Point8(Point7):
+    p3 : Point3[5]
+
+    @virtual
+    def calculate : int
+        return x
+
 def main : void
     var p : Point
     var p2 : Point2
@@ -46,4 +53,5 @@ def main : void
     var p5 : Point5
     var p6 : Point6
     var p7 : Point7
+    var p8 : Point8
 
