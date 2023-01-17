@@ -59,6 +59,12 @@ namespace haard {
             int string_addr_counter;
             std::map<std::string, uint64_t> string_address_map;
             std::map<std::string, IRFunction*> function_map;
+
+            // used for opening files
+            char* file_path;
+            char* file_mode;
+            char* file_buffer;
+            FILE* file_descriptor;
     };
 }
 

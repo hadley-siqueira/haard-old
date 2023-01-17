@@ -377,14 +377,14 @@ Type* Parser::parse_primary_type() {
     }
 
     while (type != nullptr) {
-        if (match(TK_TIMES)) {
+        if (next_token_same_line() && match(TK_TIMES)) {
             type = new IndirectionType(TYPE_POINTER, matched, type);
-        } else if (match(TK_POWER)) {
+        } else if (next_token_same_line() && match(TK_POWER)) {
             type = new IndirectionType(TYPE_POINTER, matched, type);
             type = new IndirectionType(TYPE_POINTER, matched, type);
-        } else if (match(TK_BITWISE_AND)) {
+        } else if (next_token_same_line() && match(TK_BITWISE_AND)) {
             type = new IndirectionType(TYPE_REFERENCE, matched, type);
-        } else if (match(TK_LEFT_SQUARE_BRACKET)) {
+        } else if (next_token_same_line() && match(TK_LEFT_SQUARE_BRACKET)) {
             token = matched;
 
             if (!lookahead(TK_RIGHT_SQUARE_BRACKET)) {

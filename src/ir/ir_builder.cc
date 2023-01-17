@@ -593,9 +593,16 @@ void IRBuilder::build_call(BinOp* bin) {
         IRValue* this_ptr;
 
         build_expression(bin->get_left(), true);
-        this_ptr = last_value;
-
         BinOp* dot = (BinOp*) bin->get_left();
+
+        // if left side is a pointer, we want the value of the pointer
+        // and not the address of the pointer itself
+        if (dot->get_left()->get_type()->get_kind() == TYPE_POINTER) {
+            this_ptr = ctx->new_load(ARCH_WORD_SIZE, last_value)->get_dst();
+        } else {
+            this_ptr = last_value;
+        }
+
         Identifier* id = (Identifier*) dot->get_right();
         Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
         std::string name = f->get_qualified_name();
@@ -707,10 +714,24 @@ void IRBuilder::build_member_access(BinOp* bin, bool lvalue) {
 
             var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
             offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
-            ctx->new_binary(IR_ADD, base, offset);
+            last_value = ctx->new_binary(IR_ADD, base, offset)->get_dst();
         }
     } else {
+        if (id->get_symbol()->get_kind() == SYM_CLASS_VARIABLE) {
+            IRValue* base = last_value;
+            IRValue* offset;
 
+            var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+            offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
+            last_value = ctx->new_binary(IR_ADD, base, offset)->get_dst();
+
+            Type* type = id->get_type();
+            int size = type->get_size_in_bytes();
+
+            if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
+                last_value = ctx->new_load(size, last_value)->get_dst();
+            }
+        }
     }
 }
 

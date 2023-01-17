@@ -6,5 +6,6 @@
 
 uint64_t conv64(std::string value);
 uint64_t char2u64(std::string value);
+char get_escaped(char n);
 
 #endif

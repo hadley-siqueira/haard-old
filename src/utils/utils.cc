@@ -68,3 +68,24 @@ uint64_t char2u64(std::string value) {
 
     return res;
 }
+
+char get_escaped(char n) {
+    switch (n) {
+    case 'n':
+        return '\n';
+
+    case 't':
+        return '\t';
+
+    case '\\':
+        return '\\';
+
+    case '\'':
+        return '\'';
+
+    case '0':
+        return '\0';
+    }
+
+    return n;
+}

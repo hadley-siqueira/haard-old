@@ -7,6 +7,7 @@
 #include "ir/ir_call.h"
 #include "ir/ir_memory.h"
 #include "printer/ir_printer.h"
+#include "utils/utils.h"
 
 using namespace haard;
 
@@ -34,6 +35,12 @@ void IrVM::execute_modules(IRModules* modules) {
 
         for (int j = 1; j < s.size() - 1; ++j) {
             char c = s[j];
+
+            if (c == '\\') {
+                j = j + 1;
+                c = get_escaped(s[j]);
+            }
+
             mem[string_addr_counter++] = c;
         }
 
@@ -455,6 +462,17 @@ uint64_t IrVM::load8(uint64_t addr) {
 bool IrVM::is_special_load_address(uint64_t addr) {
     switch (addr) {
     case 0x10:
+    case 0x11:
+    case 0x12:
+    case 0x20:
+    case 0x21:
+    case 0x22:
+    case 0x23:
+    case 0x24:
+    case 0x25:
+    case 0x26:
+    case 0x27:
+    case 0x28:
         return true;
     }
 
@@ -466,6 +484,15 @@ bool IrVM::is_special_store_address(uint64_t addr) {
     case 0x10:
     case 0x11:
     case 0x12:
+    case 0x20:
+    case 0x21:
+    case 0x22:
+    case 0x23:
+    case 0x24:
+    case 0x25:
+    case 0x26:
+    case 0x27:
+    case 0x28:
         return true;
     }
 
@@ -479,6 +506,9 @@ uint64_t IrVM::load_special_address(uint64_t addr) {
     case 0x10:
         std::cin >> v;
         return v;
+
+    case 0x22:
+        return (uint64_t) file_descriptor;
 
     default:
         break;
@@ -500,6 +530,35 @@ void IrVM::store_special_address(uint64_t addr, uint64_t value) {
     case 0x12:
         printf("%s", (char*) value);
         break;
+
+    case 0x20:
+        file_path = (char*) value;
+        break;
+
+    case 0x21:
+        file_mode = (char*) value;
+        break;
+
+    case 0x22:
+        file_descriptor = (FILE*) value;
+        break;
+
+    case 0x23:
+        file_buffer = (char*) value;
+        break;
+
+    case 0x25:
+        file_descriptor = fopen(file_path, file_mode);
+        break;
+
+    case 0x26:
+        fclose(file_descriptor);
+        break;
+
+    case 0x27:
+        fprintf(file_descriptor, "%s", file_buffer);
+        break;
+
     }
 }
 

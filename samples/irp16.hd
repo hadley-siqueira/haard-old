@@ -1,0 +1,26 @@
+import std.io
+import std.file
+
+def main : void
+    var f : File
+
+    w = read_int('Enter width: ')
+    h = read_int('Enter height: ')
+
+    f.open('img.ppm', "w")
+    f.writeln('P3')
+    f.write(w)
+    f.write(" ")
+    f.write(h)
+    f.write("\n255\n")
+
+    for i = 0; i < w * h; ++i:
+        f.writeln("0 0 255")
+
+    f.close()
+
+    var b : char[50]
+
+    for i = 0; i < 100; ++i:
+        to_str(b, 0 - i)
+        println(b)

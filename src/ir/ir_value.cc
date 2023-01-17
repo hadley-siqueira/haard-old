@@ -73,10 +73,8 @@ void IRValue::set_value(const char* value) {
 uint64_t IRValue::to_u64() {
     uint64_t res = 0;
 
-    //std::cout << "CONV = " << value << std::endl;
     switch (kind) {
     case IR_VALUE_LITERAL_BOOL:
-        //if (strcmp(value, "true") == 0) {
         if (value == "true" || value == "1") {
             res = 1;
         }

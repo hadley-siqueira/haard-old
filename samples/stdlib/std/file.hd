@@ -1,0 +1,82 @@
+import std.cstring
+
+def to_str : void
+    @buffer : char*
+    @n      : int
+
+    i = 0
+    flag = false
+
+    if n == 0:
+        buffer[0] = '0'
+        buffer[1] = '\0'
+    else:
+        if n < 0:
+            n = 0 - n
+            flag = true
+
+        while n > 0:
+            m = n % 10
+            buffer[i] = '0' + m
+            i = i + 1
+            n = n / 10 
+
+        if flag:
+            buffer[i] = '-'
+            i = i + 1
+
+        buffer[i] =  '\0'
+        strrev(buffer)
+
+class File:
+    descriptor : void*
+
+    def open : void
+        @path : char*
+        @mode : char*
+
+        ptr = 0x20 as char**
+        *ptr = path
+
+        ptr = 0x21
+        *ptr = mode
+
+        ptr = 0x25
+        *ptr = 0
+
+        ptr = 0x22
+        descriptor = *ptr 
+
+    def write : void
+        @buffer : char*
+
+        ptr = 0x23 as char**
+        *ptr = buffer
+
+        ptr = 0x22
+        *ptr = descriptor
+
+        ptr = 0x27
+        *ptr = 0
+
+    def write : void
+        @n : int
+
+        var buf : char[50]
+
+        to_str(buf, n)
+        write(buf)
+
+    def writeln : void
+        @buffer : char*
+
+        write(buffer)
+        write("\n")
+
+    def close : void
+        ptr = 0x22 as i64**
+        *ptr = descriptor
+
+        ptr = 0x26 as void**
+        *ptr = descriptor
+
