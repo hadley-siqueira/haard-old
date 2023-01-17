@@ -13,6 +13,14 @@ def print : void
     *p = n
 
 def print : void
+    @n : u8
+
+    k = n & 0x0ff
+    p = &k as int*
+    p = 0x10
+    *p = k
+
+def print : void
     @s : char*
 
     while *s != '\0':
@@ -47,6 +55,12 @@ def println : void
     @c : char
 
     print(c)
+    print('\n')
+
+def println : void
+    @n : u8
+
+    print(n)
     print('\n')
 
 def println : void
@@ -85,3 +99,15 @@ def read_int : int
     print(msg)
     return read_int()
 
+def memcpy : void
+    @dest : void*
+    @src  : void*
+    @n    : int
+ 
+    p2 = dest as char*
+    p1 = src as char*
+ 
+    for i = 0; i < n; ++i:
+        *p2 = *p1
+        ++p1
+        ++p2

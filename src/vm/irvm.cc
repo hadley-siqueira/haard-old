@@ -81,6 +81,7 @@ void IrVM::execute_function(IRFunction* function) {
 }
 
 void IrVM::execute(IR* ir) {
+    int size;
     uint64_t src1_value;
     uint64_t src2_value;
     uint64_t addr;
@@ -267,6 +268,15 @@ void IrVM::execute(IR* ir) {
         src1_value = values[bin->get_src1()->to_str()];
         src2_value = values[bin->get_src2()->to_str()];
         values[bin->get_dst()->to_str()] = (int64_t) src1_value >> src2_value;
+        ip++;
+        break;
+
+    case IR_MEMCPY:
+        src1_value = values[mem->get_dst()->to_str()];
+        src2_value = values[mem->get_src()->to_str()];
+        size = mem->get_offset();
+
+        memcpy((void*) src1_value, (void*) src2_value, size);
         ip++;
         break;
 

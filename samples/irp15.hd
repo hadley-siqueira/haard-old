@@ -33,7 +33,6 @@ class Line:
 def main : void
     var p : Point
     var l : Line
-    var f : File
     ptr = &l
 
     p.init()

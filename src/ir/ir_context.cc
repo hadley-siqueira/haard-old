@@ -96,6 +96,13 @@ IRMemory* IRContext::new_store(int size, IRValue* dst, IRValue* src) {
     return store;
 }
 
+IRMemory *IRContext::new_memcpy(IRValue *dest, IRValue *src, int size) {
+    IRMemory* m = new IRMemory(IR_MEMCPY, dest, src, size);
+
+    add_instruction(m);
+    return m;
+}
+
 IRBin* IRContext::new_binary(int kind, IRValue* src1, IRValue* src2) {
     IRBin* bin;
     IRValue* dst = new_temporary();

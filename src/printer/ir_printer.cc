@@ -180,6 +180,12 @@ void IRPrinter::print_instruction(IR* ir) {
         *out << mem->get_src()->to_str();
         break;
 
+    case IR_MEMCPY:
+        *out << "memcpy " << mem->get_dst()->to_str() << ", ";
+        *out << mem->get_src()->to_str() << ", ";
+        *out << mem->get_offset();
+        break;
+
     case IR_ALLOCA:
         *out << alloca->get_dst()->to_str() << " = alloca ";
         *out << alloca->get_name() << ", ";

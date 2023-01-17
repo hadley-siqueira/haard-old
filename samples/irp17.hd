@@ -1,0 +1,27 @@
+import std.io
+
+class Pixel:
+    r : u8
+    g : u8
+    b : u8
+
+    def print : void
+        println(r)
+        println(g)
+        println(b)
+
+def main : void
+    var p0 : Pixel
+    var p1 : Pixel
+    var p2 : Pixel
+
+    p0.r = 70
+    p0.g = 70
+    p0.b = 130
+
+    p0.print()
+    memcpy(&p1, &p0, 3)
+    p1.print()
+
+    p2 = p0
+    p2.print()

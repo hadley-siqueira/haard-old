@@ -24,8 +24,11 @@ namespace haard {
             IRUnary* new_unary(int kind,IRValue* dst, IRValue* src);
             IRAlloca* new_alloca(std::string name, int size=8, int align=8);
             IRAlloca* new_tmp_alloca(int size=8, int align=8);
+
             IRMemory* new_load(int size, IRValue* src);
             IRMemory* new_store(int size, IRValue* dst, IRValue* src);
+            IRMemory* new_memcpy(IRValue* dest, IRValue* src, int size);
+
             IRBin* new_binary(int kind, IRValue* src1, IRValue* src2);
 
             IRUnary* new_load_immediate(int kind, std::string value);

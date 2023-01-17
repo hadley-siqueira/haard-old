@@ -534,6 +534,12 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
             if (ctx->has_alloca(name)) {
                 last_value = ctx->get_alloca_value(name);
             }
+        } else if (type->get_kind() == TYPE_NAMED) {
+            std::string name = id->get_unique_name();
+
+            if (ctx->has_alloca(name)) {
+                last_value = ctx->get_alloca_value(name);
+            }
         }
     } else if (kind == SYM_CLASS_VARIABLE) {
         if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
@@ -739,6 +745,7 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     IRMemory* store;
     IRValue* left;
     IRValue* right;
+    Type* type;
     int size;
 
     build_expression(bin->get_right());
@@ -747,12 +754,17 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     build_expression(bin->get_left(), true);
     left = last_value;
 
-    size = bin->get_left()->get_type()->get_size_in_bytes();
+    type = bin->get_left()->get_type();
+    size = type->get_size_in_bytes();
 
     // FIXME
     // on complex types, should call memcpy instead of a simple store
-    store = ctx->new_store(size, left, right);
-    last_value = left;
+    if (type->get_kind() != TYPE_NAMED) {
+        store = ctx->new_store(size, left, right);
+        last_value = left;
+    } else {
+        ctx->new_memcpy(left, right, size);
+    }
 }
 
 void IRBuilder::build_logical_or(BinOp* bin) {
