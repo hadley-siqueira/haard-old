@@ -22,10 +22,6 @@ void IRBuilder::build(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
-
-    IRPrinter printer;
-    printer.print_modules(modules);
-    std::cout << printer.get_output();
 }
 
 void IRBuilder::build_source(Source* source) {

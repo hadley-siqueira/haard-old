@@ -1,0 +1,48 @@
+import std.io
+
+def print_array : void
+    @v : int*
+    @n : int
+
+    print('{')
+
+    i = 0
+    while i < n - 1:
+        print(v[i])
+        print(", ")
+        ++i
+
+    print(v[i])
+    println('}')
+
+def swap : void
+    @a : int*
+    @b : int*
+
+    tmp = *a
+    *a = *b
+    *b = tmp
+
+def bubble_sort : void
+    @v : int*
+    @n : int
+
+    if n < 1:
+        return
+
+    i = 0
+    while i < n:
+        if v[i] > v[i + 1]:
+            swap(&v[i], &v[i + 1])
+        ++i
+
+    bubble_sort(v, n - 1)
+
+def main : void
+    var numbers : int[10]
+
+    for i = 0; i < 10; ++i:
+        numbers[i] = read_int('Enter a number: ')
+
+    bubble_sort(numbers, 9)
+    print_array(numbers, 10)

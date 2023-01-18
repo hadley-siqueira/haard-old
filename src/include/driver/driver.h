@@ -58,6 +58,7 @@ namespace haard {
             bool pretty_flag;
             bool info_flag;
             bool help_flag;
+            bool show_logs_flag;
     };
 }
 

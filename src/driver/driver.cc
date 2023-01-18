@@ -26,6 +26,7 @@ Driver::Driver() {
     pretty_flag = false;
     info_flag = false;
     help_flag = false;
+    show_logs_flag = false;
 }
 
 Driver::~Driver() {
@@ -37,24 +38,28 @@ void Driver::run() {
     configure_search_path();
 
     run_info_flags();
-    std::cout << "starting parsing...\n";
+
+    logger.info("starting parsing...");
     parse_sources();
-    std::cout << "ending parsing...\n";
+
+    logger.info("ending parsing...");
     check_for_errors();
 
-    std::cout << "starting semantic analysis...\n";
+    logger.info("starting semantic analysis...");
     semantic_analysis();
     check_for_errors();
-    std::cout << "ending semantic analysis...\n";
+    logger.info("ending semantic analysis...");
 
     run_flags();
 
-    std::cout << "starting ir generation...\n";
+    logger.info("starting ir generation...");
     ir_generation();
     check_for_errors();
-    std::cout << "ir generation done...\n";
+    logger.info("ir generation done...");
 
-    logger.print();
+    if (show_logs_flag) {
+        logger.print();
+    }
 }
 
 void Driver::run_info_flags() {
@@ -96,6 +101,8 @@ void Driver::set_flags(int argc, char* argv[]) {
             info_flag = true;
         } else if (strcmp(argv[i], "-h") == 0) {
             help_flag = true;
+        } else if (strcmp(argv[i], "--show-logs") == 0) {
+            show_logs_flag = true;
         }
     }
 }
@@ -183,14 +190,16 @@ void Driver::parse_simple_import(Import* import) {
 }
 
 Source* Driver::parse_file(const char* path) {
+    std::stringstream ss;
     std::string relative_path;
 
     if (!file_exists(path)) {
-        std::cout << "Error: file '" << path << "' doesn't exist\n";
-        exit(0);
+        ss << "Error: file '" << path << "' doesn't exist";
+        logger.error_and_exit(ss.str());
     }
 
-    std::cout << "Parsing: " << path << std::endl;
+    ss << "Parsing: " << path;
+    logger.info(ss.str());
 
     if (!sources->has_source(path)) {
         Parser parser(&logger);
