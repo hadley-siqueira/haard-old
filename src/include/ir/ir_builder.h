@@ -103,6 +103,8 @@ namespace haard {
             void build_literal_integer(Literal* literal);
             void build_literal_string(Literal* literal);
 
+            void build_sizeof(UnOp* un);
+
         private:
             bool is_function_call(BinOp* bin);
             bool is_method_call(BinOp* bin);

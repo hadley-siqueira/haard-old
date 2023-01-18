@@ -469,6 +469,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     case EXPR_PARENTHESIS:
         build_expression(un->get_expression(), lvalue);
         break;
+
+    case EXPR_SIZEOF:
+        build_sizeof(un);
+        break;
     }
 }
 
@@ -993,6 +997,12 @@ void IRBuilder::build_literal_integer(Literal* literal) {
 void IRBuilder::build_literal_string(Literal* literal) {
     build_literal(literal, IR_VALUE_LITERAL_STRING);
     modules->add_string_literal(literal->get_lexeme());
+}
+
+void IRBuilder::build_sizeof(UnOp* un) {
+    Type* type = un->get_expression()->get_type();
+
+    last_value = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, type->get_size_in_bytes())->get_dst();
 }
 
 bool IRBuilder::is_function_call(BinOp* bin) {

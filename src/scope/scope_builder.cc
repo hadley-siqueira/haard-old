@@ -427,6 +427,10 @@ void ScopeBuilder::build_expression(Expression* expression) {
     case EXPR_CAST:
         build_cast_expression((CastExpression*) expression);
         break;
+
+    case EXPR_SIZEOF:
+        build_sizeof(un);
+        break;
     }
 }
 
@@ -839,6 +843,11 @@ void ScopeBuilder::build_literal_string(Literal* literal) {
     //build_literal(literal, TYPE_STR);
 }
 
+void ScopeBuilder::build_sizeof(UnOp* un) {
+    build_expression(un->get_expression());
+    un->set_type(new Type(TYPE_U64));
+}
+
 void ScopeBuilder::build_expression_list(ExpressionList* exprlist) {
     if (exprlist == nullptr) return;
 
@@ -943,8 +952,7 @@ void ScopeBuilder::define_class(Class* klass) {
     define_class_super(klass);
     define_class_variables(klass);
     define_class_methods(klass);
-    std::cout << klass->get_cpp_name() << " = ";
-    klass->get_scope()->debug();
+
     leave_scope();
     current_class = nullptr;
 }
