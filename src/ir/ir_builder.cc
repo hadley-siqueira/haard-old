@@ -99,7 +99,13 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
         size = var->get_type()->get_size_in_bytes();
         align = var->get_type()->get_alignment();
         alloca = ctx->new_alloca(name, size, align);
-        ctx->new_store(size, alloca->get_dst(), p);
+
+        // handle parameters passed by value
+        if (var->get_type()->get_kind() != TYPE_NAMED) {
+            ctx->new_store(size, alloca->get_dst(), p);
+        } else {
+            ctx->new_memcpy(alloca->get_dst(), p, size);
+        }
     }
 }
 

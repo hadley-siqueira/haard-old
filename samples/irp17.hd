@@ -5,10 +5,29 @@ class Pixel:
     g : u8
     b : u8
 
-    def print : void
-        println(r)
-        println(g)
-        println(b)
+    def init : void
+        @rv : u8
+        @gv : u8
+        @bv : u8
+
+        r = rv
+        g = gv
+        b = bv
+
+    def to_print : void
+        print("(")
+        print(r)
+        print(", ")
+        print(g)
+        print(", ")
+        print(b)
+        println(")")
+
+def change : void
+    @p : Pixel
+
+    p.r = 10
+    p.to_print()
 
 def main : void
     var p0 : Pixel
@@ -19,9 +38,20 @@ def main : void
     p0.g = 70
     p0.b = 130
 
-    p0.print()
+    p0.to_print()
     memcpy(&p1, &p0, 3)
-    p1.print()
+    p1.to_print()
 
     p2 = p0
-    p2.print()
+    p2.to_print()
+
+    p2.init(0, 255, 170)
+    p2.to_print()
+
+    println("before")
+    p0.to_print()
+
+    change(p0)
+
+    println("after")
+    p0.to_print()
