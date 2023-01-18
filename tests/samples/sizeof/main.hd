@@ -22,6 +22,7 @@ def main : int
     var d : Point2
     var e : Point3
     var arr : int[10]
+    var arr2 : Point3[10]
     var n : int
 
     n = sizeof(a)
@@ -40,4 +41,7 @@ def main : int
     println(n)
 
     n = sizeof(arr)
+    println(n)
+
+    n = sizeof(arr2)
     println(n)
