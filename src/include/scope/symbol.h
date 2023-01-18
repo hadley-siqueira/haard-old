@@ -30,7 +30,7 @@ namespace haard {
             std::string to_cpp(int idx=0);
 
             int overloaded_count();
-            void* get_overloaded(TypeList* types);
+            int get_overloaded(TypeList* types);
 
             Scope* get_descriptor_scope(int idx=0);
 

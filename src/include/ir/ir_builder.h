@@ -49,6 +49,8 @@ namespace haard {
 
             void build_expression(Expression* expression, bool lvalue=false);
 
+            void build_scope(BinOp* bin, bool lvalue=false);
+
             void build_identifier(Identifier* id, bool lvalue=false);
             void build_identifier_lvalue(Identifier* id);
             void build_identifier_rvalue(Identifier* id);

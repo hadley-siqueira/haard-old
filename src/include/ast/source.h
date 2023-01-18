@@ -19,6 +19,7 @@ namespace haard {
         public:
             const char* get_path();
             Import* get_import(int idx);
+            Import* get_import_with_alias(std::string alias);
             Function* get_function(int idx);
             Class* get_class(int idx);
             Scope* get_scope();

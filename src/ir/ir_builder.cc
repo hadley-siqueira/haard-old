@@ -324,6 +324,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     ExpressionList* exprlist = (ExpressionList*) expression;
 
     switch (kind) {
+    case EXPR_SCOPE:
+        build_scope(bin, lvalue);
+        break;
+
     case EXPR_ID:
         build_identifier((Identifier*) expression, lvalue);
         break;
@@ -470,6 +474,12 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_expression(un->get_expression(), lvalue);
         break;
     }
+}
+
+void IRBuilder::build_scope(BinOp* bin, bool lvalue){
+    Identifier* id = (Identifier*) bin->get_right();
+
+    build_identifier(id, lvalue);
 }
 
 void IRBuilder::build_identifier(Identifier* id, bool lvalue) {
@@ -649,7 +659,15 @@ void IRBuilder::build_call_arguments(IRCall* call, ExpressionList* args, IRValue
 }
 
 void IRBuilder::build_function_call(BinOp* bin, IRCall* call) {
-    Identifier* id = (Identifier*) bin->get_left();
+    Identifier* id;
+
+    if (bin->get_left()->get_kind() == EXPR_ID) {
+        id = (Identifier*) bin->get_left();
+    } else if (bin->get_left()->get_kind() == EXPR_SCOPE) {
+        BinOp* scope = (BinOp*) bin->get_left();
+        id = (Identifier*) scope->get_right();
+    }
+
     Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
     std::string name = f->get_qualified_name();
 
@@ -986,6 +1004,10 @@ bool IRBuilder::is_function_call(BinOp* bin) {
 
     if (bin->get_left()->get_kind() == EXPR_ID) {
         id = (Identifier*) bin->get_left();
+        return id->get_symbol()->get_kind() == SYM_FUNCTION;
+    } else if (bin->get_left()->get_kind() == EXPR_SCOPE) {
+        bin = (BinOp*) bin->get_left();
+        id = (Identifier*) bin->get_right();
         return id->get_symbol()->get_kind() == SYM_FUNCTION;
     }
 

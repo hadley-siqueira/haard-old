@@ -1,4 +1,4 @@
-import std.io
+import std.io as io
 
 class Pixel:
     r : u8
@@ -15,7 +15,7 @@ class Pixel:
         b = bv
 
     def to_print : void
-        print("(")
+        io::print("(")
         print(r)
         print(", ")
         print(g)

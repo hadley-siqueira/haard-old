@@ -176,20 +176,40 @@ int Symbol::overloaded_count() {
     return descriptors.size();
 }
 
-void* Symbol::get_overloaded(TypeList* types) {
-    /*Function* f;
+int Symbol::get_overloaded(TypeList* types) {
+    Function* f;
     FunctionType* ft;
+    int i;
+    bool found = false;
 
-    for (int i = 0; i < overloaded_count(); ++i) {
-        f = (Function*) descriptors[i];
-        ft = f->get_self_type();
+    // try
+    for (i = 0; i < overloaded_count(); ++i) {
+        f = (Function*) get_descriptor(i);
+        ft = (FunctionType*) f->get_self_type();
 
         if (ft->check_arguments_type(types)) {
-            return descriptors[i];
+            found = true;
+            break;
         }
-    }*/
+    }
 
-    return nullptr;
+    if (!found) {
+        for (i = 0; i < overloaded_count(); ++i) {
+            f = (Function*) get_descriptor(i);
+            ft = (FunctionType*) f->get_self_type();
+
+            if (ft->check_arguments_type_with_conversion(types)) {
+                found = true;
+                break;
+            }
+        }
+    }
+
+    if (found) {
+        return i;
+    }
+
+    return -1;
 }
 
 Scope* Symbol::get_descriptor_scope(int idx) {

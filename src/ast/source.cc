@@ -36,6 +36,20 @@ Import* Source::get_import(int idx) {
     return nullptr;
 }
 
+Import* Source::get_import_with_alias(std::string alias) {
+    Import* import = nullptr;
+
+    for (int i = 0; i < import_count(); ++i) {
+        import = get_import(i);
+
+        if (alias == import->get_alias()) {
+            return import;
+        }
+    }
+
+    return nullptr;
+}
+
 Function* Source::get_function(int idx) {
     if (idx < functions.size()) {
         return functions[idx];
