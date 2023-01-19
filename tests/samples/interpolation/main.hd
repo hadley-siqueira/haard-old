@@ -66,3 +66,6 @@ def main : void
     m = 3
     msg = "CHUPA C++!! Eu tenho interpolacao! >> n + m = {n + m}"
     println(msg)
+
+    for i = 0; i < 10; ++i:
+        println("Hello from $i")

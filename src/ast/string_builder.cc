@@ -8,8 +8,12 @@ StringBuilder::StringBuilder() {
 }
 
 StringBuilder::~StringBuilder() {
-    for (int i = 0; i < expressions_count(); ++i) {
+    /*for (int i = 0; i < expressions_count(); ++i) {
         delete expressions[i];
+    }*/
+
+    for (int i = 0; i < calls_count(); ++i) {
+        delete calls[i];
     }
 }
 
