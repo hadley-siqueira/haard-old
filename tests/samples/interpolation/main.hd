@@ -1,54 +1,5 @@
 import std.io
-import std.cstring
-
-class String:
-    buffer : char[255]
-    size   : int
-
-    def init : void
-        size = 0
-        buffer[0] = '\0'
-
-    def add : void
-        @n : int
-
-        i = 0
-        flag = false
-        initt = size
-
-        if n == 0:
-            buffer[size] = '0'
-            ++size
-            buffer[size] = '\0'
-        else:
-            if n < 0:
-                n = 0 - n
-                flag = true
-
-            while n > 0:
-                m = n % 10
-                buffer[size] = '0' + m
-                size = size + 1
-                n = n / 10 
-
-            if flag:
-                buffer[size] = '-'
-                size = size + 1
-
-            buffer[size] =  '\0'
-            strrev(&buffer[initt])
-
-
-    def c_str : char*
-        return &buffer[0]
-
-    def add : void
-        @s : char*
-
-        while *s != '\0':
-            buffer[size] = *s
-            ++size
-            ++s
+import std.string
 
 def main : void
     n = 2

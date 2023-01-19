@@ -1,53 +1,51 @@
 import std.cstring
 
 class String:
-    data : char*
-    last : char*
-    size : u64
-    capacity : u64
+    buffer : char[255]
+    size   : int
 
     def init : void
-        data = new char[10]
         size = 0
-        capacity = 10
+        buffer[0] = '\0'
 
-    def destroy : void
-        delete[] data
-
-    def append : void
-        @s : char*
-
-        len = strlen(s)
-        resize(len)
+    def add : void
+        @n : int
 
         i = 0
-        for i = 0; i < len; ++i:
-            *(data + size + i) = *(s + i)
+        flag = false
+        initt = size
 
-        *(data + size + i) = '\0'
-        size = size + len
+        if n == 0:
+            buffer[size] = '0'
+            ++size
+            buffer[size] = '\0'
+        else:
+            if n < 0:
+                n = 0 - n
+                flag = true
 
-    def resize : void
-        if size >= capacity:
-            tmp = new char[size * 2]
+            while n > 0:
+                m = n % 10
+                buffer[size] = '0' + m
+                size = size + 1
+                n = n / 10 
 
-            for i = 0; i < size; ++i:
-                *(tmp + i) = *(data + i)
+            if flag:
+                buffer[size] = '-'
+                size = size + 1
 
-            capacity = capacity * 2
-            delete[] data
-            data = tmp
+            buffer[size] =  '\0'
+            strrev(&buffer[initt])
 
-    def resize : void
-        @inc : int
 
-        if size + inc >= capacity:
-            tmp = new char[size * 2]
+    def c_str : char*
+        return &buffer[0]
 
-            for i = 0; i < size; ++i:
-                *(tmp + i) = *(data + i)
+    def add : void
+        @s : char*
 
-            capacity = capacity * 2 + inc
-            delete[] data
-            data = tmp
+        while *s != '\0':
+            buffer[size] = *s
+            ++size
+            ++s
 

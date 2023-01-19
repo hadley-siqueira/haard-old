@@ -14,3 +14,5 @@ do
         printf "${GREEN}Ok!${NC}\n"
     fi
 done
+
+rm out.txt

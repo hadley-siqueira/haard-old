@@ -1,0 +1,41 @@
+n + m = 5
+Hello from -10 and from -20
+Hello from $i and from {i * 2}
+Hello from -9 and from -18
+Hello from $i and from {i * 2}
+Hello from -8 and from -16
+Hello from $i and from {i * 2}
+Hello from -7 and from -14
+Hello from $i and from {i * 2}
+Hello from -6 and from -12
+Hello from $i and from {i * 2}
+Hello from -5 and from -10
+Hello from $i and from {i * 2}
+Hello from -4 and from -8
+Hello from $i and from {i * 2}
+Hello from -3 and from -6
+Hello from $i and from {i * 2}
+Hello from -2 and from -4
+Hello from $i and from {i * 2}
+Hello from -1 and from -2
+Hello from $i and from {i * 2}
+Hello from 0 and from 0
+Hello from $i and from {i * 2}
+Hello from 1 and from 2
+Hello from $i and from {i * 2}
+Hello from 2 and from 4
+Hello from $i and from {i * 2}
+Hello from 3 and from 6
+Hello from $i and from {i * 2}
+Hello from 4 and from 8
+Hello from $i and from {i * 2}
+Hello from 5 and from 10
+Hello from $i and from {i * 2}
+Hello from 6 and from 12
+Hello from $i and from {i * 2}
+Hello from 7 and from 14
+Hello from $i and from {i * 2}
+Hello from 8 and from 16
+Hello from $i and from {i * 2}
+Hello from 9 and from 18
+Hello from $i and from {i * 2}

@@ -1145,7 +1145,7 @@ Expression* Parser::parse_string_literal() {
         parts = split_interpolation(str);
 
         for (int i = 0; i < parts.size(); ++i) {
-            std::cout << '>' << parts[i] << "<\n";
+            //std::cout << '>' << parts[i] << "<\n";
 
             if (parts[i].size() > 0) {
                 if (parts[i][0] == '$' || parts[i][0] == '{') {
