@@ -142,8 +142,5 @@ bool FunctionType::check_arguments_type_with_conversion(TypeList* args) {
         return false;
     }
 
-    std::cout << __FILE__ << ' ' << __LINE__
-              << " fix me please\n";
-
     return true;
 }
