@@ -403,6 +403,10 @@ void ScopeBuilder::build_expression(Expression* expression) {
         build_literal_string(literal);
         break;
 
+    case EXPR_STRING_BUILDER:
+        build_string_builder((StringBuilder*) expression);
+        break;
+
     case EXPR_LITERAL_SYMBOL:
         build_literal(literal, TYPE_SYMBOL);
         break;
@@ -841,6 +845,56 @@ void ScopeBuilder::build_literal(Literal* literal, int kind) {
 void ScopeBuilder::build_literal_string(Literal* literal) {
     literal->set_type(new IndirectionType(TYPE_POINTER, new Type(TYPE_CHAR)));
     //build_literal(literal, TYPE_STR);
+}
+
+void ScopeBuilder::build_string_builder(StringBuilder* sb) {
+    NamedType* type;
+    Variable* var = sb->get_variable();
+    var->set_name("sbuilder");
+    type = new NamedType();
+
+    type->set_name("String");
+    var->set_type(type);
+    link_type(type);
+
+    var->set_uid(var_counter++);
+    var->set_kind(VAR_LOCAL);
+    current_scope->define(sb->get_variable());
+    current_function->add_variable(var);
+
+    {
+        Identifier* name = new Identifier("sbuilder");
+        Identifier* method = new Identifier("init");
+        BinOp* dot = new BinOp(EXPR_DOT, name, method);
+        ExpressionList* args = new ExpressionList(EXPR_ARGS);
+        BinOp* call = new BinOp(EXPR_CALL, dot, args);
+        sb->add_call(call);
+        build_expression(call);
+    }
+
+    for (int i = 0; i < sb->expressions_count(); ++i) {
+        Identifier* name = new Identifier("sbuilder");
+        Identifier* method = new Identifier("add");
+        BinOp* dot = new BinOp(EXPR_DOT, name, method);
+        ExpressionList* args = new ExpressionList(EXPR_ARGS);
+
+        args->add_expression(sb->get_expression(i));
+        BinOp* call = new BinOp(EXPR_CALL, dot, args);
+        sb->add_call(call);
+        build_expression(call);
+    }
+
+    {
+        Identifier* name = new Identifier("sbuilder");
+        Identifier* method = new Identifier("c_str");
+        BinOp* dot = new BinOp(EXPR_DOT, name, method);
+        ExpressionList* args = new ExpressionList(EXPR_ARGS);
+        BinOp* call = new BinOp(EXPR_CALL, dot, args);
+        sb->add_call(call);
+        build_expression(call);
+    }
+
+    sb->set_type(new IndirectionType(TYPE_POINTER, new Type(TYPE_CHAR)));
 }
 
 void ScopeBuilder::build_sizeof(UnOp* un) {

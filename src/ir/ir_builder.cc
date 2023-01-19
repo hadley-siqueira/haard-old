@@ -22,6 +22,10 @@ void IRBuilder::build(Sources* sources) {
     for (int i = 0; i < sources->sources_count(); ++i) {
         build_source(sources->get_source(i));
     }
+
+    /*IRPrinter p;
+    p.print_modules(modules);
+    std::cout << p.get_output() << std::endl;*/
 }
 
 void IRBuilder::build_source(Source* source) {
@@ -456,6 +460,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
 
     case EXPR_LITERAL_STRING:
         build_literal_string(literal);
+        break;
+
+    case EXPR_STRING_BUILDER:
+        build_string_builder((StringBuilder*) expression);
         break;
 
     case EXPR_LITERAL_SYMBOL:
@@ -997,6 +1005,24 @@ void IRBuilder::build_literal_integer(Literal* literal) {
 void IRBuilder::build_literal_string(Literal* literal) {
     build_literal(literal, IR_VALUE_LITERAL_STRING);
     modules->add_string_literal(literal->get_lexeme());
+}
+
+void IRBuilder::build_string_builder(StringBuilder* sb) {
+    int size;
+    int align;
+    std::string name;
+    Variable* var;
+    IRAlloca* alloca;
+
+    var = sb->get_variable();
+    name = var->get_unique_name();
+    size = var->get_type()->get_size_in_bytes();
+    align = var->get_type()->get_alignment();
+    alloca = ctx->new_alloca(name, size, align);
+
+    for (int i = 0; i < sb->calls_count(); ++i) {
+        build_expression(sb->get_call(i));
+    }
 }
 
 void IRBuilder::build_sizeof(UnOp* un) {

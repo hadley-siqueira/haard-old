@@ -11,6 +11,7 @@ namespace haard {
         public:
             Identifier();
             Identifier(Token& token);
+            Identifier(std::string name);
 
         public:
             int get_line();

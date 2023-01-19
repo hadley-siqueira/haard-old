@@ -22,6 +22,16 @@ void test_scanner(std::string path) {
     }
 }
 
+void test_scanner2(std::string str) {
+    Scanner s;
+
+    std::vector<Token> tokens = s.read_from_string(str);
+
+    for (int i = 0; i < tokens.size(); ++i) {
+        std::cout << tokens[i].to_str() << std::endl;
+    }
+}
+
 void test_parser(std::string path) {
     Parser parser;
     Printer printer;
@@ -43,6 +53,7 @@ void test_driver(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
     //test_scanner(argv[1]);
     test_driver(argc, argv);
+    //test_scanner2("name.foo = 2");
 
     return 0;
 }

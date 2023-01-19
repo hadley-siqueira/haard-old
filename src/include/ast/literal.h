@@ -9,6 +9,7 @@ namespace haard {
         public:
             Literal(int kind);
             Literal(int kind, Token& token);
+            Literal(int kind, std::string str);
 
         public:
             const char* get_lexeme();

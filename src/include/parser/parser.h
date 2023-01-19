@@ -17,6 +17,7 @@ namespace haard {
 
         public:
             Source* read(std::string path, std::string relative_path);
+            Expression* read_expression_from_string(std::string str);
 
         private:
             Source* parse_source();
@@ -63,6 +64,8 @@ namespace haard {
             Expression* parse_unary_expression();
             Expression* parse_postfix_expression();
             Expression* parse_primary_expression();
+            Expression* parse_string_literal();
+
             Expression* parse_parenthesis_or_tuple();
             Expression* parse_list_expression();
             Expression* parse_array_or_hash();
@@ -85,6 +88,9 @@ namespace haard {
             bool has_parameters();
             void indent();
             void dedent();
+
+            std::vector<std::string> split_interpolation(std::string str);
+            bool has_interpolation(std::string str);
 
         private:
             int idx;

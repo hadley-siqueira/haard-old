@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ast/variable.h"
+#include "utils/string_pool.h"
 
 using namespace haard;
 
@@ -56,7 +57,7 @@ void Variable::set_column(int column) {
 }
 
 void Variable::set_name(const char* name) {
-    this->name = name;
+    this->name = StringPool::get(name);
 }
 
 void Variable::set_type(Type* type) {

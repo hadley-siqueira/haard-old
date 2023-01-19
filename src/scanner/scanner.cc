@@ -26,6 +26,18 @@ std::vector<Token> Scanner::read(std::string path) {
     return tokens;
 }
 
+std::vector<Token> Scanner::read_from_string(std::string str) {
+    buffer = str;
+
+    while (has_next()) {
+        get_token();
+    }
+
+    start_token();
+    create_token(TK_EOF);
+    return tokens;
+}
+
 void Scanner::read_to_buffer(std::string path) {
     char c;
     std::ifstream file;

@@ -1,5 +1,6 @@
 #include <sstream>
 #include "ast/identifier.h"
+#include "utils/string_pool.h"
 
 using namespace haard;
 
@@ -15,6 +16,15 @@ Identifier::Identifier(Token& token) {
     line = token.get_line();
     column = token.get_column();
     lexeme = token.get_lexeme();
+    symbol = nullptr;
+    overloaded_index = 0;
+}
+
+Identifier::Identifier(std::string name) {
+    kind = EXPR_ID;
+    line = 0;
+    column = 0;
+    lexeme = StringPool::get(name);
     symbol = nullptr;
     overloaded_index = 0;
 }

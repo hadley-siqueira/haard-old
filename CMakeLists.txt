@@ -65,6 +65,7 @@ set(AST_SRC
     src/ast/expression_statement.cc
     src/ast/var_decl.cc
     src/ast/cast_expression.cc
+    src/ast/string_builder.cc
 )
 
 set(IR_SRC

@@ -9,6 +9,7 @@ namespace haard {
         public:
             Scanner();
             std::vector<Token> read(std::string path);
+            std::vector<Token> read_from_string(std::string str);
 
         private:
             bool has_next();

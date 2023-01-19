@@ -85,6 +85,7 @@ namespace haard {
 
             void build_literal(Literal* literal, int kind);
             void build_literal_string(Literal* literal);
+            void build_string_builder(StringBuilder* sb);
 
             void build_sizeof(UnOp* un);
 

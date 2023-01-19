@@ -30,6 +30,16 @@ Source* Parser::read(std::string path, std::string relative_path) {
     return source;
 }
 
+Expression* Parser::read_expression_from_string(std::string str) {
+    Scanner s;
+    Expression* expr;
+
+    tokens = s.read_from_string(str);
+    expr = parse_expression();
+
+    return expr;
+}
+
 Source* Parser::parse_source() {
     Source* source = new Source();
 
@@ -444,9 +454,6 @@ WhileStatement* Parser::parse_while_statement() {
 
 ForStatement* Parser::parse_for_statement() {
     ForStatement* stmt = new ForStatement();
-    Expression* expr1;
-    Expression* expr2;
-    Expression* expr3;
 
     expect(TK_FOR);
     parse_for_statement_init(stmt);
@@ -455,6 +462,12 @@ ForStatement* Parser::parse_for_statement() {
 
     expect(TK_COLON);
     indent();
+
+    if (next_token_same_line()) {
+        DBG;
+        logger->error_and_exit("<red>error: </red>Unexpected tokens after colon. Expected them to be on a new line");
+    }
+
     stmt->set_statements(parse_compound_statement());
     dedent();
 
@@ -1092,8 +1105,8 @@ Expression* Parser::parse_primary_expression() {
         expr = new Literal(EXPR_LITERAL_DOUBLE, matched);
     } else if (match(TK_LITERAL_CHAR)) {
         expr = new Literal(EXPR_LITERAL_CHAR, matched);
-    } else if (match(TK_LITERAL_STRING)) {
-        expr = new Literal(EXPR_LITERAL_STRING, matched);
+    } else if (lookahead(TK_LITERAL_STRING)) {
+        expr = parse_string_literal();
     } else if (match(TK_LITERAL_SYMBOL)) {
         expr = new Literal(EXPR_LITERAL_SYMBOL, matched);
     } else if (match(TK_TRUE)) {
@@ -1114,6 +1127,41 @@ Expression* Parser::parse_primary_expression() {
         expr = new UnOp(EXPR_GLOBAL_SCOPE, parse_identifier_expression());
     } else if (lookahead(TK_BITWISE_OR)) {
         expr = parse_anonymous_function();
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_string_literal() {
+    Expression* expr;
+    StringBuilder* builder;
+    std::vector<std::string> parts;
+
+    expect(TK_LITERAL_STRING);
+    std::string str(matched.get_lexeme());
+
+    if (has_interpolation(str)) {
+        builder = new StringBuilder();
+        parts = split_interpolation(str);
+
+        for (int i = 0; i < parts.size(); ++i) {
+            std::cout << '"' << parts[i] << "\"\n";
+
+            if (parts[i].size() > 0) {
+                if (parts[i][0] == '$' || parts[i][0] == '{') {
+                    parts[i][0] = ' ';
+
+                    Parser p;
+                    builder->add_expression(p.read_expression_from_string(parts[i]));
+                } else {
+                    builder->add_expression(new Literal(EXPR_LITERAL_STRING, parts[i]));
+                }
+            }
+        }
+
+        expr = builder;
+    } else {
+        expr = new Literal(EXPR_LITERAL_STRING, matched);
     }
 
     return expr;
@@ -1327,4 +1375,68 @@ void Parser::indent() {
 
 void Parser::dedent() {
     indent_stack.pop();
+}
+
+std::vector<std::string> Parser::split_interpolation(std::string str) {
+    std::vector<std::string> res;
+    std::string buffer;
+
+    for (int i = 1; i < str.size() - 1; ++i) {
+        if (str[i] == '\\') {
+            buffer += str[i];
+            buffer += str[i + 1];
+            i += 1;
+        } else if (str[i] == '$' || str[i] == '{' || str[i] == '}') {
+            res.push_back(buffer);
+            buffer = "";
+
+            if (str[i] == '$' || str[i] == '{') {
+                buffer += str[i];
+            }
+
+            if (str[i] == '$') {
+                ++i;
+
+                while (i < str.size() - 1 && ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9') || (str[i] == '_'))) {
+                    buffer += str[i];
+                    ++i;
+                }
+
+                res.push_back(buffer);
+                buffer = "";
+
+                if (i < str.size()) {
+                    buffer += str[i];
+                }
+            }
+        } else {
+            buffer += str[i];
+        }
+    }
+
+    res.push_back(buffer);
+
+    for (int i = 0; i < res.size(); ++i) {
+        char c = res[i][0];
+
+        if (c != '$' && c != '{') {
+            std::stringstream ss;
+            ss << '"' << res[i] << '"';
+            res[i] = ss.str();
+        }
+    }
+
+    return res;
+}
+
+bool Parser::has_interpolation(std::string str) {
+    for (int i = 0; i < str.size(); ++i) {
+        if (str[i] == '\\') {
+            i += 2;
+        } else if (str[i] == '$' || str[i] == '{') {
+            return true;
+        }
+    }
+
+    return false;
 }

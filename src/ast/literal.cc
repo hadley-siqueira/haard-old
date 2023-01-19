@@ -1,5 +1,6 @@
 #include "ast/literal.h"
 #include "utils/utils.h"
+#include "utils/string_pool.h"
 
 using namespace haard;
 
@@ -13,6 +14,13 @@ Literal::Literal(int kind, Token& token) {
     lexeme = token.get_lexeme();
     line = token.get_line();
     column = token.get_column();
+}
+
+Literal::Literal(int kind, std::string str) {
+    this->kind = kind;
+    lexeme = StringPool::get(str);
+    line = 0;
+    column = 0;
 }
             
 const char* Literal::get_lexeme() {
@@ -54,3 +62,4 @@ uint64_t Literal::to_u64() {
 
     return res;
 }
+
