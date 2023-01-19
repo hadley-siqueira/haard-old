@@ -62,7 +62,7 @@ syn keyword HDStatement	lambda nonlocal pass return with yield new delete
 syn keyword HDStatement	class def function var const enum union struct type alias nextgroup=HDFunction skipwhite
 syn keyword HDConditional	elif else if
 syn keyword HDRepeat	for while case others
-syn keyword HDOperator	and in is not or
+syn keyword HDOperator	and in is not or sizeof
 syn keyword HDException	except finally raise try
 syn keyword HDInclude	from import
 syn keyword HDAsync		async await
