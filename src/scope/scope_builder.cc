@@ -684,13 +684,13 @@ void ScopeBuilder::build_dot(BinOp* bin) {
     field = (Identifier*) bin->get_right();
     symbol = scope->has_field(field->get_lexeme());
 
-    std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
+    // FIXME
+    /*std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
     std::cout << "fix me because the overloaded is not good, the type scope is not good and maybe some code"
                  "here will go to the call. Call must set the last overloaded index. Refactor call generation"
-                 "handle method types\n";
+                 "handle method types\n";*/
 
     if (symbol) {
-        std::cout << "mtype: " << symbol->get_type()->get_kind() << ' ' << symbol->get_type()->to_cpp() << std::endl;
         field->set_type(symbol->get_type());
         field->set_symbol(symbol);
         bin->set_type(symbol->get_type());

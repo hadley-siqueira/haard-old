@@ -1145,7 +1145,7 @@ Expression* Parser::parse_string_literal() {
         parts = split_interpolation(str);
 
         for (int i = 0; i < parts.size(); ++i) {
-            std::cout << '"' << parts[i] << "\"\n";
+            std::cout << '>' << parts[i] << "<\n";
 
             if (parts[i].size() > 0) {
                 if (parts[i][0] == '$' || parts[i][0] == '{') {
@@ -1380,6 +1380,7 @@ void Parser::dedent() {
 std::vector<std::string> Parser::split_interpolation(std::string str) {
     std::vector<std::string> res;
     std::string buffer;
+    char sep = str[0]; // is it a " or '?
 
     for (int i = 1; i < str.size() - 1; ++i) {
         if (str[i] == '\\') {
@@ -1405,7 +1406,7 @@ std::vector<std::string> Parser::split_interpolation(std::string str) {
                 res.push_back(buffer);
                 buffer = "";
 
-                if (i < str.size()) {
+                if (i < str.size() && str[i] != sep) {
                     buffer += str[i];
                 }
             }
