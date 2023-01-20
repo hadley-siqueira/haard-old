@@ -13,6 +13,8 @@ CompoundStatement::~CompoundStatement() {
     for (int i = 0; i < statements.size(); ++i) {
         delete statements[i];
     }
+
+    delete scope;
 }
 
 Statement* CompoundStatement::get_statement(int idx) {
