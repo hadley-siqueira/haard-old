@@ -10,7 +10,7 @@ Symbol::Symbol() {
     name = nullptr;
 }
 
-Symbol::Symbol(int kind, const char* name, void* descriptor) {
+Symbol::Symbol(int kind, std::string name, void* descriptor) {
     this->kind = kind;
     this->name = name;
     descriptors.push_back(descriptor);
@@ -20,7 +20,7 @@ int Symbol::get_kind() {
     return kind;
 }
 
-const char* Symbol::get_name() {
+std::string Symbol::get_name() {
     return name;
 }
 
@@ -36,7 +36,7 @@ void Symbol::set_kind(int kind) {
     this->kind = kind;
 }
 
-void Symbol::set_name(const char* name) {
+void Symbol::set_name(std::string name) {
     this->name = name;
 }
 

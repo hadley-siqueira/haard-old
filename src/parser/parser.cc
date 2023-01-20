@@ -40,6 +40,13 @@ Expression* Parser::read_expression_from_string(std::string str) {
     return expr;
 }
 
+Function* Parser::read_function_from_string(std::string str) {
+    Scanner s;
+
+    tokens = s.read_from_string(str);
+    return parse_function();
+}
+
 Source* Parser::parse_source() {
     Source* source = new Source();
 

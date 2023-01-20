@@ -118,6 +118,7 @@ namespace haard {
             void define_overloaded_function(Symbol* symbol, Function* function);
 
             void connect_sibling_scopes(Sources* sources);
+            void generate_deletables();
 
         private:
             void link_type(Type* type);
@@ -136,7 +137,7 @@ namespace haard {
 
         private:
             void enter_scope(Scope* scope);
-            void leave_scope();
+            void leave_scope(bool has_deletables=false);
 
         private:
             Logger* logger;
@@ -150,6 +151,7 @@ namespace haard {
             int var_counter;
             int function_counter;
             int class_counter;
+            int sbuilder_counter;
     };
 }
 

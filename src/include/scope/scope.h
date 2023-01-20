@@ -5,6 +5,7 @@
 #include <vector>
 #include "ast/ast.h"
 #include "scope/symbol.h"
+#include "ast/expression.h"
 
 namespace haard {
     class Scope {
@@ -31,10 +32,15 @@ namespace haard {
             void add_sibling(Scope* scope);
             int siblings_count();
 
-            Symbol* has(const char* name);
-            Symbol* has_field(const char* name);
-            Symbol* local_has(const char* name);
-            Symbol* has_class(const char* name);
+            Symbol* has(std::string name);
+            Symbol* has_field(std::string name);
+            Symbol* local_has(std::string name);
+            Symbol* has_class(std::string name);
+
+            std::vector<Variable*> get_variables_to_be_deleted();
+            void add_deletable(Expression* expr);
+            int deletables_count();
+            Expression* get_deletable(int i);
 
             void debug();
 
@@ -43,6 +49,7 @@ namespace haard {
             Scope* parent;
             Scope* super;
             std::vector<Scope*> siblings;
+            std::vector<Expression*> deletables;
     };
 }
 

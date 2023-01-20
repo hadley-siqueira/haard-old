@@ -112,6 +112,8 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
 void IRBuilder::build_function_body(Function* function) {
     build_compound_statement(function->get_statements());
     ctx->new_unary(IR_RETURN, nullptr, nullptr);
+
+    generate_deletables(function->get_scope());
 }
 
 void IRBuilder::set_logger(Logger* logger) {
@@ -186,6 +188,8 @@ void IRBuilder::build_compound_statement(CompoundStatement* stmts) {
     for (int i = 0; i < stmts->statements_count(); ++i) {
         build_statement(stmts->get_statement(i));
     }
+
+    generate_deletables(stmts->get_scope());
 }
 
 void IRBuilder::build_expression_statement(ExpressionStatement* statement) {
@@ -210,8 +214,11 @@ void IRBuilder::build_while_statement(WhileStatement* statement) {
     ctx->new_branch(IR_BZ, cond, after_label);
 
     build_statement(statement->get_statements());
+
     ctx->new_branch(IR_GOTO, begin_label);
     ctx->add_instruction(after);
+
+    generate_deletables(statement->get_scope());
 }
 
 void IRBuilder::build_for_statement(ForStatement* statement) {
@@ -234,9 +241,10 @@ void IRBuilder::build_for_statement(ForStatement* statement) {
     build_statement(statement->get_statements());
     build_for_inc(statement);
 
-    //ctx->new_unary(IR_GOTO, nullptr, begin_label);
     ctx->new_branch(IR_GOTO, begin_label);
     ctx->add_instruction(after);
+
+    generate_deletables(statement->get_scope());
 }
 
 void IRBuilder::build_for_init(ForStatement* statement) {
@@ -285,12 +293,13 @@ void IRBuilder::build_if(BranchStatement* statement) {
 
     build_expression(statement->get_condition());
     cond = last_value;
-    //ctx->new_bin(IR_BZ, nullptr, cond, fb_label);
     ctx->new_branch(IR_BZ, cond, fb_label);
 
     build_statement(statement->get_true_statements());
-    //ctx->new_unary(IR_GOTO, nullptr, after_label);
+
+    generate_deletables(statement->get_scope());
     ctx->new_branch(IR_GOTO, after_label);
+
     ctx->add_instruction(fb);
     build_statement(statement->get_false_statements());
     ctx->add_instruction(after);
@@ -298,6 +307,7 @@ void IRBuilder::build_if(BranchStatement* statement) {
 
 void IRBuilder::build_else(BranchStatement* statement) {
     build_statement(statement->get_true_statements());
+    generate_deletables(statement->get_scope());
 }
 
 void IRBuilder::build_return_statement(JumpStatement* statement) {
@@ -1054,6 +1064,12 @@ void IRBuilder::build_sizeof(UnOp* un) {
     Type* type = un->get_expression()->get_type();
 
     last_value = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, type->get_size_in_bytes())->get_dst();
+}
+
+void IRBuilder::generate_deletables(Scope* scope) {
+    for (int i = 0; i < scope->deletables_count(); ++i) {
+        build_expression(scope->get_deletable(i));
+    }
 }
 
 bool IRBuilder::is_function_call(BinOp* bin) {

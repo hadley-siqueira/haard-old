@@ -12,6 +12,10 @@ Scope::~Scope() {
     for (auto it = symbols.begin(); it != symbols.end(); ++it) {
         delete it->second;
     }
+
+    for (int i = 0; i < deletables.size(); ++i) {
+        delete deletables[i];
+    }
 }
 
 Scope* Scope::get_parent() {
@@ -106,7 +110,7 @@ int Scope::siblings_count() {
     return siblings.size();
 }
 
-Symbol* Scope::local_has(const char* name) {
+Symbol* Scope::local_has(std::string name) {
     if (symbols.count(name) > 0) {
         return symbols[name];
     }
@@ -114,7 +118,7 @@ Symbol* Scope::local_has(const char* name) {
     return nullptr;
 }
 
-Symbol* Scope::has_field(const char* name) {
+Symbol* Scope::has_field(std::string name) {
     if (symbols.count(name) > 0) {
         return symbols[name];
     }
@@ -126,7 +130,7 @@ Symbol* Scope::has_field(const char* name) {
     return nullptr;
 }
 
-Symbol* Scope::has(const char* name) {
+Symbol* Scope::has(std::string name) {
     Symbol* sym = nullptr;
 
     if (symbols.count(name) > 0) {
@@ -156,7 +160,7 @@ Symbol* Scope::has(const char* name) {
     return sym;
 }
 
-Symbol* Scope::has_class(const char* name) {
+Symbol* Scope::has_class(std::string name) {
     Symbol* sym = nullptr;
 
     if (symbols.count(name) > 0) {
@@ -169,6 +173,55 @@ Symbol* Scope::has_class(const char* name) {
 
     if (has_parent()) {
         return parent->has_class(name);
+    }
+
+    return nullptr;
+}
+
+std::vector<Variable*> Scope::get_variables_to_be_deleted() {
+    Variable* var;
+    Type* type;
+    int kind;
+    std::vector<Variable*> vars;
+
+    for (auto it = symbols.begin(); it != symbols.end(); ++it) {
+        Symbol* sym = it->second;
+
+        switch (sym->get_kind()) {
+        case SYM_CLASS_VARIABLE:
+        case SYM_PARAMETER:
+        case SYM_VARIABLE:
+            var = (Variable*) sym->get_descriptor();
+            type = var->get_type();
+
+            if (type->get_kind() == TYPE_NAMED) {
+                NamedType* named = (NamedType*) type;
+                kind = named->get_symbol()->get_kind();
+
+                if (kind == SYM_CLASS) {
+                    vars.push_back(var);
+                }
+            }
+
+        default:
+            break;
+        }
+    }
+
+    return vars;
+}
+
+void Scope::add_deletable(Expression* expr) {
+    deletables.push_back(expr);
+}
+
+int Scope::deletables_count() {
+    return deletables.size();
+}
+
+Expression* Scope::get_deletable(int i) {
+    if (i < deletables_count()) {
+        return deletables[i];
     }
 
     return nullptr;

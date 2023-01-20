@@ -3,6 +3,7 @@
 #include "scope/scope_builder.h"
 #include "log/info_messages.h"
 #include "log/error_messages.h"
+#include "parser/parser.h"
 
 using namespace haard;
 
@@ -15,6 +16,7 @@ ScopeBuilder::ScopeBuilder() {
     var_counter = 0;
     function_counter = 0;
     class_counter = 0;
+    sbuilder_counter = 0;
 }
 
 void ScopeBuilder::build(Sources* sources) {
@@ -72,7 +74,7 @@ void ScopeBuilder::build_function(Function* function) {
     var_counter = 0;
     build_compound_statement(function->get_statements());
 
-    leave_scope();
+    leave_scope(true);
 }
 
 void ScopeBuilder::build_statement(Statement* statement) {
@@ -137,9 +139,13 @@ void ScopeBuilder::build_statement(Statement* statement) {
 }
 
 void ScopeBuilder::build_compound_statement(CompoundStatement* stmts) {
+    enter_scope(stmts->get_scope());
+
     for (int i = 0; i < stmts->statements_count(); ++i) {
         build_statement(stmts->get_statement(i));
     }
+
+    leave_scope(true);
 }
 
 void ScopeBuilder::build_expression_statement(ExpressionStatement* statement) {
@@ -156,7 +162,7 @@ void ScopeBuilder::build_while_statement(WhileStatement* statement) {
     build_expression(statement->get_condition());
     build_compound_statement(statement->get_statements());
 
-    leave_scope();
+    leave_scope(true);
 }
 
 void ScopeBuilder::build_for_statement(ForStatement* statement) {
@@ -169,7 +175,7 @@ void ScopeBuilder::build_for_statement(ForStatement* statement) {
     }
 
     build_compound_statement(statement->get_statements());
-    leave_scope();
+    leave_scope(true);
 }
 
 void ScopeBuilder::build_foreach_statement(ForStatement* statement) {
@@ -190,7 +196,7 @@ void ScopeBuilder::build_foreach_statement(ForStatement* statement) {
     }*/
 
     build_compound_statement(statement->get_statements());
-    leave_scope();
+    leave_scope(true);
 }
 
 void ScopeBuilder::build_branch_statement(BranchStatement* statement) {
@@ -204,7 +210,7 @@ void ScopeBuilder::build_branch_statement(BranchStatement* statement) {
         build_statement(statement->get_true_statements());
     }
 
-    leave_scope();
+    leave_scope(true);
 
     if (statement->get_false_statements()) {
         build_statement(statement->get_false_statements());
@@ -837,9 +843,14 @@ void ScopeBuilder::build_literal_string(Literal* literal) {
 }
 
 void ScopeBuilder::build_string_builder(StringBuilder* sb) {
+    std::stringstream ss;
     NamedType* type;
     Variable* var = sb->get_variable();
-    var->set_name("sbuilder");
+
+    ss << "sbuilder" << sbuilder_counter++;
+    std::string tmp_name = ss.str();
+
+    var->set_name(tmp_name);
     type = new NamedType();
 
     type->set_name("String");
@@ -852,7 +863,7 @@ void ScopeBuilder::build_string_builder(StringBuilder* sb) {
     current_function->add_variable(var);
 
     {
-        Identifier* name = new Identifier("sbuilder");
+        Identifier* name = new Identifier(tmp_name);
         Identifier* method = new Identifier("init");
         BinOp* dot = new BinOp(EXPR_DOT, name, method);
         ExpressionList* args = new ExpressionList(EXPR_ARGS);
@@ -862,7 +873,7 @@ void ScopeBuilder::build_string_builder(StringBuilder* sb) {
     }
 
     for (int i = 0; i < sb->expressions_count(); ++i) {
-        Identifier* name = new Identifier("sbuilder");
+        Identifier* name = new Identifier(tmp_name);
         Identifier* method = new Identifier("add");
         BinOp* dot = new BinOp(EXPR_DOT, name, method);
         ExpressionList* args = new ExpressionList(EXPR_ARGS);
@@ -874,7 +885,7 @@ void ScopeBuilder::build_string_builder(StringBuilder* sb) {
     }
 
     {
-        Identifier* name = new Identifier("sbuilder");
+        Identifier* name = new Identifier(tmp_name);
         Identifier* method = new Identifier("c_str");
         BinOp* dot = new BinOp(EXPR_DOT, name, method);
         ExpressionList* args = new ExpressionList(EXPR_ARGS);
@@ -1056,6 +1067,24 @@ void ScopeBuilder::define_class_methods(Class* klass) {
     for (int i = 0; i < klass->methods_count(); ++i) {
         define_class_method(klass->get_method(i));
     }
+
+    // add default constructor if necessary
+    if (klass->constructors_count() == 0) {
+        std::string c = "def init : void\n    pass\n";
+        Parser parser;
+        Function* m = parser.read_function_from_string(c);
+        klass->add_method(m);
+        define_class_method(m);
+    }
+
+    // add default destructor if necessary
+    if (klass->get_destructor() == nullptr) {
+        std::string c = "def destroy : void\n    pass\n";
+        Parser parser;
+        Function* m = parser.read_function_from_string(c);
+        klass->add_method(m);
+        define_class_method(m);
+    }
 }
 
 void ScopeBuilder::define_class_method(Function* method) {
@@ -1130,6 +1159,21 @@ void ScopeBuilder::connect_sibling_scopes(Sources* sources) {
         for (int j = 0; j < src->import_count(); ++j) {
             scope->add_sibling(src->get_import(j)->get_source()->get_scope());
         }
+    }
+}
+
+void ScopeBuilder::generate_deletables() {
+    std::vector<Variable*> vars = current_scope->get_variables_to_be_deleted();
+
+    for (int i = 0; i < vars.size(); ++i) {
+        Identifier* name = new Identifier(vars[i]->get_name());
+        Identifier* method = new Identifier("destroy");
+        BinOp* dot = new BinOp(EXPR_DOT, name, method);
+        ExpressionList* args = new ExpressionList(EXPR_ARGS);
+        BinOp* call = new BinOp(EXPR_CALL, dot, args);
+        build_expression(call);
+
+        current_scope->add_deletable(call);
     }
 }
 
@@ -1326,7 +1370,11 @@ void ScopeBuilder::enter_scope(Scope* scope) {
     current_scope = scope;
 }
 
-void ScopeBuilder::leave_scope() {
+void ScopeBuilder::leave_scope(bool has_deletables) {
+    if (has_deletables) {
+        generate_deletables();
+    }
+
     current_scope = scopes.top();
     scopes.pop();
 }

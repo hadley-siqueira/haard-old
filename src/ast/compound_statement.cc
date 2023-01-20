@@ -1,10 +1,12 @@
 #include "defs.h"
 #include "ast/compound_statement.h"
+#include "scope/scope.h"
 
 using namespace haard;
 
 CompoundStatement::CompoundStatement() {
     kind = STMT_COMPOUND;
+    scope = new Scope();
 }
 
 CompoundStatement::~CompoundStatement() {
@@ -37,4 +39,12 @@ Statement* CompoundStatement::clone() {
     }
 
     return other;
+}
+
+Scope* CompoundStatement::get_scope() const {
+    return scope;
+}
+
+void CompoundStatement::set_scope(Scope* value) {
+    scope = value;
 }

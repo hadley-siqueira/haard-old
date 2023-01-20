@@ -107,6 +107,8 @@ namespace haard {
 
             void build_sizeof(UnOp* un);
 
+            void generate_deletables(Scope* scope);
+
         private:
             bool is_function_call(BinOp* bin);
             bool is_method_call(BinOp* bin);
