@@ -41,13 +41,15 @@ namespace haard {
             void build_this(ThisExpression* expr);
             void build_new(NewExpression* op);
             void build_delete(UnOp* op);
-            void build_assignment(BinOp* bin);
+
             void build_call(BinOp* bin);
             void build_dot(BinOp* bin);
             void build_index_access(BinOp* bin);
             void build_expression_in(BinOp* bin);
             void build_inclusive_range(BinOp* bin);
             void build_cast_expression(CastExpression* expr);
+
+            void build_assignment(BinOp* bin);
 
             void build_pre_inc(UnOp* op);
             void build_pre_dec(UnOp* op);
@@ -127,6 +129,7 @@ namespace haard {
         private:
             bool is_new_var_assign(BinOp* bin);
             void create_new_var(BinOp* bin);
+            bool is_constructor_call(BinOp* bin);
 
         public:
             void set_logger(Logger* logger);

@@ -39,7 +39,7 @@ namespace haard {
             void debug();
 
         private:
-            std::map<const char*, Symbol*> symbols;
+            std::map<std::string, Symbol*> symbols;
             Scope* parent;
             Scope* super;
             std::vector<Scope*> siblings;

@@ -1,0 +1,29 @@
+import std.io as io
+import std.string
+
+class Pixel:
+    r : u8
+    g : u8
+    b : u8
+
+    def init : void
+        r = 0
+        g = 0
+        b = 0
+
+    def init : void
+        @rv : u8
+        @gv : u8
+        @bv : u8
+
+        r = rv
+        g = gv
+        b = bv
+
+    def println : void
+        io::println("($r, $g, $b)")
+
+def main : void
+    p = Pixel()
+    p2 = Pixel(25, 25, 0)
+    p2.println()

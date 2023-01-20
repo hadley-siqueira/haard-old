@@ -3,6 +3,7 @@
 
 #include "token/token.h"
 #include "ast/expression.h"
+#include "scope/symbol.h"
 
 namespace haard {
     class BinOp : public Expression {
@@ -24,12 +25,20 @@ namespace haard {
 
             Expression* clone();
 
-        private:
+            Symbol* get_constructor_call() const;
+            void set_constructor_call(Symbol* value);
+
+            int get_overloaded_index() const;
+            void set_overloaded_index(int value);
+
+    private:
             Expression* left;
             Expression* right;
             int line;
             int column;
             bool initial_assign;
+            Symbol* constructor_call;
+            int overloaded_index;
     };
 }
 

@@ -9,9 +9,7 @@ Scope::Scope() {
 }
 
 Scope::~Scope() {
-    std::map<const char*, Symbol*>::iterator it;
-
-    for (it = symbols.begin(); it != symbols.end(); ++it) {
+    for (auto it = symbols.begin(); it != symbols.end(); ++it) {
         delete it->second;
     }
 }
@@ -178,7 +176,6 @@ Symbol* Scope::has_class(const char* name) {
 
 void Scope::debug() {
     Symbol* sym;
-    std::map<const char*, Symbol*>::iterator it;
 
     if (has_parent()) {
         parent->debug();
@@ -187,7 +184,7 @@ void Scope::debug() {
 
     std::cout << "{";
 
-    for (it = symbols.begin(); it != symbols.end(); ++it) {
+    for (auto it = symbols.begin(); it != symbols.end(); ++it) {
         sym = it->second;
 
         for (int i = 0; i < sym->overloaded_count(); ++i) {

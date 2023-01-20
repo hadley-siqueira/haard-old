@@ -73,3 +73,19 @@ Expression* BinOp::clone() {
     return other;
 }
 
+Symbol* BinOp::get_constructor_call() const {
+    return constructor_call;
+}
+
+void BinOp::set_constructor_call(Symbol* value) {
+    constructor_call = value;
+}
+
+int BinOp::get_overloaded_index() const {
+    return overloaded_index;
+}
+
+void BinOp::set_overloaded_index(int value) {
+    overloaded_index = value;
+}
+

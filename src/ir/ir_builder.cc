@@ -207,11 +207,9 @@ void IRBuilder::build_while_statement(WhileStatement* statement) {
     ctx->add_instruction(begin);
     build_expression(statement->get_condition());
     cond = last_value;
-    //ctx->new_bin(IR_BZ, nullptr, cond, after_label);
     ctx->new_branch(IR_BZ, cond, after_label);
 
     build_statement(statement->get_statements());
-    //ctx->new_unary(IR_GOTO, nullptr, begin_label);
     ctx->new_branch(IR_GOTO, begin_label);
     ctx->add_instruction(after);
 }
@@ -346,6 +344,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
 
     case EXPR_DOT:
         build_member_access(bin, lvalue);
+        break;
+
+    case EXPR_CONSTRUCTOR_ASSIGNMENT:
+        build_constructor_assignment(bin);
         break;
 
     case EXPR_ASSIGN:
@@ -619,6 +621,8 @@ void IRBuilder::build_call(BinOp* bin) {
         build_function_call(bin, call);
     } else if (is_method_call(bin)) {
         build_method_call(bin, call);
+    } else if (is_constructor_call(bin)) {
+        //DBG; exit(0);
     } else if (bin->get_left()->get_kind() == EXPR_DOT) {
         IRValue* this_ptr;
 
@@ -797,6 +801,27 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     } else {
         ctx->new_memcpy(left, right, size);
     }
+}
+
+void IRBuilder::build_constructor_assignment(BinOp* bin) {
+    IRValue* this_ptr;
+    std::string name;
+    Function* f;
+    BinOp* constructor;
+    IRCall* call = new IRCall();
+
+    build_expression(bin->get_left(), true);
+    this_ptr = last_value;
+
+    constructor = (BinOp*) bin->get_right();
+    int idx = constructor->get_overloaded_index();
+    f = (Function*) constructor->get_constructor_call()->get_descriptor(idx);
+    name = f->get_qualified_name();
+
+    call->set_name(name);
+
+    build_call_arguments(call, (ExpressionList*) constructor->get_right(), this_ptr);
+    ctx->add_instruction(call);
 }
 
 void IRBuilder::build_logical_or(BinOp* bin) {
@@ -1052,6 +1077,22 @@ bool IRBuilder::is_method_call(BinOp* bin) {
     if (bin->get_left()->get_kind() == EXPR_ID) {
         id = (Identifier*) bin->get_left();
         return id->get_symbol()->get_kind() == SYM_METHOD;
+    }
+
+    return false;
+}
+
+bool IRBuilder::is_constructor_call(BinOp* bin) {
+    Identifier* id;
+    Type* type;
+    Symbol* sym;
+
+    if (bin->get_left()->get_kind() == EXPR_ID) {
+        id = (Identifier*) bin->get_left();
+        type = id->get_type();
+        sym = id->get_symbol();
+
+        return type->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS;
     }
 
     return false;

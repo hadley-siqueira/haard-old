@@ -67,6 +67,7 @@ namespace haard {
             void build_member_access(BinOp* bin, bool lvalue=false);
 
             void build_assignment(BinOp* bin, bool lvalue=false);
+            void build_constructor_assignment(BinOp* bin);
 
             void build_logical_or(BinOp* bin);
             void build_logical_and(BinOp* bin);
@@ -109,6 +110,7 @@ namespace haard {
         private:
             bool is_function_call(BinOp* bin);
             bool is_method_call(BinOp* bin);
+            bool is_constructor_call(BinOp* bin);
 
         public:
             void set_logger(Logger* logger);

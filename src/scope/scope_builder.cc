@@ -501,13 +501,19 @@ void ScopeBuilder::build_delete(UnOp* op) {
 }
 
 void ScopeBuilder::build_assignment(BinOp* bin) {
+    bool new_var = false;
     build_expression(bin->get_right());
 
     if (is_new_var_assign(bin)) {
+        new_var = true;
         create_new_var(bin);
     }
  
     build_expression(bin->get_left());
+
+    if (new_var && is_constructor_call(bin)) {
+        bin->set_kind(EXPR_CONSTRUCTOR_ASSIGNMENT);
+    }
 }
 
 void ScopeBuilder::build_pre_inc(UnOp* op) {
@@ -595,37 +601,20 @@ void ScopeBuilder::build_call(BinOp* bin) {
             ftype = (FunctionType*) f->get_self_type();
             bin->set_type(ftype->get_return_type());
         } else if (tl->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS) {
-            bool found = false;
-            int i = 0;
             Class* klass = (Class*) sym->get_descriptor();
             args = (TypeList*) tr;
 
-            for (i = 0; i < klass->constructors_count(); ++i) {
-                Function* f = (Function*) klass->get_constructor(i);
-                ftype = (FunctionType*) f->get_self_type();
+            Symbol* sym2 = klass->get_scope()->local_has("init");
+            int index = -1;
 
-                if (ftype->check_arguments_type(args)) {
-                    found = true;
-                    break;
-                }
+            if (sym2) {
+                index = sym2->get_overloaded(args);
             }
 
-            if (!found) {
-                for (i = 0; i < klass->constructors_count(); ++i) {
-                    Function* f = (Function*) klass->get_constructor(i);
-                    ftype = (FunctionType*) f->get_self_type();
-
-                    if (ftype->check_arguments_type_with_conversion(args)) {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-
-            if (found) {
-                // id->set_overloaded_index(i);
+            if (index >= 0) {
+                bin->set_constructor_call(sym2);
+                bin->set_overloaded_index(index);
             } else {
-                // FIXME
                 std::cout << "Error: constructor not overloaded with signature\n";
                 DBG;
                 exit(0);
@@ -940,6 +929,29 @@ void ScopeBuilder::create_new_var(BinOp* bin) {
     bin->set_initial_assign(true);
     current_scope->define(var);
     current_function->add_variable(var);
+}
+
+bool ScopeBuilder::is_constructor_call(BinOp* bin) {
+    BinOp* call;
+    Identifier* id;
+    Symbol* sym;
+    Type* type;
+
+    if (bin->get_right()->get_kind() == EXPR_CALL) {
+        call = (BinOp*) bin->get_right();
+
+        if (call->get_left()->get_kind() == EXPR_ID) {
+            id = (Identifier*) call->get_left();
+            type = id->get_type();
+            sym = id->get_symbol();
+
+            return type->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS;
+        } else if (call->get_left()->get_kind() == EXPR_SCOPE) {
+
+        }
+    }
+
+    return false;
 }
 
 // define methods
