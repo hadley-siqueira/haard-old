@@ -13,6 +13,8 @@ Function::Function() {
     virtual_flag = false;
     template_header = nullptr;
     self_type = nullptr;
+    constructor_flag = false;
+    destructor_flag = false;
 }
 
 Function::~Function() {
@@ -232,6 +234,14 @@ bool Function::is_method() {
     return method_flag;
 }
 
+bool Function::is_constructor() {
+    return constructor_flag;
+}
+
+bool Function::is_destructor() {
+    return destructor_flag;
+}
+
 bool Function::is_virtual() {
     return virtual_flag;
 }
@@ -400,4 +410,12 @@ Function* Function::get_parent_method() const {
 
 void Function::set_parent_method(Function* value) {
     parent_method = value;
+}
+
+void Function::set_constructor(bool value) {
+    constructor_flag = value;
+}
+
+void Function::set_destructor(bool value) {
+    destructor_flag = value;
 }

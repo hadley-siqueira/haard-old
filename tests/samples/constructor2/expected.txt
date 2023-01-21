@@ -1,0 +1,12 @@
+build pixel 1
+build pixel 1
+build pixel2
+build pixel 1
+build pixel2
+build pixel3
+destroying pixel
+destroy pixel2
+destroying pixel
+destroy pixel3
+destroy pixel2
+destroying pixel

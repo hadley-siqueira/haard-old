@@ -58,6 +58,8 @@ namespace haard {
 
             bool is_template();
             bool is_method();
+            bool is_constructor();
+            bool is_destructor();
             bool is_virtual();
             bool is_binded_with_types(TypeList* types);
             void bind_with(TypeList* types);
@@ -84,12 +86,17 @@ namespace haard {
             Function* get_parent_method() const;
             void set_parent_method(Function* value);
 
+            void set_constructor(bool value);
+            void set_destructor(bool value);
+
     private:
             int uid;
             int line;
             int column;
             int overloaded_index;
             bool method_flag;
+            bool constructor_flag;
+            bool destructor_flag;
             bool virtual_flag;
             const char* name;
             Type* return_type;

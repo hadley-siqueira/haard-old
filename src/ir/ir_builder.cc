@@ -336,6 +336,10 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_scope(bin, lvalue);
         break;
 
+    case EXPR_THIS:
+        build_this((ThisExpression*) expression);
+        break;
+
     case EXPR_ID:
         build_identifier((Identifier*) expression, lvalue);
         break;
@@ -592,6 +596,10 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
             last_value = add;
         }
     }
+}
+
+void IRBuilder::build_this(ThisExpression* expr) {
+    last_value = ctx->get_alloca_value("this");
 }
 
 void IRBuilder::build_pre_inc(UnOp* un) {

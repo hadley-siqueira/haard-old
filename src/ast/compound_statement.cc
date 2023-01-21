@@ -33,6 +33,10 @@ void CompoundStatement::add_statement(Statement* stmt) {
     statements.push_back(stmt);
 }
 
+void CompoundStatement::add_front(Statement* stmt) {
+    statements.insert(statements.begin(), stmt);
+}
+
 Statement* CompoundStatement::clone() {
     CompoundStatement* other = new CompoundStatement();
 

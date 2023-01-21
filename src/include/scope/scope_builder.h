@@ -120,6 +120,9 @@ namespace haard {
             void connect_sibling_scopes(Sources* sources);
             void generate_deletables();
 
+            void add_parent_constructors_call(Function* function);
+            void add_parent_destructors_call(Function* function);
+
         private:
             void link_type(Type* type);
             void link_named_type(NamedType* type);
@@ -135,7 +138,10 @@ namespace haard {
         public:
             void set_logger(Logger* logger);
 
-        private:
+            void add_default_constructor(Class* klass);
+            void add_default_destructor(Class* klass);
+
+    private:
             void enter_scope(Scope* scope);
             void leave_scope(bool has_deletables=false);
 

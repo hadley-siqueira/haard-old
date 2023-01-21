@@ -128,10 +128,12 @@ void Class::add_method(Function* method) {
 
     if (strcmp(method->get_name(), "init") == 0) {
         constructors.push_back(method);
+        method->set_constructor(true);
     }
     
     if (strcmp(method->get_name(), "destroy") == 0) {
         destructor = method;
+        method->set_destructor(true);
     }
 
     method->set_method();

@@ -15,6 +15,7 @@ namespace haard {
             Statement* get_statement(int idx);
             int statements_count();
             void add_statement(Statement* stmt);
+            void add_front(Statement* stmt);
 
             Statement* clone();
 

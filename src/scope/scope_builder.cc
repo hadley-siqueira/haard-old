@@ -48,16 +48,12 @@ void ScopeBuilder::build_source(Source* source) {
 
 void ScopeBuilder::build_class(Class* klass) {
     current_class = klass;
-    enter_scope(klass->get_scope());
 
-   /* define_class_template_header(klass);
-    define_class_super(klass);
-    define_class_variables(klass);
-    define_class_methods(klass);*/
+    enter_scope(klass->get_scope());
     build_class_methods(klass);
     klass->calculate_variables_offset();
-
     leave_scope();
+
     current_class = nullptr;
 }
 
@@ -72,6 +68,13 @@ void ScopeBuilder::build_function(Function* function) {
     current_function = function;
 
     var_counter = 0;
+
+    if (function->is_constructor()) {
+        add_parent_constructors_call(function);
+    } else if (function->is_destructor()) {
+        add_parent_destructors_call(function);
+    }
+
     build_compound_statement(function->get_statements());
 
     leave_scope(true);
@@ -1063,12 +1066,7 @@ void ScopeBuilder::define_class_variable(Variable* var) {
     }
 }
 
-void ScopeBuilder::define_class_methods(Class* klass) {
-    for (int i = 0; i < klass->methods_count(); ++i) {
-        define_class_method(klass->get_method(i));
-    }
-
-    // add default constructor if necessary
+void ScopeBuilder::add_default_constructor(Class* klass) {
     if (klass->constructors_count() == 0) {
         std::string c = "def init : void\n    pass\n";
         Parser parser;
@@ -1076,8 +1074,9 @@ void ScopeBuilder::define_class_methods(Class* klass) {
         klass->add_method(m);
         define_class_method(m);
     }
+}
 
-    // add default destructor if necessary
+void ScopeBuilder::add_default_destructor(Class* klass) {
     if (klass->get_destructor() == nullptr) {
         std::string c = "def destroy : void\n    pass\n";
         Parser parser;
@@ -1085,6 +1084,15 @@ void ScopeBuilder::define_class_methods(Class* klass) {
         klass->add_method(m);
         define_class_method(m);
     }
+}
+
+void ScopeBuilder::define_class_methods(Class* klass) {
+    for (int i = 0; i < klass->methods_count(); ++i) {
+        define_class_method(klass->get_method(i));
+    }
+
+    add_default_constructor(klass);
+    add_default_destructor(klass);
 }
 
 void ScopeBuilder::define_class_method(Function* method) {
@@ -1174,6 +1182,44 @@ void ScopeBuilder::generate_deletables() {
         build_expression(call);
 
         current_scope->add_deletable(call);
+    }
+}
+
+void ScopeBuilder::add_parent_constructors_call(Function* function) {
+    Class* klass = function->get_class();
+    Class* super;
+    CompoundStatement* stmts;
+
+    if (klass->has_super_class()) {
+        super = klass->get_super_class_descriptor();
+        stmts = function->get_statements();
+        std::string name = super->get_name();
+
+        Parser p;
+        std::string cmd = "(this as " + name + "*).init()";
+        Expression* expr = p.read_expression_from_string(cmd);
+        ExpressionStatement* es = new ExpressionStatement(expr);
+        build_statement(es);
+        stmts->add_front(es);
+    }
+}
+
+void ScopeBuilder::add_parent_destructors_call(Function* function) {
+    Class* klass = function->get_class();
+    Class* super;
+    CompoundStatement* stmts;
+
+    if (klass->has_super_class()) {
+        super = klass->get_super_class_descriptor();
+        stmts = function->get_statements();
+        std::string name = super->get_name();
+
+        Parser p;
+        std::string cmd = "(this as " + name + "*).destroy()";
+        Expression* expr = p.read_expression_from_string(cmd);
+        ExpressionStatement* es = new ExpressionStatement(expr);
+        build_statement(es);
+        stmts->add_statement(es);
     }
 }
 
@@ -1314,9 +1360,10 @@ void ScopeBuilder::link_type(Type* type) {
 void ScopeBuilder::link_named_type(NamedType* type) {
     TemplateHeader* header = type->get_template_header();
     Symbol* sym = current_scope->has(type->get_name());
+    std::string name = type->get_name();
 
     if (!sym) {
-        logger->error_and_exit("<red>error: </red> named type not in scope");
+        logger->error_and_exit("<red>error: </red> type <white>'" + name + "'</white> not in scope");
     }
 
     int kind = sym->get_kind();
