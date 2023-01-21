@@ -1,0 +1,13 @@
+init C1
+init C2
+-----
+init C1
+init C2
+init C1
+init C3
+destroy C3
+destroy C1
+destroy C2
+destroy C1
+destroy C2
+destroy C1

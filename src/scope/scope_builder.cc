@@ -70,8 +70,10 @@ void ScopeBuilder::build_function(Function* function) {
     var_counter = 0;
 
     if (function->is_constructor()) {
+        add_members_initialization(function);
         add_parent_constructors_call(function);
     } else if (function->is_destructor()) {
+        add_members_destruction(function);
         add_parent_destructors_call(function);
     }
 
@@ -1173,7 +1175,7 @@ void ScopeBuilder::connect_sibling_scopes(Sources* sources) {
 void ScopeBuilder::generate_deletables() {
     std::vector<Variable*> vars = current_scope->get_variables_to_be_deleted();
 
-    for (int i = 0; i < vars.size(); ++i) {
+    for (int i = vars.size() - 1; i >= 0; --i) {
         Identifier* name = new Identifier(vars[i]->get_name());
         Identifier* method = new Identifier("destroy");
         BinOp* dot = new BinOp(EXPR_DOT, name, method);
@@ -1220,6 +1222,56 @@ void ScopeBuilder::add_parent_destructors_call(Function* function) {
         ExpressionStatement* es = new ExpressionStatement(expr);
         build_statement(es);
         stmts->add_statement(es);
+    }
+}
+
+void ScopeBuilder::add_members_initialization(Function* function) {
+    Class* klass = function->get_class();
+    CompoundStatement* stmts;
+    Variable* var;
+    Type* type;
+
+    stmts = function->get_statements();
+
+    for (int i = 0; i < klass->variables_count(); ++i) {
+        var = klass->get_variable(i);
+        type = var->get_type();
+
+        if (type->is_class()) {
+            std::string name = var->get_name();
+
+            Parser p;
+            std::string cmd = name + ".init()";
+            Expression* expr = p.read_expression_from_string(cmd);
+            ExpressionStatement* es = new ExpressionStatement(expr);
+            build_statement(es);
+            stmts->add_front(es);
+        }
+    }
+}
+
+void ScopeBuilder::add_members_destruction(Function* function) {
+    Class* klass = function->get_class();
+    CompoundStatement* stmts;
+    Variable* var;
+    Type* type;
+
+    stmts = function->get_statements();
+
+    for (int i = 0; i < klass->variables_count(); ++i) {
+        var = klass->get_variable(i);
+        type = var->get_type();
+
+        if (type->is_class()) {
+            std::string name = var->get_name();
+
+            Parser p;
+            std::string cmd = name + ".destroy()";
+            Expression* expr = p.read_expression_from_string(cmd);
+            ExpressionStatement* es = new ExpressionStatement(expr);
+            build_statement(es);
+            stmts->add_statement(es);
+        }
     }
 }
 

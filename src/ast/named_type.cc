@@ -108,3 +108,7 @@ int NamedType::get_alignment() {
 Scope* NamedType::get_scope() {
     return symbol->get_descriptor_scope();
 }
+
+bool NamedType::is_class() {
+    return kind == TYPE_NAMED && symbol->get_kind() == SYM_CLASS;
+}

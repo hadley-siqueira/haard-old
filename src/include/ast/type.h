@@ -34,6 +34,7 @@ namespace haard {
             virtual int get_alignment();
             virtual Scope* get_scope();
             virtual bool is_signed();
+            virtual bool is_class();
 
         protected:
             int kind;

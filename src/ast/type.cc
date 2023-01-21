@@ -421,3 +421,7 @@ bool Type::is_signed() {
 
     return true;
 }
+
+bool Type::is_class() {
+    return false;
+}

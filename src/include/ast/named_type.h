@@ -23,6 +23,7 @@ namespace haard {
             int get_size_in_bytes();
             int get_alignment();
             Scope* get_scope();
+            bool is_class();
 
             Symbol* has_field(const char* name);
             bool equal(Type* type);

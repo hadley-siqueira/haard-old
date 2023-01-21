@@ -123,6 +123,9 @@ namespace haard {
             void add_parent_constructors_call(Function* function);
             void add_parent_destructors_call(Function* function);
 
+            void add_members_initialization(Function* function);
+            void add_members_destruction(Function* function);
+
         private:
             void link_type(Type* type);
             void link_named_type(NamedType* type);
