@@ -65,6 +65,9 @@ namespace haard {
             char* file_mode;
             char* file_buffer;
             FILE* file_descriptor;
+
+            // malloc/free
+            void* malloced;
     };
 }
 

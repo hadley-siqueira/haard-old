@@ -1,0 +1,13 @@
+def malloc : void*
+    @size : int
+
+    ptr = 0x30 as u64*
+    *ptr = size
+
+    return *ptr
+
+def free : void
+    @ptr : void*
+
+    m = 0x31 as void*
+    *m = ptr

@@ -1,0 +1,22 @@
+import std.io
+import std.string
+import std.memory
+
+class Pixel:
+    r : int
+    g : int
+    b : int
+
+    def init : void
+        r = 71
+        g = 77
+        b = 1
+
+        println("$r, $g, $b")
+
+def main : void
+    var pix : Pixel
+    p = malloc(sizeof(pix) * 3) as Pixel*
+    p.init()
+    println(p.r)
+    free(p)

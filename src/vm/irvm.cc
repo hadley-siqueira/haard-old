@@ -484,6 +484,8 @@ bool IrVM::is_special_load_address(uint64_t addr) {
     case 0x26:
     case 0x27:
     case 0x28:
+    case 0x30:
+    case 0x31:
         return true;
     }
 
@@ -504,6 +506,8 @@ bool IrVM::is_special_store_address(uint64_t addr) {
     case 0x26:
     case 0x27:
     case 0x28:
+    case 0x30:
+    case 0x31:
         return true;
     }
 
@@ -520,6 +524,9 @@ uint64_t IrVM::load_special_address(uint64_t addr) {
 
     case 0x22:
         return (uint64_t) file_descriptor;
+
+    case 0x30:
+        return (uint64_t) malloced;
 
     default:
         break;
@@ -570,6 +577,13 @@ void IrVM::store_special_address(uint64_t addr, uint64_t value) {
         fprintf(file_descriptor, "%s", file_buffer);
         break;
 
+    case 0x30:
+        malloced = malloc(value);
+        break;
+
+    case 0x31:
+        free((void*) value);
+        break;
     }
 }
 
