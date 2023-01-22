@@ -37,7 +37,6 @@ class String:
             buffer[size] =  '\0'
             strrev(&buffer[initt])
 
-
     def c_str : char*
         return &buffer[0]
 
@@ -48,4 +47,6 @@ class String:
             buffer[size] = *s
             ++size
             ++s
+
+        buffer[size] = '\0'
 

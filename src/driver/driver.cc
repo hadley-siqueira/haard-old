@@ -13,6 +13,7 @@
 #include "scope/scope_builder.h"
 #include "ir/ir_builder.h"
 #include "vm/irvm.h"
+#include "printer/ir_printer.h"
 
 using namespace haard;
 
@@ -27,6 +28,7 @@ Driver::Driver() {
     info_flag = false;
     help_flag = false;
     show_logs_flag = false;
+    show_ir_flag = false;
 }
 
 Driver::~Driver() {
@@ -103,6 +105,8 @@ void Driver::set_flags(int argc, char* argv[]) {
             help_flag = true;
         } else if (strcmp(argv[i], "--show-logs") == 0) {
             show_logs_flag = true;
+        } else if (strcmp(argv[i], "--show-ir") == 0) {
+            show_ir_flag = true;
         }
     }
 }
@@ -150,9 +154,15 @@ void Driver::ir_generation() {
 
     auto modules = builder.get_modules();
 
+    if (show_ir_flag) {
+        IRPrinter p;
+        p.print_modules(modules);
+        std::cout << p.get_output() << std::endl;
+    }
+
     IrVM vm;
     vm.execute_modules(modules);
-    //vm.dump_memory();
+    //vm.dump_memory(1024 * 2);
 
     delete modules;
 }

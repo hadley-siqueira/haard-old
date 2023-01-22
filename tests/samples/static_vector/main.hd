@@ -48,6 +48,10 @@ class Vector:
         print()
         io::print('\n')
 
+    def println2 : void
+        print2()
+        io::print('\n')
+
     def pop : void
         size = size - 1
 
@@ -70,17 +74,16 @@ class Vector:
 def main : void
     v = Vector()
 
-    v.add(2)
-    v.add(3)
-    v.add(7)
-    v.println()
-    v.pop()
-    v.println()
-
     for i = 0; i < 10; ++i:
+        v.println2()
         v.add(i)
+
+    v.println2()
 
     v.add_front(77)
     v.println()
     v.replace(0, 100)
-    v.println()
+    v.println2()
+    v.replace(1, 100)
+    v.println2()
+
