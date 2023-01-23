@@ -8,7 +8,6 @@
 #include "ast/type.h"
 #include "ast/type_list.h"
 #include "ast/function_type.h"
-#include "ast/template_header.h"
 #include "ast/compound_statement.h"
 
 namespace haard {
@@ -74,8 +73,8 @@ namespace haard {
             void set_overloaded_index(int idx);
             int get_overloaded_index();
 
-            void set_template_header(TemplateHeader* header);
-            TemplateHeader* get_template_header();
+            void set_template_header(TypeList* header);
+            TypeList* get_template_header();
 
             void set_class(Class* klass);
             Class* get_class();
@@ -101,7 +100,7 @@ namespace haard {
             const char* name;
             Type* return_type;
             FunctionType* self_type;
-            TemplateHeader* template_header;
+            TypeList* template_header;
             CompoundStatement* statements;
             Function* parent_method;
             Scope* scope;

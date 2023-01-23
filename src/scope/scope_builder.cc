@@ -660,7 +660,10 @@ void ScopeBuilder::build_call(BinOp* bin) {
         }
     } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
         // FIXME assuming that is a function type
-        
+        TemplateExpression* expr = (TemplateExpression*) bin->get_left();
+
+        std::cout << expr->get_types()->to_str() << std::endl;
+        exit(0);
     }
 }
 
@@ -1135,7 +1138,7 @@ void ScopeBuilder::define_method_signature(Function* method) {
 }
 
 void ScopeBuilder::define_class_template_header(Class* klass) {
-    TemplateHeader* header = klass->get_template_header();
+    TypeList* header = klass->get_template_header();
 
     if (header) {
         for (int i = 0; i < header->types_count(); ++i) {
@@ -1305,7 +1308,7 @@ void ScopeBuilder::define_function_signature(Function* function) {
 
 void ScopeBuilder::define_function_template_header(Function* function) {
     Symbol* sym;
-    TemplateHeader* header = function->get_template_header();
+    TypeList* header = function->get_template_header();
 
     if (header) {
         for (int i = 0; i < header->types_count(); ++i) {
@@ -1347,7 +1350,7 @@ void ScopeBuilder::define_function_self_type(Function* function) {
     FunctionType* ftype = new FunctionType();
 
     if (function->get_template_header()) {
-        TemplateHeader* header = function->get_template_header();
+        TypeList* header = function->get_template_header();
 
         for (int i = 0; i < header->types_count(); ++i) {
             ftype->add_template(header->get_type(i));
@@ -1410,7 +1413,7 @@ void ScopeBuilder::link_type(Type* type) {
 }
 
 void ScopeBuilder::link_named_type(NamedType* type) {
-    TemplateHeader* header = type->get_template_header();
+    TypeList* header = type->get_template_header();
     Symbol* sym = current_scope->has(type->get_name());
     std::string name = type->get_name();
 
@@ -1450,7 +1453,7 @@ void ScopeBuilder::link_array_list_type(ArrayListType* type) {
     build_expression(type->get_expression());
 }
 
-void ScopeBuilder::link_template_header(TemplateHeader* header) {
+void ScopeBuilder::link_template_header(TypeList* header) {
     if (header) {
         for (int i = 0; i < header->types_count(); ++i) {
             link_type(header->get_type(i));

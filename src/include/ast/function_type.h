@@ -4,7 +4,6 @@
 #include <vector>
 #include "ast/type.h"
 #include "ast/type_list.h"
-#include "ast/template_header.h"
 
 namespace haard {
     class FunctionType : public Type {
@@ -22,7 +21,7 @@ namespace haard {
             void add_template(Type* type);
             int templates_count();
             Type* get_template(int idx);
-            TemplateHeader* get_template_header();
+            TypeList* get_template_header();
             bool check_arguments_type(TypeList* args);
             bool check_arguments_type_with_conversion(TypeList* args);
 
@@ -34,8 +33,7 @@ namespace haard {
         private:
             std::vector<Type*> ptypes;
             Type* rtype;
-            TemplateHeader* template_header;
-            
+            TypeList* template_header;
     };
 }
 

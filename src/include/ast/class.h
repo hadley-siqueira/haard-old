@@ -7,7 +7,6 @@
 #include "ast/variable.h"
 #include "ast/type.h"
 #include "ast/named_type.h"
-#include "ast/template_header.h"
 
 namespace haard {
     class Scope;
@@ -57,8 +56,8 @@ namespace haard {
             bool has_super_class();
             Class* get_super_class_descriptor();
 
-            void set_template_header(TemplateHeader* header);
-            TemplateHeader* get_template_header();
+            void set_template_header(TypeList* header);
+            TypeList* get_template_header();
 
             Function* get_destructor() const;
             void set_destructor(Function* value);
@@ -85,7 +84,7 @@ namespace haard {
             bool is_virtual_flag;
             const char* name;
             Type* super_class;
-            TemplateHeader* template_header;
+            TypeList* template_header;
             Function* destructor;
             Scope* scope;
             NamedType* self_type;

@@ -139,8 +139,8 @@ Class* Parser::parse_class() {
     return klass;
 }
 
-TemplateHeader* Parser::parse_template_header() {
-    TemplateHeader* header = new TemplateHeader();
+TypeList *Parser::parse_template_header() {
+    TypeList* header = new TypeList();
 
     expect(TK_BEGIN_TEMPLATE);
     expect(TK_ID);
@@ -241,7 +241,6 @@ Type* Parser::parse_function_type() {
 }
 
 TypeList* Parser::parse_template_list_header() {
-    Type* type;
     TypeList* types = new TypeList();
 
     expect(TK_BEGIN_TEMPLATE);
@@ -258,7 +257,6 @@ TypeList* Parser::parse_template_list_header() {
 }
 
 TypeList* Parser::parse_template_list() {
-    Type* type;
     TypeList* types = new TypeList();
 
     expect(TK_BEGIN_TEMPLATE);

@@ -95,7 +95,7 @@ void Printer::print_function(Function* function) {
     out << "def " << function->get_name();
 
     if (function->get_template_header()) {
-        TemplateHeader* header = function->get_template_header();
+        TypeList* header = function->get_template_header();
         int i;
         out << '<';
 

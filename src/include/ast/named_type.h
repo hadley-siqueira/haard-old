@@ -2,9 +2,9 @@
 #define HAARD_AST_NAMED_TYPE_H
 
 #include "ast/type.h"
-#include "ast/template_header.h"
 #include "ast/identifier.h"
 #include "scope/symbol.h"
+#include "ast/type_list.h"
 
 namespace haard {
     class NamedType : public Type {
@@ -33,13 +33,13 @@ namespace haard {
 
             Type* clone();
 
-            void set_template_header(TemplateHeader* header);
-            TemplateHeader* get_template_header();
+            void set_template_header(TypeList* header);
+            TypeList* get_template_header();
 
         private:
             const char* alias;
             const char* name;
-            TemplateHeader* template_header;
+            TypeList* template_header;
             Symbol* symbol;
     };
 }

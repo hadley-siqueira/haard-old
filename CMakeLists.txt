@@ -45,7 +45,6 @@ set(AST_SRC
     src/ast/type_list.cc
     src/ast/named_type.cc
     src/ast/template_type.cc
-    src/ast/template_header.cc
     src/ast/expression.cc
     src/ast/identifier.cc
     src/ast/unop.cc

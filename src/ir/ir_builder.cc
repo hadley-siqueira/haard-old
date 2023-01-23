@@ -47,6 +47,10 @@ void IRBuilder::build_class(Class* klass) {
 }
 
 void IRBuilder::build_function(Function* function) {
+    if (function->is_template()) {
+        return;
+    }
+
     IRFunction* ir_func = new IRFunction();
 
     ir_func->set_name(function->get_qualified_name());

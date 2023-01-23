@@ -108,17 +108,6 @@ std::string TypeList::to_str() {
     std::stringstream ss;
     std::string sep;
 
-    if (templates.size() > 0) {
-        ss << '<';
-
-        for (i = 0; i < templates.size() - 1; ++i) {
-            ss << templates[i]->to_str() << ", ";
-        }
-
-        ss << templates[i]->to_str();
-        ss << "> :: ";
-    }
-
     switch (kind) {
     case TYPE_FUNCTION:
         sep = " -> ";
@@ -135,20 +124,4 @@ std::string TypeList::to_str() {
 
     ss << types[i]->to_str();
     return ss.str();
-}
-
-Type* TypeList::get_template(int idx) {
-    if (idx < templates.size()) {
-        return templates[idx];
-    }
-
-    return nullptr;
-}
-
-void TypeList::add_template(Type* type) {
-    templates.push_back(type);
-}
-
-int TypeList::templates_count() {
-    return templates.size();
 }

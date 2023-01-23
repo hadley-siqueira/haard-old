@@ -89,11 +89,11 @@ Type* NamedType::clone() {
     return other;
 }
 
-void NamedType::set_template_header(TemplateHeader* header) {
+void NamedType::set_template_header(TypeList* header) {
     template_header = header;
 }
 
-TemplateHeader* NamedType::get_template_header() {
+TypeList* NamedType::get_template_header() {
     return template_header;
 }
 

@@ -28,7 +28,7 @@ int FunctionType::params_count() {
 
 void FunctionType::add_template(Type* type) {
     if (template_header == nullptr) {
-        template_header = new TemplateHeader();
+        template_header = new TypeList();
     }
 
     template_header->add_type(type);
@@ -83,7 +83,7 @@ Type* FunctionType::clone() {
     }
 
     other->set_return_type(rtype->clone());
-    other->template_header = template_header->clone();
+    other->template_header = (TypeList*) template_header->clone();
 
     return other;
 }
@@ -111,7 +111,7 @@ int FunctionType::templates_count() {
     return 0;
 }
 
-TemplateHeader* FunctionType::get_template_header() {
+TypeList* FunctionType::get_template_header() {
     return template_header;
 }
 

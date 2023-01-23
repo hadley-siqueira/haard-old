@@ -224,11 +224,11 @@ void Class::set_source(Source* source) {
     this->source = source;
 }
 
-void Class::set_template_header(TemplateHeader* header) {
+void Class::set_template_header(TypeList* header) {
     template_header = header;
 }
 
-TemplateHeader* Class::get_template_header() {
+TypeList* Class::get_template_header() {
     return template_header;
 }
 

@@ -1,0 +1,12 @@
+def swap<T> : void
+    @a : T*
+    @b : T*
+
+    tmp = *a
+    *a = *b
+    *b = tmp
+
+def main : void
+    n = 0
+    m = 1
+    swap<int, float, int*>(&n, &m)
