@@ -11,7 +11,7 @@ FunctionType::FunctionType() {
 }
 
 FunctionType::~FunctionType() {
-    delete template_header;
+
 }
 
 void FunctionType::add_param_type(Type* type) {
@@ -92,7 +92,9 @@ std::string FunctionType::to_str() {
     std::stringstream ss;
 
     if (template_header) {
-        ss << template_header->to_str() << ' ';
+        ss << "<";
+        ss << template_header->to_str();
+        ss << "> :: ";
     }
 
     for (int i = 0; i < params_count(); ++i) {

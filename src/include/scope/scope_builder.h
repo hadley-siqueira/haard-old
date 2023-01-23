@@ -92,6 +92,7 @@ namespace haard {
             void build_sizeof(UnOp* un);
 
             void build_expression_list(ExpressionList* exprlist);
+            void build_template_expression(TemplateExpression* expression);
 
         private:
             void define_sources(Sources* sources);

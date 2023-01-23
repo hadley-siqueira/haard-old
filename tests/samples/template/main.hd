@@ -9,4 +9,4 @@ def swap<T> : void
 def main : void
     n = 0
     m = 1
-    swap<int, float, int*>(&n, &m)
+    swap<int>(&n, &m)

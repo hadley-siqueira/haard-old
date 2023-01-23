@@ -106,22 +106,14 @@ Type* TypeList::clone() {
 std::string TypeList::to_str() {
     int i;
     std::stringstream ss;
-    std::string sep;
 
-    switch (kind) {
-    case TYPE_FUNCTION:
-        sep = " -> ";
-        break;
+    if (types_count() > 0) {
+        for (i = 0; i < types.size() - 1; ++i) {
+            ss << types[i]->to_str() << ", ";
+        }
 
-    default:
-        sep = " ? ";
-        break;
+        ss << types[i]->to_str();
     }
 
-    for (i = 0; i < types.size() - 1; ++i) {
-        ss << types[i]->to_str() << sep;
-    }
-
-    ss << types[i]->to_str();
     return ss.str();
 }

@@ -446,6 +446,10 @@ void ScopeBuilder::build_expression(Expression* expression) {
     case EXPR_SIZEOF:
         build_sizeof(un);
         break;
+
+    case EXPR_TEMPLATE:
+        build_template_expression((TemplateExpression*) expression);
+        break;
     }
 }
 
@@ -659,11 +663,7 @@ void ScopeBuilder::build_call(BinOp* bin) {
             bin->set_type(ftype->get_return_type());
         }
     } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
-        // FIXME assuming that is a function type
-        TemplateExpression* expr = (TemplateExpression*) bin->get_left();
 
-        std::cout << expr->get_types()->to_str() << std::endl;
-        exit(0);
     }
 }
 
@@ -925,6 +925,28 @@ void ScopeBuilder::build_expression_list(ExpressionList* exprlist) {
     }
 
     exprlist->set_type(types);
+}
+
+void ScopeBuilder::build_template_expression(TemplateExpression* expression) {
+    build_expression(expression->get_expression());
+
+    if (expression->get_expression()->get_kind() == EXPR_ID) {
+        Identifier* id = (Identifier*) expression->get_expression();
+        Symbol* sym = id->get_symbol();
+
+        if (!sym) {
+            std::stringstream ss;
+            ss << "<red>error: </red> " << id->get_lexeme();
+            ss << " not in scope";
+            logger->error_and_exit(ss.str());
+        }
+
+        if (sym->get_kind() == SYM_FUNCTION) {
+            //Function* f = sym->get_descriptor()
+        }
+    }
+
+    exit(0);
 }
 
 bool ScopeBuilder::is_new_var_assign(BinOp* bin) {
