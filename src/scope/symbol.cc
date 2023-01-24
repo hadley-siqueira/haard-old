@@ -184,6 +184,7 @@ std::string Symbol::get_qualified_name(int idx) {
     Class* klass = (Class*) descriptors[idx];
     Function* func = (Function*) descriptors[idx];
     Variable* var = (Variable*) descriptors[idx];
+    TemplateType* type = (TemplateType*) descriptors[idx];
 
     switch (kind) {
     case SYM_CLASS:
@@ -199,6 +200,10 @@ std::string Symbol::get_qualified_name(int idx) {
     case SYM_VARIABLE:
     case SYM_CLASS_VARIABLE:
         ss << var->get_unique_name();
+        break;
+
+    case SYM_TEMPLATE:
+        ss << type->get_qualified_name();
         break;
     }
 
@@ -245,6 +250,16 @@ int Symbol::get_overloaded(TypeList* types) {
     return -1;
 }
 
+int Symbol::get_overloaded(void* ptr) {
+    for (int i = 0; i < overloaded_count(); ++i) {
+        if (ptr == get_descriptor(i)) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 Scope* Symbol::get_descriptor_scope(int idx) {
     Class* klass = (Class*) descriptors[idx];
 
@@ -260,6 +275,7 @@ int Symbol::get_size_in_bytes(int idx) {
     Class* klass = (Class*) descriptors[idx];
     Function* func = (Function*) descriptors[idx];
     Variable* var = (Variable*) descriptors[idx];
+    TemplateType* tt = (TemplateType*) descriptors[idx];
 
     switch (kind) {
     case SYM_CLASS:
@@ -267,12 +283,15 @@ int Symbol::get_size_in_bytes(int idx) {
 
     case SYM_FUNCTION:
     case SYM_METHOD:
-        return 0;
+        return ARCH_WORD_SIZE;
 
     case SYM_PARAMETER:
     case SYM_VARIABLE:
     case SYM_CLASS_VARIABLE:
         return var->get_size_in_bytes();
+
+    case SYM_TEMPLATE:
+        return tt->get_size_in_bytes();
     }
 
     return 0;
@@ -282,6 +301,7 @@ int Symbol::get_alignment(int idx) {
     Class* klass = (Class*) descriptors[idx];
     Function* func = (Function*) descriptors[idx];
     Variable* var = (Variable*) descriptors[idx];
+    TemplateType* tt = (TemplateType*) descriptors[idx];
 
     switch (kind) {
     case SYM_CLASS:
@@ -289,12 +309,15 @@ int Symbol::get_alignment(int idx) {
 
     case SYM_FUNCTION:
     case SYM_METHOD:
-        return 0;
+        return ARCH_WORD_SIZE;
 
     case SYM_PARAMETER:
     case SYM_VARIABLE:
     case SYM_CLASS_VARIABLE:
         return var->get_type()->get_alignment();
+
+    case SYM_TEMPLATE:
+        return tt->get_alignment();
     }
 
     return 0;

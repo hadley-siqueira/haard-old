@@ -32,6 +32,7 @@ namespace haard {
 
             int overloaded_count();
             int get_overloaded(TypeList* types);
+            int get_overloaded(void* ptr);
 
             Scope* get_descriptor_scope(int idx=0);
 

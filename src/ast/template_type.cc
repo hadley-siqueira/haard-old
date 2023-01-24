@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sstream>
 #include "ast/template_type.h"
 
@@ -37,6 +38,42 @@ std::string TemplateType::to_str() {
 
 std::string TemplateType::to_cpp() {
     return name;
+}
+
+std::string TemplateType::get_qualified_name() {
+    std::stringstream ss;
+
+    ss << name;
+
+    if (is_binded()) {
+        ss << ":" << bind_type->get_qualified_name();
+    }
+
+    return ss.str();
+}
+
+bool TemplateType::equal(Type* type) {
+    if (is_binded()) {
+        return bind_type->equal(type);
+    }
+
+    return false;
+}
+
+int TemplateType::get_size_in_bytes() {
+    if (is_binded()) {
+        return bind_type->get_size_in_bytes();
+    }
+
+    return 1;
+}
+
+int TemplateType::get_alignment() {
+    if (is_binded()) {
+        return bind_type->get_alignment();
+    }
+
+    return 8;
 }
 
 bool TemplateType::is_binded() {

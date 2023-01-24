@@ -50,12 +50,35 @@ std::string NamedType::to_str() {
 }
 
 bool NamedType::equal(Type* type) {
-    if (type->get_kind() != TYPE_NAMED) {
+    NamedType* other = (NamedType*) type;
+
+    if (type->get_kind() == TYPE_TEMPLATE) {
+        TemplateType* tt = (TemplateType*) type;
+
+        if (tt->is_binded()) {
+            if (tt->get_bind_type()->get_kind() == TYPE_NAMED) {
+                other = (NamedType*) tt->get_bind_type();
+            }
+        }
+    } else if (type->get_kind() != TYPE_NAMED) {
         return false;
     }
 
-    NamedType* other = (NamedType*) type;
-    return symbol->get_descriptor() == other->symbol->get_descriptor();
+    int kind = symbol->get_kind();
+
+    switch (kind) {
+    case SYM_CLASS:
+    case SYM_STRUCT:
+    case SYM_UNION:
+    case SYM_ENUM:
+        return symbol->get_descriptor() == other->symbol->get_descriptor();
+        break;
+
+    default:
+        break;
+    }
+
+    return false;
 }
 
 Symbol* NamedType::has_field(const char* name) {

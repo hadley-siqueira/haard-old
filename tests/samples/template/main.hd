@@ -1,3 +1,6 @@
+import std.io
+import std.string
+
 class Foo:
     n : int
 
@@ -14,7 +17,36 @@ def swap<T> : void
     *a = *b
     *b = tmp
 
+def swap2 : void
+    @a : int*
+    @b : int*
+
+    tmp = *a
+    *a = *b
+    *b = tmp
+
+def sum : int
+    @a : int
+    @b : int
+
+    return a + b
+
+#def make_pair<T, K> : void
+#    @a : T
+#    @b : K
+
+#    n = 0
+
 def main : void
     n = 0
     m = 1
-#    swap<int>(&n, &m)
+    swap<int>(&n, &m)
+#    swap2(&n, &m)
+    println(n)
+    println(m)
+    k = sum(2, 3)
+    println(k)
+    println(sum(2, 5))
+#    swap<double>(&n, &m)
+#    swap<Foo>(&n, &m)
+#    make_pair<int, float>(n, m)

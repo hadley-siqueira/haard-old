@@ -81,6 +81,7 @@ void ScopeBuilder::build_function(Function* function) {
     build_compound_statement(function->get_statements());
 
     leave_scope(true);
+//    current_function = nullptr;
 }
 
 void ScopeBuilder::build_statement(Statement* statement) {
@@ -669,7 +670,7 @@ void ScopeBuilder::build_call(BinOp* bin) {
         Symbol* sym = id->get_symbol();
 
         if (tl->get_kind() == TYPE_FUNCTION) {
-            int index = sym->get_overloaded((TypeList*) tr);
+            /*int index = sym->get_overloaded((TypeList*) tr);
 
             if (index >= 0) {
                 id->set_overloaded_index(index);
@@ -677,7 +678,7 @@ void ScopeBuilder::build_call(BinOp* bin) {
                 std::cout << "Error: function not overloaded with signature\n";
                 DBG;
                 exit(0);
-            }
+            }*/
 
             Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
             ftype = (FunctionType*) f->get_self_type();
@@ -964,6 +965,7 @@ void ScopeBuilder::build_template_expression(TemplateExpression* expression) {
             Function* f = (Function*) sym->get_descriptor();
             Scope* old = current_scope;
             current_scope = f->get_scope()->get_parent();
+            auto oldf = current_function;
 
             if (f->is_template()) {
                 Function* ff = f->get_with_template_binding(expression->get_types());
@@ -971,23 +973,21 @@ void ScopeBuilder::build_template_expression(TemplateExpression* expression) {
                 define_function(ff);
                 build_function(ff);
 
-                if (current_class != nullptr) {
+                if (f->is_method()) {
                     current_class->add_method(ff);
                 } else {
                     current_source->add_function(ff);
                 }
 
-                /*Printer p;
-                p.print_function(ff);
-                std::cout << p.to_str();*/
+                Symbol* syms = current_scope->has(ff->get_name());
+                id->set_overloaded_index(syms->get_overloaded(ff));
                 expression->set_type(ff->get_self_type());
             }
 
+            current_function = oldf;
             current_scope = old;
         }
     }
-
-    //exit(0);
 }
 
 bool ScopeBuilder::is_new_var_assign(BinOp* bin) {

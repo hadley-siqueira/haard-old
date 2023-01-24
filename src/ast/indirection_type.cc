@@ -56,6 +56,14 @@ std::string IndirectionType::to_cpp() {
     return subtype->to_cpp() + "&";
 }
 
+std::string IndirectionType::get_qualified_name() {
+    if (kind == TYPE_POINTER) {
+        return subtype->get_qualified_name() + "*";
+    }
+
+    return subtype->get_qualified_name() + "&";
+}
+
 int IndirectionType::get_size_in_bytes() {
     return ARCH_WORD_SIZE;
 }

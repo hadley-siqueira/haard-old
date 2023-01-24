@@ -17,6 +17,10 @@ namespace haard {
 
             std::string to_str();
             std::string to_cpp();
+            std::string get_qualified_name();
+            bool equal(Type* type);
+            int get_size_in_bytes();
+            int get_alignment();
 
             Type* get_bind_type();
             void set_bind_type(Type* type);

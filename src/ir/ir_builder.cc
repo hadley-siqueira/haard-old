@@ -577,8 +577,42 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
         } else if (type->get_kind() == TYPE_NAMED) {
             std::string name = id->get_unique_name();
 
-            if (ctx->has_alloca(name)) {
-                last_value = ctx->get_alloca_value(name);
+            NamedType* named = (NamedType*) type;
+
+            if (named->get_symbol()->get_kind() != SYM_TEMPLATE) {
+                if (ctx->has_alloca(name)) {
+                    last_value = ctx->get_alloca_value(name);
+                }
+            } else {
+                TemplateType* tt = (TemplateType*) named->get_symbol()->get_descriptor();
+
+                type = tt->get_bind_type();
+
+                if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
+                    std::string name = id->get_unique_name();
+
+                    if (ctx->has_alloca(name)) {
+                        tmp0 = ctx->get_alloca_value(name);
+                        load = ctx->new_load(size, tmp0);
+                        last_value = load->get_dst();
+                    }
+                } else if (type->get_kind() == TYPE_ARRAY) {
+                    std::string name = id->get_unique_name();
+
+                    if (ctx->has_alloca(name)) {
+                        last_value = ctx->get_alloca_value(name);
+                    }
+                } else if (type->get_kind() == TYPE_NAMED) {
+                    std::string name = id->get_unique_name();
+
+                    NamedType* named = (NamedType*) type;
+
+                    if (named->get_symbol()->get_kind() != SYM_TEMPLATE) {
+                        if (ctx->has_alloca(name)) {
+                            last_value = ctx->get_alloca_value(name);
+                        }
+                    }
+                }
             }
         }
     } else if (kind == SYM_CLASS_VARIABLE) {
@@ -827,13 +861,47 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     type = bin->get_left()->get_type();
     size = type->get_size_in_bytes();
 
-    // FIXME
+    /*// FIXME
     // on complex types, should call memcpy instead of a simple store
     if (type->get_kind() != TYPE_NAMED) {
         store = ctx->new_store(size, left, right);
         last_value = left;
     } else {
         ctx->new_memcpy(left, right, size);
+    }*/
+
+    // FIXME
+    // on complex types, should call memcpy instead of a simple store
+    if (type->get_kind() != TYPE_NAMED) {
+        store = ctx->new_store(size, left, right);
+        last_value = left;
+    } else if (type->get_kind() == TYPE_NAMED) {
+        NamedType* named = (NamedType*) type;
+        Symbol* sym = named->get_symbol();
+        TemplateType* tt = (TemplateType*) sym->get_descriptor();
+        int kind = sym->get_kind();
+
+        switch (kind) {
+        case SYM_CLASS:
+        case SYM_STRUCT:
+        case SYM_ENUM:
+        case SYM_UNION:
+            ctx->new_memcpy(left, right, size);
+            break;
+
+        case SYM_TEMPLATE:
+            if (tt->get_bind_type()->get_kind() != TYPE_NAMED) {
+                store = ctx->new_store(size, left, right);
+                last_value = left;
+            } else {
+                ctx->new_memcpy(left, right, size);
+            }
+
+            break;
+
+        default:
+            break;
+        }
     }
 }
 

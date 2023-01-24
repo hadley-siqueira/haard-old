@@ -38,10 +38,10 @@ void IRPrinter::print_function(IRFunction* function) {
 
     if (function->parameters_count() > 0) {
         for (i = 0; i < function->parameters_count() - 1; ++i) {
-            *out << '%' << i << ", ";
+            *out << function->get_parameter(i)->to_str() << ", ";
         }
 
-        *out << '%' << i;
+        *out << function->get_parameter(i)->to_str();
     }
 
     *out << "):\n";
