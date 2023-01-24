@@ -20,7 +20,6 @@ Function::Function() {
 Function::~Function() {
     delete statements;
     delete scope;
-    delete template_header;
     
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];
@@ -203,7 +202,7 @@ void Function::add_parameter(Variable* param) {
 void Function::add_variable(Variable* var) {
     variables.push_back(var);
 }
-            
+
 void Function::set_from_token(Token& token) {
     line = token.get_line();
     column = token.get_column();
@@ -314,18 +313,18 @@ void Function::bind_with(TypeList* types) {
 }
 
 Function* Function::get_with_template_binding(TypeList* bindings) {
-    /*for (int i = 0; i < tfunctions.size(); ++i) {
+    for (int i = 0; i < tfunctions.size(); ++i) {
         if (tfunctions[i]->is_binded_with_types(bindings)) {
             return tfunctions[i];
         }
-    }*/
+    }
 
     Function* new_func = clone();
 
     new_func->bind_with(bindings);
-    //this->tfunctions.push_back(new_func);
+    tfunctions.push_back(new_func);
 
-    return new_func;//tfunctions[tfunctions.size() - 1];
+    return new_func;
 }
 
 std::string Function::get_type_signature() {

@@ -112,3 +112,7 @@ Scope* NamedType::get_scope() {
 bool NamedType::is_class() {
     return kind == TYPE_NAMED && symbol->get_kind() == SYM_CLASS;
 }
+
+std::string NamedType::get_qualified_name() {
+    return symbol->get_qualified_name();
+}

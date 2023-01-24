@@ -4,6 +4,7 @@
 #include "log/info_messages.h"
 #include "log/error_messages.h"
 #include "parser/parser.h"
+#include "printer/printer.h"
 
 using namespace haard;
 
@@ -663,7 +664,25 @@ void ScopeBuilder::build_call(BinOp* bin) {
             bin->set_type(ftype->get_return_type());
         }
     } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
+        TemplateExpression* te = (TemplateExpression*) bin->get_left();
+        Identifier* id = (Identifier*) te->get_expression();
+        Symbol* sym = id->get_symbol();
 
+        if (tl->get_kind() == TYPE_FUNCTION) {
+            int index = sym->get_overloaded((TypeList*) tr);
+
+            if (index >= 0) {
+                id->set_overloaded_index(index);
+            } else {
+                std::cout << "Error: function not overloaded with signature\n";
+                DBG;
+                exit(0);
+            }
+
+            Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+            ftype = (FunctionType*) f->get_self_type();
+            bin->set_type(ftype->get_return_type());
+        }
     }
 }
 
@@ -942,11 +961,33 @@ void ScopeBuilder::build_template_expression(TemplateExpression* expression) {
         }
 
         if (sym->get_kind() == SYM_FUNCTION) {
-            //Function* f = sym->get_descriptor()
+            Function* f = (Function*) sym->get_descriptor();
+            Scope* old = current_scope;
+            current_scope = f->get_scope()->get_parent();
+
+            if (f->is_template()) {
+                Function* ff = f->get_with_template_binding(expression->get_types());
+
+                define_function(ff);
+                build_function(ff);
+
+                if (current_class != nullptr) {
+                    current_class->add_method(ff);
+                } else {
+                    current_source->add_function(ff);
+                }
+
+                /*Printer p;
+                p.print_function(ff);
+                std::cout << p.to_str();*/
+                expression->set_type(ff->get_self_type());
+            }
+
+            current_scope = old;
         }
     }
 
-    exit(0);
+    //exit(0);
 }
 
 bool ScopeBuilder::is_new_var_assign(BinOp* bin) {
@@ -1431,6 +1472,10 @@ void ScopeBuilder::link_type(Type* type) {
     case TYPE_ARRAY:
         link_array_list_type((ArrayListType*) type);
         break;
+
+    case TYPE_TEMPLATE:
+        link_template_type((TemplateType*) type);
+        break;
     }
 }
 
@@ -1473,6 +1518,18 @@ void ScopeBuilder::link_function_type(FunctionType* type) {
 void ScopeBuilder::link_array_list_type(ArrayListType* type) {
     link_type(type->get_subtype());
     build_expression(type->get_expression());
+}
+
+void ScopeBuilder::link_template_type(TemplateType* type) {
+    if (type->get_bind_type()) {
+        link_type(type->get_bind_type());
+    } else {
+        Symbol* sym = current_scope->has(type->get_name());
+
+        if (sym && sym->get_kind() == SYM_TEMPLATE) {
+
+        }
+    }
 }
 
 void ScopeBuilder::link_template_header(TypeList* header) {

@@ -187,7 +187,7 @@ void Class::calculate_variables_offset() {
     // store one of its variables
     remaining_pad = 0;
 
-    while (offset % max_align != 0) {
+    while (max_align != 0 && offset % max_align != 0) {
         ++offset;
         ++remaining_pad;
     }

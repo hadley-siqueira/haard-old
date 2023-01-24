@@ -88,7 +88,7 @@ namespace haard {
             void set_constructor(bool value);
             void set_destructor(bool value);
 
-    private:
+        private:
             int uid;
             int line;
             int column;
@@ -109,7 +109,7 @@ namespace haard {
             std::vector<Variable*> parameters;
             std::vector<Variable*> variables;
             std::vector<std::string> annotations;
-            
+            std::vector<Function*> tfunctions;
     };
 }
 

@@ -24,6 +24,7 @@ namespace haard {
             int get_alignment();
             Scope* get_scope();
             bool is_class();
+            std::string get_qualified_name();
 
             Symbol* has_field(const char* name);
             bool equal(Type* type);
