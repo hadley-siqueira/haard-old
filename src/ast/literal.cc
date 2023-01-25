@@ -1,6 +1,5 @@
 #include "ast/literal.h"
 #include "utils/utils.h"
-#include "utils/string_pool.h"
 
 using namespace haard;
 
@@ -18,7 +17,7 @@ Literal::Literal(int kind, Token& token) {
 
 Literal::Literal(int kind, std::string str) {
     this->kind = kind;
-    lexeme = StringPool::get(str);
+    lexeme = str;
     line = 0;
     column = 0;
 }

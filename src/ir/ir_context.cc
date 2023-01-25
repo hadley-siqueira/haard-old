@@ -1,7 +1,6 @@
 #include <sstream>
 #include <iostream>
 #include "ir/ir_context.h"
-#include "utils/string_pool.h"
 
 using namespace haard;
 
@@ -168,7 +167,7 @@ IRLabel* IRContext::new_label() {
     ss << "L" << label_counter;
     ++label_counter;
 
-    label->set_label(StringPool::get(ss.str().c_str()));
+    label->set_label(ss.str());
     return label;
 }
 

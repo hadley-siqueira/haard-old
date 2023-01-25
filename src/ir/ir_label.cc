@@ -6,10 +6,10 @@ IRLabel::IRLabel() {
     kind = IR_LABEL;
 }
 
-const char* IRLabel::get_label() const {
+std::string IRLabel::get_label() const {
     return label;
 }
 
-void IRLabel::set_label(const char* value) {
+void IRLabel::set_label(std::string value) {
     this->label = value;
 }

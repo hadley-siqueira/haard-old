@@ -1,6 +1,5 @@
 #include <sstream>
 #include "ast/identifier.h"
-#include "utils/string_pool.h"
 
 using namespace haard;
 

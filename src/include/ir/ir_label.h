@@ -9,11 +9,11 @@ namespace haard {
             IRLabel();
 
         public:
-            const char* get_label() const;
-            void set_label(const char* value);
+            std::string get_label() const;
+            void set_label(std::string value);
 
     private:
-            const char* label;
+            std::string label;
     };
 }
 

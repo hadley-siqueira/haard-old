@@ -14,16 +14,16 @@ namespace haard {
             ~Sources();
 
         public:
-            void add_source(const char* path, Source* source);
-            Source* get_source(const char* path);
+            void add_source(std::string path, Source* source);
+            Source* get_source(std::string path);
             Source* get_source(int i);
-            bool has_source(const char* path);
+            bool has_source(std::string path);
 
             int sources_count();
 
         private:
             std::vector<Source*> sources;
-            std::map<const char*, Source*> sources_map;
+            std::map<std::string, Source*> sources_map;
     };
 }
 

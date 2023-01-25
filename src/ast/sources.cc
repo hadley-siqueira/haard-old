@@ -12,12 +12,12 @@ Sources::~Sources() {
     }
 }
 
-void Sources::add_source(const char* path, Source* source) {
+void Sources::add_source(std::string path, Source* source) {
     sources_map[path] = source;
     sources.push_back(source);
 }
 
-Source* Sources::get_source(const char* path) {
+Source* Sources::get_source(std::string path) {
     if (has_source(path)) {
         return sources_map[path];
     }
@@ -33,7 +33,7 @@ Source* Sources::get_source(int i) {
     return nullptr;
 }
 
-bool Sources::has_source(const char* path) {
+bool Sources::has_source(std::string path) {
     return sources_map.count(path) > 0;
 }
 

@@ -1,7 +1,6 @@
 #include <iostream>
 #include "ast/ast.h"
 #include "ast/named_type.h"
-#include "utils/string_pool.h"
 
 using namespace haard;
 
@@ -32,7 +31,7 @@ void NamedType::set_alias(std::string id) {
 }
 
 void NamedType::set_name(std::string id) {
-    name = StringPool::get(id);
+    name = id;
 }
 
 void NamedType::set_symbol(Symbol* symbol) {

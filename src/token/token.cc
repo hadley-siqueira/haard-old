@@ -1,5 +1,4 @@
 #include <sstream>
-#include "utils/string_pool.h"
 #include "token/token.h"
 #include "defs.h"
 

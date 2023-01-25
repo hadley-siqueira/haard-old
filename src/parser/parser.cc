@@ -1,6 +1,5 @@
 #include <iostream>
 #include <sstream>
-#include "utils/string_pool.h"
 #include "parser/parser.h"
 #include "log/messages.h"
 
@@ -24,8 +23,8 @@ Source* Parser::read(std::string path, std::string relative_path) {
     this->path = path;
     tokens = s.read(path);
     source = parse_source();
-    source->set_path(StringPool::get(path));
-    source->set_relative_path(StringPool::get(relative_path));
+    source->set_path(path);
+    source->set_relative_path(relative_path);
 
     return source;
 }

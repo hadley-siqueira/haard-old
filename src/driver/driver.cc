@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <sys/types.h>
 #include <dirent.h>
-#include "utils/string_pool.h"
 #include "driver/driver.h"
 #include "printer/printer.h"
 #include "printer/cpp_printer.h"
@@ -126,12 +125,12 @@ void Driver::print_information() {
 }
 
 void Driver::parse_sources() {
-    const char* path;
+    std::string path;
 
     if (root_path == ".") {
-        path = StringPool::get("./" + main_path);
+        path = "./" + main_path;
     } else {
-        path = StringPool::get(main_path);
+        path = main_path;
     }
 
     parse_imports(parse_file(path));
@@ -186,7 +185,7 @@ void Driver::parse_import(Import* import) {
 
 void Driver::parse_simple_import(Import* import) {
     Source* file = nullptr;
-    const char* path = build_import_path(import);
+    std::string path = build_import_path(import);
 
     file = sources->get_source(path);
 
@@ -199,7 +198,7 @@ void Driver::parse_simple_import(Import* import) {
     }
 }
 
-Source* Driver::parse_file(const char* path) {
+Source* Driver::parse_file(std::string path) {
     std::stringstream ss;
     std::string relative_path;
 
@@ -237,7 +236,7 @@ void Driver::generate_cpp() {
     system("g++ /tmp/out.cc");
 }
 
-const char* Driver::build_import_path(Import* import) {
+std::string Driver::build_import_path(Import* import) {
     std::string str;
 
     for (int i = 0; i < import->path_count(); ++i) {
@@ -251,11 +250,11 @@ const char* Driver::build_import_path(Import* import) {
         std::string full_path = search_path[i] + str;
 
         if (file_exists(full_path)) {
-            return StringPool::get(full_path);
+            return full_path;
         }
     }
 
-    return StringPool::get(str);
+    return str;
 }
 
 bool Driver::file_exists(std::string path) {

@@ -4,7 +4,6 @@
 using namespace haard;
 
 Source::Source() {
-    path = nullptr;
     scope = new Scope();
 }
 
@@ -24,7 +23,7 @@ Source::~Source() {
     delete scope;
 }
 
-const char* Source::get_path() {
+std::string Source::get_path() {
     return path;
 }
 
@@ -70,7 +69,7 @@ Scope* Source::get_scope() {
     return scope;
 }
 
-void Source::set_path(const char* path) {
+void Source::set_path(std::string path) {
     this->path = path;
 }
             
@@ -100,10 +99,10 @@ int Source::classes_count() {
     return classes.size();
 }
 
-const char *Source::get_relative_path() const {
+std::string Source::get_relative_path() const {
     return relative_path;
 }
 
-void Source::set_relative_path(const char *value) {
+void Source::set_relative_path(std::string value) {
     relative_path = value;
 }

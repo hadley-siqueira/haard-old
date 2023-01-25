@@ -4,7 +4,6 @@
 
 #include "defs.h"
 #include "ir/ir_value.h"
-#include "utils/string_pool.h"
 #include "utils/utils.h"
 
 using namespace haard;
@@ -24,7 +23,7 @@ IRValue::IRValue(int kind, int tmp) {
 
     ss << tmp;
     this->kind = kind;
-    this->value = StringPool::get(ss.str());
+    this->value = ss.str();
 }
 
 std::string IRValue::to_str() {
