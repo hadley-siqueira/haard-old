@@ -1,7 +1,6 @@
 #include <iostream>
 #include "ast/variable.h"
 #include "ast/named_type.h"
-#include "ast/template_type.h"
 
 using namespace haard;
 

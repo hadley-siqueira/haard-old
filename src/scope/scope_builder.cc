@@ -43,8 +43,8 @@ void ScopeBuilder::build_source(Source* source) {
         build_function(source->get_function(i));
     }
 
-    current_source = nullptr;
     leave_scope();
+    current_source = nullptr;
 }
 
 void ScopeBuilder::build_class(Class* klass) {
@@ -81,7 +81,7 @@ void ScopeBuilder::build_function(Function* function) {
     build_compound_statement(function->get_statements());
 
     leave_scope(true);
-//    current_function = nullptr;
+    current_function = nullptr;
 }
 
 void ScopeBuilder::build_statement(Statement* statement) {
@@ -197,11 +197,6 @@ void ScopeBuilder::build_foreach_statement(ForStatement* statement) {
     }
 
     build_expression(expr->get_left());
-    /*
-    if (expr->get_left()->get_kind() == EXPR_ID) {
-        build_expression(expr->get_right());
-    }*/
-
     build_compound_statement(statement->get_statements());
     leave_scope(true);
 }
@@ -452,6 +447,8 @@ void ScopeBuilder::build_expression(Expression* expression) {
 }
 
 void ScopeBuilder::build_identifier(Identifier* id) {
+    Symbol* sym = nullptr;
+
     if (id->has_scope()) {
         Import* import = current_source->get_import_with_alias(id->get_alias());
 
@@ -460,22 +457,16 @@ void ScopeBuilder::build_identifier(Identifier* id) {
         }
 
         Scope* scope = import->get_source()->get_scope();
-        Symbol* sym = scope->local_has(id->get_name());
-
-        if (!sym) {
-            logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
-        }
-
-        id->set_symbol(sym);
+        sym = scope->local_has(id->get_name());
     } else {
-        Symbol* sym = current_scope->has(id->get_name());
-
-        if (!sym) {
-            logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
-        }
-
-        id->set_symbol(sym);
+        sym = current_scope->has(id->get_name());
     }
+
+    if (!sym) {
+        logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
+    }
+
+    id->set_symbol(sym);
 }
 
 void ScopeBuilder::build_this(ThisExpression* expr) {
@@ -1178,12 +1169,12 @@ void ScopeBuilder::define_class_template_header(Class* klass) {
 
     if (header) {
         for (int i = 0; i < header->types_count(); ++i) {
-            TemplateType* t = (TemplateType*) header->get_type(i);
+            NamedType* t = (NamedType*) header->get_type(i);
 
             if (current_scope->local_has(t->get_name())) {
                 logger->error_and_exit("error: already used type on template header");
             } else {
-                current_scope->define(t);
+                current_scope->define_template(t);
             }
         }
     }
@@ -1348,11 +1339,11 @@ void ScopeBuilder::define_function_template_header(Function* function) {
 
     if (header) {
         for (int i = 0; i < header->types_count(); ++i) {
-            TemplateType* type = (TemplateType*) header->get_type(i);
+            NamedType* type = (NamedType*) header->get_type(i);
             sym = current_scope->local_has(type->get_name());
 
             if (!sym) {
-                current_scope->define(type);
+                current_scope->define_template(type);
                 link_type(type->get_bind_type());
             } else {
                 logger->error_and_exit("<red>error: </red>template name already defined");
@@ -1445,10 +1436,6 @@ void ScopeBuilder::link_type(Type* type) {
     case TYPE_ARRAY:
         link_array_list_type((ArrayListType*) type);
         break;
-
-    case TYPE_TEMPLATE:
-        link_template_type((TemplateType*) type);
-        break;
     }
 }
 
@@ -1491,18 +1478,6 @@ void ScopeBuilder::link_function_type(FunctionType* type) {
 void ScopeBuilder::link_array_list_type(ArrayListType* type) {
     link_type(type->get_subtype());
     build_expression(type->get_expression());
-}
-
-void ScopeBuilder::link_template_type(TemplateType* type) {
-    if (type->get_bind_type()) {
-        link_type(type->get_bind_type());
-    } else {
-        Symbol* sym = current_scope->has(type->get_name());
-
-        if (sym && sym->get_kind() == SYM_TEMPLATE) {
-
-        }
-    }
 }
 
 void ScopeBuilder::link_template_header(TypeList* header) {

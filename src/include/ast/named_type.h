@@ -10,6 +10,7 @@ namespace haard {
     class NamedType : public Type {
         public:
             NamedType();
+            NamedType(Token& token);
             ~NamedType();
 
         public:
@@ -37,10 +38,15 @@ namespace haard {
             void set_template_header(TypeList* header);
             TypeList* get_template_header();
 
+            Type* get_bind_type();
+            void set_bind_type(Type* type);
+            bool is_binded();
+
         private:
             std::string alias;
             std::string name;
             TypeList* template_header;
+            Type* bind_type;
             Symbol* symbol;
     };
 }

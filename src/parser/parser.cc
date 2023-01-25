@@ -143,11 +143,11 @@ TypeList *Parser::parse_template_header() {
 
     expect(TK_BEGIN_TEMPLATE);
     expect(TK_ID);
-    header->add_type(new TemplateType(matched));
+    header->add_type(new NamedType(matched));
 
     while (match(TK_COMMA)) {
         expect(TK_ID);
-        header->add_type(new TemplateType(matched));
+        header->add_type(new NamedType(matched));
     }
 
     expect(TK_END_TEMPLATE);
@@ -244,11 +244,11 @@ TypeList* Parser::parse_template_list_header() {
 
     expect(TK_BEGIN_TEMPLATE);
     expect(TK_ID);
-    types->add_type(new TemplateType(matched));
+    types->add_type(new NamedType(matched));
 
     while (match(TK_COMMA)) {
         expect(TK_ID);
-        types->add_type(new TemplateType(matched));
+        types->add_type(new NamedType(matched));
     }
 
     expect(TK_END_TEMPLATE);

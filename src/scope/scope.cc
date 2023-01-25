@@ -82,10 +82,9 @@ Symbol* Scope::define(Variable* var) {
     return sym;
 }
 
-Symbol* Scope::define(TemplateType* type) {
+Symbol* Scope::define_template(NamedType* type) {
     Symbol* sym = new Symbol(SYM_TEMPLATE, type->get_name(), type);
     symbols[type->get_name()] = sym;
-
 
     return sym;
 }

@@ -218,7 +218,7 @@ bool Function::is_template() {
     }
 
     for (int i = 0; i < template_header->types_count(); ++i) {
-        TemplateType* type = (TemplateType*) template_header->get_type(i);
+        NamedType* type = (NamedType*) template_header->get_type(i);
 
         if (!type->is_binded()) {
             return true;
@@ -292,7 +292,7 @@ bool Function::is_binded_with_types(TypeList* types) {
     }
 
     for (int i = 0; i < template_header->types_count(); ++i) {
-        TemplateType* t = (TemplateType*) template_header->get_type(i);
+        NamedType* t = (NamedType*) template_header->get_type(i);
 
         if (t->is_binded()) {
             if (!t->get_bind_type()->equal(types->get_type(i))) {
@@ -306,7 +306,7 @@ bool Function::is_binded_with_types(TypeList* types) {
 
 void Function::bind_with(TypeList* types) {
     for (int i = 0; i < template_header->types_count(); ++i) {
-        TemplateType* t = (TemplateType*) template_header->get_type(i);
+        NamedType* t = (NamedType*) template_header->get_type(i);
         t->set_bind_type(types->get_type(i));
     }
 }

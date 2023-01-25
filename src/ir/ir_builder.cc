@@ -109,8 +109,7 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
             if (named->get_symbol()->get_kind() != SYM_TEMPLATE) {
                 ctx->new_memcpy(alloca->get_dst(), p, size);
             } else {
-                TemplateType* tt = (TemplateType*) named->get_symbol()->get_descriptor();
-                Type* type = tt->get_bind_type();
+                Type* type = named->get_bind_type();
 
                 if (type->get_kind() != TYPE_NAMED) {
                     ctx->new_store(size, alloca->get_dst(), p);
@@ -809,7 +808,6 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     } else if (type->get_kind() == TYPE_NAMED) {
         NamedType* named = (NamedType*) type;
         Symbol* sym = named->get_symbol();
-        TemplateType* tt = (TemplateType*) sym->get_descriptor();
         int kind = sym->get_kind();
 
         switch (kind) {
@@ -821,7 +819,7 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
             break;
 
         case SYM_TEMPLATE:
-            if (tt->get_bind_type()->get_kind() != TYPE_NAMED) {
+            if (named->get_bind_type()->get_kind() != TYPE_NAMED) {
                 store = ctx->new_store(size, left, right);
                 last_value = left;
             } else {

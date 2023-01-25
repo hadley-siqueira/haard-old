@@ -8,6 +8,15 @@ NamedType::NamedType() {
     kind = TYPE_NAMED;
     symbol = nullptr;
     template_header = nullptr;
+    bind_type = nullptr;
+}
+
+NamedType::NamedType(Token& token) {
+    kind = TYPE_NAMED;
+    symbol = nullptr;
+    template_header = nullptr;
+    bind_type = nullptr;
+    set_name(token.get_lexeme());
 }
 
 NamedType::~NamedType() {
@@ -49,15 +58,7 @@ std::string NamedType::to_str() {
 bool NamedType::equal(Type* type) {
     NamedType* other = (NamedType*) type;
 
-    if (type->get_kind() == TYPE_TEMPLATE) {
-        TemplateType* tt = (TemplateType*) type;
-
-        if (tt->is_binded()) {
-            if (tt->get_bind_type()->get_kind() == TYPE_NAMED) {
-                other = (NamedType*) tt->get_bind_type();
-            }
-        }
-    } else if (type->get_kind() != TYPE_NAMED) {
+    if (type->get_kind() != TYPE_NAMED) {
         return false;
     }
 
@@ -135,4 +136,16 @@ bool NamedType::is_class() {
 
 std::string NamedType::get_qualified_name() {
     return symbol->get_qualified_name();
+}
+
+bool NamedType::is_binded() {
+    return bind_type != nullptr;
+}
+
+Type* NamedType::get_bind_type() {
+    return bind_type;
+}
+
+void NamedType::set_bind_type(Type* type) {
+    bind_type = type;
 }

@@ -184,7 +184,7 @@ std::string Symbol::get_qualified_name(int idx) {
     Class* klass = (Class*) descriptors[idx];
     Function* func = (Function*) descriptors[idx];
     Variable* var = (Variable*) descriptors[idx];
-    TemplateType* type = (TemplateType*) descriptors[idx];
+    NamedType* type = (NamedType*) descriptors[idx];
 
     switch (kind) {
     case SYM_CLASS:
@@ -273,9 +273,8 @@ Scope* Symbol::get_descriptor_scope(int idx) {
 
 int Symbol::get_size_in_bytes(int idx) {
     Class* klass = (Class*) descriptors[idx];
-    Function* func = (Function*) descriptors[idx];
     Variable* var = (Variable*) descriptors[idx];
-    TemplateType* tt = (TemplateType*) descriptors[idx];
+    NamedType* tt = (NamedType*) descriptors[idx];
 
     switch (kind) {
     case SYM_CLASS:
@@ -301,7 +300,7 @@ int Symbol::get_alignment(int idx) {
     Class* klass = (Class*) descriptors[idx];
     Function* func = (Function*) descriptors[idx];
     Variable* var = (Variable*) descriptors[idx];
-    TemplateType* tt = (TemplateType*) descriptors[idx];
+    NamedType* tt = (NamedType*) descriptors[idx];
 
     switch (kind) {
     case SYM_CLASS:
