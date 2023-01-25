@@ -626,21 +626,6 @@ void IRBuilder::build_call(BinOp* bin) {
 
         build_call_arguments(call, (ExpressionList*) bin->get_right(), this_ptr);
         ctx->add_instruction(call);
-    } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
-        TemplateExpression* te = (TemplateExpression*) bin->get_left();
-        Identifier* id;
-
-        if (te->get_expression()->get_kind() == EXPR_ID) {
-            id = (Identifier*) te->get_expression();
-        }
-
-        Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
-        std::string name = f->get_qualified_name();
-
-        call->set_name(name);
-
-        build_call_arguments(call, (ExpressionList*) bin->get_right());
-        ctx->add_instruction(call);
     }
 
     if (bin->get_type()->get_kind() != TYPE_VOID) {

@@ -24,7 +24,6 @@
 #include "ast/function_expression.h"
 #include "ast/new_expression.h"
 #include "ast/this_expression.h"
-#include "ast/template_expression.h"
 #include "ast/cast_expression.h"
 #include "ast/string_builder.h"
 

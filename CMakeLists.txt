@@ -49,7 +49,6 @@ set(AST_SRC
     src/ast/binop.cc
     src/ast/literal.cc
     src/ast/expression_list.cc
-    src/ast/template_expression.cc
     src/ast/new_expression.cc
     src/ast/this_expression.cc
     src/ast/function_expression.cc

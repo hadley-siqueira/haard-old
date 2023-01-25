@@ -7,6 +7,7 @@ Identifier::Identifier() {
     kind = EXPR_ID;
     symbol = nullptr;
     overloaded_index = 0;
+    template_list = new TypeList();
 }
 
 Identifier::Identifier(Token& token) {
@@ -16,6 +17,7 @@ Identifier::Identifier(Token& token) {
     name = token.get_lexeme();
     symbol = nullptr;
     overloaded_index = 0;
+    template_list = new TypeList();
 }
 
 Identifier::Identifier(Token& scope, Token& name) {
@@ -26,6 +28,7 @@ Identifier::Identifier(Token& scope, Token& name) {
     this->alias = scope.get_lexeme();
     symbol = nullptr;
     overloaded_index = 0;
+    template_list = new TypeList();
 }
 
 Identifier::Identifier(std::string name) {
@@ -35,6 +38,7 @@ Identifier::Identifier(std::string name) {
     this->name = name;
     symbol = nullptr;
     overloaded_index = 0;
+    template_list = new TypeList();
 }
 
 int Identifier::get_line() {
@@ -124,4 +128,16 @@ std::string Identifier::get_alias() const {
 
 void Identifier::set_alias(const std::string &value) {
     alias = value;
+}
+
+int Identifier::template_count() {
+    return template_list->types_count();
+}
+
+void Identifier::add_template(Type* type) {
+    template_list->add_type(type);
+}
+
+Type* Identifier::get_template(int idx) {
+    return template_list->get_type(idx);
 }

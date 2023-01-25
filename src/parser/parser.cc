@@ -1129,16 +1129,8 @@ Expression* Parser::parse_primary_expression() {
         expr = new ThisExpression(matched);
     } else if (lookahead(TK_ID)) {
         expr = parse_identifier_expression();
-
-        if (lookahead(TK_BEGIN_TEMPLATE)) {
-            expr = new TemplateExpression(expr, parse_template_list());
-        }
     } else if (lookahead(TK_SCOPE)) {
         expr = parse_identifier_expression();
-
-        if (lookahead(TK_BEGIN_TEMPLATE)) {
-            expr = new TemplateExpression(expr, parse_template_list());
-        }
     } else if (lookahead(TK_BITWISE_OR)) {
         expr = parse_anonymous_function();
     }
@@ -1315,6 +1307,7 @@ Expression *Parser::parse_cast_expression() {
 }
 
 Identifier* Parser::parse_identifier_expression() {
+    Identifier* id = nullptr;
     Token name;
     Token scope;
 
@@ -1336,7 +1329,19 @@ Identifier* Parser::parse_identifier_expression() {
         }
     }
 
-    return new Identifier(scope, name);
+    id = new Identifier(scope, name);
+
+    if (match(TK_BEGIN_TEMPLATE)) {
+        id->add_template(parse_type());
+
+        while (match(TK_COMMA)) {
+            id->add_template(parse_type());
+        }
+
+        expect(TK_END_TEMPLATE);
+    }
+
+    return id;
 }
 
 void Parser::advance() {

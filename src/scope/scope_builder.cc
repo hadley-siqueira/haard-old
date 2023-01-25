@@ -439,10 +439,6 @@ void ScopeBuilder::build_expression(Expression* expression) {
     case EXPR_SIZEOF:
         build_sizeof(un);
         break;
-
-    case EXPR_TEMPLATE:
-        build_template_expression((TemplateExpression*) expression);
-        break;
     }
 }
 
@@ -621,26 +617,6 @@ void ScopeBuilder::build_call(BinOp* bin) {
                 DBG;
                 exit(0);
             }
-
-            Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
-            ftype = (FunctionType*) f->get_self_type();
-            bin->set_type(ftype->get_return_type());
-        }
-    } else if (bin->get_left()->get_kind() == EXPR_TEMPLATE) {
-        TemplateExpression* te = (TemplateExpression*) bin->get_left();
-        Identifier* id = (Identifier*) te->get_expression();
-        Symbol* sym = id->get_symbol();
-
-        if (tl->get_kind() == TYPE_FUNCTION) {
-            /*int index = sym->get_overloaded((TypeList*) tr);
-
-            if (index >= 0) {
-                id->set_overloaded_index(index);
-            } else {
-                std::cout << "Error: function not overloaded with signature\n";
-                DBG;
-                exit(0);
-            }*/
 
             Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
             ftype = (FunctionType*) f->get_self_type();
@@ -907,53 +883,6 @@ void ScopeBuilder::build_expression_list(ExpressionList* exprlist) {
     }
 
     exprlist->set_type(types);
-}
-
-void ScopeBuilder::build_template_expression(TemplateExpression* expression) {
-    build_expression(expression->get_expression());
-
-    if (expression->get_expression()->get_kind() == EXPR_ID) {
-        Identifier* id = (Identifier*) expression->get_expression();
-        Symbol* sym = id->get_symbol();
-
-        if (!sym) {
-            std::stringstream ss;
-            ss << "<red>error: </red> " << id->get_name();
-            ss << " not in scope";
-            logger->error_and_exit(ss.str());
-        }
-
-        if (sym->get_kind() == SYM_FUNCTION) {
-            Function* f = (Function*) sym->get_descriptor();
-            Scope* old = current_scope;
-            current_scope = f->get_scope()->get_parent();
-            auto oldf = current_function;
-
-            if (f->is_template()) {
-                Function* ff = f->get_with_template_binding(expression->get_types());
-
-                define_function(ff);
-                build_function(ff);
-
-                if (f->is_method()) {
-                    current_class->add_method(ff);
-                } else {
-                    current_source->add_function(ff);
-                }
-
-                /*Printer p, p2;
-                p.print_function(ff);
-                p2.print_function(f);
-                std::cout << p.to_str() << '\n' << p2.to_str() << '\n';*/
-                Symbol* syms = current_scope->has(ff->get_name());
-                id->set_overloaded_index(syms->get_overloaded(ff));
-                expression->set_type(ff->get_self_type());
-            }
-
-            current_function = oldf;
-            current_scope = old;
-        }
-    }
 }
 
 bool ScopeBuilder::is_new_var_assign(BinOp* bin) {

@@ -5,6 +5,7 @@
 #include "ast/expression.h"
 #include "token/token.h"
 #include "scope/symbol.h"
+#include "ast/type_list.h"
 
 namespace haard {
     class Identifier : public Expression {
@@ -40,6 +41,10 @@ namespace haard {
             std::string get_alias() const;
             void set_alias(const std::string& value);
 
+            int template_count();
+            void add_template(Type* type);
+            Type* get_template(int idx);
+
     private:
             int line;
             int column;
@@ -47,6 +52,7 @@ namespace haard {
             std::string alias;
             Symbol* symbol;
             int overloaded_index;
+            TypeList* template_list;
             
     };
 }
