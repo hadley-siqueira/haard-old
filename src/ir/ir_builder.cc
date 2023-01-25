@@ -567,7 +567,7 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
     type = id->get_type();
     size = type->get_size_in_bytes();
 
-    if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
+    if (type->is_integer_scalar()) {
         load = ctx->new_load(size, last_value);
         last_value = load->get_dst();
     }

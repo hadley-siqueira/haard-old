@@ -425,3 +425,31 @@ bool Type::is_signed() {
 bool Type::is_class() {
     return false;
 }
+
+bool Type::is_integer_scalar() {
+    switch (kind) {
+    case TYPE_I8:
+    case TYPE_U8:
+    case TYPE_CHAR:
+    case TYPE_BOOL:
+    case TYPE_UCHAR:
+    case TYPE_VOID:
+    case TYPE_I16:
+    case TYPE_SHORT:
+    case TYPE_U16:
+    case TYPE_USHORT:
+    case TYPE_I32:
+    case TYPE_INT:
+    case TYPE_U32:
+    case TYPE_UINT:
+    case TYPE_LONG:
+    case TYPE_I64:
+    case TYPE_U64:
+    case TYPE_ULONG:
+    case TYPE_SYMBOL:
+    case TYPE_STR:
+        return true;
+    }
+
+    return false;
+}

@@ -21,6 +21,8 @@ namespace haard {
             std::string to_cpp();
             std::string get_qualified_name();
 
+            bool is_integer_scalar();
+
         private:
             Type* subtype;
     };

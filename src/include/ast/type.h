@@ -35,6 +35,7 @@ namespace haard {
             virtual Scope* get_scope();
             virtual bool is_signed();
             virtual bool is_class();
+            virtual bool is_integer_scalar();
 
         protected:
             int kind;

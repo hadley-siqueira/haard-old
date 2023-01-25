@@ -64,6 +64,10 @@ std::string IndirectionType::get_qualified_name() {
     return subtype->get_qualified_name() + "&";
 }
 
+bool IndirectionType::is_integer_scalar() {
+    return true;
+}
+
 int IndirectionType::get_size_in_bytes() {
     return ARCH_WORD_SIZE;
 }
