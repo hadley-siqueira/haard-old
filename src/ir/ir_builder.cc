@@ -345,10 +345,6 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     ExpressionList* exprlist = (ExpressionList*) expression;
 
     switch (kind) {
-    case EXPR_SCOPE:
-        build_scope(bin, lvalue);
-        break;
-
     case EXPR_THIS:
         build_this((ThisExpression*) expression);
         break;
@@ -637,9 +633,6 @@ void IRBuilder::build_call(BinOp* bin) {
 
         if (te->get_expression()->get_kind() == EXPR_ID) {
             id = (Identifier*) te->get_expression();
-        } else if (te->get_expression()->get_kind() == EXPR_SCOPE) {
-            BinOp* scope = (BinOp*) te->get_expression();
-            id = (Identifier*) scope->get_right();
         }
 
         Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
@@ -679,9 +672,6 @@ void IRBuilder::build_function_call(BinOp* bin, IRCall* call) {
 
     if (bin->get_left()->get_kind() == EXPR_ID) {
         id = (Identifier*) bin->get_left();
-    } else if (bin->get_left()->get_kind() == EXPR_SCOPE) {
-        BinOp* scope = (BinOp*) bin->get_left();
-        id = (Identifier*) scope->get_right();
     }
 
     Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
@@ -1110,10 +1100,6 @@ bool IRBuilder::is_function_call(BinOp* bin) {
 
     if (bin->get_left()->get_kind() == EXPR_ID) {
         id = (Identifier*) bin->get_left();
-        return id->get_symbol()->get_kind() == SYM_FUNCTION;
-    } else if (bin->get_left()->get_kind() == EXPR_SCOPE) {
-        bin = (BinOp*) bin->get_left();
-        id = (Identifier*) bin->get_right();
         return id->get_symbol()->get_kind() == SYM_FUNCTION;
     }
 

@@ -253,10 +253,6 @@ void ScopeBuilder::build_expression(Expression* expression) {
     ExpressionList* exprlist = (ExpressionList*) expression;
 
     switch (kind) {
-    case EXPR_SCOPE:
-        build_scope(bin);
-        break;
-
     case EXPR_ID:
         build_identifier((Identifier*) expression);
         break;
@@ -482,27 +478,6 @@ void ScopeBuilder::build_identifier(Identifier* id) {
     }
 }
 
-void ScopeBuilder::build_scope(BinOp* bin) {
-    Identifier* alias = (Identifier*) bin->get_left();
-    Identifier* id = (Identifier*) bin->get_right();
-
-    Import* import = current_source->get_import_with_alias(alias->get_name());
-
-    if (import == nullptr) {
-        logger->error_and_exit("There is no import with alias");
-    }
-
-    Scope* scope = import->get_source()->get_scope();
-    Symbol* sym = scope->local_has(id->get_name());
-
-    if (!sym) {
-        logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
-    }
-
-    id->set_symbol(sym);
-    bin->set_type(id->get_type());
-}
-
 void ScopeBuilder::build_this(ThisExpression* expr) {
     if (current_class == nullptr) {
         std::cout << "Error: using this outside class";
@@ -595,28 +570,7 @@ void ScopeBuilder::build_call(BinOp* bin) {
     tl = bin->get_left()->get_type();
     tr = bin->get_right()->get_type();
 
-    if (bin->get_left()->get_kind() == EXPR_SCOPE) {
-        BinOp* scope = (BinOp*) bin->get_left();
-
-        Identifier* id = (Identifier*) scope->get_right();
-        Symbol* sym = id->get_symbol();
-
-        if (tl->get_kind() == TYPE_FUNCTION) {
-            int index = sym->get_overloaded((TypeList*) tr);
-
-            if (index >= 0) {
-                id->set_overloaded_index(index);
-            } else {
-                std::cout << "Error: function not overloaded with signature\n";
-                DBG;
-                exit(0);
-            }
-
-            Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
-            ftype = (FunctionType*) f->get_self_type();
-            bin->set_type(ftype->get_return_type());
-        }
-    } else if (bin->get_left()->get_kind() == EXPR_ID) {
+    if (bin->get_left()->get_kind() == EXPR_ID) {
         Identifier* id = (Identifier*) bin->get_left();
         Symbol* sym = id->get_symbol();
 
@@ -1049,8 +1003,6 @@ bool ScopeBuilder::is_constructor_call(BinOp* bin) {
             sym = id->get_symbol();
 
             return type->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS;
-        } else if (call->get_left()->get_kind() == EXPR_SCOPE) {
-
         }
     }
 

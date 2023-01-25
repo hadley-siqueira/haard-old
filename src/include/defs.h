@@ -608,7 +608,6 @@ namespace haard {
         EXPR_UNKNOWN,
         EXPR_THIS,
         EXPR_ID,
-        EXPR_SCOPE,
         EXPR_GLOBAL_SCOPE,
         EXPR_ASSIGN,
         EXPR_SPECIAL_ASSIGN,

@@ -1128,13 +1128,17 @@ Expression* Parser::parse_primary_expression() {
     } else if (match(TK_THIS)) {
         expr = new ThisExpression(matched);
     } else if (lookahead(TK_ID)) {
-        expr = parse_scope_expression();
+        expr = parse_identifier_expression();
 
         if (lookahead(TK_BEGIN_TEMPLATE)) {
             expr = new TemplateExpression(expr, parse_template_list());
         }
-    } else if (match(TK_SCOPE)) {
-        expr = new UnOp(EXPR_GLOBAL_SCOPE, parse_identifier_expression());
+    } else if (lookahead(TK_SCOPE)) {
+        expr = parse_identifier_expression();
+
+        if (lookahead(TK_BEGIN_TEMPLATE)) {
+            expr = new TemplateExpression(expr, parse_template_list());
+        }
     } else if (lookahead(TK_BITWISE_OR)) {
         expr = parse_anonymous_function();
     }
@@ -1306,12 +1310,6 @@ Expression *Parser::parse_cast_expression() {
     if (match(TK_AS)) {
         expr = new CastExpression(expr, parse_type());
     }
-
-    return expr;
-}
-
-Expression* Parser::parse_scope_expression() {
-    Identifier* expr = parse_identifier_expression();
 
     return expr;
 }

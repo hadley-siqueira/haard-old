@@ -36,7 +36,6 @@ namespace haard {
             void build_expression(Expression* expression);
 
             void build_identifier(Identifier* id);
-            void build_scope(BinOp* bin);
 
             void build_this(ThisExpression* expr);
             void build_new(NewExpression* op);

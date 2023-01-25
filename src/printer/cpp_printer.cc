@@ -531,11 +531,6 @@ void CppPrinter::print_expression(Expression* expression) {
         print_this((ThisExpression*) expression);
         break;
 
-    case EXPR_SCOPE:
-        print_expression(bin->get_left());
-        *out << "::";
-        print_expression(bin->get_right());
-        break;
 
     case EXPR_GLOBAL_SCOPE:
         *out << "::";
