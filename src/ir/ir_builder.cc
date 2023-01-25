@@ -104,7 +104,20 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
         if (var->get_type()->get_kind() != TYPE_NAMED) {
             ctx->new_store(size, alloca->get_dst(), p);
         } else {
-            ctx->new_memcpy(alloca->get_dst(), p, size);
+            NamedType* named = (NamedType*) var->get_type();
+
+            if (named->get_symbol()->get_kind() != SYM_TEMPLATE) {
+                ctx->new_memcpy(alloca->get_dst(), p, size);
+            } else {
+                TemplateType* tt = (TemplateType*) named->get_symbol()->get_descriptor();
+                Type* type = tt->get_bind_type();
+
+                if (type->get_kind() != TYPE_NAMED) {
+                    ctx->new_store(size, alloca->get_dst(), p);
+                } else {
+                    ctx->new_memcpy(alloca->get_dst(), p, size);
+                }
+            }
         }
     }
 }
@@ -523,22 +536,20 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
 
     kind = id->get_symbol()->get_kind();
 
-    if (kind == SYM_VARIABLE || kind == SYM_PARAMETER) {
+    if (id->is_local_variable()) {
         type = id->get_type();
         size = type->get_size_in_bytes();
         align = type->get_alignment();
 
-        if (type->is_primitive() || type->get_kind() == TYPE_POINTER || type->get_kind() == TYPE_ARRAY || type->get_kind() == TYPE_NAMED) {
-            std::string name = id->get_unique_name();
+        std::string name = id->get_unique_name();
 
-            if (ctx->has_alloca(name)) {
-                last_value = ctx->get_alloca_value(name);
-            } else {
-                alloca = ctx->new_alloca(name, size, align);
-                last_value = alloca->get_dst();
-            }
+        if (ctx->has_alloca(name)) {
+            last_value = ctx->get_alloca_value(name);
+        } else {
+            alloca = ctx->new_alloca(name, size, align);
+            last_value = alloca->get_dst();
         }
-    } else if (kind == SYM_CLASS_VARIABLE) {
+    } else if (id->is_class_variable()) {
         IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
         Variable* var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
         IRValue* offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
@@ -549,86 +560,16 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
 
 void IRBuilder::build_identifier_rvalue(Identifier* id) {
     IRMemory* load;
-    IRValue* tmp0;
     Type* type;
     int size;
-    int kind;
 
-    kind = id->get_symbol()->get_kind();
-
+    build_identifier_lvalue(id);
     type = id->get_type();
     size = type->get_size_in_bytes();
 
-    if (kind == SYM_VARIABLE || kind == SYM_PARAMETER) {
-        if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-            std::string name = id->get_unique_name();
-
-            if (ctx->has_alloca(name)) {
-                tmp0 = ctx->get_alloca_value(name);
-                load = ctx->new_load(size, tmp0);
-                last_value = load->get_dst();
-            }
-        } else if (type->get_kind() == TYPE_ARRAY) {
-            std::string name = id->get_unique_name();
-
-            if (ctx->has_alloca(name)) {
-                last_value = ctx->get_alloca_value(name);
-            }
-        } else if (type->get_kind() == TYPE_NAMED) {
-            std::string name = id->get_unique_name();
-
-            NamedType* named = (NamedType*) type;
-
-            if (named->get_symbol()->get_kind() != SYM_TEMPLATE) {
-                if (ctx->has_alloca(name)) {
-                    last_value = ctx->get_alloca_value(name);
-                }
-            } else {
-                TemplateType* tt = (TemplateType*) named->get_symbol()->get_descriptor();
-
-                type = tt->get_bind_type();
-
-                if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-                    std::string name = id->get_unique_name();
-
-                    if (ctx->has_alloca(name)) {
-                        tmp0 = ctx->get_alloca_value(name);
-                        load = ctx->new_load(size, tmp0);
-                        last_value = load->get_dst();
-                    }
-                } else if (type->get_kind() == TYPE_ARRAY) {
-                    std::string name = id->get_unique_name();
-
-                    if (ctx->has_alloca(name)) {
-                        last_value = ctx->get_alloca_value(name);
-                    }
-                } else if (type->get_kind() == TYPE_NAMED) {
-                    std::string name = id->get_unique_name();
-
-                    NamedType* named = (NamedType*) type;
-
-                    if (named->get_symbol()->get_kind() != SYM_TEMPLATE) {
-                        if (ctx->has_alloca(name)) {
-                            last_value = ctx->get_alloca_value(name);
-                        }
-                    }
-                }
-            }
-        }
-    } else if (kind == SYM_CLASS_VARIABLE) {
-        if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
-            IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
-            Variable* var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
-            IRValue* offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
-            IRValue* add = ctx->new_binary(IR_ADD, this_ptr, offset)->get_dst();
-            last_value = ctx->new_load(size, add)->get_dst();
-        } else if (type->get_kind() == TYPE_ARRAY) {
-            IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
-            Variable* var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
-            IRValue* offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
-            IRValue* add = ctx->new_binary(IR_ADD, this_ptr, offset)->get_dst();
-            last_value = add;
-        }
+    if (type->is_primitive() || type->get_kind() == TYPE_POINTER) {
+        load = ctx->new_load(size, last_value);
+        last_value = load->get_dst();
     }
 }
 
@@ -1205,4 +1146,3 @@ bool IRBuilder::is_constructor_call(BinOp* bin) {
 
     return false;
 }
-

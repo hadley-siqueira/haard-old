@@ -273,20 +273,26 @@ TypeList* Parser::parse_template_list() {
 Type* Parser::parse_tuple_type() {
     Token token;
     TypeList* ftype = nullptr;
-    Type* type = parse_union_type();
 
-    if (match(TK_COMMA)) {
-        token = matched;
-        ftype = new TypeList(TYPE_TUPLE, token, type, parse_union_type());
+    if (match(TK_LEFT_PARENTHESIS)) {
+        Type* type = parse_union_type();
 
-        while (match(TK_COMMA)) {
-            ftype->add_type(parse_union_type());
+        if (match(TK_COMMA)) {
+            token = matched;
+            ftype = new TypeList(TYPE_TUPLE, token, type, parse_union_type());
+
+            while (match(TK_COMMA)) {
+                ftype->add_type(parse_union_type());
+            }
+
+            type = ftype;
         }
 
-        type = ftype;
+        expect(TK_RIGHT_PARENTHESIS);
+        return type;
+    } else {
+        return parse_union_type();
     }
-
-    return type;
 }
 
 Type* Parser::parse_union_type() {

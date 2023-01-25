@@ -1,6 +1,8 @@
 #include <iostream>
 #include "ast/variable.h"
 #include "utils/string_pool.h"
+#include "ast/named_type.h"
+#include "ast/template_type.h"
 
 using namespace haard;
 
@@ -41,6 +43,15 @@ std::string Variable::get_name() {
 }
 
 Type* Variable::get_type() {
+    /*if (type->get_kind() == TYPE_NAMED) {
+        NamedType* named = (NamedType*) type;
+
+        if (named->get_symbol() && named->get_symbol()->get_kind() == SYM_TEMPLATE) {
+            TemplateType* tt = (TemplateType*) named->get_symbol()->get_descriptor();
+            return tt->get_bind_type();
+        }
+    }*/
+
     return type;
 }
 

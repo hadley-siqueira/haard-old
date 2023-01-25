@@ -31,17 +31,19 @@ def sum : int
 
     return a + b
 
-#def make_pair<T, K> : void
-#    @a : T
-#    @b : K
+def make_pair<T, K> : void
+    @a : T
+    @b : K
 
-#    n = 0
+    println(a)
+    println(b)
 
 def main : void
     n = 0
     m = 1
     swap<int>(&n, &m)
 #    swap2(&n, &m)
+    make_pair<int, int>(2, 3)
     println(n)
     println(m)
     k = sum(2, 3)

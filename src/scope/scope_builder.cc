@@ -979,6 +979,10 @@ void ScopeBuilder::build_template_expression(TemplateExpression* expression) {
                     current_source->add_function(ff);
                 }
 
+                /*Printer p, p2;
+                p.print_function(ff);
+                p2.print_function(f);
+                std::cout << p.to_str() << '\n' << p2.to_str() << '\n';*/
                 Symbol* syms = current_scope->has(ff->get_name());
                 id->set_overloaded_index(syms->get_overloaded(ff));
                 expression->set_type(ff->get_self_type());

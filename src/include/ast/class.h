@@ -30,7 +30,6 @@ namespace haard {
             int get_size_in_bytes();
             std::string get_qualified_name();
 
-
             void set_from_token(Token& token);
             void set_name(const char* name);
             void set_line(int line);

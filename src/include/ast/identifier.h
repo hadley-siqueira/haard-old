@@ -30,6 +30,9 @@ namespace haard {
             std::string get_unique_name();
 
             Expression* clone();
+
+            bool is_local_variable();
+            bool is_class_variable();
             
         private:
             int line;

@@ -83,3 +83,21 @@ Expression* Identifier::clone() {
 
     return other;
 }
+
+bool Identifier::is_local_variable() {
+    if (symbol == nullptr) {
+        return false;
+    }
+
+    int kind = symbol->get_kind();
+    return kind == SYM_VARIABLE || kind == SYM_PARAMETER;
+}
+
+bool Identifier::is_class_variable() {
+    if (symbol == nullptr) {
+        return false;
+    }
+
+    int kind = symbol->get_kind();
+    return kind == SYM_CLASS_VARIABLE;
+}
