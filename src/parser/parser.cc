@@ -1312,24 +1312,34 @@ Expression *Parser::parse_cast_expression() {
 }
 
 Expression* Parser::parse_scope_expression() {
-    Token oper;
-    Expression* expr = parse_identifier_expression();
-
-    if (match(TK_SCOPE)) {
-        oper = matched;
-        expr = new BinOp(EXPR_SCOPE, oper, expr, parse_identifier_expression());
-    }
+    Identifier* expr = parse_identifier_expression();
 
     return expr;
 }
 
-Expression* Parser::parse_identifier_expression() {
-    Expression* expr;
+Identifier* Parser::parse_identifier_expression() {
+    Token name;
+    Token scope;
 
-    expect(TK_ID);
-    expr = new Identifier(matched);
+    // global scope
+    if (match(TK_SCOPE)) {
+        scope = matched;
 
-    return expr;
+        expect(TK_ID);
+        name = matched;
+    } else {
+        expect(TK_ID);
+        name = matched;
+
+        if (match(TK_SCOPE)) {
+            scope = name;
+
+            expect(TK_ID);
+            name = matched;
+        }
+    }
+
+    return new Identifier(scope, name);
 }
 
 void Parser::advance() {

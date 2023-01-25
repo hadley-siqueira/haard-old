@@ -7,7 +7,6 @@ using namespace haard;
 Identifier::Identifier() {
     kind = EXPR_ID;
     symbol = nullptr;
-    lexeme = nullptr;
     overloaded_index = 0;
 }
 
@@ -15,7 +14,17 @@ Identifier::Identifier(Token& token) {
     kind = EXPR_ID;
     line = token.get_line();
     column = token.get_column();
-    lexeme = token.get_lexeme();
+    name = token.get_lexeme();
+    symbol = nullptr;
+    overloaded_index = 0;
+}
+
+Identifier::Identifier(Token& scope, Token& name) {
+    kind = EXPR_ID;
+    line = name.get_line();
+    column = name.get_column();
+    this->name = name.get_lexeme();
+    this->alias = scope.get_lexeme();
     symbol = nullptr;
     overloaded_index = 0;
 }
@@ -24,7 +33,7 @@ Identifier::Identifier(std::string name) {
     kind = EXPR_ID;
     line = 0;
     column = 0;
-    lexeme = StringPool::get(name);
+    this->name = name;
     symbol = nullptr;
     overloaded_index = 0;
 }
@@ -37,8 +46,8 @@ int Identifier::get_column() {
     return column;
 }
 
-std::string Identifier::get_lexeme() {
-    return lexeme;
+std::string Identifier::get_name() {
+    return name;
 }
 
 Symbol* Identifier::get_symbol() {
@@ -53,8 +62,8 @@ void Identifier::set_column(int column) {
     this->column;
 }
 
-void Identifier::set_lexeme(std::string lexeme) {
-    this->lexeme = lexeme;
+void Identifier::set_name(std::string lexeme) {
+    this->name = lexeme;
 }
 
 void Identifier::set_symbol(Symbol* symbol) {
@@ -79,7 +88,7 @@ Expression* Identifier::clone() {
 
     other->line = line;
     other->column = column;
-    other->lexeme = lexeme;
+    other->name = name;
 
     return other;
 }
@@ -103,18 +112,17 @@ bool Identifier::is_class_variable() {
 }
 
 bool Identifier::has_scope() {
-    return scope.size() > 0;
+    return alias.size() > 0;
 }
 
 bool Identifier::has_global_scope() {
-    return scope == "::";
+    return alias == "::";
 }
 
-std::string Identifier::get_scope() const {
-    return scope;
+std::string Identifier::get_alias() const {
+    return alias;
 }
 
-void Identifier::set_scope(const std::string &value)
-{
-    scope = value;
+void Identifier::set_alias(const std::string &value) {
+    alias = value;
 }

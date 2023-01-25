@@ -150,7 +150,7 @@ void CppPrinter::print_function(Function* function) {
 
     *out << " {\n";
 
-    if (strcmp(function->get_name(), "main") == 0) {
+    if (function->get_name() == "main") {
         main_function = function;
     }
 

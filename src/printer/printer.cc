@@ -756,7 +756,7 @@ void Printer::print_unop(std::string oper, UnOp* un, bool before) {
 }
 
 void Printer::print_identifier(Identifier* id) {
-    out << id->get_lexeme();
+    out << id->get_name();
 }
 
 void Printer::print_literal(Literal* literal) {

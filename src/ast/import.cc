@@ -5,7 +5,6 @@ using namespace haard;
 
 Import::Import() {
     source = nullptr;
-    alias = nullptr;
 }
 
 int Import::get_line() {
@@ -16,15 +15,15 @@ int Import::get_column() {
     return column;
 }
 
-const char* Import::get_alias() {
+std::string Import::get_alias() {
     return alias;
 }
 
-std::vector<const char*> Import::get_path() {
+std::vector<std::string> Import::get_path() {
     return path;
 }
             
-const char* Import::get_path(int idx) {
+std::string Import::get_path(int idx) {
     return path[idx];
 }
 
@@ -40,11 +39,11 @@ void Import::set_column(int column) {
     this->column = column;
 }
 
-void Import::set_alias(const char* alias) {
+void Import::set_alias(std::string alias) {
     this->alias = alias;
 }
 
-void Import::set_path(std::vector<const char*> path) {
+void Import::set_path(std::vector<std::string> path) {
     this->path = path;
 }
 
@@ -57,12 +56,12 @@ void Import::set_source(Source* source) {
     this->source = source;
 }
 
-void Import::add_to_path(const char* s) {
+void Import::add_to_path(std::string s) {
     path.push_back(s);
 }
 
 bool Import::has_alias() {
-    return alias != nullptr;
+    return alias.size() > 0;
 }
 
 int Import::path_count() {

@@ -13,12 +13,12 @@ namespace haard {
             ~NamedType();
 
         public:
-            const char* get_alias();
-            const char* get_name();
+            std::string get_alias();
+            std::string get_name();
             Symbol* get_symbol();
 
-            void set_alias(const char* id);
-            void set_name(const char* id);
+            void set_alias(std::string id);
+            void set_name(std::string id);
             void set_symbol(Symbol* symbol);
             int get_size_in_bytes();
             int get_alignment();
@@ -26,7 +26,7 @@ namespace haard {
             bool is_class();
             std::string get_qualified_name();
 
-            Symbol* has_field(const char* name);
+            Symbol* has_field(std::string name);
             bool equal(Type* type);
 
             std::string to_cpp();
@@ -38,8 +38,8 @@ namespace haard {
             TypeList* get_template_header();
 
         private:
-            const char* alias;
-            const char* name;
+            std::string alias;
+            std::string name;
             TypeList* template_header;
             Symbol* symbol;
     };

@@ -16,11 +16,11 @@ TemplateType::TemplateType(Token& token) {
     bind_type = nullptr;
 }
 
-const char* TemplateType::get_name() {
+std::string TemplateType::get_name() {
     return name;
 }
 
-void TemplateType::set_name(const char* name) {
+void TemplateType::set_name(std::string name) {
     this->name = name;
 }
 

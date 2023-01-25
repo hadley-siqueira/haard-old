@@ -12,12 +12,12 @@ namespace haard {
             Literal(int kind, std::string str);
 
         public:
-            const char* get_lexeme();
+            std::string get_lexeme();
             Expression* clone();
             uint64_t to_u64();
 
         private:
-            const char* lexeme;
+            std::string lexeme;
             int line;
             int column;
     };

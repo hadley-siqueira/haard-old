@@ -11,17 +11,18 @@ namespace haard {
         public:
             Identifier();
             Identifier(Token& token);
+            Identifier(Token& alias, Token& name);
             Identifier(std::string name);
 
         public:
             int get_line();
             int get_column();
-            std::string get_lexeme();
+            std::string get_name();
             Symbol* get_symbol();
 
             void set_line(int line);
             void set_column(int column);
-            void set_lexeme(std::string lexeme);
+            void set_name(std::string name);
             void set_symbol(Symbol* symbol);
 
             int get_overloaded_index();
@@ -36,14 +37,14 @@ namespace haard {
             
             bool has_scope();
             bool has_global_scope();
-            std::string get_scope() const;
-            void set_scope(const std::string& value);
+            std::string get_alias() const;
+            void set_alias(const std::string& value);
 
     private:
             int line;
             int column;
-            std::string lexeme;
-            std::string scope;
+            std::string name;
+            std::string alias;
             Symbol* symbol;
             int overloaded_index;
             

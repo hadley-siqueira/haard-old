@@ -20,7 +20,7 @@ Variable::Variable(Token& token) {
 }
 
 Variable::Variable(Identifier* id) {
-    name = id->get_lexeme();
+    name = id->get_name();
     line = id->get_line();
     column = id->get_column();
     type = nullptr;

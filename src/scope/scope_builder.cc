@@ -456,27 +456,44 @@ void ScopeBuilder::build_expression(Expression* expression) {
 }
 
 void ScopeBuilder::build_identifier(Identifier* id) {
-    Symbol* sym = current_scope->has(id->get_lexeme());
+    if (id->has_scope()) {
+        Import* import = current_source->get_import_with_alias(id->get_alias());
 
-    if (!sym) {
-        logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
+        if (import == nullptr) {
+            logger->error_and_exit("There is no import with alias");
+        }
+
+        Scope* scope = import->get_source()->get_scope();
+        Symbol* sym = scope->local_has(id->get_name());
+
+        if (!sym) {
+            logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
+        }
+
+        id->set_symbol(sym);
+    } else {
+        Symbol* sym = current_scope->has(id->get_name());
+
+        if (!sym) {
+            logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
+        }
+
+        id->set_symbol(sym);
     }
-
-    id->set_symbol(sym);
 }
 
 void ScopeBuilder::build_scope(BinOp* bin) {
     Identifier* alias = (Identifier*) bin->get_left();
     Identifier* id = (Identifier*) bin->get_right();
 
-    Import* import = current_source->get_import_with_alias(alias->get_lexeme());
+    Import* import = current_source->get_import_with_alias(alias->get_name());
 
     if (import == nullptr) {
         logger->error_and_exit("There is no import with alias");
     }
 
     Scope* scope = import->get_source()->get_scope();
-    Symbol* sym = scope->local_has(id->get_lexeme());
+    Symbol* sym = scope->local_has(id->get_name());
 
     if (!sym) {
         logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
@@ -705,7 +722,7 @@ void ScopeBuilder::build_dot(BinOp* bin) {
     //tl = bin->get_left()->get_type();
     scope = tl->get_scope();
     field = (Identifier*) bin->get_right();
-    symbol = scope->has_field(field->get_lexeme());
+    symbol = scope->has_field(field->get_name());
 
     // FIXME
     /*std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
@@ -721,7 +738,7 @@ void ScopeBuilder::build_dot(BinOp* bin) {
         std::cout << "debbuging...\n";
         std::cout << tl->to_cpp() << std::endl;
         scope->debug();
-        std::cout << field->get_lexeme() << ' ' << field->get_line() << std::endl;
+        std::cout << field->get_name() << ' ' << field->get_line() << std::endl;
         DBG;
         exit(0);
     }
@@ -956,7 +973,7 @@ void ScopeBuilder::build_template_expression(TemplateExpression* expression) {
 
         if (!sym) {
             std::stringstream ss;
-            ss << "<red>error: </red> " << id->get_lexeme();
+            ss << "<red>error: </red> " << id->get_name();
             ss << " not in scope";
             logger->error_and_exit(ss.str());
         }
@@ -1000,7 +1017,7 @@ bool ScopeBuilder::is_new_var_assign(BinOp* bin) {
     }
 
     Identifier* id = (Identifier*) bin->get_left();
-    Symbol* sym = current_scope->has(id->get_lexeme());
+    Symbol* sym = current_scope->has(id->get_name());
 
     return sym == nullptr;
 }

@@ -71,7 +71,7 @@ namespace haard {
             Expression* parse_list_expression();
             Expression* parse_array_or_hash();
             Expression* parse_scope_expression();
-            Expression* parse_identifier_expression();
+            Identifier* parse_identifier_expression();
             Expression* parse_anonymous_function();
             ExpressionList* parse_argument_list();
             ExpressionList* parse_hash(Expression* key);

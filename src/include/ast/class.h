@@ -18,7 +18,7 @@ namespace haard {
             ~Class();
 
         public:
-            const char* get_name();
+            std::string get_name();
             std::string get_cpp_name();
             int get_line();
             int get_column();
@@ -31,7 +31,7 @@ namespace haard {
             std::string get_qualified_name();
 
             void set_from_token(Token& token);
-            void set_name(const char* name);
+            void set_name(std::string name);
             void set_line(int line);
             void set_column(int column);
             void set_uid(int uid);
@@ -81,7 +81,7 @@ namespace haard {
             int alignment;
             int remaining_pad;
             bool is_virtual_flag;
-            const char* name;
+            std::string name;
             Type* super_class;
             TypeList* template_header;
             Function* destructor;

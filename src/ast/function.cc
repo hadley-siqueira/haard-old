@@ -5,7 +5,6 @@
 using namespace haard;
 
 Function::Function() {
-    name = nullptr;
     return_type = nullptr;
     statements = nullptr;
     scope = new Scope();
@@ -38,7 +37,7 @@ int Function::get_column() {
     return column;
 }
 
-const char* Function::get_name() {
+std::string Function::get_name() {
     return name;
 }
 
@@ -158,7 +157,7 @@ void Function::set_column(int column) {
     this->column = column;
 }
 
-void Function::set_name(const char* name) {
+void Function::set_name(std::string name) {
     this->name = name;
 }
 

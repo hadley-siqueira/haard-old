@@ -137,7 +137,7 @@ Log* haard::error_message_unexpected_token(std::string path, Token& token) {
     int line = token.get_line();
     int column = token.get_column();
     int kind = token.get_kind();
-    int count = strlen(token.get_lexeme());
+    int count = token.get_lexeme().size();
 
     ss << "unexpected token '<white>";
     ss << token_kind_to_str_map.at(kind);
@@ -159,7 +159,7 @@ Log* haard::error_message_expected_token(std::string path, int kind, Token& toke
     int line = token.get_line();
     int column = token.get_column();
     int tkind = token.get_kind();
-    int count = strlen(token.get_lexeme());
+    int count = token.get_lexeme().size();
 
     ss << "expected token '<white>";
     ss << token_kind_to_str_map.at(kind);
@@ -183,7 +183,7 @@ Log* haard::error_message_no_return_type(std::string path, Token& token) {
     int line = token.get_line();
     int column = token.get_column();
     int tkind = token.get_kind();
-    int count = strlen(token.get_lexeme());
+    int count = token.get_lexeme().size();
 
     ss << "expected a return type";
 

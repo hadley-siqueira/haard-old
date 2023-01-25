@@ -12,7 +12,6 @@ Class::Class() {
     template_header = nullptr;
     destructor = nullptr;
     scope = new Scope();
-    name = nullptr;
     is_virtual_flag = false;
 }
 
@@ -28,7 +27,7 @@ Class::~Class() {
     delete scope;
 }
 
-const char* Class::get_name() {
+std::string Class::get_name() {
     return name;
 }
 
@@ -81,7 +80,7 @@ void Class::set_from_token(Token& token) {
     set_column(token.get_column());
 }
 
-void Class::set_name(const char* name) {
+void Class::set_name(std::string name) {
     this->name = name;
 }
 
@@ -126,12 +125,12 @@ void Class::set_self_type(NamedType* type) {
 void Class::add_method(Function* method) {
     methods.push_back(method);
 
-    if (strcmp(method->get_name(), "init") == 0) {
+    if (method->get_name() == "init") {
         constructors.push_back(method);
         method->set_constructor(true);
     }
     
-    if (strcmp(method->get_name(), "destroy") == 0) {
+    if (method->get_name() == "destroy") {
         destructor = method;
         method->set_destructor(true);
     }

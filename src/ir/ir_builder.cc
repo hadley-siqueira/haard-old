@@ -63,7 +63,7 @@ void IRBuilder::build_function(Function* function) {
 
     current_module->add_function(ir_func);
 
-    if (strcmp(function->get_name(), "main") == 0) {
+    if (function->get_name() == "main") {
         current_module->set_main_function(ir_func);
     }
 }

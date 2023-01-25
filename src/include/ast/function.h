@@ -23,7 +23,7 @@ namespace haard {
         public:
             int get_line();
             int get_column();
-            const char* get_name();
+            std::string get_name();
             std::string get_cpp_name();
             std::string get_cpp_signature();
             std::string get_type_signature();
@@ -36,7 +36,7 @@ namespace haard {
 
             void set_line(int line);
             void set_column(int column);
-            void set_name(const char* name);
+            void set_name(std::string name);
             void set_from_token(Token& token);
             void set_return_type(Type* type);
             void set_statements(CompoundStatement* statements);
@@ -97,7 +97,7 @@ namespace haard {
             bool constructor_flag;
             bool destructor_flag;
             bool virtual_flag;
-            const char* name;
+            std::string name;
             Type* return_type;
             FunctionType* self_type;
             TypeList* template_header;

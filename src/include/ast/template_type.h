@@ -12,8 +12,8 @@ namespace haard {
             TemplateType(Token& token);
 
         public:
-            const char* get_name();
-            void set_name(const char* name);
+            std::string get_name();
+            void set_name(std::string name);
 
             std::string to_str();
             std::string to_cpp();
@@ -29,7 +29,7 @@ namespace haard {
             Type* clone();
 
         private:
-            const char* name;
+            std::string name;
             Type* bind_type;
     };
 }

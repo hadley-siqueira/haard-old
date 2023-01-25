@@ -21,7 +21,7 @@ int Token::get_whitespace() {
     return whitespace;
 }
 
-const char* Token::get_lexeme() {
+std::string Token::get_lexeme() {
     return lexeme;
 }
 
@@ -42,7 +42,7 @@ void Token::set_whitespace(int whitespace) {
 }
 
 void Token::set_lexeme(std::string lexeme) {
-    this->lexeme = StringPool::get(lexeme);
+    this->lexeme = lexeme;
 }
 
 std::string Token::to_str() {

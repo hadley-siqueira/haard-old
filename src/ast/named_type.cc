@@ -7,8 +7,6 @@ using namespace haard;
 
 NamedType::NamedType() {
     kind = TYPE_NAMED;
-    alias = nullptr;
-    name = nullptr;
     symbol = nullptr;
     template_header = nullptr;
 }
@@ -17,11 +15,11 @@ NamedType::~NamedType() {
     /* Empty */
 }
 
-const char* NamedType::get_alias() {
+std::string NamedType::get_alias() {
     return alias;
 }
 
-const char* NamedType::get_name() {
+std::string NamedType::get_name() {
     return name;
 }
 
@@ -29,11 +27,11 @@ Symbol* NamedType::get_symbol() {
     return symbol;
 }
 
-void NamedType::set_alias(const char* id) {
+void NamedType::set_alias(std::string id) {
     alias = id;
 }
 
-void NamedType::set_name(const char* id) {
+void NamedType::set_name(std::string id) {
     name = StringPool::get(id);
 }
 
@@ -81,7 +79,7 @@ bool NamedType::equal(Type* type) {
     return false;
 }
 
-Symbol* NamedType::has_field(const char* name) {
+Symbol* NamedType::has_field(std::string name) {
     Class* klass;
     Symbol* sym = nullptr;
 

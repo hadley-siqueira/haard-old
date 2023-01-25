@@ -23,7 +23,7 @@ Literal::Literal(int kind, std::string str) {
     column = 0;
 }
             
-const char* Literal::get_lexeme() {
+std::string Literal::get_lexeme() {
     return lexeme;
 }
 
