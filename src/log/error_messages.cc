@@ -33,7 +33,7 @@ std::string haard::error_message_id_not_in_scope(Source* source, Identifier* id)
     std::string path = source->get_path();
     int line = id->get_line();
     int column = id->get_column();
-    int count = strlen(id->get_lexeme());
+    int count = id->get_lexeme().size();
 
     msg << error_header(path, line, column);
     msg << "<white>'" << id->get_lexeme() << "'</white> not in scope\n";

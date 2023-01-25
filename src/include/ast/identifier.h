@@ -16,12 +16,12 @@ namespace haard {
         public:
             int get_line();
             int get_column();
-            const char* get_lexeme();
+            std::string get_lexeme();
             Symbol* get_symbol();
 
             void set_line(int line);
             void set_column(int column);
-            void set_lexeme(const char* lexeme);
+            void set_lexeme(std::string lexeme);
             void set_symbol(Symbol* symbol);
 
             int get_overloaded_index();
@@ -34,10 +34,16 @@ namespace haard {
             bool is_local_variable();
             bool is_class_variable();
             
-        private:
+            bool has_scope();
+            bool has_global_scope();
+            std::string get_scope() const;
+            void set_scope(const std::string& value);
+
+    private:
             int line;
             int column;
-            const char* lexeme;
+            std::string lexeme;
+            std::string scope;
             Symbol* symbol;
             int overloaded_index;
             

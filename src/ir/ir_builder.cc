@@ -513,7 +513,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     }
 }
 
-void IRBuilder::build_scope(BinOp* bin, bool lvalue){
+void IRBuilder::build_scope(BinOp* bin, bool lvalue) {
     Identifier* id = (Identifier*) bin->get_right();
 
     build_identifier(id, lvalue);

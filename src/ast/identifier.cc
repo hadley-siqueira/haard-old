@@ -37,7 +37,7 @@ int Identifier::get_column() {
     return column;
 }
 
-const char* Identifier::get_lexeme() {
+std::string Identifier::get_lexeme() {
     return lexeme;
 }
 
@@ -53,7 +53,7 @@ void Identifier::set_column(int column) {
     this->column;
 }
 
-void Identifier::set_lexeme(const char* lexeme) {
+void Identifier::set_lexeme(std::string lexeme) {
     this->lexeme = lexeme;
 }
 
@@ -100,4 +100,21 @@ bool Identifier::is_class_variable() {
 
     int kind = symbol->get_kind();
     return kind == SYM_CLASS_VARIABLE;
+}
+
+bool Identifier::has_scope() {
+    return scope.size() > 0;
+}
+
+bool Identifier::has_global_scope() {
+    return scope == "::";
+}
+
+std::string Identifier::get_scope() const {
+    return scope;
+}
+
+void Identifier::set_scope(const std::string &value)
+{
+    scope = value;
 }
