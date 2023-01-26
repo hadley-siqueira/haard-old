@@ -60,6 +60,18 @@ std::string NamedType::to_str() {
 }
 
 bool NamedType::equal(Type* type) {
+    if (bind_type) {
+        return bind_type->equal(type);
+    }
+
+    if (type->get_kind() != TYPE_NAMED) {
+        return false;
+    }
+
+    NamedType* other = (NamedType*) type;
+    return symbol->get_descriptor() == other->symbol->get_descriptor();
+
+    /*
     NamedType* other = (NamedType*) type;
 
     if (type->get_kind() != TYPE_NAMED) {
@@ -80,7 +92,7 @@ bool NamedType::equal(Type* type) {
         break;
     }
 
-    return false;
+    return false;*/
 }
 
 bool NamedType::is_integer_scalar() {
