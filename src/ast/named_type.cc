@@ -52,6 +52,10 @@ std::string NamedType::to_cpp() {
 }
 
 std::string NamedType::to_str() {
+    if (bind_type) {
+        return name + ":" + bind_type->to_str();
+    }
+
     return name;
 }
 

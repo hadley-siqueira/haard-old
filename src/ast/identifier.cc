@@ -141,3 +141,19 @@ void Identifier::add_template(Type* type) {
 Type* Identifier::get_template(int idx) {
     return template_list->get_type(idx);
 }
+
+TypeList* Identifier::get_template_list() const {
+    return template_list;
+}
+
+void Identifier::set_template_list(TypeList* value) {
+    template_list = value;
+}
+
+bool Identifier::has_template() {
+    return template_count() > 0;
+}
+
+void* Identifier::get_descriptor() {
+    return symbol->get_descriptor(overloaded_index);
+}

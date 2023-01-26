@@ -45,6 +45,11 @@ namespace haard {
             void add_template(Type* type);
             Type* get_template(int idx);
 
+            TypeList* get_template_list() const;
+            void set_template_list(TypeList* value);
+            bool has_template();
+            void* get_descriptor();
+
     private:
             int line;
             int column;

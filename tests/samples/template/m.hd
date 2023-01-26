@@ -1,0 +1,28 @@
+def swap<T> : void
+    @a : T*
+    @b : T*
+
+    tmp = *a
+    *a = *b
+    *b = tmp
+
+#def concat<T, K> : void
+#    @a : T
+#    @b : K
+#
+#    n = a
+#    m = b
+#
+#class Foo:
+#    n : int
+
+def main : void
+    a = 0
+    b = 0
+    c = 'a'
+    d = 'b'
+#    p = Foo()
+    swap<int>(&a, &b)
+#    swap<char>(&c, &d)
+#    concat<int, char>(a, c)
+#    concat<int, Foo>(a, p)

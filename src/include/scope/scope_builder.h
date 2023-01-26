@@ -42,6 +42,10 @@ namespace haard {
             void build_delete(UnOp* op);
 
             void build_call(BinOp* bin);
+            void build_function_call(BinOp* bin);
+            void build_constructor_call(BinOp* bin);
+            void build_member_call(BinOp* bin);
+
             void build_dot(BinOp* bin);
             void build_index_access(BinOp* bin);
             void build_expression_in(BinOp* bin);
@@ -135,7 +139,10 @@ namespace haard {
         private:
             bool is_new_var_assign(BinOp* bin);
             void create_new_var(BinOp* bin);
+            bool is_constructor_call_assignment(BinOp* bin);
+            bool is_function_call(BinOp* bin);
             bool is_constructor_call(BinOp* bin);
+            bool is_member_call(BinOp* bin);
 
         public:
             void set_logger(Logger* logger);

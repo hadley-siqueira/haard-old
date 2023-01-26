@@ -312,6 +312,14 @@ void Function::bind_with(TypeList* types) {
 }
 
 Function* Function::get_with_template_binding(TypeList* bindings) {
+    if (bindings == nullptr) {
+        return nullptr;
+    }
+
+    if (template_header->types_count() != bindings->types_count()) {
+        return nullptr;
+    }
+
     for (int i = 0; i < tfunctions.size(); ++i) {
         if (tfunctions[i]->is_binded_with_types(bindings)) {
             return tfunctions[i];

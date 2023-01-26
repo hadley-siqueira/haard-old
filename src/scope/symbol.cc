@@ -80,13 +80,7 @@ std::string Symbol::to_str(int idx) {
 
     case SYM_FUNCTION:
         ss << "func(";
-
-        if (get_type(idx)) {
-            Printer p;
-            p.print_type(get_type(idx));
-            ss << p.to_str();
-        }
-
+        ss << get_type(idx)->to_str();
         ss << ")";
         break;
 
@@ -203,7 +197,11 @@ std::string Symbol::get_qualified_name(int idx) {
         break;
 
     case SYM_TEMPLATE:
-        ss << type->get_qualified_name();
+        if (type->get_bind_type()) {
+            ss << type->get_bind_type()->get_qualified_name();
+        } else {
+            ss << type->get_name();
+        }
         break;
     }
 

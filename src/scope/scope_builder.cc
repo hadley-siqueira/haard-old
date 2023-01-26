@@ -467,9 +467,7 @@ void ScopeBuilder::build_identifier(Identifier* id) {
 
 void ScopeBuilder::build_this(ThisExpression* expr) {
     if (current_class == nullptr) {
-        std::cout << "Error: using this outside class";
-        DBG;
-        exit(0);
+        logger->error_and_exit("<red>error: </red>: using this outside class");
     }
 
     expr->set_type(new IndirectionType(TYPE_POINTER, current_class->get_self_type()));
@@ -507,7 +505,7 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
  
     build_expression(bin->get_left());
 
-    if (new_var && is_constructor_call(bin)) {
+    if (new_var && is_constructor_call_assignment(bin)) {
         bin->set_kind(EXPR_CONSTRUCTOR_ASSIGNMENT);
     }
 }
@@ -557,71 +555,84 @@ void ScopeBuilder::build_call(BinOp* bin) {
     tl = bin->get_left()->get_type();
     tr = bin->get_right()->get_type();
 
-    if (bin->get_left()->get_kind() == EXPR_ID) {
-        Identifier* id = (Identifier*) bin->get_left();
-        Symbol* sym = id->get_symbol();
+    if (is_function_call(bin)) {
+        build_function_call(bin);
+    } else if (is_constructor_call(bin)) {
+        build_constructor_call(bin);
+    } else if (is_member_call(bin)) {
+        build_member_call(bin);
+    } else {
+        logger->error_and_exit("<red>error:</red> can't make a call");
+    }
+}
 
-        if (tl->get_kind() == TYPE_FUNCTION) {
-            int index = sym->get_overloaded((TypeList*) tr);
+void ScopeBuilder::build_function_call(BinOp* bin) {
+    Identifier* id = (Identifier*) bin->get_left();
+    Symbol* sym = id->get_symbol();
 
-            if (index >= 0) {
-                id->set_overloaded_index(index);
-            } else {
-                std::cout << "Error: function not overloaded with signature\n";
-                DBG;
-                exit(0);
-            }
+    int index = sym->get_overloaded((TypeList*) bin->get_right()->get_type());
 
-            Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
-            ftype = (FunctionType*) f->get_self_type();
-            bin->set_type(ftype->get_return_type());
-        } else if (tl->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS) {
-            Class* klass = (Class*) sym->get_descriptor();
-            args = (TypeList*) tr;
+    if (index >= 0) {
+        id->set_overloaded_index(index);
+    } else {
+        std::cout << "Error: function not overloaded with signature\n";
+        DBG;
+        exit(0);
+    }
 
-            Symbol* sym2 = klass->get_scope()->local_has("init");
-            int index = -1;
+    // Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+    Function* f = (Function*) id->get_descriptor();
+    FunctionType* ftype = (FunctionType*) f->get_self_type();
+    bin->set_type(ftype->get_return_type());
+}
 
-            if (sym2) {
-                index = sym2->get_overloaded(args);
-            }
+void ScopeBuilder::build_constructor_call(BinOp* bin) {
+    Identifier* id = (Identifier*) bin->get_left();
+    Symbol* sym = id->get_symbol();
+    Class* klass = (Class*) sym->get_descriptor();
+    TypeList* args = (TypeList*) bin->get_right()->get_type();
 
-            if (index >= 0) {
-                bin->set_constructor_call(sym2);
-                bin->set_overloaded_index(index);
-            } else {
-                std::cout << "Error: constructor not overloaded with signature\n";
-                DBG;
-                exit(0);
-            }
+    Symbol* sym2 = klass->get_scope()->local_has("init");
+    int index = -1;
 
-            bin->set_type(sym->get_type());
+    if (sym2) {
+        index = sym2->get_overloaded(args);
+    }
+
+    if (index >= 0) {
+        bin->set_constructor_call(sym2);
+        bin->set_overloaded_index(index);
+    } else {
+        std::cout << "Error: constructor not overloaded with signature\n";
+        DBG;
+        exit(0);
+    }
+
+    bin->set_type(sym->get_type());
+}
+
+void ScopeBuilder::build_member_call(BinOp* bin) {
+    BinOp* dot = (BinOp*) bin->get_left();
+    Identifier* id = (Identifier*) dot->get_right();
+    Symbol* sym = id->get_symbol();
+
+    Type* tl = bin->get_left()->get_type();
+    Type* tr = bin->get_right()->get_type();
+
+    if (tl->get_kind() == TYPE_FUNCTION) {
+        int index = sym->get_overloaded((TypeList*) tr);
+
+        if (index >= 0) {
+            id->set_overloaded_index(index);
         } else {
-            // FIXME
-            std::cout << "Error: not a function to be called\n";
+            std::cout << "Error: function not overloaded with signature\n";
             DBG;
             exit(0);
         }
-    } else if (bin->get_left()->get_kind() == EXPR_DOT) {
-        BinOp* dot = (BinOp*) bin->get_left();
-        Identifier* id = (Identifier*) dot->get_right();
-        Symbol* sym = id->get_symbol();
 
-        if (tl->get_kind() == TYPE_FUNCTION) {
-            int index = sym->get_overloaded((TypeList*) tr);
-
-            if (index >= 0) {
-                id->set_overloaded_index(index);
-            } else {
-                std::cout << "Error: function not overloaded with signature\n";
-                DBG;
-                exit(0);
-            }
-
-            Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
-            ftype = (FunctionType*) f->get_self_type();
-            bin->set_type(ftype->get_return_type());
-        }
+        Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+        FunctionType* ftype = (FunctionType*) f->get_self_type();
+        bin->set_type(ftype->get_return_type());
     }
 }
 
@@ -908,7 +919,7 @@ void ScopeBuilder::create_new_var(BinOp* bin) {
     current_function->add_variable(var);
 }
 
-bool ScopeBuilder::is_constructor_call(BinOp* bin) {
+bool ScopeBuilder::is_constructor_call_assignment(BinOp* bin) {
     BinOp* call;
     Identifier* id;
     Symbol* sym;
@@ -927,6 +938,29 @@ bool ScopeBuilder::is_constructor_call(BinOp* bin) {
     }
 
     return false;
+}
+
+bool ScopeBuilder::is_function_call(BinOp* bin) {
+    if (bin->get_left()->get_kind() != EXPR_ID) {
+        return false;
+    }
+
+    return bin->get_left()->get_type()->get_kind() == TYPE_FUNCTION;
+}
+
+bool ScopeBuilder::is_constructor_call(BinOp* bin) {
+    if (bin->get_left()->get_kind() != EXPR_ID) {
+        return false;
+    }
+
+    Identifier* id = (Identifier*) bin->get_left();
+
+    return id->get_type()->get_kind() == TYPE_NAMED &&
+            id->get_symbol()->get_kind() == SYM_CLASS;
+}
+
+bool ScopeBuilder::is_member_call(BinOp* bin) {
+    return bin->get_left()->get_kind() == EXPR_DOT;
 }
 
 // define methods
@@ -1382,7 +1416,9 @@ void ScopeBuilder::link_named_type(NamedType* type) {
     if (kind == SYM_CLASS) {
         type->set_symbol(sym);
     } else if (kind == SYM_TEMPLATE) {
+        NamedType* desc = (NamedType*) sym->get_descriptor();
         type->set_symbol(sym);
+        type->set_bind_type(desc->get_bind_type());
     } else {
         logger->error_and_exit("error: named type not in scope but is another entity");
     }
@@ -1391,7 +1427,7 @@ void ScopeBuilder::link_named_type(NamedType* type) {
         for (int i = 0; i < header->types_count(); ++i) {
             link_type(header->get_type(i));
         }
-    } 
+    }
 }
 
 void ScopeBuilder::link_function_type(FunctionType* type) {
