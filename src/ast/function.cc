@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "ast/function.h"
 #include "scope/scope.h"
 
@@ -14,6 +15,7 @@ Function::Function() {
     self_type = nullptr;
     constructor_flag = false;
     destructor_flag = false;
+    template_flag = false;
 }
 
 Function::~Function() {
@@ -149,6 +151,28 @@ std::string Function::get_qualified_name() {
     return ss.str();
 }
 
+std::string Function::get_original() {
+    char c;
+    std::ifstream file;
+    std::string buffer;
+    int counter;
+
+    file.open(get_path());
+
+    file.seekg(begin);
+    counter = begin;
+
+    while (counter < end && file.get(c)) {
+        buffer += c;
+        ++counter;
+    }
+
+    buffer += "\n";
+
+    file.close();
+    return buffer;
+}
+
 void Function::set_line(int line) {
     this->line = line;
 }
@@ -171,6 +195,10 @@ void Function::set_statements(CompoundStatement* statements) {
 
 void Function::set_virtual(bool v) {
     virtual_flag = v;
+}
+
+void Function::set_template(bool v) {
+    template_flag = v;
 }
 
 int Function::get_uid() {
@@ -213,19 +241,7 @@ void Function::set_method(bool value) {
 }
 
 bool Function::is_template() {
-    if (template_header == nullptr) {
-        return false;
-    }
-
-    for (int i = 0; i < template_header->types_count(); ++i) {
-        NamedType* type = (NamedType*) template_header->get_type(i);
-
-        if (!type->is_binded()) {
-            return true;
-        }
-    }
-
-    return false;
+    return template_flag;
 }
 
 bool Function::is_method() {
@@ -280,58 +296,6 @@ Function* Function::clone() {
     }
 
     return nfunc;
-}
-
-bool Function::is_binded_with_types(TypeList* types) {
-    if (template_header == nullptr) {
-        return false;
-    }
-
-    if (template_header->types_count() != types->types_count()) {
-        return false;
-    }
-
-    for (int i = 0; i < template_header->types_count(); ++i) {
-        NamedType* t = (NamedType*) template_header->get_type(i);
-
-        if (t->is_binded()) {
-            if (!t->get_bind_type()->equal(types->get_type(i))) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-void Function::bind_with(TypeList* types) {
-    for (int i = 0; i < template_header->types_count(); ++i) {
-        NamedType* t = (NamedType*) template_header->get_type(i);
-        t->set_bind_type(types->get_type(i));
-    }
-}
-
-Function* Function::get_with_template_binding(TypeList* bindings) {
-    if (bindings == nullptr) {
-        return nullptr;
-    }
-
-    if (template_header->types_count() != bindings->types_count()) {
-        return nullptr;
-    }
-
-    for (int i = 0; i < tfunctions.size(); ++i) {
-        if (tfunctions[i]->is_binded_with_types(bindings)) {
-            return tfunctions[i];
-        }
-    }
-
-    Function* new_func = clone();
-
-    new_func->bind_with(bindings);
-    tfunctions.push_back(new_func);
-
-    return new_func;
 }
 
 std::string Function::get_type_signature() {
@@ -424,4 +388,24 @@ void Function::set_constructor(bool value) {
 
 void Function::set_destructor(bool value) {
     destructor_flag = value;
+}
+
+std::string Function::get_path() {
+    return source->get_path();
+}
+
+int Function::get_begin() const {
+    return begin;
+}
+
+void Function::set_begin(int value) {
+    begin = value;
+}
+
+int Function::get_end() const {
+    return end;
+}
+
+void Function::set_end(int value) {
+    end = value;
 }

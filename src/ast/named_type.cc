@@ -8,14 +8,12 @@ NamedType::NamedType() {
     kind = TYPE_NAMED;
     symbol = nullptr;
     template_header = nullptr;
-    bind_type = nullptr;
 }
 
 NamedType::NamedType(Token& token) {
     kind = TYPE_NAMED;
     symbol = nullptr;
     template_header = nullptr;
-    bind_type = nullptr;
     set_name(token.get_lexeme());
 }
 
@@ -52,54 +50,19 @@ std::string NamedType::to_cpp() {
 }
 
 std::string NamedType::to_str() {
-    if (bind_type) {
-        return name + ":" + bind_type->to_str();
-    }
-
     return name;
 }
 
 bool NamedType::equal(Type* type) {
-    if (bind_type) {
-        return bind_type->equal(type);
-    }
-
     if (type->get_kind() != TYPE_NAMED) {
         return false;
     }
 
     NamedType* other = (NamedType*) type;
     return symbol->get_descriptor() == other->symbol->get_descriptor();
-
-    /*
-    NamedType* other = (NamedType*) type;
-
-    if (type->get_kind() != TYPE_NAMED) {
-        return false;
-    }
-
-    int kind = symbol->get_kind();
-
-    switch (kind) {
-    case SYM_CLASS:
-    case SYM_STRUCT:
-    case SYM_UNION:
-    case SYM_ENUM:
-        return symbol->get_descriptor() == other->symbol->get_descriptor();
-        break;
-
-    default:
-        break;
-    }
-
-    return false;*/
 }
 
 bool NamedType::is_integer_scalar() {
-    if (bind_type) {
-        return bind_type->is_integer_scalar();
-    }
-
     return false;
 }
 
@@ -160,16 +123,4 @@ bool NamedType::is_class() {
 
 std::string NamedType::get_qualified_name() {
     return symbol->get_qualified_name();
-}
-
-bool NamedType::is_binded() {
-    return bind_type != nullptr;
-}
-
-Type* NamedType::get_bind_type() {
-    return bind_type;
-}
-
-void NamedType::set_bind_type(Type* type) {
-    bind_type = type;
 }

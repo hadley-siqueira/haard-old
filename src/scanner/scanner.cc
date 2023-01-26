@@ -123,6 +123,7 @@ void Scanner::start_token() {
     lexeme = "";
     token_line = line;
     token_column = column;
+    token_begin = idx;
 }
 
 void Scanner::advance() {
@@ -370,6 +371,8 @@ void Scanner::create_token(int kind) {
     token.set_line(token_line);
     token.set_column(token_column);
     token.set_whitespace(ws);
+    token.set_begin(token_begin);
+    token.set_end(idx);
 
     tokens.push_back(token);
 }

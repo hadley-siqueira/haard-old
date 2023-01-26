@@ -70,6 +70,7 @@ Type* Symbol::get_type(int idx) {
 
 std::string Symbol::to_str(int idx) {
     std::stringstream ss;
+    NamedType* named = (NamedType*) descriptors[idx];
 
     ss << "<" << name << ":";
 
@@ -86,13 +87,7 @@ std::string Symbol::to_str(int idx) {
 
     case SYM_METHOD:
         ss << "method(";
-
-        if (get_type(idx)) {
-            Printer p;
-            p.print_type(get_type(idx));
-            ss << p.to_str();
-        }
-
+        ss << get_type(idx)->to_str();
         ss << ")";
         break;
 
@@ -122,10 +117,6 @@ std::string Symbol::to_str(int idx) {
 
     case SYM_CLASS_VARIABLE:
         ss << "cvar";
-        break;
-
-    case SYM_TEMPLATE:
-        ss << "template";
         break;
     }
 
@@ -194,14 +185,6 @@ std::string Symbol::get_qualified_name(int idx) {
     case SYM_VARIABLE:
     case SYM_CLASS_VARIABLE:
         ss << var->get_unique_name();
-        break;
-
-    case SYM_TEMPLATE:
-        if (type->get_bind_type()) {
-            ss << type->get_bind_type()->get_qualified_name();
-        } else {
-            ss << type->get_name();
-        }
         break;
     }
 
@@ -286,11 +269,6 @@ int Symbol::get_size_in_bytes(int idx) {
     case SYM_VARIABLE:
     case SYM_CLASS_VARIABLE:
         return var->get_size_in_bytes();
-
-    case SYM_TEMPLATE:
-        if (tt->get_bind_type()) {
-            return tt->get_bind_type()->get_size_in_bytes();
-        }
     }
 
     return 1;
@@ -315,10 +293,6 @@ int Symbol::get_alignment(int idx) {
     case SYM_CLASS_VARIABLE:
         return var->get_type()->get_alignment();
 
-    case SYM_TEMPLATE:
-        if (tt->get_bind_type()) {
-            return tt->get_bind_type()->get_alignment();
-        }
     }
 
     return ARCH_WORD_SIZE;

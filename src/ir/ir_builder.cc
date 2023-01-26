@@ -104,19 +104,7 @@ void IRBuilder::build_function_parameters(Function* function, IRFunction* ir_fun
         if (var->get_type()->get_kind() != TYPE_NAMED) {
             ctx->new_store(size, alloca->get_dst(), p);
         } else {
-            NamedType* named = (NamedType*) var->get_type();
-
-            if (named->get_symbol()->get_kind() != SYM_TEMPLATE) {
-                ctx->new_memcpy(alloca->get_dst(), p, size);
-            } else {
-                Type* type = named->get_bind_type();
-
-                if (type->get_kind() != TYPE_NAMED) {
-                    ctx->new_store(size, alloca->get_dst(), p);
-                } else {
-                    ctx->new_memcpy(alloca->get_dst(), p, size);
-                }
-            }
+            ctx->new_memcpy(alloca->get_dst(), p, size);
         }
     }
 }
@@ -776,46 +764,14 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     type = bin->get_left()->get_type();
     size = type->get_size_in_bytes();
 
-    /*// FIXME
+    // FIXME
     // on complex types, should call memcpy instead of a simple store
     if (type->get_kind() != TYPE_NAMED) {
         store = ctx->new_store(size, left, right);
         last_value = left;
     } else {
         ctx->new_memcpy(left, right, size);
-    }*/
-
-    // FIXME
-    // on complex types, should call memcpy instead of a simple store
-    if (type->get_kind() != TYPE_NAMED) {
-        store = ctx->new_store(size, left, right);
         last_value = left;
-    } else if (type->get_kind() == TYPE_NAMED) {
-        NamedType* named = (NamedType*) type;
-        Symbol* sym = named->get_symbol();
-        int kind = sym->get_kind();
-
-        switch (kind) {
-        case SYM_CLASS:
-        case SYM_STRUCT:
-        case SYM_ENUM:
-        case SYM_UNION:
-            ctx->new_memcpy(left, right, size);
-            break;
-
-        case SYM_TEMPLATE:
-            if (named->get_bind_type()->get_kind() != TYPE_NAMED) {
-                store = ctx->new_store(size, left, right);
-                last_value = left;
-            } else {
-                ctx->new_memcpy(left, right, size);
-            }
-
-            break;
-
-        default:
-            break;
-        }
     }
 }
 

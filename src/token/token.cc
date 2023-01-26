@@ -49,10 +49,28 @@ std::string Token::to_str() {
 
     ss << "(";
     ss << token_kind_to_str_map.at(kind) << ", ";
-    ss << "'" << lexeme << "', ";
-    ss << line << ", ";
-    ss << column << ", ";
+    ss << "'" << lexeme << "', l=";
+    ss << line << ", c=";
+    ss << column << ", b=";
+    ss << begin << ", e=";
+    ss << end << ", ws=";
     ss << whitespace << ")";
 
     return ss.str();
+}
+
+int Token::get_begin() const {
+    return begin;
+}
+
+void Token::set_begin(int value) {
+    begin = value;
+}
+
+int Token::get_end() const {
+    return end;
+}
+
+void Token::set_end(int value) {
+    end = value;
 }

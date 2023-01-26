@@ -1,0 +1,23 @@
+def plus1 : int
+    @n : int
+
+    return n + 1
+
+def swap<T> : void
+    @a : T*
+    @b : T*
+
+    tmp = *a
+    *a = *b
+    *b = tmp
+
+def swap2<T> : void
+    @a : T*
+    @b : T*
+
+    swap<T>(a, b)
+
+def main : void
+    a = 2
+    b = 3
+    swap2<int>(&a, &b)

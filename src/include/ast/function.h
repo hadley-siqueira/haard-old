@@ -33,6 +33,7 @@ namespace haard {
             CompoundStatement* get_statements();
             Scope* get_scope();
             std::string get_qualified_name();
+            std::string get_original();
 
             void set_line(int line);
             void set_column(int column);
@@ -41,6 +42,7 @@ namespace haard {
             void set_return_type(Type* type);
             void set_statements(CompoundStatement* statements);
             void set_virtual(bool v);
+            void set_template(bool v);
 
             int get_uid();
             void set_uid(int uid);
@@ -60,11 +62,8 @@ namespace haard {
             bool is_constructor();
             bool is_destructor();
             bool is_virtual();
-            bool is_binded_with_types(TypeList* types);
-            void bind_with(TypeList* types);
 
             Function* clone();
-            Function* get_with_template_binding(TypeList* bindings);
             bool same_signature(Function* other);
 
             void set_source(Source* source);
@@ -88,15 +87,26 @@ namespace haard {
             void set_constructor(bool value);
             void set_destructor(bool value);
 
-        private:
+            std::string get_path();
+
+            int get_begin() const;
+            void set_begin(int value);
+
+            int get_end() const;
+            void set_end(int value);
+
+    private:
             int uid;
             int line;
             int column;
             int overloaded_index;
+            int begin;
+            int end;
             bool method_flag;
             bool constructor_flag;
             bool destructor_flag;
             bool virtual_flag;
+            bool template_flag;
             std::string name;
             Type* return_type;
             FunctionType* self_type;

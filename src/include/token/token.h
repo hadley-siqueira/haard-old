@@ -20,11 +20,19 @@ namespace haard {
 
             std::string to_str();
 
-        private:
+            int get_begin() const;
+            void set_begin(int value);
+
+            int get_end() const;
+            void set_end(int value);
+
+    private:
             int kind;
             int line;
             int column;
             int whitespace;
+            int begin;
+            int end;
             std::string lexeme;
     };
 }

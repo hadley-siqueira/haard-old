@@ -119,6 +119,7 @@ namespace haard {
             void define_function_parameters(Function* function);
             void define_function_self_type(Function* function);
             void define_overloaded_function(Symbol* symbol, Function* function);
+            void define_template_header(TypeList* types);
 
             void connect_sibling_scopes(Sources* sources);
             void generate_deletables();

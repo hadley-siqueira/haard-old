@@ -73,14 +73,6 @@ void Type::set_column(int column) {
 }
 
 bool Type::equal(Type* type) {
-    if (type->get_kind() == TYPE_NAMED) {
-        NamedType* named = (NamedType*) type;
-
-        if (named->get_bind_type()) {
-            return kind == named->get_bind_type()->get_kind();
-        }
-    }
-
     return kind == type->kind;
 }
 

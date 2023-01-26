@@ -44,6 +44,8 @@ namespace haard {
             int column;
             int token_line;
             int token_column;
+            int token_begin;
+            int token_end;
             int idx;
             int ws;
             std::vector<Token> tokens;

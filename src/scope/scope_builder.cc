@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <set>
 #include "scope/scope_builder.h"
 #include "log/info_messages.h"
 #include "log/error_messages.h"
@@ -462,6 +463,10 @@ void ScopeBuilder::build_identifier(Identifier* id) {
         logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
     }
 
+    if (id->has_template()) {
+        link_template_header(id->get_template_list());
+    }
+
     id->set_symbol(sym);
 }
 
@@ -563,25 +568,7 @@ void ScopeBuilder::build_function_call(BinOp* bin) {
     Symbol* sym = id->get_symbol();
 
     if (id->has_template()) {
-        Function* f = (Function*) id->get_descriptor();
-        Function* ff = f->get_with_template_binding(id->get_template_list());
-        Scope* scope = f->get_scope()->get_parent();
-        auto old_scope = current_scope;
-        auto old_function = current_function;
-        auto old_source = current_source;
 
-        current_scope = scope;
-        current_source = f->get_source();
-
-        define_function(ff);
-        build_function(ff);
-
-        id->set_overloaded_index(id->get_symbol()->get_overloaded(ff));
-        current_source->add_function(ff);
-
-        current_scope = old_scope;
-        current_function = old_function;
-        current_source = old_source;
     } else {
         int index = sym->get_overloaded((TypeList*) bin->get_right()->get_type());
 
@@ -1142,19 +1129,7 @@ void ScopeBuilder::define_method_signature(Function* method) {
 }
 
 void ScopeBuilder::define_class_template_header(Class* klass) {
-    TypeList* header = klass->get_template_header();
-
-    if (header) {
-        for (int i = 0; i < header->types_count(); ++i) {
-            NamedType* t = (NamedType*) header->get_type(i);
-
-            if (current_scope->local_has(t->get_name())) {
-                logger->error_and_exit("error: already used type on template header");
-            } else {
-                current_scope->define_template(t);
-            }
-        }
-    }
+    define_template_header(klass->get_template_header());
 }
 
 void ScopeBuilder::define_class_super(Class* klass) {
@@ -1311,22 +1286,7 @@ void ScopeBuilder::define_function_signature(Function* function) {
 }
 
 void ScopeBuilder::define_function_template_header(Function* function) {
-    Symbol* sym;
-    TypeList* header = function->get_template_header();
-
-    if (header) {
-        for (int i = 0; i < header->types_count(); ++i) {
-            NamedType* type = (NamedType*) header->get_type(i);
-            sym = current_scope->local_has(type->get_name());
-
-            if (!sym) {
-                current_scope->define_template(type);
-                link_type(type->get_bind_type());
-            } else {
-                logger->error_and_exit("<red>error: </red>template name already defined");
-            }
-        }
-    }
+    define_template_header(function->get_template_header());
 }
 
 void ScopeBuilder::define_function_parameters(Function* function) {
@@ -1389,6 +1349,22 @@ void ScopeBuilder::define_overloaded_function(Symbol* symbol, Function* function
     function->set_overloaded_index(symbol->overloaded_count() - 1);
 }
 
+void ScopeBuilder::define_template_header(TypeList* types) {
+    std::set<std::string> mapping;
+
+    if (types) {
+        for (int i = 0; i < types->types_count(); ++i) {
+            NamedType* t = (NamedType*) types->get_type(i);
+
+            if (mapping.count(t->get_name()) > 0) {
+                logger->error_and_exit("error: already used type on template header");
+            } else {
+                mapping.insert(t->get_name());
+            }
+        }
+    }
+}
+
 void ScopeBuilder::link_type(Type* type) {
     IndirectionType* it = (IndirectionType*) type;
 
@@ -1417,7 +1393,6 @@ void ScopeBuilder::link_type(Type* type) {
 }
 
 void ScopeBuilder::link_named_type(NamedType* type) {
-    TypeList* header = type->get_template_header();
     Symbol* sym = current_scope->has(type->get_name());
     std::string name = type->get_name();
 
@@ -1429,18 +1404,8 @@ void ScopeBuilder::link_named_type(NamedType* type) {
 
     if (kind == SYM_CLASS) {
         type->set_symbol(sym);
-    } else if (kind == SYM_TEMPLATE) {
-        NamedType* desc = (NamedType*) sym->get_descriptor();
-        type->set_symbol(sym);
-        type->set_bind_type(desc->get_bind_type());
     } else {
         logger->error_and_exit("error: named type not in scope but is another entity");
-    }
-
-    if (header) {
-        for (int i = 0; i < header->types_count(); ++i) {
-            link_type(header->get_type(i));
-        }
     }
 }
 

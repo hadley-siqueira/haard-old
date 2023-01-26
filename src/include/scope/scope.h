@@ -24,7 +24,6 @@ namespace haard {
             Symbol* define(Function* func);
             Symbol* define(int kind, Variable* var);
             Symbol* define(Variable* var);
-            Symbol* define_template(NamedType* type);
 
             bool has_parent();
             bool has_siblings();

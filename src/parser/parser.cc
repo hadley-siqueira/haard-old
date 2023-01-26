@@ -96,7 +96,6 @@ Import* Parser::parse_import() {
 }
 
 Class* Parser::parse_class() {
-    //Token name;
     Class* klass = new Class();
 
     if (annotations.size() > 0) {
@@ -167,6 +166,9 @@ Variable* Parser::parse_class_variable() {
 }
 
 Function* Parser::parse_function() {
+    int begin;
+    int end;
+
     Type* type;
     Function* function = new Function();
 
@@ -176,6 +178,8 @@ Function* Parser::parse_function() {
     }
 
     expect(TK_DEF);
+    begin = matched.get_begin();
+
     expect(TK_ID);
     function->set_from_token(matched);
 
@@ -198,7 +202,11 @@ Function* Parser::parse_function() {
     }
 
     function->set_statements(parse_compound_statement());
+    end = matched.get_end();
     dedent();
+
+    function->set_begin(begin);
+    function->set_end(end);
 
     return function;
 }
