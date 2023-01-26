@@ -24,6 +24,8 @@ namespace haard {
             Variable* get_variable() const;
             void set_variable(Variable *value);
 
+            Expression* clone();
+
     private:
             std::vector<Expression*> expressions;
             std::vector<Expression*> calls;

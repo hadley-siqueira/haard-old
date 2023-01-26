@@ -1,3 +1,6 @@
+import std.io
+import std.string
+
 def swap<T> : void
     @a : T*
     @b : T*
@@ -6,23 +9,25 @@ def swap<T> : void
     *a = *b
     *b = tmp
 
-#def concat<T, K> : void
-#    @a : T
-#    @b : K
-#
-#    n = a
-#    m = b
+def concat<T, K> : void
+    @a : T
+    @b : K
+
+    #println("a = $a ; b = $b")
+    println(a)
+    println(b)
 #
 #class Foo:
 #    n : int
 
 def main : void
-    a = 0
-    b = 0
+    a = 3
+    b = 7
     c = 'a'
     d = 'b'
 #    p = Foo()
     swap<int>(&a, &b)
+    println("$a $b")
 #    swap<char>(&c, &d)
-#    concat<int, char>(a, c)
+    concat<int, char>(a, c)
 #    concat<int, Foo>(a, p)

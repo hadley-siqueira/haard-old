@@ -5,7 +5,6 @@ using namespace haard;
 
 Literal::Literal(int kind) {
     this->kind = kind;
-    lexeme = nullptr;
 }
 
 Literal::Literal(int kind, Token& token) {

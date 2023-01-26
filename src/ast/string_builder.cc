@@ -52,3 +52,19 @@ Variable* StringBuilder::get_variable() const {
 void StringBuilder::set_variable(Variable* value) {
     variable = value;
 }
+
+Expression* StringBuilder::clone() {
+    StringBuilder* other = new StringBuilder();
+
+    for (int i = 0; i < expressions.size(); ++i) {
+        other->add_expression(expressions[i]->clone());
+    }
+
+    for (int i = 0; i < calls.size(); ++i) {
+        other->add_call(calls[i]->clone());
+    }
+
+    other->variable = variable->clone();
+
+    return other;
+}

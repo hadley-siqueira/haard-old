@@ -29,6 +29,7 @@ namespace haard {
 
             Symbol* has_field(std::string name);
             bool equal(Type* type);
+            bool is_integer_scalar();
 
             std::string to_cpp();
             std::string to_str();

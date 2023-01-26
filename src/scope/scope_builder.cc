@@ -544,16 +544,8 @@ void ScopeBuilder::build_logical_and(BinOp* op) {
 }
 
 void ScopeBuilder::build_call(BinOp* bin) {
-    Type* tl;
-    Type* tr;
-    FunctionType* ftype;
-    TypeList* args;
-
     build_expression(bin->get_left());
     build_expression(bin->get_right());
-
-    tl = bin->get_left()->get_type();
-    tr = bin->get_right()->get_type();
 
     if (is_function_call(bin)) {
         build_function_call(bin);
@@ -570,14 +562,36 @@ void ScopeBuilder::build_function_call(BinOp* bin) {
     Identifier* id = (Identifier*) bin->get_left();
     Symbol* sym = id->get_symbol();
 
-    int index = sym->get_overloaded((TypeList*) bin->get_right()->get_type());
+    if (id->has_template()) {
+        Function* f = (Function*) id->get_descriptor();
+        Function* ff = f->get_with_template_binding(id->get_template_list());
+        Scope* scope = f->get_scope()->get_parent();
+        auto old_scope = current_scope;
+        auto old_function = current_function;
+        auto old_source = current_source;
 
-    if (index >= 0) {
-        id->set_overloaded_index(index);
+        current_scope = scope;
+        current_source = f->get_source();
+
+        define_function(ff);
+        build_function(ff);
+
+        id->set_overloaded_index(id->get_symbol()->get_overloaded(ff));
+        current_source->add_function(ff);
+
+        current_scope = old_scope;
+        current_function = old_function;
+        current_source = old_source;
     } else {
-        std::cout << "Error: function not overloaded with signature\n";
-        DBG;
-        exit(0);
+        int index = sym->get_overloaded((TypeList*) bin->get_right()->get_type());
+
+        if (index >= 0) {
+            id->set_overloaded_index(index);
+        } else {
+            std::cout << "Error: function not overloaded with signature\n";
+            DBG;
+            exit(0);
+        }
     }
 
     // Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());

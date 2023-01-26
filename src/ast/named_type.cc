@@ -83,6 +83,14 @@ bool NamedType::equal(Type* type) {
     return false;
 }
 
+bool NamedType::is_integer_scalar() {
+    if (bind_type) {
+        return bind_type->is_integer_scalar();
+    }
+
+    return false;
+}
+
 Symbol* NamedType::has_field(std::string name) {
     Class* klass;
     Symbol* sym = nullptr;

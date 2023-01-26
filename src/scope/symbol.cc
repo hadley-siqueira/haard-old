@@ -288,10 +288,12 @@ int Symbol::get_size_in_bytes(int idx) {
         return var->get_size_in_bytes();
 
     case SYM_TEMPLATE:
-        return tt->get_size_in_bytes();
+        if (tt->get_bind_type()) {
+            return tt->get_bind_type()->get_size_in_bytes();
+        }
     }
 
-    return 0;
+    return 1;
 }
 
 int Symbol::get_alignment(int idx) {
@@ -314,8 +316,10 @@ int Symbol::get_alignment(int idx) {
         return var->get_type()->get_alignment();
 
     case SYM_TEMPLATE:
-        return tt->get_alignment();
+        if (tt->get_bind_type()) {
+            return tt->get_bind_type()->get_alignment();
+        }
     }
 
-    return 0;
+    return ARCH_WORD_SIZE;
 }
