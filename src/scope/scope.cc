@@ -82,6 +82,13 @@ Symbol* Scope::define(Variable* var) {
     return sym;
 }
 
+Symbol* Scope::define_template(std::string name) {
+    Symbol* sym = new Symbol(SYM_TEMPLATE, name, nullptr);
+    symbols[name] = sym;
+
+    return sym;
+}
+
 bool Scope::has_parent() {
     return parent != nullptr;
 }

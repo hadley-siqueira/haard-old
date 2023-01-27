@@ -17,6 +17,13 @@ def swap2<T> : void
 
     swap<T>(a, b)
 
+def swap2<T> : void
+    @a : T*
+    @b : T*
+    @c : int
+
+    swap<T>(a, b)
+
 def main : void
     a = 2
     b = 3

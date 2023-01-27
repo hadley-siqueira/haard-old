@@ -17,7 +17,10 @@ namespace haard {
         public:
             int get_kind();
             std::string get_name();
+
             void* get_descriptor(int idx=0);
+            std::vector<void *> get_descriptors(TypeList* templates);
+
             Type* get_type(int idx=0);
             int get_size_in_bytes(int idx=0);
             int get_alignment(int idx=0);

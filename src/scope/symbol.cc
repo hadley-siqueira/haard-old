@@ -32,6 +32,44 @@ void* Symbol::get_descriptor(int idx) {
     return nullptr;
 }
 
+std::vector<void*> Symbol::get_descriptors(TypeList* templates) {
+    Class* klass;
+    Function* f;
+    std::vector<void*> res;
+
+    int count = templates->types_count();
+
+    for (int i = 0; i < descriptors.size(); ++i) {
+        switch (kind) {
+        case SYM_CLASS:
+            klass = (Class*) descriptors[i];
+
+            if (klass->get_template_header()) {
+                if (klass->get_template_header()->types_count() == count) {
+                    res.push_back(klass);
+                }
+            }
+
+            break;
+
+        case SYM_FUNCTION:
+        case SYM_METHOD:
+            f = (Function*) descriptors[i];
+
+            if (f->get_template_header()) {
+                if (f->get_template_header()->types_count() == count) {
+                    res.push_back(f);
+                }
+            }
+
+        default:
+            break;
+        }
+    }
+
+    return res;
+}
+
 void Symbol::set_kind(int kind) {
     this->kind = kind;
 }

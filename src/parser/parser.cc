@@ -185,6 +185,7 @@ Function* Parser::parse_function() {
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
         function->set_template_header(parse_template_header());
+        function->set_template(true);
     }
 
     expect(TK_COLON);

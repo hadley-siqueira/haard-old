@@ -728,6 +728,7 @@ namespace haard {
         SYM_VARIABLE,
         SYM_CLASS_VARIABLE,
         SYM_PARAMETER,
+        SYM_TEMPLATE
     } SymbolKind;
 
     typedef enum IRValueKind {

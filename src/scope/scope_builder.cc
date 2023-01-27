@@ -66,6 +66,10 @@ void ScopeBuilder::build_class_methods(Class* klass) {
 }
 
 void ScopeBuilder::build_function(Function* function) {
+    if (function->is_template()) {
+        return;
+    }
+
     enter_scope(function->get_scope());
     current_function = function;
 
@@ -465,6 +469,12 @@ void ScopeBuilder::build_identifier(Identifier* id) {
 
     if (id->has_template()) {
         link_template_header(id->get_template_list());
+        std::vector<void*> descs = sym->get_descriptors(id->get_template_list());
+
+        for (int i = 0; i < descs.size(); ++i) {
+            Function* f = (Function*) descs[i];
+            std::cout << f->get_original() << '\n';
+        }
     }
 
     id->set_symbol(sym);
@@ -1350,16 +1360,14 @@ void ScopeBuilder::define_overloaded_function(Symbol* symbol, Function* function
 }
 
 void ScopeBuilder::define_template_header(TypeList* types) {
-    std::set<std::string> mapping;
-
     if (types) {
         for (int i = 0; i < types->types_count(); ++i) {
             NamedType* t = (NamedType*) types->get_type(i);
 
-            if (mapping.count(t->get_name()) > 0) {
+            if (current_scope->local_has(t->get_name())) {
                 logger->error_and_exit("error: already used type on template header");
             } else {
-                mapping.insert(t->get_name());
+                current_scope->define_template(t->get_name());
             }
         }
     }
@@ -1404,14 +1412,14 @@ void ScopeBuilder::link_named_type(NamedType* type) {
 
     if (kind == SYM_CLASS) {
         type->set_symbol(sym);
+    } else if (kind == SYM_TEMPLATE) {
+
     } else {
         logger->error_and_exit("error: named type not in scope but is another entity");
     }
 }
 
 void ScopeBuilder::link_function_type(FunctionType* type) {
-    link_template_header(type->get_template_header());
-
     for (int i = 0; i < type->params_count(); ++i) {
         link_type(type->get_param_type(i));
     }
@@ -1436,7 +1444,6 @@ void ScopeBuilder::set_logger(Logger* logger) {
     this->logger = logger;
 }
 
-// PRIVATE
 void ScopeBuilder::enter_scope(Scope* scope) {
     scopes.push(current_scope);
     scope->set_parent(current_scope);
