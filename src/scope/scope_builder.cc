@@ -472,7 +472,10 @@ void ScopeBuilder::build_identifier(Identifier* id) {
 
     if (id->has_template()) {
         link_template_header(id->get_template_list());
-        generate_templates(id);
+
+        if (!sym->has_template(id->get_template_list())) {
+            generate_templates(id);
+        }
     }
 }
 

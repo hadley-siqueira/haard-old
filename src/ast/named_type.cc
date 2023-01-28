@@ -50,7 +50,22 @@ std::string NamedType::to_cpp() {
 }
 
 std::string NamedType::to_str() {
-    return name;
+    std::stringstream ss;
+    int i;
+
+    ss << name;
+
+    if (template_header) {
+        ss << '<';
+
+        for (i = 0; i < template_header->types_count() - 1; ++i) {
+            ss << template_header->get_type(i)->to_str() << ", ";
+        }
+
+        ss << template_header->get_type(i)->to_str() << '>';
+    }
+
+    return ss.str();
 }
 
 bool NamedType::equal(Type* type) {

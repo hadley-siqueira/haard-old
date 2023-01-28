@@ -39,10 +39,13 @@ namespace haard {
 
             Scope* get_descriptor_scope(int idx=0);
 
+            bool has_template(TypeList* types);
+
     private:
             int kind;
             std::string name;
             std::vector<void*> descriptors;
+            std::vector<TypeList*> templates;
     };
 }
 

@@ -290,6 +290,16 @@ Scope* Symbol::get_descriptor_scope(int idx) {
     return nullptr;
 }
 
+bool Symbol::has_template(TypeList* types) {
+    for (int i = 0; i < templates.size(); ++i) {
+        if (templates[i]->equal(types)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 int Symbol::get_size_in_bytes(int idx) {
     Class* klass = (Class*) descriptors[idx];
     Variable* var = (Variable*) descriptors[idx];
