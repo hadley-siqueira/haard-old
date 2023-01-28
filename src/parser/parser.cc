@@ -109,6 +109,7 @@ Class* Parser::parse_class() {
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
         klass->set_template_header(parse_template_header());
+        klass->set_template(true);
     }
 
     if (match(TK_LEFT_PARENTHESIS)) {
@@ -137,16 +138,14 @@ Class* Parser::parse_class() {
     return klass;
 }
 
-TypeList *Parser::parse_template_header() {
+TypeList* Parser::parse_template_header() {
     TypeList* header = new TypeList();
 
     expect(TK_BEGIN_TEMPLATE);
-    expect(TK_ID);
-    header->add_type(new NamedType(matched));
+    header->add_type(parse_type());
 
     while (match(TK_COMMA)) {
-        expect(TK_ID);
-        header->add_type(new NamedType(matched));
+        header->add_type(parse_type());
     }
 
     expect(TK_END_TEMPLATE);
@@ -1472,4 +1471,22 @@ bool Parser::has_interpolation(std::string str) {
     }
 
     return false;
+}
+
+Logger *Parser::get_logger() const
+{
+    return logger;
+}
+
+void Parser::set_logger(Logger *value)
+{
+    logger = value;
+}
+
+std::string Parser::get_path() const {
+    return path;
+}
+
+void Parser::set_path(const std::string &value) {
+    path = value;
 }

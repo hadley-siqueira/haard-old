@@ -13,6 +13,7 @@ Class::Class() {
     destructor = nullptr;
     scope = new Scope();
     is_virtual_flag = false;
+    template_flag = false;
 }
 
 Class::~Class() {
@@ -265,6 +266,14 @@ int Class::get_remaining_pad() const {
 
 void Class::set_remaining_pad(int value) {
     remaining_pad = value;
+}
+
+bool Class::is_template() {
+    return template_flag;
+}
+
+void Class::set_template(bool value) {
+    template_flag = value;
 }
 
 int Class::get_alignment() const {

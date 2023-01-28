@@ -20,7 +20,13 @@ namespace haard {
             Expression* read_expression_from_string(std::string str);
             Function* read_function_from_string(std::string str);
 
-        private:
+            std::string get_path() const;
+            void set_path(const std::string &value);
+
+            Logger* get_logger() const;
+            void set_logger(Logger* value);
+
+    private:
             Source* parse_source();
             Import* parse_import();
             Class* parse_class();

@@ -73,6 +73,9 @@ namespace haard {
             int get_remaining_pad() const;
             void set_remaining_pad(int value);
 
+            bool is_template();
+            void set_template(bool value);
+
     private:
             int line;
             int column;
@@ -81,6 +84,7 @@ namespace haard {
             int alignment;
             int remaining_pad;
             bool is_virtual_flag;
+            bool template_flag;
             std::string name;
             Type* super_class;
             TypeList* template_header;

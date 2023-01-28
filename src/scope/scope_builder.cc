@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <set>
+#include <regex>
 #include "scope/scope_builder.h"
 #include "log/info_messages.h"
 #include "log/error_messages.h"
@@ -467,17 +468,12 @@ void ScopeBuilder::build_identifier(Identifier* id) {
         logger->error_and_exit(error_message_id_not_in_scope(current_source, id));
     }
 
+    id->set_symbol(sym);
+
     if (id->has_template()) {
         link_template_header(id->get_template_list());
-        std::vector<void*> descs = sym->get_descriptors(id->get_template_list());
-
-        for (int i = 0; i < descs.size(); ++i) {
-            Function* f = (Function*) descs[i];
-            std::cout << f->get_original() << '\n';
-        }
+        generate_templates(id);
     }
-
-    id->set_symbol(sym);
 }
 
 void ScopeBuilder::build_this(ThisExpression* expr) {
@@ -972,6 +968,38 @@ bool ScopeBuilder::is_constructor_call(BinOp* bin) {
 
 bool ScopeBuilder::is_member_call(BinOp* bin) {
     return bin->get_left()->get_kind() == EXPR_DOT;
+}
+
+void ScopeBuilder::generate_templates(Identifier* id) {
+    Symbol* sym = id->get_symbol();
+    std::vector<void*> descs = sym->get_descriptors(id->get_template_list());
+
+    for (int i = 0; i < descs.size(); ++i) {
+        Function* f = (Function*) descs[i];
+
+        Function* res = generate_template(f, id->get_template_list());
+    }
+}
+
+Function* ScopeBuilder::generate_template(Function* function, TypeList* types) {
+    Function* output = nullptr;
+    std::string body = function->get_original();
+    TypeList* templates = function->get_template_header();
+
+    for (int i = 0; i < templates->types_count(); ++i) {
+        std::string from = templates->get_type(i)->to_str();
+        std::string to = types->get_type(i)->to_str();
+        std::regex pattern("\\b" + from + "\\b");
+        body = std::regex_replace(body, pattern, to);
+        std::cout << body << '\n';
+    }
+
+    Parser p(logger);
+    p.set_path(function->get_path());
+    output = p.read_function_from_string(body);
+    output->set_template(false);
+
+    return output;
 }
 
 // define methods

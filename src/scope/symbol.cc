@@ -44,7 +44,7 @@ std::vector<void*> Symbol::get_descriptors(TypeList* templates) {
         case SYM_CLASS:
             klass = (Class*) descriptors[i];
 
-            if (klass->get_template_header()) {
+            if (klass->is_template()) {
                 if (klass->get_template_header()->types_count() == count) {
                     res.push_back(klass);
                 }
@@ -56,7 +56,7 @@ std::vector<void*> Symbol::get_descriptors(TypeList* templates) {
         case SYM_METHOD:
             f = (Function*) descriptors[i];
 
-            if (f->get_template_header()) {
+            if (f->is_template()) {
                 if (f->get_template_header()->types_count() == count) {
                     res.push_back(f);
                 }

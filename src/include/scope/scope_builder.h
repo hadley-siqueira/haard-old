@@ -145,6 +145,9 @@ namespace haard {
             bool is_constructor_call(BinOp* bin);
             bool is_member_call(BinOp* bin);
 
+            void generate_templates(Identifier* id);
+            Function* generate_template(Function* function, TypeList* types);
+
         public:
             void set_logger(Logger* logger);
 
