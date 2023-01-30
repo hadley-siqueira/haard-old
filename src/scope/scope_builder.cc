@@ -981,6 +981,26 @@ void ScopeBuilder::generate_templates(Identifier* id) {
         Function* f = (Function*) descs[i];
 
         Function* res = generate_template(f, id->get_template_list());
+
+        Source* source = f->get_source();
+        source->add_function(res);
+
+        auto old_source = current_source;
+        auto old_function = current_function;
+        auto old_class = current_class;
+        auto old_scope = current_scope;
+
+        current_source = source;
+        current_function = res;
+        current_scope = source->get_scope();
+
+        define_function(res);
+        build_function(res);
+
+        current_source = old_source;
+        current_function = old_function;
+        current_class = old_class;
+        current_scope = old_scope;
     }
 }
 
@@ -1327,7 +1347,9 @@ void ScopeBuilder::define_function_signature(Function* function) {
 }
 
 void ScopeBuilder::define_function_template_header(Function* function) {
-    define_template_header(function->get_template_header());
+    if (function->is_template()) {
+        define_template_header(function->get_template_header());
+    }
 }
 
 void ScopeBuilder::define_function_parameters(Function* function) {
@@ -1346,7 +1368,9 @@ void ScopeBuilder::define_function_parameters(Function* function) {
         } else if (sym->get_kind() != SYM_PARAMETER) {
             current_scope->define(SYM_PARAMETER, param);
         } else {
-            logger->error_and_exit("<red>error: </red>parameter already defined");
+            std::string name = param->get_name();
+            std::string msg = "<red>error: </red>parameter '" + name + "' already defined";
+            logger->error_and_exit(msg);
         }
     }
 }
