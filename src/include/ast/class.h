@@ -29,6 +29,7 @@ namespace haard {
             NamedType* get_self_type();
             int get_size_in_bytes();
             std::string get_qualified_name();
+            std::string get_original();
 
             void set_from_token(Token& token);
             void set_name(std::string name);
@@ -76,6 +77,14 @@ namespace haard {
             bool is_template();
             void set_template(bool value);
 
+            std::string get_path();
+
+            int get_begin() const;
+            void set_begin(int value);
+
+            int get_end() const;
+            void set_end(int value);
+
     private:
             int line;
             int column;
@@ -83,6 +92,8 @@ namespace haard {
             int size_in_bytes;
             int alignment;
             int remaining_pad;
+            int begin;
+            int end;
             bool is_virtual_flag;
             bool template_flag;
             std::string name;

@@ -40,6 +40,7 @@ namespace haard {
             Scope* get_descriptor_scope(int idx=0);
 
             bool has_template(TypeList* types);
+            void add_template(TypeList* types);
 
     private:
             int kind;

@@ -292,12 +292,16 @@ Scope* Symbol::get_descriptor_scope(int idx) {
 
 bool Symbol::has_template(TypeList* types) {
     for (int i = 0; i < templates.size(); ++i) {
-        if (templates[i]->equal(types)) {
+        if (templates[i]->types_equal(types)) {
             return true;
         }
     }
 
     return false;
+}
+
+void Symbol::add_template(TypeList* types) {
+    templates.push_back(types);
 }
 
 int Symbol::get_size_in_bytes(int idx) {

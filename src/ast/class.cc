@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <sstream>
+#include <fstream>
 #include "ast/class.h"
 #include "scope/scope.h"
 
@@ -276,6 +277,26 @@ void Class::set_template(bool value) {
     template_flag = value;
 }
 
+std::string Class::get_path() {
+    return source->get_path();
+}
+
+int Class::get_begin() const {
+    return begin;
+}
+
+void Class::set_begin(int value) {
+    begin = value;
+}
+
+int Class::get_end() const {
+    return end;
+}
+
+void Class::set_end(int value) {
+    end = value;
+}
+
 int Class::get_alignment() const {
     return alignment;
 }
@@ -291,4 +312,26 @@ std::string Class::get_qualified_name() {
     ss << source->get_relative_path() << "." << name;
 
     return ss.str();
+}
+
+std::string Class::get_original() {
+    char c;
+    std::ifstream file;
+    std::string buffer;
+    int counter;
+
+    file.open(get_path());
+
+    file.seekg(begin);
+    counter = begin;
+
+    while (counter < end && file.get(c)) {
+        buffer += c;
+        ++counter;
+    }
+
+    buffer += "\n";
+
+    file.close();
+    return buffer;
 }

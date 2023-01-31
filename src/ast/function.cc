@@ -134,7 +134,7 @@ std::string Function::get_qualified_name() {
         ss << source->get_relative_path() << "." << name;
     }
 
-    ss << "<";
+    ss << "(";
 
     if (parameters_count() > 0) {
         for (i = 0; i < parameters_count() - 1; ++i) {
@@ -147,7 +147,7 @@ std::string Function::get_qualified_name() {
         ss << "void";
     }
 
-    ss << ">";
+    ss << ")";
     return ss.str();
 }
 

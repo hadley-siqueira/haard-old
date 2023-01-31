@@ -46,6 +46,13 @@ Function* Parser::read_function_from_string(std::string str) {
     return parse_function();
 }
 
+Class* Parser::read_class_from_string(std::string str) {
+    Scanner s;
+
+    tokens = s.read_from_string(str);
+    return parse_class();
+}
+
 Source* Parser::parse_source() {
     Source* source = new Source();
 
@@ -97,6 +104,8 @@ Import* Parser::parse_import() {
 
 Class* Parser::parse_class() {
     Class* klass = new Class();
+    int begin;
+    int end;
 
     if (annotations.size() > 0) {
         klass->set_annotations(annotations);
@@ -104,6 +113,8 @@ Class* Parser::parse_class() {
     }
 
     expect(TK_CLASS);
+    begin = matched.get_begin();
+
     expect(TK_ID);
     klass->set_from_token(matched);
 
@@ -134,7 +145,11 @@ Class* Parser::parse_class() {
         }
     }
 
+    end = matched.get_end();
     dedent();
+
+    klass->set_begin(begin);
+    klass->set_end(end);
     return klass;
 }
 

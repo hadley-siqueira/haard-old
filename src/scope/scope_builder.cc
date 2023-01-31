@@ -50,6 +50,10 @@ void ScopeBuilder::build_source(Source* source) {
 }
 
 void ScopeBuilder::build_class(Class* klass) {
+    if (klass->is_template()) {
+        return;
+    }
+
     current_class = klass;
 
     enter_scope(klass->get_scope());
@@ -475,6 +479,7 @@ void ScopeBuilder::build_identifier(Identifier* id) {
 
         if (!sym->has_template(id->get_template_list())) {
             generate_templates(id);
+            sym->add_template(id->get_template_list());
         }
     }
 }
@@ -576,18 +581,15 @@ void ScopeBuilder::build_function_call(BinOp* bin) {
     Identifier* id = (Identifier*) bin->get_left();
     Symbol* sym = id->get_symbol();
 
-    if (id->has_template()) {
 
+    int index = sym->get_overloaded((TypeList*) bin->get_right()->get_type());
+
+    if (index >= 0) {
+        id->set_overloaded_index(index);
     } else {
-        int index = sym->get_overloaded((TypeList*) bin->get_right()->get_type());
-
-        if (index >= 0) {
-            id->set_overloaded_index(index);
-        } else {
-            std::cout << "Error: function not overloaded with signature\n";
-            DBG;
-            exit(0);
-        }
+        std::cout << "Error: function not overloaded with signature\n";
+        DBG;
+        exit(0);
     }
 
     // Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
@@ -977,34 +979,62 @@ void ScopeBuilder::generate_templates(Identifier* id) {
     Symbol* sym = id->get_symbol();
     std::vector<void*> descs = sym->get_descriptors(id->get_template_list());
 
-    for (int i = 0; i < descs.size(); ++i) {
-        Function* f = (Function*) descs[i];
+    if (sym->get_kind() == SYM_FUNCTION) {
+        for (int i = 0; i < descs.size(); ++i) {
+            Function* f = (Function*) descs[i];
 
-        Function* res = generate_template(f, id->get_template_list());
+            Function* res = generate_function_template(f, id->get_template_list());
 
-        Source* source = f->get_source();
-        source->add_function(res);
+            Source* source = f->get_source();
 
-        auto old_source = current_source;
-        auto old_function = current_function;
-        auto old_class = current_class;
-        auto old_scope = current_scope;
+            auto old_source = current_source;
+            auto old_function = current_function;
+            auto old_class = current_class;
+            auto old_scope = current_scope;
 
-        current_source = source;
-        current_function = res;
-        current_scope = source->get_scope();
+            current_source = f->get_source();
+            current_function = res;
+            current_scope = source->get_scope();
 
-        define_function(res);
-        build_function(res);
+            source->add_function(res);
+            define_function(res);
+            build_function(res);
 
-        current_source = old_source;
-        current_function = old_function;
-        current_class = old_class;
-        current_scope = old_scope;
+            current_source = old_source;
+            current_function = old_function;
+            current_class = old_class;
+            current_scope = old_scope;
+        }
+    } else if (sym->get_kind() == SYM_CLASS) {
+        for (int i = 0; i < descs.size(); ++i) {
+            Class* f = (Class*) descs[i];
+
+            Class* res = generate_class_template(f, id->get_template_list());
+
+            Source* source = f->get_source();
+
+            auto old_source = current_source;
+            auto old_function = current_function;
+            auto old_class = current_class;
+            auto old_scope = current_scope;
+
+            current_source = f->get_source();
+            current_class = res;
+            current_scope = source->get_scope();
+
+            source->add_class(res);
+            define_class(res);
+            build_class(res);
+
+            current_source = old_source;
+            current_function = old_function;
+            current_class = old_class;
+            current_scope = old_scope;
+        }
     }
 }
 
-Function* ScopeBuilder::generate_template(Function* function, TypeList* types) {
+Function* ScopeBuilder::generate_function_template(Function* function, TypeList* types) {
     Function* output = nullptr;
     std::string body = function->get_original();
     TypeList* templates = function->get_template_header();
@@ -1014,12 +1044,32 @@ Function* ScopeBuilder::generate_template(Function* function, TypeList* types) {
         std::string to = types->get_type(i)->to_str();
         std::regex pattern("\\b" + from + "\\b");
         body = std::regex_replace(body, pattern, to);
-        std::cout << body << '\n';
     }
 
     Parser p(logger);
     p.set_path(function->get_path());
     output = p.read_function_from_string(body);
+    output->set_template(false);
+
+    return output;
+}
+
+Class* ScopeBuilder::generate_class_template(Class* klass, TypeList* types) {
+    Class* output = nullptr;
+    std::string body = klass->get_original();
+    TypeList* templates = klass->get_template_header();
+
+    for (int i = 0; i < templates->types_count(); ++i) {
+        std::string from = templates->get_type(i)->to_str();
+        std::string to = types->get_type(i)->to_str();
+        std::regex pattern("\\b" + from + "\\b");
+        body = std::regex_replace(body, pattern, to);
+        std::cout << body << '\n'; exit(0);
+    }
+
+    Parser p(logger);
+    p.set_path(klass->get_path());
+    output = p.read_class_from_string(body);
     output->set_template(false);
 
     return output;

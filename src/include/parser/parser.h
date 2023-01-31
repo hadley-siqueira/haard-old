@@ -19,6 +19,7 @@ namespace haard {
             Source* read(std::string path, std::string relative_path);
             Expression* read_expression_from_string(std::string str);
             Function* read_function_from_string(std::string str);
+            Class* read_class_from_string(std::string str);
 
             std::string get_path() const;
             void set_path(const std::string &value);

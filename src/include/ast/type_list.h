@@ -20,6 +20,7 @@ namespace haard {
             void add_type(Type* type);
 
             bool equal(Type* type);
+            bool types_equal(TypeList* other);
             bool check_arguments_type(TypeList* args);
             Type* get_return_type();
             Type* clone();
