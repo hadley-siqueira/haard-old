@@ -24,6 +24,7 @@ namespace haard {
             Import* get_import_with_alias(std::string alias);
             Function* get_function(int idx);
             Class* get_class(int idx);
+            Data* get_data(int idx);
             Scope* get_scope();
 
             void set_path(std::string path);
@@ -35,6 +36,7 @@ namespace haard {
             int import_count();
             int function_count();
             int classes_count();
+            int data_count();
 
             std::string get_relative_path() const;
             void set_relative_path(std::string value);
@@ -46,7 +48,6 @@ namespace haard {
             std::vector<Function*> functions;
             std::vector<Class*> classes;
             std::vector<Data*> datas;
-            std::vector<TypeDeclaration*> types_declaration;
             Scope* scope;
     };
 }

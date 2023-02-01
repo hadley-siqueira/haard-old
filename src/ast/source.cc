@@ -65,6 +65,14 @@ Class* Source::get_class(int idx) {
     return nullptr;
 }
 
+Data* Source::get_data(int idx) {
+    if (idx < data_count()) {
+        return datas[idx];
+    }
+
+    return nullptr;
+}
+
 Scope* Source::get_scope() {
     return scope;
 }
@@ -88,7 +96,6 @@ void Source::add_class(Class* klass) {
 }
 
 void Source::add_data(Data* data) {
-    types_declaration.push_back(data);
     datas.push_back(data);
 }
 
@@ -102,6 +109,10 @@ int Source::function_count() {
 
 int Source::classes_count() {
     return classes.size();
+}
+
+int Source::data_count() {
+    return datas.size();
 }
 
 std::string Source::get_relative_path() const {

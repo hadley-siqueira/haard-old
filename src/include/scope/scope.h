@@ -21,6 +21,7 @@ namespace haard {
             void set_super(Scope* symtab);
 
             Symbol* define_class(std::string& name, Class* klass);
+            Symbol* define_data(std::string& name, Data* data);
 
             Symbol* define(Class* klass);
             Symbol* define(Function* func);

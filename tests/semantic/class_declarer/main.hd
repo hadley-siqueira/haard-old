@@ -17,6 +17,13 @@ data Tree:
     Node : int
     Node : (int, int)
 
+data Option<T>:
+    None : void
+    Some : T
+
 data List<T>:
     None : void
     Cons : (T, List<T>*)
+
+    def to_str : char*
+        n = 0

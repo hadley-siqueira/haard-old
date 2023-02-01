@@ -6,9 +6,6 @@
 #include "ast/data_field.h"
 
 namespace haard {
-    class Scope;
-    class Source;
-
     class Data : public TypeDeclaration {
         public:
             Data();
