@@ -11,3 +11,12 @@ class Bar<T>:
 
 class Bar<K, N>:
     n : int
+
+data Tree:
+    Leaf : void
+    Node : int
+    Node : (int, int)
+
+data List<T>:
+    None : void
+    Cons : (T, List<T>*)

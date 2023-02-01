@@ -8,6 +8,7 @@
 #include "ast/ast.h"
 
 namespace haard {
+    std::string get_info_header();
     std::string info_message_defining_source(Source* source);
     std::string info_message_defining_class(Class* klass);
     std::string info_message_defining_function(Function* function);

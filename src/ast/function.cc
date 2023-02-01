@@ -371,15 +371,15 @@ Class* Function::get_class() {
     return klass;
 }
 
-std::vector<std::string> Function::get_annotations() const {
+std::vector<Annotation*> Function::get_annotations() const {
     return annotations;
 }
 
-void Function::set_annotations(const std::vector<std::string>& value) {
+void Function::set_annotations(const std::vector<Annotation*>& value) {
     annotations = value;
 
     for (int i = 0; i < annotations.size(); ++i) {
-        if (annotations[i].compare("virtual") == 0) {
+        if (annotations[i]->get_value().compare("virtual") == 0) {
             virtual_flag = true;
         }
     }

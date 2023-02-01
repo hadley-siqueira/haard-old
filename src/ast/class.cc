@@ -4,6 +4,7 @@
 #include <fstream>
 #include "ast/class.h"
 #include "scope/scope.h"
+#include "ast/annotation.h"
 
 using namespace haard;
 
@@ -241,11 +242,11 @@ void Class::set_destructor(Function* value) {
     destructor = value;
 }
 
-std::vector<std::string> Class::get_annotations() const {
+std::vector<Annotation*> Class::get_annotations() const {
     return annotations;
 }
 
-void Class::set_annotations(const std::vector<std::string>& value) {
+void Class::set_annotations(const std::vector<Annotation*>& value) {
     annotations = value;
 }
 

@@ -40,6 +40,7 @@ namespace haard {
         TK_STRUCT,
         TK_ENUM,
         TK_UNION,
+        TK_DATA,
         TK_THIS,
         TK_IF,
         TK_ELIF,
@@ -174,6 +175,7 @@ namespace haard {
         {TK_STRUCT, "TK_STRUCT"},
         {TK_ENUM, "TK_ENUM"},
         {TK_UNION, "TK_UNION"},
+        {TK_DATA, "TK_DATA"},
         {TK_THIS, "TK_THIS"},
         {TK_IF, "TK_IF"},
         {TK_ELIF, "TK_ELIF"},
@@ -308,6 +310,7 @@ namespace haard {
         {"TK_STRUCT", TK_STRUCT},
         {"TK_ENUM", TK_ENUM},
         {"TK_UNION", TK_UNION},
+        {"TK_DATA", TK_DATA},
         {"TK_THIS", TK_THIS},
         {"TK_IF", TK_IF},
         {"TK_ELIF", TK_ELIF},
@@ -442,6 +445,7 @@ namespace haard {
         {"struct", TK_STRUCT},
         {"enum", TK_ENUM},
         {"union", TK_UNION},
+        {"data", TK_DATA},
         {"this", TK_THIS},
         {"if", TK_IF},
         {"elif", TK_ELIF},
@@ -717,6 +721,14 @@ namespace haard {
         VAR_PARAM,
         VAR_CLASS
     } VariableKind;
+
+    typedef enum TypeDeclarationKind {
+        DECL_CLASS,
+        DECL_ENUM,
+        DECL_UNION,
+        DECL_DATA,
+        DECL_STRUCT
+    } TypeDeclarationKind;
 
     typedef enum SymbolKind {
         SYM_CLASS,

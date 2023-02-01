@@ -87,6 +87,11 @@ void Source::add_class(Class* klass) {
     klass->set_source(this);
 }
 
+void Source::add_data(Data* data) {
+    types_declaration.push_back(data);
+    datas.push_back(data);
+}
+
 int Source::import_count() {
     return imports.size();
 }

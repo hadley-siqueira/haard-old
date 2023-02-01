@@ -7,6 +7,7 @@
 #include "ast/variable.h"
 #include "ast/type.h"
 #include "ast/named_type.h"
+#include "ast/annotation.h"
 
 namespace haard {
     class Scope;
@@ -62,8 +63,8 @@ namespace haard {
             Function* get_destructor() const;
             void set_destructor(Function* value);
 
-            std::vector<std::string> get_annotations() const;
-            void set_annotations(const std::vector<std::string>& value);
+            std::vector<Annotation*> get_annotations() const;
+            void set_annotations(const std::vector<Annotation*>& value);
 
             int get_alignment() const;
             void set_alignment(int value);
@@ -106,7 +107,7 @@ namespace haard {
             std::vector<Function*> methods;
             std::vector<Function*> constructors;
             std::vector<Variable*> variables;
-            std::vector<std::string> annotations;
+            std::vector<Annotation*> annotations;
     };
 }
 

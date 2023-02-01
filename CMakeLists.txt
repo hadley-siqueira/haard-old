@@ -32,8 +32,18 @@ set(PARSER_SRC
 set(AST_SRC
     src/ast/sources.cc
     src/ast/source.cc
+    src/ast/annotation.cc
     src/ast/import.cc
+    src/ast/type_declaration.cc
+    src/ast/field.cc
     src/ast/class.cc
+    src/ast/struct.cc
+    src/ast/union.cc
+    src/ast/enum.cc
+    src/ast/data.cc
+    src/ast/data_field.cc
+    src/ast/data_field_single.cc
+    src/ast/data_field_compound.cc
     src/ast/function.cc
     src/ast/variable.cc
     src/ast/type.cc

@@ -5,7 +5,9 @@
 #include <vector>
 #include "ast/import.h"
 #include "ast/class.h"
+#include "ast/data.h"
 #include "ast/function.h"
+#include "ast/type_declaration.h"
 
 namespace haard {
     class Import;
@@ -28,6 +30,7 @@ namespace haard {
             void add_import(Import* import);
             void add_function(Function* function);
             void add_class(Class* klass);
+            void add_data(Data* data);
             
             int import_count();
             int function_count();
@@ -42,6 +45,8 @@ namespace haard {
             std::vector<Import*> imports;
             std::vector<Function*> functions;
             std::vector<Class*> classes;
+            std::vector<Data*> datas;
+            std::vector<TypeDeclaration*> types_declaration;
             Scope* scope;
     };
 }

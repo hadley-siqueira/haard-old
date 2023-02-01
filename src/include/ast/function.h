@@ -9,6 +9,7 @@
 #include "ast/type_list.h"
 #include "ast/function_type.h"
 #include "ast/compound_statement.h"
+#include "ast/annotation.h"
 
 namespace haard {
     class Scope;
@@ -78,8 +79,8 @@ namespace haard {
             void set_class(Class* klass);
             Class* get_class();
 
-            std::vector<std::string> get_annotations() const;
-            void set_annotations(const std::vector<std::string>& value);
+            std::vector<Annotation*> get_annotations() const;
+            void set_annotations(const std::vector<Annotation*> &value);
 
             Function* get_parent_method() const;
             void set_parent_method(Function* value);
@@ -118,7 +119,7 @@ namespace haard {
             Class* klass;
             std::vector<Variable*> parameters;
             std::vector<Variable*> variables;
-            std::vector<std::string> annotations;
+            std::vector<Annotation*> annotations;
             std::vector<Function*> tfunctions;
     };
 }

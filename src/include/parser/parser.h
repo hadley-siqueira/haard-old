@@ -31,6 +31,13 @@ namespace haard {
             Source* parse_source();
             Import* parse_import();
             Class* parse_class();
+            Struct* parse_struct();
+            Enum* parse_enum();
+            Union* parse_union();
+
+            Data* parse_data();
+            DataField* parse_data_field();
+
             TypeList* parse_template_header();
             Variable* parse_class_variable();
             Function* parse_function();
@@ -104,7 +111,7 @@ namespace haard {
             std::string path;
             std::vector<Token> tokens;
             std::stack<int> indent_stack;
-            std::vector<std::string> annotations;
+            std::vector<Annotation*> annotations;
             Token matched;
             Logger* logger;
     };
