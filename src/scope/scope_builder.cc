@@ -581,7 +581,6 @@ void ScopeBuilder::build_function_call(BinOp* bin) {
     Identifier* id = (Identifier*) bin->get_left();
     Symbol* sym = id->get_symbol();
 
-
     int index = sym->get_overloaded((TypeList*) bin->get_right()->get_type());
 
     if (index >= 0) {
@@ -1064,9 +1063,9 @@ Class* ScopeBuilder::generate_class_template(Class* klass, TypeList* types) {
         std::string to = types->get_type(i)->to_str();
         std::regex pattern("\\b" + from + "\\b");
         body = std::regex_replace(body, pattern, to);
-        std::cout << body << '\n'; exit(0);
     }
 
+    std::cout << body << '\n';
     Parser p(logger);
     p.set_path(klass->get_path());
     output = p.read_class_from_string(body);
@@ -1118,12 +1117,19 @@ void ScopeBuilder::define_source_functions(Source* source) {
 void ScopeBuilder::define_class(Class* klass) {
     Symbol* sym;
     NamedType* self_type = new NamedType();
+    Class* other;
 
     current_class = klass;
     sym = current_scope->local_has(klass->get_name());
 
     if (sym != nullptr) {
-        logger->error_and_exit(error_message_cant_define_class(klass, sym));
+        other = (Class*) sym->get_descriptor();
+
+        if (!other->is_template()) {
+            logger->error_and_exit(error_message_cant_define_class(klass, sym));
+        } else {
+            sym->add_descriptor(klass);
+        }
     }
 
     current_scope->define(klass);
@@ -1147,7 +1153,7 @@ void ScopeBuilder::define_class(Class* klass) {
 void ScopeBuilder::define_class_variables(Class* klass) {
     for (int i = 0; i < klass->variables_count(); ++i) {
         define_class_variable(klass->get_variable(i));
-        klass->get_variable(i)->set_uid(i); 
+        klass->get_variable(i)->set_uid(i);
     }
 }
 
@@ -1240,7 +1246,9 @@ void ScopeBuilder::define_method_signature(Function* method) {
 }
 
 void ScopeBuilder::define_class_template_header(Class* klass) {
-    define_template_header(klass->get_template_header());
+    if (klass->is_template()) {
+        define_template_header(klass->get_template_header());
+    }
 }
 
 void ScopeBuilder::define_class_super(Class* klass) {
