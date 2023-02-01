@@ -13,6 +13,7 @@
 #include "ir/ir_builder.h"
 #include "vm/irvm.h"
 #include "printer/ir_printer.h"
+#include "semantic/class_declarer.h"
 
 using namespace haard;
 
@@ -137,12 +138,23 @@ void Driver::parse_sources() {
 }
 
 void Driver::semantic_analysis() {
-    ScopeBuilder def_builder;
+    /*ScopeBuilder def_builder;
     //ScopeBuilder sym_builder;
 
     def_builder.set_logger(&logger);
     def_builder.build(sources);
-    // sym_builder.build_sources(sources);
+    // sym_builder.build_sources(sources);*/
+
+    ClassDeclarer class_declarer;
+
+    class_declarer.set_logger(&logger);
+    class_declarer.build_sources(sources);
+
+    if (show_logs_flag) {
+        logger.print();
+    }
+
+    exit(0);
 }
 
 void Driver::ir_generation() {

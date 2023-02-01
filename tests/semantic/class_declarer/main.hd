@@ -1,0 +1,13 @@
+import foo
+
+class Foo:
+    n : int
+
+class Bar:
+    n : int
+
+class Bar<T>:
+    n : int
+
+class Bar<K, N>:
+    n : int

@@ -97,6 +97,10 @@ set(SCOPE_SRC
     src/scope/scope_builder.cc
 )
 
+set(SEMANTIC_SRC
+    src/semantic/class_declarer.cc
+)
+
 set(IRVM_SRC
     src/vm/irvm.cc
     src/vm/irvm_context.cc
@@ -113,6 +117,7 @@ set(SOURCES
     ${IR_SRC}
     ${PRINTER_SRC}
     ${SCOPE_SRC}
+    ${SEMANTIC_SRC}
     ${IRVM_SRC}
     ${DRIVER_SRC}
 )

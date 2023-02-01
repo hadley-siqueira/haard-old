@@ -34,6 +34,13 @@ void Scope::set_super(Scope* symtab) {
     super = symtab;
 }
 
+Symbol *Scope::define_class(std::string& name, Class* klass) {
+    Symbol* sym = new Symbol(SYM_CLASS, name, klass);
+    symbols[name] = sym;
+
+    return sym;
+}
+
 Symbol* Scope::define(Class* klass) {
     Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
     symbols[klass->get_name()] = sym;
@@ -245,4 +252,60 @@ void Scope::debug() {
     }
 
     std::cout << "}";
+}
+
+Symbol* Scope::resolve(std::string& name) {
+    Symbol* sym = nullptr;
+
+    sym = resolve_local(name);
+
+    if (sym) {
+        return sym;
+    }
+
+    sym = resolve_field(name);
+
+    if (sym) {
+        return sym;
+    }
+
+    if (has_parent()) {
+        return parent->resolve(name);
+    }
+
+    if (has_siblings()) {
+        for (int i = 0; i < siblings_count(); ++i) {
+            sym = siblings[i]->resolve_local(name);
+
+            if (sym != nullptr) {
+                return sym;
+            }
+        }
+    }
+
+    return sym;
+}
+
+Symbol* Scope::resolve_local(std::string& name) {
+    if (symbols.count(name) > 0) {
+        return symbols[name];
+    }
+
+    if (symbols.count(qualified + name) > 0) {
+        return symbols[qualified + name];
+    }
+
+    return nullptr;
+}
+
+Symbol* Scope::resolve_field(std::string& name) {
+    if (symbols.count(name) > 0) {
+        return symbols[name];
+    }
+
+    if (has_super()) {
+        return super->has_field(name);
+    }
+
+    return nullptr;
 }

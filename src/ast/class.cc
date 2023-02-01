@@ -314,11 +314,16 @@ std::string Class::get_qualified_name() {
     if (template_header && template_header->types_count() > 0) {
         ss << "<";
 
-        for (i = 0; i < template_header->types_count() - 1; ++i) {
-            ss << template_header->get_type(i)->get_qualified_name() << ", ";
+        if (is_template()) {
+            ss << template_header->types_count();
+        } else {
+            for (i = 0; i < template_header->types_count() - 1; ++i) {
+                ss << template_header->get_type(i)->get_qualified_name() << ", ";
+            }
+
+            ss << template_header->get_type(i)->get_qualified_name();
         }
 
-        ss << template_header->get_type(i)->get_qualified_name();
         ss << ">";
     }
 

@@ -20,6 +20,8 @@ namespace haard {
             void set_parent(Scope* symtab);
             void set_super(Scope* symtab);
 
+            Symbol* define_class(std::string& name, Class* klass);
+
             Symbol* define(Class* klass);
             Symbol* define(Function* func);
             Symbol* define(int kind, Variable* var);
@@ -44,12 +46,20 @@ namespace haard {
 
             void debug();
 
+            // new stuff
+            Symbol* resolve(std::string& name);
+            Symbol* resolve_local(std::string& name);
+            Symbol* resolve_field(std::string& name);
+
         private:
             std::map<std::string, Symbol*> symbols;
             Scope* parent;
             Scope* super;
             std::vector<Scope*> siblings;
             std::vector<Expression*> deletables;
+
+            // new stuff
+            std::string qualified;
     };
 }
 
