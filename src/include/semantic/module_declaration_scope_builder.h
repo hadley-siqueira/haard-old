@@ -6,7 +6,7 @@
 #include "log/logger.h"
 
 namespace haard {
-    class ModuleScopeBuilder {
+    class ModuleDeclarationScopeBuilder {
         public:
             void build_module(Source* module);
             void build_classes(Source* module);
@@ -20,6 +20,10 @@ namespace haard {
             /*void build_enum(Enum* decl);
             void build_union(Union* decl);
             void build_struct(Struct* decl);*/
+
+        public:
+            Logger* get_logger() const;
+            void set_logger(Logger* value);
 
         private:
             Scope* current_scope;

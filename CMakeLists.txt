@@ -108,9 +108,8 @@ set(SCOPE_SRC
 )
 
 set(SEMANTIC_SRC
-    src/semantic/module_scope_builder.cc
-    src/semantic/class_declarer.cc
-    src/semantic/data_declarer.cc
+    src/semantic/modules_scope_builder.cc
+    src/semantic/module_declaration_scope_builder.cc
 )
 
 set(IRVM_SRC
