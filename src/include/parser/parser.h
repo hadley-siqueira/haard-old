@@ -36,7 +36,8 @@ namespace haard {
             Union* parse_union();
             Data* parse_data();
 
-            DataField* parse_data_field();
+            Field* parse_field();
+            Field* parse_enum_field();
 
             TypeList* parse_template_header();
             Variable* parse_class_variable();

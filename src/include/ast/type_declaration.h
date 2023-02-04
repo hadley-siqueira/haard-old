@@ -32,6 +32,7 @@ namespace haard {
             std::string get_name() const;
             std::string get_qualified_name();
             TypeList* get_template_header() const;
+            Type* get_super_type() const;
 
             void set_kind(int value);
             void set_line(int value);
@@ -44,6 +45,7 @@ namespace haard {
             void set_source(Source* value);
             void set_from_token(Token& token);
             void set_template_header(TypeList* value);
+            void set_super_type(Type* value);
 
             bool is_template();
 
@@ -52,10 +54,7 @@ namespace haard {
             void add_field(Field* field);
             void add_method(Function* method);
 
-
-
-
-    protected:
+        protected:
             int kind;
             int line;
             int column;
@@ -69,6 +68,7 @@ namespace haard {
             std::string name;
             TypeList* template_header;
             NamedType* self_type;
+            Type* super_type;
             Source* source;
             Scope* scope;
             std::vector<Field*> fields;

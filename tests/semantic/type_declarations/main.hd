@@ -22,10 +22,20 @@ struct Pixel:
     g : u8
     b : u8
 
-struct Pixel:
+struct Pixel2:
     r : u8
     g : u8
     b : u8
+
+enum Colors(char):
+    RED
+    GREEN
+    BLUE
+
+enum Colors:
+    RED = 0xff0000
+    GREEN = 0x00ff00
+    BLUE = 0x0000ff
 
 data Option<T>: 
     None : void

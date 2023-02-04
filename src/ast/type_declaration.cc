@@ -117,6 +117,14 @@ void TypeDeclaration::add_method(Function* method) {
     methods.push_back(method);
 }
 
+Type* TypeDeclaration::get_super_type() const {
+    return super_type;
+}
+
+void TypeDeclaration::set_super_type(Type* value) {
+    super_type = value;
+}
+
 Source* TypeDeclaration::get_source() const {
     return source;
 }

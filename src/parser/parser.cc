@@ -67,6 +67,8 @@ Source* Parser::parse_source() {
             source->add_data(parse_data());
         } else if (lookahead(TK_STRUCT)) {
             source->add_struct(parse_struct());
+        } else if (lookahead(TK_ENUM)) {
+            source->add_enum(parse_enum());
         } else if (lookahead(TK_AT)) {
             parse_annotation();
         } else if (match(TK_EOF)) {
@@ -185,7 +187,54 @@ Struct *Parser::parse_struct() {
         if (lookahead(TK_DEF)) {
             data->add_method(parse_function());
         } else if (lookahead(TK_ID)) {
-            data->add_field(parse_data_field());
+            data->add_field(parse_field());
+        } else if (lookahead(TK_AT)) {
+            parse_annotation();
+        } else if (match(TK_PASS)) {
+            break;
+        } else {
+            break;
+        }
+    }
+
+    end = matched.get_end();
+    dedent();
+
+    data->set_begin(begin);
+    data->set_end(end);
+
+    return data;
+}
+
+Enum* Parser::parse_enum() {
+    Enum* data = new Enum();
+    int begin;
+    int end;
+
+    if (annotations.size() > 0) {
+        data->set_annotations(annotations);
+        annotations.clear();
+    }
+
+    expect(TK_ENUM);
+    begin = matched.get_begin();
+
+    expect(TK_ID);
+    data->set_from_token(matched);
+
+    if (match(TK_LEFT_PARENTHESIS)) {
+        data->set_super_type(parse_type());
+        expect(TK_RIGHT_PARENTHESIS);
+    }
+
+    expect(TK_COLON);
+    indent();
+
+    while (is_indentend()) {
+        if (lookahead(TK_DEF)) {
+            data->add_method(parse_function());
+        } else if (lookahead(TK_ID)) {
+            data->add_field(parse_enum_field());
         } else if (lookahead(TK_AT)) {
             parse_annotation();
         } else if (match(TK_PASS)) {
@@ -232,7 +281,7 @@ Data* Parser::parse_data() {
         if (lookahead(TK_DEF)) {
             data->add_method(parse_function());
         } else if (lookahead(TK_ID)) {
-            data->add_field(parse_data_field());
+            data->add_field(parse_field());
         } else if (lookahead(TK_AT)) {
             parse_annotation();
         } else if (match(TK_PASS)) {
@@ -251,14 +300,27 @@ Data* Parser::parse_data() {
     return data;
 }
 
-DataField* Parser::parse_data_field() {
-    DataField* field = new DataField();
+Field *Parser::parse_field() {
+    Field* field = new Field();
 
     expect(TK_ID);
     field->set_from_token(matched);
 
     expect(TK_COLON);
     field->set_type(parse_type());
+
+    if (match(TK_ASSIGNMENT)) {
+        field->set_initial_value(parse_expression());
+    }
+
+    return field;
+}
+
+Field* Parser::parse_enum_field() {
+    Field* field = new Field();
+
+    expect(TK_ID);
+    field->set_from_token(matched);
 
     if (match(TK_ASSIGNMENT)) {
         field->set_initial_value(parse_expression());

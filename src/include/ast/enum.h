@@ -1,9 +1,12 @@
 #ifndef HAARD_AST_ENUM_H
 #define HAARD_AST_ENUM_H
 
-namespace haard {
-    class Enum {
+#include "ast/type_declaration.h"
 
+namespace haard {
+    class Enum : public TypeDeclaration {
+        public:
+            Enum();
     };
 }
 

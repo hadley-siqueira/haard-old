@@ -23,6 +23,7 @@ namespace haard {
             Symbol* define_class(std::string& name, Class* klass);
             Symbol* define_data(std::string& name, Data* data);
             Symbol* define_struct(std::string& name, Struct* obj);
+            Symbol* define_enum(std::string& name, Enum* obj);
 
             Symbol* define(Class* klass);
             Symbol* define(Function* func);
