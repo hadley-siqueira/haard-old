@@ -28,7 +28,7 @@ void Printer::print_source(Source* source) {
         out << '\n';
     }
 
-    for (int i = 0; i < source->function_count(); ++i) {
+    for (int i = 0; i < source->functions_count(); ++i) {
         print_function(source->get_function(i));
         out << '\n';
     }

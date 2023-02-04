@@ -43,7 +43,7 @@ namespace haard {
             void add_union(Union* obj);
             
             int import_count();
-            int function_count();
+            int functions_count();
             int classes_count();
             int data_count();
             int structs_count();

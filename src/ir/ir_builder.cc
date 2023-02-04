@@ -28,7 +28,7 @@ void IRBuilder::build_source(Source* source) {
     IRModule* module = new IRModule();
     current_module = module;
 
-    for (int i = 0; i < source->function_count(); ++i) {
+    for (int i = 0; i < source->functions_count(); ++i) {
         build_function(source->get_function(i));
     }
 

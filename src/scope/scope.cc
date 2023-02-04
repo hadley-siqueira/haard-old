@@ -69,6 +69,13 @@ Symbol* Scope::define_union(std::string& name, Union* obj) {
     return sym;
 }
 
+Symbol* Scope::define_function(std::string& name, Function* obj) {
+    Symbol* sym = new Symbol(SYM_FUNCTION, name, obj);
+    symbols[name] = sym;
+
+    return sym;
+}
+
 Symbol* Scope::define(Class* klass) {
     Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
     symbols[klass->get_name()] = sym;
@@ -336,4 +343,14 @@ Symbol* Scope::resolve_field(std::string& name) {
     }
 
     return nullptr;
+}
+
+std::string Scope::get_qualified() const
+{
+    return qualified;
+}
+
+void Scope::set_qualified(const std::string &value)
+{
+    qualified = value;
 }

@@ -208,10 +208,18 @@ std::string Symbol::get_qualified_name(int idx) {
     Function* func = (Function*) descriptors[idx];
     Variable* var = (Variable*) descriptors[idx];
     NamedType* type = (NamedType*) descriptors[idx];
+    TypeDeclaration* type_decl = (TypeDeclaration*) descriptors[idx];
 
     switch (kind) {
     case SYM_CLASS:
         ss << klass->get_qualified_name();
+        break;
+
+    case SYM_ENUM:
+    case SYM_STRUCT:
+    case SYM_DATA:
+    case SYM_UNION:
+        ss << type_decl->get_qualified_name();
         break;
 
     case SYM_FUNCTION:

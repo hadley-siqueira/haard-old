@@ -41,7 +41,7 @@ void ScopeBuilder::build_source(Source* source) {
         build_class(source->get_class(i));
     }
 
-    for (int i = 0; i < source->function_count(); ++i) {
+    for (int i = 0; i < source->functions_count(); ++i) {
         build_function(source->get_function(i));
     }
 
@@ -1107,7 +1107,7 @@ void ScopeBuilder::define_source_classes(Source* source) {
 void ScopeBuilder::define_source_functions(Source* source) {
     enter_scope(source->get_scope());
 
-    for (int i = 0; i < source->function_count(); ++i) {
+    for (int i = 0; i < source->functions_count(); ++i) {
         define_function(source->get_function(i));
     }
 

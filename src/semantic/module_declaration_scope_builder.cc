@@ -1,51 +1,60 @@
 #include "semantic/module_declaration_scope_builder.h"
+#include "semantic/type_descriptor_linker.h"
 
 using namespace haard;
 
 void ModuleDeclarationScopeBuilder::build_module(Source* module) {
     current_scope = module->get_scope();
+    current_scope->set_qualified(module->get_relative_path());
 
-    build_classes(module);
-    build_datas(module);
-    build_structs(module);
-    build_enums(module);
-    build_unions(module);
+    define_classes(module);
+    define_datas(module);
+    define_structs(module);
+    define_enums(module);
+    define_unions(module);
+    define_functions(module);
 }
 
-void ModuleDeclarationScopeBuilder::build_classes(Source* module) {
+void ModuleDeclarationScopeBuilder::define_classes(Source* module) {
     for (int i = 0; i < module->classes_count(); ++i) {
-        build_class(module->get_class(i));
+        define_class(module->get_class(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::build_datas(Source* module) {
+void ModuleDeclarationScopeBuilder::define_datas(Source* module) {
     for (int i = 0; i < module->data_count(); ++i) {
-        build_data(module->get_data(i));
+        define_data(module->get_data(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::build_enums(Source* module) {
+void ModuleDeclarationScopeBuilder::define_enums(Source* module) {
     for (int i = 0; i < module->enums_count(); ++i) {
-        build_enum(module->get_enum(i));
+        define_enum(module->get_enum(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::build_unions(Source* module) {
+void ModuleDeclarationScopeBuilder::define_unions(Source* module) {
     for (int i = 0; i < module->unions_count(); ++i) {
-        build_union(module->get_union(i));
+        define_union(module->get_union(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::build_structs(Source* module) {
+void ModuleDeclarationScopeBuilder::define_structs(Source* module) {
     for (int i = 0; i < module->structs_count(); ++i) {
-        build_struct(module->get_struct(i));
+        define_struct(module->get_struct(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::build_class(Class* decl) {
+void ModuleDeclarationScopeBuilder::define_functions(Source* module) {
+    for (int i = 0; i < module->functions_count(); ++i) {
+        define_function(module->get_function(i));
+    }
+}
+
+void ModuleDeclarationScopeBuilder::define_class(Class* decl) {
     std::string name = decl->get_qualified_name();
 
-    if (current_scope->local_has(name)) {
+    if (current_scope->resolve_local(name)) {
         logger->error_and_exit(name + " already defined");
     } else {
         current_scope->define_class(name, decl);
@@ -53,10 +62,10 @@ void ModuleDeclarationScopeBuilder::build_class(Class* decl) {
     }
 }
 
-void ModuleDeclarationScopeBuilder::build_data(Data* decl) {
+void ModuleDeclarationScopeBuilder::define_data(Data* decl) {
     std::string name = decl->get_qualified_name();
 
-    if (current_scope->local_has(name)) {
+    if (current_scope->resolve_local(name)) {
         logger->error_and_exit(name + " already defined");
     } else {
         current_scope->define_data(name, decl);
@@ -64,10 +73,10 @@ void ModuleDeclarationScopeBuilder::build_data(Data* decl) {
     }
 }
 
-void ModuleDeclarationScopeBuilder::build_enum(Enum* decl) {
+void ModuleDeclarationScopeBuilder::define_enum(Enum* decl) {
     std::string name = decl->get_qualified_name();
 
-    if (current_scope->local_has(name)) {
+    if (current_scope->resolve_local(name)) {
         logger->error_and_exit(name + " already defined");
     } else {
         current_scope->define_enum(name, decl);
@@ -75,10 +84,10 @@ void ModuleDeclarationScopeBuilder::build_enum(Enum* decl) {
     }
 }
 
-void ModuleDeclarationScopeBuilder::build_union(Union* decl) {
+void ModuleDeclarationScopeBuilder::define_union(Union* decl) {
     std::string name = decl->get_qualified_name();
 
-    if (current_scope->local_has(name)) {
+    if (current_scope->resolve_local(name)) {
         logger->error_and_exit(name + " already defined");
     } else {
         current_scope->define_union(name, decl);
@@ -86,14 +95,31 @@ void ModuleDeclarationScopeBuilder::build_union(Union* decl) {
     }
 }
 
-void ModuleDeclarationScopeBuilder::build_struct(Struct* decl) {
+void ModuleDeclarationScopeBuilder::define_struct(Struct* decl) {
     std::string name = decl->get_qualified_name();
 
-    if (current_scope->local_has(name)) {
+    if (current_scope->resolve_local(name)) {
         logger->error_and_exit(name + " already defined");
     } else {
         current_scope->define_struct(name, decl);
         logger->info("file.hd: declaring struct " + name);
+    }
+}
+
+void ModuleDeclarationScopeBuilder::define_function(Function* decl) {
+    for (int i = 0; i < decl->parameters_count(); ++i) {
+        TypeDescriptorLink linker(current_scope, logger);
+
+        linker.link_type(decl->get_parameter(i)->get_type());
+    }
+
+    std::string name = decl->get_qualified_name();
+
+    if (current_scope->resolve_local(name)) {
+        logger->error_and_exit(name + " already defined");
+    } else {
+        current_scope->define_function(name, decl);
+        logger->info("file.hd: declaring function " + name);
     }
 }
 

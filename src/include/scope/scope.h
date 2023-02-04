@@ -25,6 +25,7 @@ namespace haard {
             Symbol* define_struct(std::string& name, Struct* obj);
             Symbol* define_enum(std::string& name, Enum* obj);
             Symbol* define_union(std::string& name, Union* obj);
+            Symbol* define_function(std::string& name, Function* obj);
 
             Symbol* define(Class* klass);
             Symbol* define(Function* func);
@@ -55,7 +56,10 @@ namespace haard {
             Symbol* resolve_local(std::string& name);
             Symbol* resolve_field(std::string& name);
 
-        private:
+            std::string get_qualified() const;
+            void set_qualified(const std::string& value);
+
+    private:
             std::map<std::string, Symbol*> symbols;
             Scope* parent;
             Scope* super;

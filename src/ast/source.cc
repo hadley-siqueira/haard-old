@@ -143,7 +143,7 @@ int Source::import_count() {
     return imports.size();
 }
 
-int Source::function_count() {
+int Source::functions_count() {
     return functions.size();
 }
 

@@ -17,6 +17,10 @@ data Tree:
     Node : int
     Node : (int, int)
 
+data Tree<T>:
+    Leaf : void
+    Node : (T, Tree<T>*, Tree<T>*)
+
 struct Pixel:
     r : u8
     g : u8
@@ -51,3 +55,38 @@ data List<T>:
 
     def to_str : char*
         n = 0
+
+def sum : int
+    @a : int
+    @b : int
+
+    return a + b
+
+def swap : void
+    @a : int*
+    @b : int*
+
+    tmp = *a
+    *a = *b
+    *b = tmp
+
+def foo : void
+    @a : Packet
+    @b : Packet*
+    @c : int
+
+# main.make_pair<T, K>(1, 2, int*)
+#def make_pair<T, K> : (T, K)
+#    @a : T
+#    @b : K
+#    @c : int*
+#
+#    c = 0
+
+#const MAX_SIZE = 1024
+
+#def the_array : void
+#    @arr : int[MAX_SIZE]
+#    @n   : int
+
+#    n = 0
