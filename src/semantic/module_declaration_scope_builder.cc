@@ -7,6 +7,7 @@ void ModuleDeclarationScopeBuilder::build_module(Source* module) {
 
     build_classes(module);
     build_datas(module);
+    build_structs(module);
 }
 
 void ModuleDeclarationScopeBuilder::build_classes(Source* module) {
@@ -30,7 +31,9 @@ void ModuleDeclarationScopeBuilder::build_unions(Source* module) {
 }
 
 void ModuleDeclarationScopeBuilder::build_structs(Source* module) {
-
+    for (int i = 0; i < module->structs_count(); ++i) {
+        build_struct(module->get_struct(i));
+    }
 }
 
 void ModuleDeclarationScopeBuilder::build_class(Class* decl) {
@@ -52,6 +55,17 @@ void ModuleDeclarationScopeBuilder::build_data(Data* decl) {
     } else {
         current_scope->define_data(name, decl);
         logger->info("file.hd: declaring data " + name);
+    }
+}
+
+void ModuleDeclarationScopeBuilder::build_struct(Struct* decl) {
+    std::string name = decl->get_qualified_name();
+
+    if (current_scope->local_has(name)) {
+        logger->error_and_exit(name + " already defined");
+    } else {
+        current_scope->define_struct(name, decl);
+        logger->info("file.hd: declaring struct " + name);
     }
 }
 

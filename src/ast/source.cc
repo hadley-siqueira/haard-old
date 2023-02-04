@@ -73,6 +73,14 @@ Data* Source::get_data(int idx) {
     return nullptr;
 }
 
+Struct* Source::get_struct(int idx) {
+    if (idx < structs_count()) {
+        return structs[idx];
+    }
+
+    return nullptr;
+}
+
 Scope* Source::get_scope() {
     return scope;
 }
@@ -97,6 +105,12 @@ void Source::add_class(Class* klass) {
 
 void Source::add_data(Data* data) {
     datas.push_back(data);
+    data->set_source(this);
+}
+
+void Source::add_struct(Struct* obj) {
+    structs.push_back(obj);
+    obj->set_source(this);
 }
 
 int Source::import_count() {
@@ -113,6 +127,10 @@ int Source::classes_count() {
 
 int Source::data_count() {
     return datas.size();
+}
+
+int Source::structs_count() {
+    return structs.size();
 }
 
 std::string Source::get_relative_path() const {

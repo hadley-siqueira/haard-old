@@ -48,6 +48,13 @@ Symbol* Scope::define_data(std::string& name, Data* data) {
     return sym;
 }
 
+Symbol* Scope::define_struct(std::string &name, Struct* obj) {
+    Symbol* sym = new Symbol(SYM_STRUCT, name, obj);
+    symbols[name] = sym;
+
+    return sym;
+}
+
 Symbol* Scope::define(Class* klass) {
     Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
     symbols[klass->get_name()] = sym;

@@ -117,6 +117,14 @@ void TypeDeclaration::add_method(Function* method) {
     methods.push_back(method);
 }
 
+Source* TypeDeclaration::get_source() const {
+    return source;
+}
+
+void TypeDeclaration::set_source(Source* value) {
+    source = value;
+}
+
 TypeList *TypeDeclaration::get_template_header() const {
     return template_header;
 }

@@ -27,6 +27,7 @@ namespace haard {
             int get_alignment();
             int get_begin() const;
             int get_end() const;
+            Source* get_source() const;
             std::vector<Annotation*> get_annotations() const;
             std::string get_name() const;
             std::string get_qualified_name();
@@ -40,6 +41,7 @@ namespace haard {
             void set_name(const std::string& value);
             void set_begin(int value);
             void set_end(int value);
+            void set_source(Source* value);
             void set_from_token(Token& token);
             void set_template_header(TypeList* value);
 
@@ -49,6 +51,9 @@ namespace haard {
 
             void add_field(Field* field);
             void add_method(Function* method);
+
+
+
 
     protected:
             int kind;

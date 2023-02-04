@@ -17,7 +17,17 @@ data Tree:
     Node : int
     Node : (int, int)
 
-data Option<T>:
+struct Pixel:
+    r : u8
+    g : u8
+    b : u8
+
+struct Pixel:
+    r : u8
+    g : u8
+    b : u8
+
+data Option<T>: 
     None : void
     Some : T
 

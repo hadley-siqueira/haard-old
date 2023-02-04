@@ -6,6 +6,7 @@
 #include "ast/import.h"
 #include "ast/class.h"
 #include "ast/data.h"
+#include "ast/struct.h"
 #include "ast/function.h"
 #include "ast/type_declaration.h"
 
@@ -25,6 +26,7 @@ namespace haard {
             Function* get_function(int idx);
             Class* get_class(int idx);
             Data* get_data(int idx);
+            Struct* get_struct(int idx);
             Scope* get_scope();
 
             void set_path(std::string path);
@@ -32,11 +34,13 @@ namespace haard {
             void add_function(Function* function);
             void add_class(Class* klass);
             void add_data(Data* data);
+            void add_struct(Struct* obj);
             
             int import_count();
             int function_count();
             int classes_count();
             int data_count();
+            int structs_count();
 
             std::string get_relative_path() const;
             void set_relative_path(std::string value);
@@ -48,6 +52,7 @@ namespace haard {
             std::vector<Function*> functions;
             std::vector<Class*> classes;
             std::vector<Data*> datas;
+            std::vector<Struct*> structs;
             Scope* scope;
     };
 }

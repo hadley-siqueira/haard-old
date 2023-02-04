@@ -65,6 +65,8 @@ Source* Parser::parse_source() {
             source->add_class(parse_class());
         } else if (lookahead(TK_DATA)) {
             source->add_data(parse_data());
+        } else if (lookahead(TK_STRUCT)) {
+            source->add_struct(parse_struct());
         } else if (lookahead(TK_AT)) {
             parse_annotation();
         } else if (match(TK_EOF)) {
@@ -153,6 +155,53 @@ Class* Parser::parse_class() {
     klass->set_begin(begin);
     klass->set_end(end);
     return klass;
+}
+
+Struct *Parser::parse_struct() {
+    Struct* data = new Struct();
+    int begin;
+    int end;
+
+    if (annotations.size() > 0) {
+        data->set_annotations(annotations);
+        annotations.clear();
+    }
+
+    expect(TK_STRUCT);
+    begin = matched.get_begin();
+
+    expect(TK_ID);
+    data->set_from_token(matched);
+
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        data->set_template_header(parse_template_header());
+        data->set_template(true);
+    }
+
+    expect(TK_COLON);
+    indent();
+
+    while (is_indentend()) {
+        if (lookahead(TK_DEF)) {
+            data->add_method(parse_function());
+        } else if (lookahead(TK_ID)) {
+            data->add_field(parse_data_field());
+        } else if (lookahead(TK_AT)) {
+            parse_annotation();
+        } else if (match(TK_PASS)) {
+            break;
+        } else {
+            break;
+        }
+    }
+
+    end = matched.get_end();
+    dedent();
+
+    data->set_begin(begin);
+    data->set_end(end);
+
+    return data;
 }
 
 Data* Parser::parse_data() {
@@ -746,7 +795,7 @@ VarDeclaration* Parser::parse_variable_declaration() {
 
 void Parser::parse_annotation() {
     expect(TK_AT);
-    expect(TK_ID);
+    expect_on_same_line(TK_ID);
     Annotation* an = new Annotation();
     an->set_value(matched.get_lexeme());
     annotations.push_back(an);
@@ -1442,6 +1491,14 @@ void Parser::advance() {
 
 void Parser::expect(int kind) {
     if (match(kind)) {
+        return;
+    }
+
+    logger->error(error_message_expected_token(path, kind, tokens[idx]));
+}
+
+void Parser::expect_on_same_line(int kind) {
+    if (next_token_same_line() && match(kind)) {
         return;
     }
 

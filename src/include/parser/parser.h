@@ -34,8 +34,8 @@ namespace haard {
             Struct* parse_struct();
             Enum* parse_enum();
             Union* parse_union();
-
             Data* parse_data();
+
             DataField* parse_data_field();
 
             TypeList* parse_template_header();
@@ -94,6 +94,7 @@ namespace haard {
 
             void advance();
             void expect(int kind);
+            void expect_on_same_line(int kind);
             bool match(int kind);
             bool lookahead(int kind);
             bool lookahead(int kind, int offset);
