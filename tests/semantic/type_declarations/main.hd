@@ -32,10 +32,14 @@ enum Colors(char):
     GREEN
     BLUE
 
-enum Colors:
+enum Colors2:
     RED = 0xff0000
     GREEN = 0x00ff00
     BLUE = 0x0000ff
+
+union Packet:
+    header : int
+    align  : u8
 
 data Option<T>: 
     None : void

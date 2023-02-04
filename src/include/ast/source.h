@@ -8,6 +8,7 @@
 #include "ast/data.h"
 #include "ast/struct.h"
 #include "ast/enum.h"
+#include "ast/union.h"
 #include "ast/function.h"
 #include "ast/type_declaration.h"
 
@@ -29,6 +30,7 @@ namespace haard {
             Data* get_data(int idx);
             Struct* get_struct(int idx);
             Enum* get_enum(int idx);
+            Union* get_union(int idx);
             Scope* get_scope();
 
             void set_path(std::string path);
@@ -38,6 +40,7 @@ namespace haard {
             void add_data(Data* data);
             void add_struct(Struct* obj);
             void add_enum(Enum* obj);
+            void add_union(Union* obj);
             
             int import_count();
             int function_count();
@@ -45,6 +48,7 @@ namespace haard {
             int data_count();
             int structs_count();
             int enums_count();
+            int unions_count();
 
             std::string get_relative_path() const;
             void set_relative_path(std::string value);
@@ -58,6 +62,7 @@ namespace haard {
             std::vector<Data*> datas;
             std::vector<Struct*> structs;
             std::vector<Enum*> enums;
+            std::vector<Union*> unions;
             Scope* scope;
     };
 }

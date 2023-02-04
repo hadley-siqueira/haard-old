@@ -18,7 +18,7 @@ namespace haard {
             void build_class(Class* decl);
             void build_data(Data* decl);
             void build_enum(Enum* decl);
-            /*void build_union(Union* decl);*/
+            void build_union(Union* decl);
             void build_struct(Struct* decl);
 
         public:

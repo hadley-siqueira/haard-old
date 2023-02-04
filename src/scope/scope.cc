@@ -62,6 +62,13 @@ Symbol* Scope::define_enum(std::string& name, Enum* obj) {
     return sym;
 }
 
+Symbol* Scope::define_union(std::string& name, Union* obj) {
+    Symbol* sym = new Symbol(SYM_UNION, name, obj);
+    symbols[name] = sym;
+
+    return sym;
+}
+
 Symbol* Scope::define(Class* klass) {
     Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
     symbols[klass->get_name()] = sym;

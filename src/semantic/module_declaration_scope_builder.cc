@@ -9,6 +9,7 @@ void ModuleDeclarationScopeBuilder::build_module(Source* module) {
     build_datas(module);
     build_structs(module);
     build_enums(module);
+    build_unions(module);
 }
 
 void ModuleDeclarationScopeBuilder::build_classes(Source* module) {
@@ -30,7 +31,9 @@ void ModuleDeclarationScopeBuilder::build_enums(Source* module) {
 }
 
 void ModuleDeclarationScopeBuilder::build_unions(Source* module) {
-
+    for (int i = 0; i < module->unions_count(); ++i) {
+        build_union(module->get_union(i));
+    }
 }
 
 void ModuleDeclarationScopeBuilder::build_structs(Source* module) {
@@ -69,6 +72,17 @@ void ModuleDeclarationScopeBuilder::build_enum(Enum* decl) {
     } else {
         current_scope->define_enum(name, decl);
         logger->info("file.hd: declaring enum " + name);
+    }
+}
+
+void ModuleDeclarationScopeBuilder::build_union(Union* decl) {
+    std::string name = decl->get_qualified_name();
+
+    if (current_scope->local_has(name)) {
+        logger->error_and_exit(name + " already defined");
+    } else {
+        current_scope->define_union(name, decl);
+        logger->info("file.hd: declaring union " + name);
     }
 }
 

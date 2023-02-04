@@ -89,6 +89,14 @@ Enum* Source::get_enum(int idx) {
     return nullptr;
 }
 
+Union* Source::get_union(int idx) {
+    if (idx < unions_count()) {
+        return unions[idx];
+    }
+
+    return nullptr;
+}
+
 Scope* Source::get_scope() {
     return scope;
 }
@@ -126,6 +134,11 @@ void Source::add_enum(Enum* obj) {
     obj->set_source(this);
 }
 
+void Source::add_union(Union* obj) {
+    unions.push_back(obj);
+    obj->set_source(this);
+}
+
 int Source::import_count() {
     return imports.size();
 }
@@ -148,6 +161,10 @@ int Source::structs_count() {
 
 int Source::enums_count() {
     return enums.size();
+}
+
+int Source::unions_count() {
+    return unions.size();
 }
 
 std::string Source::get_relative_path() const {

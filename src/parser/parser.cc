@@ -69,6 +69,8 @@ Source* Parser::parse_source() {
             source->add_struct(parse_struct());
         } else if (lookahead(TK_ENUM)) {
             source->add_enum(parse_enum());
+        } else if (lookahead(TK_UNION)) {
+            source->add_union(parse_union());
         } else if (lookahead(TK_AT)) {
             parse_annotation();
         } else if (match(TK_EOF)) {
@@ -235,6 +237,53 @@ Enum* Parser::parse_enum() {
             data->add_method(parse_function());
         } else if (lookahead(TK_ID)) {
             data->add_field(parse_enum_field());
+        } else if (lookahead(TK_AT)) {
+            parse_annotation();
+        } else if (match(TK_PASS)) {
+            break;
+        } else {
+            break;
+        }
+    }
+
+    end = matched.get_end();
+    dedent();
+
+    data->set_begin(begin);
+    data->set_end(end);
+
+    return data;
+}
+
+Union* Parser::parse_union() {
+    Union* data = new Union();
+    int begin;
+    int end;
+
+    if (annotations.size() > 0) {
+        data->set_annotations(annotations);
+        annotations.clear();
+    }
+
+    expect(TK_UNION);
+    begin = matched.get_begin();
+
+    expect(TK_ID);
+    data->set_from_token(matched);
+
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        data->set_template_header(parse_template_header());
+        data->set_template(true);
+    }
+
+    expect(TK_COLON);
+    indent();
+
+    while (is_indentend()) {
+        if (lookahead(TK_DEF)) {
+            data->add_method(parse_function());
+        } else if (lookahead(TK_ID)) {
+            data->add_field(parse_field());
         } else if (lookahead(TK_AT)) {
             parse_annotation();
         } else if (match(TK_PASS)) {
