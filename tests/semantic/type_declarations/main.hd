@@ -75,6 +75,17 @@ def foo : void
     @b : Packet*
     @c : int
 
+    n = 0
+
+def foo2 : void
+    @a : Foo
+    @b : Foo&
+
+    n = 0
+
+def foo3 : void
+    n = 0
+
 # main.make_pair<T, K>(1, 2, int*)
 #def make_pair<T, K> : (T, K)
 #    @a : T

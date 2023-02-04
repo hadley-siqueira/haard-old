@@ -5,7 +5,7 @@ using namespace haard;
 
 void ModuleDeclarationScopeBuilder::build_module(Source* module) {
     current_scope = module->get_scope();
-    current_scope->set_qualified(module->get_relative_path());
+    current_scope->set_qualified(module->get_relative_path() + ".");
 
     define_classes(module);
     define_datas(module);

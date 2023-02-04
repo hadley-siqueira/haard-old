@@ -117,9 +117,25 @@ std::string Symbol::to_str(int idx) {
         ss << "class";
         break;
 
+    case SYM_STRUCT:
+        ss << "struct";
+        break;
+
+    case SYM_UNION:
+        ss << "union";
+        break;
+
+    case SYM_DATA:
+        ss << "data";
+        break;
+
+    case SYM_ENUM:
+        ss << "enum";
+        break;
+
     case SYM_FUNCTION:
         ss << "func(";
-        ss << get_type(idx)->to_str();
+        //ss << get_type(idx)->to_str();
         ss << ")";
         break;
 
