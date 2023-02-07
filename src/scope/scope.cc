@@ -83,6 +83,13 @@ Symbol* Scope::define_template(std::string name, int value) {
     return sym;
 }
 
+Symbol *Scope::define_parameter(std::string name, Variable* obj) {
+    Symbol* sym = new Symbol(SYM_PARAMETER, name, obj);
+    symbols[name] = sym;
+
+    return sym;
+}
+
 Symbol* Scope::define(Class* klass) {
     Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
     symbols[klass->get_name()] = sym;

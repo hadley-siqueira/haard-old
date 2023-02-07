@@ -1,10 +1,13 @@
 #include "semantic/module_declaration_scope_builder.h"
 #include "semantic/type_descriptor_linker.h"
 #include "semantic/function_declaration_scope_builder.h"
+#include "log/messages.h"
+#include "log/info_messages.h"
 
 using namespace haard;
 
 void ModuleDeclarationScopeBuilder::build_module(Source* module) {
+    this->module = module;
     current_scope = module->get_scope();
     current_scope->set_qualified(module->get_relative_path() + ".");
 
@@ -59,7 +62,14 @@ void ModuleDeclarationScopeBuilder::define_class(Class* decl) {
         logger->error_and_exit(name + " already defined");
     } else {
         current_scope->define_class(name, decl);
-        logger->info("file.hd: declaring class " + name);
+        //logger->info("file.hd: declaring class " + name);
+
+        std::string path = module->get_path();
+        int line = decl->get_line();
+        int column = decl->get_column();
+        std::string msg = error_header(path, line, column);
+        msg += "declaring class " + name;
+        logger->info(info_message_defining_class(decl));
     }
 }
 

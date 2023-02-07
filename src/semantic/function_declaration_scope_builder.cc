@@ -48,8 +48,23 @@ void FunctionDeclarationScopeBuilder::define_template_header(Function* function)
 
 void FunctionDeclarationScopeBuilder::define_parameters(Function* function) {
     for (int i = 0; i < function->parameters_count(); ++i) {
-        TypeDescriptorLink linker(scope, logger);
-
-        linker.link_type(function->get_parameter(i)->get_type());
+        define_parameter(function->get_parameter(i));
     }
+}
+
+void FunctionDeclarationScopeBuilder::define_parameter(Variable* param) {
+    std::string name = param->get_name();
+    Symbol* sym = scope->resolve_local(name);
+
+    if (!sym) {
+        scope->define_parameter(name, param);
+    } else if (sym->get_kind() != SYM_PARAMETER) {
+        scope->define_parameter(name, param);
+    } else {
+        std::string msg = "<red>error: </red>parameter '" + name + "' already defined";
+        logger->error_and_exit(msg);
+    }
+
+    TypeDescriptorLink linker(scope, logger);
+    linker.link_type(param->get_type());
 }

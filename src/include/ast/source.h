@@ -33,6 +33,7 @@ namespace haard {
             Union* get_union(int idx);
             Scope* get_scope();
 
+
             void set_path(std::string path);
             void add_import(Import* import);
             void add_function(Function* function);

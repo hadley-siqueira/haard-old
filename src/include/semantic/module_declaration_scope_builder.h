@@ -28,6 +28,7 @@ namespace haard {
             void set_logger(Logger* value);
 
         private:
+            Source* module;
             Scope* current_scope;
             Logger* logger;
     };

@@ -5,6 +5,7 @@
 #include "token/token.h"
 #include "ast/type.h"
 #include "ast/identifier.h"
+#include "ast/expression.h"
 
 namespace haard {
     class Variable {

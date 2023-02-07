@@ -34,6 +34,8 @@ namespace haard {
         TypeList* get_template_header() const;
         Type* get_super_type() const;
         Scope* get_scope() const;
+        std::string get_full_filepath();
+        std::string get_relative_filepath();
 
         void set_kind(int value);
         void set_line(int value);

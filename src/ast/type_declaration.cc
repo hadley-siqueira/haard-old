@@ -135,6 +135,14 @@ Scope *TypeDeclaration::get_scope() const {
     return scope;
 }
 
+std::string TypeDeclaration::get_full_filepath() {
+    return source->get_path();
+}
+
+std::string TypeDeclaration::get_relative_filepath() {
+    return source->get_relative_path();
+}
+
 void TypeDeclaration::set_scope(Scope *value) {
     scope = value;
 }
