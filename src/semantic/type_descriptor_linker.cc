@@ -57,6 +57,8 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
         break;
 
     case SYM_TEMPLATE:
+        type->set_symbol(sym);
+        break;
 
     default:
         logger->error_and_exit("error: named type not in scope but is another entity");

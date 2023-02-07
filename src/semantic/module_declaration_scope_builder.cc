@@ -107,18 +107,20 @@ void ModuleDeclarationScopeBuilder::define_struct(Struct* decl) {
 }
 
 void ModuleDeclarationScopeBuilder::define_function(Function* decl) {
+    auto old_scope = current_scope;
+    decl->get_scope()->set_parent(current_scope);
+    current_scope = decl->get_scope();
+
     if (decl->is_template()) {
         TypeList* templates = decl->get_template_header();
-        auto old_scope = current_scope;
-        current_scope = decl->get_scope();
 
         for (int i = 0; i < templates->types_count(); ++i) {
             NamedType* named = (NamedType*) templates->get_type(i);
             std::string name = named->get_name();
-            current_scope->define_template(name);
+            current_scope->define_template(name, i);
+            TypeDescriptorLink linker(current_scope, logger);
+            linker.link_type(named);
         }
-
-        current_scope = old_scope;
     }
 
     for (int i = 0; i < decl->parameters_count(); ++i) {
@@ -126,6 +128,8 @@ void ModuleDeclarationScopeBuilder::define_function(Function* decl) {
 
         linker.link_type(decl->get_parameter(i)->get_type());
     }
+
+    current_scope = old_scope;
 
     std::string name = decl->get_qualified_name();
 

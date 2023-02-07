@@ -92,6 +92,13 @@ def foo4<T> : void
 
     n = 0
 
+def foo4<T, K> : void
+    @a : T
+    @b : K*
+
+    n = 0
+
+
 # main.make_pair<T, K>(1, 2, int*)
 #def make_pair<T, K> : (T, K)
 #    @a : T

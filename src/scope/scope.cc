@@ -76,6 +76,13 @@ Symbol* Scope::define_function(std::string& name, Function* obj) {
     return sym;
 }
 
+Symbol* Scope::define_template(std::string name, int value) {
+    Symbol* sym = new Symbol(SYM_TEMPLATE, name, (void*) value);
+    symbols[name] = sym;
+
+    return sym;
+}
+
 Symbol* Scope::define(Class* klass) {
     Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
     symbols[klass->get_name()] = sym;

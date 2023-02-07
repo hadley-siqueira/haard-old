@@ -247,6 +247,9 @@ std::string Symbol::get_qualified_name(int idx) {
     case SYM_VARIABLE:
     case SYM_CLASS_VARIABLE:
         ss << var->get_unique_name();
+
+    case SYM_TEMPLATE:
+        ss << "%" << ((long long) get_descriptor());
         break;
     }
 

@@ -1,2 +1,9 @@
 class Foo:
     n : int
+
+def foo4<K> : void
+    @a : K
+    @b : K*
+
+    n = 0
+
