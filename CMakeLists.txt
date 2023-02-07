@@ -110,6 +110,7 @@ set(SCOPE_SRC
 set(SEMANTIC_SRC
     src/semantic/modules_scope_builder.cc
     src/semantic/module_declaration_scope_builder.cc
+    src/semantic/function_declaration_scope_builder.cc
     src/semantic/type_descriptor_linker.cc
 )
 

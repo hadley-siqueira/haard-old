@@ -115,6 +115,28 @@ void TypeDeclaration::add_field(Field* field) {
 
 void TypeDeclaration::add_method(Function* method) {
     methods.push_back(method);
+
+    if (method->get_name() == "init") {
+        constructors.push_back(method);
+        method->set_constructor(true);
+    }
+
+    if (method->get_name() == "destroy") {
+        destructor = method;
+        method->set_destructor(true);
+    }
+
+    method->set_method();
+    //method->set_class(this);
+    method->get_scope()->set_parent(get_scope());
+}
+
+Scope *TypeDeclaration::get_scope() const {
+    return scope;
+}
+
+void TypeDeclaration::set_scope(Scope *value) {
+    scope = value;
 }
 
 Type* TypeDeclaration::get_super_type() const {

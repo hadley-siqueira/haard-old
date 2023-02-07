@@ -1,5 +1,6 @@
 #include "semantic/module_declaration_scope_builder.h"
 #include "semantic/type_descriptor_linker.h"
+#include "semantic/function_declaration_scope_builder.h"
 
 using namespace haard;
 
@@ -107,38 +108,8 @@ void ModuleDeclarationScopeBuilder::define_struct(Struct* decl) {
 }
 
 void ModuleDeclarationScopeBuilder::define_function(Function* decl) {
-    auto old_scope = current_scope;
-    decl->get_scope()->set_parent(current_scope);
-    current_scope = decl->get_scope();
-
-    if (decl->is_template()) {
-        TypeList* templates = decl->get_template_header();
-
-        for (int i = 0; i < templates->types_count(); ++i) {
-            NamedType* named = (NamedType*) templates->get_type(i);
-            std::string name = named->get_name();
-            current_scope->define_template(name, i);
-            TypeDescriptorLink linker(current_scope, logger);
-            linker.link_type(named);
-        }
-    }
-
-    for (int i = 0; i < decl->parameters_count(); ++i) {
-        TypeDescriptorLink linker(current_scope, logger);
-
-        linker.link_type(decl->get_parameter(i)->get_type());
-    }
-
-    current_scope = old_scope;
-
-    std::string name = decl->get_qualified_name();
-
-    if (current_scope->resolve_local(name)) {
-        logger->error_and_exit(name + " already defined");
-    } else {
-        current_scope->define_function(name, decl);
-        logger->info("file.hd: declaring function " + name);
-    }
+    FunctionDeclarationScopeBuilder builder(logger);
+    builder.define_function(decl);
 }
 
 Logger* ModuleDeclarationScopeBuilder::get_logger() const {

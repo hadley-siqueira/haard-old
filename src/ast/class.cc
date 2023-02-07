@@ -140,6 +140,7 @@ void Class::add_method(Function* method) {
 
     method->set_method();
     method->set_class(this);
+    method->get_scope()->set_parent(get_scope());
 }
 
 void Class::add_variable(Variable* var) {

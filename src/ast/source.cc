@@ -112,6 +112,7 @@ void Source::add_import(Import* import) {
 void Source::add_function(Function* function) {
     functions.push_back(function);
     function->set_source(this);
+    function->get_scope()->set_parent(get_scope());
 }
 
 void Source::add_class(Class* klass) {

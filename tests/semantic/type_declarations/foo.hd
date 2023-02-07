@@ -6,4 +6,3 @@ def foo4<K> : void
     @b : K*
 
     n = 0
-
