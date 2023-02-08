@@ -30,8 +30,8 @@ set(PARSER_SRC
 )
 
 set(AST_SRC
-    src/ast/sources.cc
-    src/ast/source.cc
+    src/ast/modules.cc
+    src/ast/module.cc
     src/ast/annotation.cc
     src/ast/import.cc
     src/ast/compound_type_descriptor.cc

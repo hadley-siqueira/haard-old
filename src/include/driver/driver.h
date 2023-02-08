@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "ast/sources.h"
-#include "ast/source.h"
+#include "ast/modules.h"
+#include "ast/module.h"
 #include "parser/parser.h"
 #include "log/logger.h"
 

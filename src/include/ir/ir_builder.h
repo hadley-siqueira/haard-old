@@ -22,8 +22,8 @@ namespace haard {
             ~IRBuilder();
 
         public:
-            void build(Modules* sources);
-            void build_source(Module* source);
+            void build(Modules* modules);
+            void build_module(Module* module);
             void build_class(Class* klass);
 
             void build_function(Function* function);
@@ -124,8 +124,8 @@ namespace haard {
             Logger* logger;
             IRValue* last_value;
             IRContext* ctx;
-            IRModules* modules;
-            IRModule* current_module;
+            IRModules* ir_modules;
+            IRModule* current_ir_module;
     };
 }
 

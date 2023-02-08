@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-#include "ast/source.h"
+#include "ast/module.h"
 
 namespace haard {
     class Modules {

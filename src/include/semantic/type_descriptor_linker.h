@@ -2,7 +2,7 @@
 #define HAARD_TYPE_DESCRIPTOR_LINKER_H
 
 #include "ast/ast.h"
-#include "ast/source.h"
+#include "ast/module.h"
 #include "log/logger.h"
 
 namespace haard {

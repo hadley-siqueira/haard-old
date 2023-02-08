@@ -1,8 +1,8 @@
 #ifndef HAARD_AST_H
 #define HAARD_AST_H
 
-#include "ast/sources.h"
-#include "ast/source.h"
+#include "ast/modules.h"
+#include "ast/module.h"
 #include "ast/import.h"
 #include "ast/compound_type_descriptor.h"
 #include "ast/class.h"

@@ -9,8 +9,8 @@ using namespace haard;
 
 IRBuilder::IRBuilder() {
     logger = nullptr;
-    current_module = nullptr;
-    modules = new IRModules();
+    current_ir_module = nullptr;
+    ir_modules = new IRModules();
     ctx = nullptr;
 }
 
@@ -18,26 +18,26 @@ IRBuilder::~IRBuilder() {
 
 }
 
-void IRBuilder::build(Modules* sources) {
-    for (int i = 0; i < sources->modules_count(); ++i) {
-        build_source(sources->get_module(i));
+void IRBuilder::build(Modules* modules) {
+    for (int i = 0; i < modules->modules_count(); ++i) {
+        build_module(modules->get_module(i));
     }
 }
 
-void IRBuilder::build_source(Module* source) {
-    IRModule* module = new IRModule();
-    current_module = module;
+void IRBuilder::build_module(Module* module) {
+    IRModule* ir_module = new IRModule();
+    current_ir_module = ir_module;
 
-    for (int i = 0; i < source->functions_count(); ++i) {
-        build_function(source->get_function(i));
+    for (int i = 0; i < module->functions_count(); ++i) {
+        build_function(module->get_function(i));
     }
 
-    for (int i = 0; i < source->classes_count(); ++i) {
-        build_class(source->get_class(i));
+    for (int i = 0; i < module->classes_count(); ++i) {
+        build_class(module->get_class(i));
     }
 
-    current_module = nullptr;
-    modules->add_module(module);
+    current_ir_module = nullptr;
+    ir_modules->add_module(ir_module);
 }
 
 void IRBuilder::build_class(Class* klass) {
@@ -61,10 +61,10 @@ void IRBuilder::build_function(Function* function) {
     build_function_body(function);
     ctx->move_allocas_to_instructions();
 
-    current_module->add_function(ir_func);
+    current_ir_module->add_function(ir_func);
 
     if (function->get_name() == "main") {
-        current_module->set_main_function(ir_func);
+        current_ir_module->set_main_function(ir_func);
     }
 }
 
@@ -121,7 +121,7 @@ void IRBuilder::set_logger(Logger* logger) {
 }
 
 IRModules* IRBuilder::get_modules() const {
-    return modules;
+    return ir_modules;
 }
 
 void IRBuilder::build_statement(Statement* statement) {
@@ -1001,7 +1001,7 @@ void IRBuilder::build_literal_integer(Literal* literal) {
 
 void IRBuilder::build_literal_string(Literal* literal) {
     build_literal(literal, IR_VALUE_LITERAL_STRING);
-    modules->add_string_literal(literal->get_lexeme());
+    ir_modules->add_string_literal(literal->get_lexeme());
 }
 
 void IRBuilder::build_string_builder(StringBuilder* sb) {

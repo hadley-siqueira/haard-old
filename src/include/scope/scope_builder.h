@@ -12,11 +12,11 @@ namespace haard {
             ScopeBuilder();
 
         public:
-            void build(Modules* sources);
+            void build(Modules* modules);
 
         private:
-            void build_sources(Modules* sources);
-            void build_source(Module* source);
+            void build_modules(Modules* modules);
+            void build_module(Module* module);
 
             void build_class(Class* klass);
             void build_class_methods(Class* klass);
@@ -97,11 +97,11 @@ namespace haard {
             void build_expression_list(ExpressionList* exprlist);
 
         private:
-            void define_sources(Modules* sources);
-            void define_sources_classes(Modules* sources);
-            void define_sources_functions(Modules* sources);
-            void define_source_classes(Module* source);
-            void define_source_functions(Module* source);
+            void define_modules(Modules* modules);
+            void define_modules_classes(Modules* modules);
+            void define_modules_functions(Modules* modules);
+            void define_module_classes(Module* module);
+            void define_module_functions(Module* module);
 
             void define_class(Class* klass);
             void define_class_variables(Class* klass);
@@ -121,7 +121,7 @@ namespace haard {
             void define_overloaded_function(Symbol* symbol, Function* function);
             void define_template_header(TypeList* types);
 
-            void connect_sibling_scopes(Modules* sources);
+            void connect_sibling_scopes(Modules* modules);
             void generate_deletables();
 
             void add_parent_constructors_call(Function* function);
@@ -164,7 +164,7 @@ namespace haard {
             Scope* current_scope;
             std::stack<Scope*> scopes;
 
-            Module* current_source;
+            Module* current_module;
             Function* current_function;
             Class* current_class;
 

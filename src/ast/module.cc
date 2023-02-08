@@ -1,4 +1,4 @@
-#include "ast/source.h"
+#include "ast/module.h"
 #include "scope/scope.h"
 
 using namespace haard;

@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include "token/token.h"
-#include "ast/source.h"
+#include "ast/module.h"
 
 namespace haard {
     class Module;

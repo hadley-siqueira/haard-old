@@ -1,5 +1,5 @@
 #include <sstream>
-#include "ast/source.h"
+#include "ast/module.h"
 #include "scope/scope.h"
 #include "ast/compound_type_descriptor.h"
 

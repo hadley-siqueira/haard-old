@@ -1,7 +1,7 @@
 #ifndef HAARD_MODULES_SCOPE_BUILDER_H
 #define HAARD_MODULES_SCOPE_BUILDER_H
 
-#include "ast/sources.h"
+#include "ast/modules.h"
 #include "log/logger.h"
 
 namespace haard {

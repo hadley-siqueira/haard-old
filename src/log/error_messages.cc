@@ -28,9 +28,9 @@ std::string haard::error_message_cant_define_class(Class* klass, Symbol* sym) {
     return msg.str();
 }
 
-std::string haard::error_message_id_not_in_scope(Module* source, Identifier* id) {
+std::string haard::error_message_id_not_in_scope(Module* module, Identifier* id) {
     std::stringstream msg;
-    std::string path = source->get_path();
+    std::string path = module->get_path();
     int line = id->get_line();
     int column = id->get_column();
     int count = id->get_name().size();
