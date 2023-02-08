@@ -9,12 +9,19 @@ namespace haard {
     class ModuleDeclarationScopeBuilder {
         public:
             void build_module(Source* module);
+
+            void define_types(Source* module);
+            void define_functions(Source* module);
+            void define_methods(Source* module);
+
             void define_classes(Source* module);
             void define_datas(Source* module);
             void define_enums(Source* module);
             void define_unions(Source* module);
             void define_structs(Source* module);
-            void define_functions(Source* module);
+
+            void define_classes_methods(Source* module);
+            void define_class_method(Class* decl);
 
             void define_class(Class* decl);
             void define_data(Data* decl);

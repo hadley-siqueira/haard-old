@@ -402,6 +402,10 @@ void Function::set_destructor(bool value) {
 }
 
 std::string Function::get_path() {
+    if (is_method()) {
+        return klass->get_path();
+    }
+
     return source->get_path();
 }
 

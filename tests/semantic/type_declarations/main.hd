@@ -3,11 +3,19 @@ import foo
 class Foo:
     n : int
 
+    def to_str : char*
+        n = 0
+
 class Bar:
     n : int
 
 class Bar<T>:
     n : int
+
+    def to_str : char*
+        @obj : T
+
+        n = 0
 
 class Bar<K, N>:
     n : int

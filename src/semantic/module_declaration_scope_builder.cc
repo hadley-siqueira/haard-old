@@ -11,12 +11,17 @@ void ModuleDeclarationScopeBuilder::build_module(Source* module) {
     current_scope = module->get_scope();
     current_scope->set_qualified(module->get_relative_path() + ".");
 
+    define_types(module);
+    define_methods(module);
+    define_functions(module);
+}
+
+void ModuleDeclarationScopeBuilder::define_types(Source* module) {
     define_classes(module);
     define_datas(module);
     define_structs(module);
     define_enums(module);
     define_unions(module);
-    define_functions(module);
 }
 
 void ModuleDeclarationScopeBuilder::define_classes(Source* module) {
@@ -49,10 +54,26 @@ void ModuleDeclarationScopeBuilder::define_structs(Source* module) {
     }
 }
 
+void ModuleDeclarationScopeBuilder::define_classes_methods(Source* module) {
+    for (int i = 0; i < module->classes_count(); ++i) {
+        define_class_method(module->get_class(i));
+    }
+}
+
+void ModuleDeclarationScopeBuilder::define_class_method(Class* decl) {
+    for (int i = 0; i < decl->methods_count(); ++i) {
+        define_function(decl->get_method(i));
+    }
+}
+
 void ModuleDeclarationScopeBuilder::define_functions(Source* module) {
     for (int i = 0; i < module->functions_count(); ++i) {
         define_function(module->get_function(i));
     }
+}
+
+void ModuleDeclarationScopeBuilder::define_methods(Source* module) {
+    define_classes_methods(module);
 }
 
 void ModuleDeclarationScopeBuilder::define_class(Class* decl) {
