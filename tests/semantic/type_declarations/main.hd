@@ -12,10 +12,10 @@ class Bar:
 class Bar<T>:
     n : int
 
-#    def to_str : char*
-#        @obj : T
-#
-#        n = 0
+    def to_str : char*
+        @obj : T
+
+        n = 0
 
 class Bar<K, N>:
     n : int

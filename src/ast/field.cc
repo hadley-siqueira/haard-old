@@ -11,16 +11,8 @@ Field::~Field() {
     delete initial_value;
 }
 
-Type* Field::get_type() const {
-    return type;
-}
-
 Expression *Field::get_initial_value() const {
     return initial_value;
-}
-
-void Field::set_type(Type* value) {
-    type = value;
 }
 
 void Field::set_initial_value(Expression* value) {

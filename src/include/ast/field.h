@@ -3,18 +3,16 @@
 
 #include "ast/type.h"
 #include "ast/expression.h"
+#include "ast/variable.h"
 
 namespace haard {
-    class Field {
+    class Field : public Variable {
         public:
             Field();
             virtual ~Field();
 
         public:
-            Type* get_type() const;
             Expression* get_initial_value() const;
-
-            void set_type(Type* value);
             void set_initial_value(Expression* value);
             void set_from_token(Token& token);
 
