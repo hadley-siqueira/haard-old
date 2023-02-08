@@ -129,10 +129,10 @@ void Driver::parse_modules() {
 }
 
 void Driver::semantic_analysis() {
-    ModulesScopeBuilder module_declarer;
+    ModulesScopeBuilder builder;
 
-    module_declarer.set_logger(&logger);
-    module_declarer.build_modules(modules);
+    builder.set_logger(&logger);
+    builder.build_modules(modules);
 
     if (show_logs_flag) {
         logger.print();

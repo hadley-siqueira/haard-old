@@ -1,4 +1,5 @@
 import foo
+import std.io
 
 class Foo:
     n : int
@@ -113,6 +114,11 @@ def make_pair<T, K> : (T, K)
     @c : int*
 
     c = 0
+
+def make_packet : void
+    @pckt : UDPPacket
+
+    n = 0
 
 #const MAX_SIZE = 1024
 

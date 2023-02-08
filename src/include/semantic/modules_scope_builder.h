@@ -6,14 +6,20 @@
 
 namespace haard {
     class ModulesScopeBuilder {
-        public:
-            void build_modules(Modules* modules);
+    public:
+        void build_modules(Modules* modules);
 
-            Logger* get_logger() const;
-            void set_logger(Logger* value);
+        void set_qualified_scopes();
+        void connect_sibling_scopes();
+        void define_types();
+        void declare_functions();
+
+        Logger* get_logger() const;
+        void set_logger(Logger* value);
 
     private:
-            Logger* logger;
+        Logger* logger;
+        Modules* modules;
     };
 }
 
