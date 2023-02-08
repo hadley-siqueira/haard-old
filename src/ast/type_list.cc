@@ -114,6 +114,20 @@ Type* TypeList::clone() {
     return other;
 }
 
+std::string TypeList::get_qualified_name() {
+    int i;
+    std::stringstream ss;
+    ss << "<";
+
+    for (i = 0; i < types_count() - 1; ++i) {
+        ss << get_type(i)->get_qualified_name() << ", ";
+    }
+
+    ss << get_type(i)->get_qualified_name();
+    ss << ">";
+    return ss.str();
+}
+
 std::string TypeList::to_str() {
     int i;
     std::stringstream ss;

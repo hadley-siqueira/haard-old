@@ -134,15 +134,8 @@ std::string Function::get_qualified_name() {
         ss << source->get_relative_path() << "." << name;
     }
 
-    if (template_header && template_header->types_count() > 0) {
-        ss << "<";
-
-        for (i = 0; i < template_header->types_count() - 1; ++i) {
-            ss << template_header->get_type(i)->get_qualified_name() << ", ";
-        }
-
-        ss << template_header->get_type(i)->get_qualified_name();
-        ss << ">";
+    if (template_header) {
+        ss << template_header->get_qualified_name();
     }
 
     ss << "(";

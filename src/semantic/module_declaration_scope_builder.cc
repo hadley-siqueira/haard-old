@@ -77,14 +77,7 @@ void ModuleDeclarationScopeBuilder::define_methods(Source* module) {
 }
 
 void ModuleDeclarationScopeBuilder::define_class(Class* decl) {
-    std::string name = decl->get_qualified_name();
-
-    if (current_scope->resolve_local(name)) {
-        logger->error_and_exit(name + " already defined");
-    } else {
-        current_scope->define_class(name, decl);
-        logger->info(info_message_defining_class(decl));
-    }
+    define_type(decl, SYM_CLASS, "class");
 }
 
 void ModuleDeclarationScopeBuilder::define_data(Data* decl) {
@@ -109,6 +102,29 @@ void ModuleDeclarationScopeBuilder::define_function(Function* decl) {
 }
 
 void ModuleDeclarationScopeBuilder::define_type(CompoundTypeDescriptor* decl, int kind, std::string msg) {
+    auto old_scope = current_scope;
+    current_scope = decl->get_scope();
+    current_scope->set_parent(old_scope);
+    TypeList* templates = decl->get_template_header();
+
+    if (templates != nullptr) {
+        if (decl->is_template()) {
+            for (int i = 0; i < templates->types_count(); ++i) {
+                NamedType* named = (NamedType*) templates->get_type(i);
+                std::string name = named->get_name();
+                current_scope->define_template(name, i);
+                TypeDescriptorLink linker(current_scope, logger);
+                linker.link_type(named);
+            }
+        } else {
+            for (int i = 0; i < templates->types_count(); ++i) {
+                TypeDescriptorLink linker(current_scope, logger);
+                linker.link_type(templates->get_type(i));
+            }
+        }
+    }
+
+    current_scope = old_scope;
     std::string name = decl->get_qualified_name();
 
     if (current_scope->resolve_local(name)) {

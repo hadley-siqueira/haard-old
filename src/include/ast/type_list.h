@@ -24,6 +24,7 @@ namespace haard {
             bool check_arguments_type(TypeList* args);
             Type* get_return_type();
             Type* clone();
+            std::string get_qualified_name();
 
             std::string to_str();
 
