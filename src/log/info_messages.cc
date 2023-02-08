@@ -25,14 +25,6 @@ std::string haard::info_message_defining_class(Class* klass) {
     return msg.str();
 }
 
-std::string haard::info_message_defining_function(Function* function) {
-    std::stringstream msg;
-
-    msg << get_info_header() << "defining function '" << function->get_type_signature() << "' on source file '" << function->get_source()->get_path();
-    return msg.str();
-
-}
-
 std::string haard::info_message_defining_method(Function* method) {
     std::stringstream msg;
 
@@ -48,13 +40,30 @@ std::string haard::info_header(std::string path, int line, int column) {
     return ss.str();
 }
 
-std::string info_message_define_enum(Enum* decl) {
+std::string haard::info_message_define_type(TypeDeclaration *decl, std::string kind) {
     std::stringstream msg;
 
     int line = decl->get_line();
     int column = decl->get_column();
     std::string path = decl->get_full_filepath();
     std::string name = decl->get_qualified_name();
-    msg << info_header(path, line, column) << "defining enum " << name;
+    msg << info_header(path, line, column) << "defining " << kind << " " << name;
+    return msg.str();
+}
+
+std::string haard::info_message_define_function(Function* function) {
+    std::stringstream msg;
+
+    int line = function->get_line();
+    int column = function->get_column();
+    std::string path = function->get_path();
+    std::string name = function->get_qualified_name();
+
+    if (function->is_method()) {
+        msg << info_header(path, line, column) << "defining method " << name;
+    } else {
+        msg << info_header(path, line, column) << "defining function " << name;
+    }
+
     return msg.str();
 }

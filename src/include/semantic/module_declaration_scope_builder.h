@@ -23,6 +23,8 @@ namespace haard {
             void define_struct(Struct* decl);
             void define_function(Function* decl);
 
+            void define_type(TypeDeclaration* decl, int kind, std::string msg);
+
         public:
             Logger* get_logger() const;
             void set_logger(Logger* value);

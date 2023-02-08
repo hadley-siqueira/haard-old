@@ -1383,10 +1383,10 @@ void ScopeBuilder::define_function(Function* function) {
     function->set_uid(function_counter++);
 
     if (!sym) {
-        logger->info(info_message_defining_function(function));
+        logger->info(info_message_define_function(function));
         current_scope->define(function);
     } else if (sym->get_kind() == SYM_FUNCTION) {
-        logger->info(info_message_defining_function(function));
+        logger->info(info_message_define_function(function));
         define_overloaded_function(sym, function);
     } else {
         logger->error_and_exit("can't define function");

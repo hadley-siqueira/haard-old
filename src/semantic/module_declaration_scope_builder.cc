@@ -62,64 +62,40 @@ void ModuleDeclarationScopeBuilder::define_class(Class* decl) {
         logger->error_and_exit(name + " already defined");
     } else {
         current_scope->define_class(name, decl);
-        //logger->info("file.hd: declaring class " + name);
-
-        std::string path = module->get_path();
-        int line = decl->get_line();
-        int column = decl->get_column();
-        std::string msg = error_header(path, line, column);
-        msg += "declaring class " + name;
         logger->info(info_message_defining_class(decl));
     }
 }
 
 void ModuleDeclarationScopeBuilder::define_data(Data* decl) {
-    std::string name = decl->get_qualified_name();
-
-    if (current_scope->resolve_local(name)) {
-        logger->error_and_exit(name + " already defined");
-    } else {
-        current_scope->define_data(name, decl);
-        logger->info("file.hd: declaring data " + name);
-    }
+    define_type(decl, SYM_DATA, "data");
 }
 
 void ModuleDeclarationScopeBuilder::define_enum(Enum* decl) {
-    std::string name = decl->get_qualified_name();
-
-    if (current_scope->resolve_local(name)) {
-        logger->error_and_exit(name + " already defined");
-    } else {
-        current_scope->define_enum(name, decl);
-        logger->info("file.hd: declaring enum " + name);
-    }
+    define_type(decl, SYM_ENUM, "enum");
 }
 
 void ModuleDeclarationScopeBuilder::define_union(Union* decl) {
-    std::string name = decl->get_qualified_name();
-
-    if (current_scope->resolve_local(name)) {
-        logger->error_and_exit(name + " already defined");
-    } else {
-        current_scope->define_union(name, decl);
-        logger->info("file.hd: declaring union " + name);
-    }
+    define_type(decl, SYM_UNION, "union");
 }
 
 void ModuleDeclarationScopeBuilder::define_struct(Struct* decl) {
-    std::string name = decl->get_qualified_name();
-
-    if (current_scope->resolve_local(name)) {
-        logger->error_and_exit(name + " already defined");
-    } else {
-        current_scope->define_struct(name, decl);
-        logger->info("file.hd: declaring struct " + name);
-    }
+    define_type(decl, SYM_STRUCT, "struct");
 }
 
 void ModuleDeclarationScopeBuilder::define_function(Function* decl) {
     FunctionDeclarationScopeBuilder builder(logger);
     builder.define_function(decl);
+}
+
+void ModuleDeclarationScopeBuilder::define_type(TypeDeclaration* decl, int kind, std::string msg) {
+    std::string name = decl->get_qualified_name();
+
+    if (current_scope->resolve_local(name)) {
+        logger->error_and_exit(name + " already defined");
+    } else {
+        current_scope->define_type(kind, name, decl);
+        logger->info(info_message_define_type(decl, msg));
+    }
 }
 
 Logger* ModuleDeclarationScopeBuilder::get_logger() const {

@@ -69,6 +69,13 @@ Symbol* Scope::define_union(std::string& name, Union* obj) {
     return sym;
 }
 
+Symbol* Scope::define_type(int kind, std::string& name, TypeDeclaration* obj) {
+    Symbol* sym = new Symbol(kind, name, obj);
+    symbols[name] = sym;
+
+    return sym;
+}
+
 Symbol* Scope::define_function(std::string& name, Function* obj) {
     Symbol* sym = new Symbol(SYM_FUNCTION, name, obj);
     symbols[name] = sym;

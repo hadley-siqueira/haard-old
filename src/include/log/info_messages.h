@@ -13,9 +13,12 @@ namespace haard {
     std::string info_message_defining_source(Source* source);
 
     std::string info_message_defining_class(Class* klass);
-    std::string info_message_define_enum(Enum* decl);
-    std::string info_message_defining_function(Function* function);
+
+
     std::string info_message_defining_method(Function* method);
+
+    std::string info_message_define_type(TypeDeclaration* decl, std::string kind);
+    std::string info_message_define_function(Function* function);
 }
 
 #endif

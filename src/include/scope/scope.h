@@ -25,6 +25,7 @@ namespace haard {
             Symbol* define_struct(std::string& name, Struct* obj);
             Symbol* define_enum(std::string& name, Enum* obj);
             Symbol* define_union(std::string& name, Union* obj);
+            Symbol* define_type(int kind, std::string& name, TypeDeclaration* obj);
             Symbol* define_function(std::string& name, Function* obj);
             Symbol* define_template(std::string name, int value);
             Symbol* define_parameter(std::string name, Variable* obj);
