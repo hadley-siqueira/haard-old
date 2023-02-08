@@ -4,6 +4,7 @@
 #include "ast/sources.h"
 #include "ast/source.h"
 #include "ast/import.h"
+#include "ast/compound_type_descriptor.h"
 #include "ast/class.h"
 #include "ast/data.h"
 #include "ast/data_field.h"

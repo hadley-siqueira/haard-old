@@ -52,6 +52,7 @@ namespace haard {
         std::string get_qualified_name();
         TypeList* get_template_header() const;
 
+        CompoundTypeDescriptor* get_super_descriptor();
         Type* get_super_type() const;
         void set_super_type(Type* value);
 

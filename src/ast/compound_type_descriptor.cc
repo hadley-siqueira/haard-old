@@ -1,7 +1,7 @@
 #include <sstream>
 #include "ast/source.h"
 #include "scope/scope.h"
-#include "ast/type_declaration.h"
+#include "ast/compound_type_descriptor.h"
 
 using namespace haard;
 
@@ -191,6 +191,16 @@ void CompoundTypeDescriptor::set_source(Source* value) {
 
 TypeList *CompoundTypeDescriptor::get_template_header() const {
     return template_header;
+}
+
+CompoundTypeDescriptor* CompoundTypeDescriptor::get_super_descriptor() {
+    CompoundTypeDescriptor* super = nullptr;
+
+    if (get_super_type()) {
+        super = (CompoundTypeDescriptor*) ((NamedType*) super_type)->get_symbol()->get_descriptor();
+    }
+
+    return super;
 }
 
 void CompoundTypeDescriptor::set_template_header(TypeList *value) {

@@ -10,7 +10,7 @@
 #include "ast/enum.h"
 #include "ast/union.h"
 #include "ast/function.h"
-#include "ast/type_declaration.h"
+#include "ast/compound_type_descriptor.h"
 
 namespace haard {
     class Import;

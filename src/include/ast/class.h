@@ -8,7 +8,7 @@
 #include "ast/type.h"
 #include "ast/named_type.h"
 #include "ast/annotation.h"
-#include "ast/type_declaration.h"
+#include "ast/compound_type_descriptor.h"
 
 namespace haard {
     class Scope;
@@ -38,8 +38,6 @@ namespace haard {
         int variables_count();
 
         Function* get_constructor(int idx);
-
-        Class* get_super_class_descriptor();
 
         void set_virtual(bool flag);
         bool is_virtual();

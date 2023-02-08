@@ -10,7 +10,7 @@
 #include "ast/function_type.h"
 #include "ast/compound_statement.h"
 #include "ast/annotation.h"
-#include "ast/type_declaration.h"
+#include "ast/compound_type_descriptor.h"
 
 namespace haard {
     class Scope;

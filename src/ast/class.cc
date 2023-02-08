@@ -50,16 +50,6 @@ void Class::set_from_token(Token& token) {
     set_column(token.get_column());
 }
 
-Class* Class::get_super_class_descriptor() {
-    Class* super = nullptr;
-
-    if (get_super_type()) {
-        super = (Class*) ((NamedType*) super_type)->get_symbol()->get_descriptor();
-    }
-
-    return super;
-}
-
 int Class::get_uid() {
     return uid;
 }
@@ -87,7 +77,7 @@ void Class::calculate_variables_offset() {
     // if has a super class, the super class already calculated vtable pointer etc
     // if doesn't have super class, need to check if need vtable ptr
     if (get_super_type()) {
-        Class* parent = get_super_class_descriptor();
+        Class* parent = (Class*) get_super_descriptor();
         offset = super_type->get_size_in_bytes() - parent->get_remaining_pad();
         max_align = super_type->get_alignment();
     } else {

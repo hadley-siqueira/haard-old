@@ -1289,12 +1289,12 @@ void ScopeBuilder::generate_deletables() {
 }
 
 void ScopeBuilder::add_parent_constructors_call(Function* function) {
-    Class* klass = function->get_compound();
+    Class* klass = (Class*) function->get_compound();
     Class* super;
     CompoundStatement* stmts;
 
     if (klass->get_super_type()) {
-        super = klass->get_super_class_descriptor();
+        super = (Class*) klass->get_super_descriptor();
         stmts = function->get_statements();
         std::string name = super->get_name();
 
@@ -1308,12 +1308,12 @@ void ScopeBuilder::add_parent_constructors_call(Function* function) {
 }
 
 void ScopeBuilder::add_parent_destructors_call(Function* function) {
-    Class* klass = function->get_compound();
+    Class* klass = (Class*) function->get_compound();
     Class* super;
     CompoundStatement* stmts;
 
     if (klass->get_super_type()) {
-        super = klass->get_super_class_descriptor();
+        super = (Class*) klass->get_super_descriptor();
         stmts = function->get_statements();
         std::string name = super->get_name();
 
@@ -1327,7 +1327,7 @@ void ScopeBuilder::add_parent_destructors_call(Function* function) {
 }
 
 void ScopeBuilder::add_members_initialization(Function* function) {
-    Class* klass = function->get_compound();
+    Class* klass = (Class*) function->get_compound();
     CompoundStatement* stmts;
     Variable* var;
     Type* type;
@@ -1352,7 +1352,7 @@ void ScopeBuilder::add_members_initialization(Function* function) {
 }
 
 void ScopeBuilder::add_members_destruction(Function* function) {
-    Class* klass = function->get_compound();
+    Class* klass = (Class*) function->get_compound();
     CompoundStatement* stmts;
     Variable* var;
     Type* type;
