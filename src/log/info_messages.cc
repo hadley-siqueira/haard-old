@@ -29,7 +29,7 @@ std::string haard::info_message_defining_method(Function* method) {
     std::stringstream msg;
 
     msg << get_info_header() << "defining method '" << method->get_type_signature()
-        << "' on class '" << method->get_class()->get_name() << "'";
+        << "' on class '" << method->get_compound()->get_name() << "'";
     return msg.str();
 }
 
@@ -40,7 +40,7 @@ std::string haard::info_header(std::string path, int line, int column) {
     return ss.str();
 }
 
-std::string haard::info_message_define_type(TypeDeclaration *decl, std::string kind) {
+std::string haard::info_message_define_type(CompoundTypeDescriptor *decl, std::string kind) {
     std::stringstream msg;
 
     int line = decl->get_line();

@@ -17,7 +17,7 @@ namespace haard {
 
     std::string info_message_defining_method(Function* method);
 
-    std::string info_message_define_type(TypeDeclaration* decl, std::string kind);
+    std::string info_message_define_type(CompoundTypeDescriptor* decl, std::string kind);
     std::string info_message_define_function(Function* function);
 }
 

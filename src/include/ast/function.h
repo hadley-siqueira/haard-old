@@ -10,11 +10,13 @@
 #include "ast/function_type.h"
 #include "ast/compound_statement.h"
 #include "ast/annotation.h"
+#include "ast/type_declaration.h"
 
 namespace haard {
     class Scope;
     class Class;
     class Source;
+    class CompoundTypeDescriptor;
 
     class Function {
         public:
@@ -76,9 +78,6 @@ namespace haard {
             void set_template_header(TypeList* header);
             TypeList* get_template_header();
 
-            void set_class(Class* klass);
-            Class* get_class();
-
             std::vector<Annotation*> get_annotations() const;
             void set_annotations(const std::vector<Annotation*> &value);
 
@@ -95,6 +94,9 @@ namespace haard {
 
             int get_end() const;
             void set_end(int value);
+
+            CompoundTypeDescriptor* get_compound() const;
+            void set_compound(CompoundTypeDescriptor* value);
 
     private:
             int uid;
@@ -116,7 +118,7 @@ namespace haard {
             Function* parent_method;
             Scope* scope;
             Source* source;
-            Class* klass;
+            CompoundTypeDescriptor* compound;
             std::vector<Variable*> parameters;
             std::vector<Variable*> variables;
             std::vector<Annotation*> annotations;

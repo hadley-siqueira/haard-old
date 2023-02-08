@@ -97,9 +97,9 @@ void CppPrinter::print_class(Class* klass) {
 
     *out << "class " << klass->get_cpp_name();
 
-    if (klass->get_super_class()) {
+    if (klass->get_super_type()) {
         *out << " : public ";
-        *out << klass->get_super_class()->to_cpp();
+        *out << klass->get_super_type()->to_cpp();
     }
 
     *out << " {\npublic:\n";

@@ -719,7 +719,7 @@ namespace haard {
     typedef enum VariableKind {
         VAR_LOCAL,
         VAR_PARAM,
-        VAR_CLASS
+        VAR_FIELD
     } VariableKind;
 
     typedef enum TypeDeclarationKind {

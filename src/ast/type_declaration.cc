@@ -5,14 +5,16 @@
 
 using namespace haard;
 
-TypeDeclaration::TypeDeclaration() {
+CompoundTypeDescriptor::CompoundTypeDescriptor() {
     self_type = nullptr;
     template_header = nullptr;
-    scope = new Scope();
     template_flag = false;
+    super_type = nullptr;
+    destructor = nullptr;
+    scope = new Scope();
 }
 
-TypeDeclaration::~TypeDeclaration() {
+CompoundTypeDescriptor::~CompoundTypeDescriptor() {
     for (int i = 0; i < methods.size(); ++i) {
         delete methods[i];
     }
@@ -24,27 +26,27 @@ TypeDeclaration::~TypeDeclaration() {
     delete scope;
 }
 
-int TypeDeclaration::get_kind() const {
+int CompoundTypeDescriptor::get_kind() const {
     return kind;
 }
 
-int TypeDeclaration::get_line() const {
+int CompoundTypeDescriptor::get_line() const {
     return line;
 }
 
-int TypeDeclaration::get_column() const {
+int CompoundTypeDescriptor::get_column() const {
     return column;
 }
 
-std::vector<Annotation*> TypeDeclaration::get_annotations() const {
+std::vector<Annotation*> CompoundTypeDescriptor::get_annotations() const {
     return annotations;
 }
 
-std::string TypeDeclaration::get_name() const {
+std::string CompoundTypeDescriptor::get_name() const {
     return name;
 }
 
-std::string TypeDeclaration::get_qualified_name() {
+std::string CompoundTypeDescriptor::get_qualified_name() {
     int i;
     std::stringstream ss;
 
@@ -69,51 +71,59 @@ std::string TypeDeclaration::get_qualified_name() {
     return ss.str();
 }
 
-int TypeDeclaration::get_size_in_bytes() {
+int CompoundTypeDescriptor::get_size_in_bytes() {
     return size_in_bytes;
 }
 
-int TypeDeclaration::get_alignment() {
+int CompoundTypeDescriptor::get_alignment() {
     return alignment;
 }
 
-void TypeDeclaration::set_kind(int value) {
+void CompoundTypeDescriptor::set_alignment(int value) {
+    alignment = value;
+}
+
+void CompoundTypeDescriptor::set_kind(int value) {
     kind = value;
 }
 
-void TypeDeclaration::set_line(int value) {
+void CompoundTypeDescriptor::set_line(int value) {
     line = value;
 }
 
-void TypeDeclaration::set_column(int value) {
+void CompoundTypeDescriptor::set_column(int value) {
     column = value;
 }
 
-void TypeDeclaration::set_template(bool value) {
+void CompoundTypeDescriptor::set_template(bool value) {
     template_flag = value;
 }
 
-void TypeDeclaration::set_annotations(const std::vector<Annotation*>& value) {
+void CompoundTypeDescriptor::set_annotations(const std::vector<Annotation*>& value) {
     annotations = value;
 }
 
-void TypeDeclaration::set_name(const std::string &value) {
+void CompoundTypeDescriptor::set_name(const std::string &value) {
     name = value;
 }
 
-bool TypeDeclaration::is_template() {
+bool CompoundTypeDescriptor::is_template() {
     return template_flag;
 }
 
-int TypeDeclaration::methods_count() {
+int CompoundTypeDescriptor::methods_count() {
     return methods.size();
 }
 
-void TypeDeclaration::add_field(Field* field) {
+int CompoundTypeDescriptor::constructors_count() {
+    return constructors.size();
+}
+
+void CompoundTypeDescriptor::add_field(Field* field) {
     fields.push_back(field);
 }
 
-void TypeDeclaration::add_method(Function* method) {
+void CompoundTypeDescriptor::add_method(Function* method) {
     methods.push_back(method);
 
     if (method->get_name() == "init") {
@@ -127,67 +137,83 @@ void TypeDeclaration::add_method(Function* method) {
     }
 
     method->set_method();
-    //method->set_class(this);
+    method->set_compound(this);
     method->get_scope()->set_parent(get_scope());
 }
 
-Scope *TypeDeclaration::get_scope() const {
+Scope *CompoundTypeDescriptor::get_scope() const {
     return scope;
 }
 
-std::string TypeDeclaration::get_full_filepath() {
+std::string CompoundTypeDescriptor::get_full_filepath() {
     return source->get_path();
 }
 
-std::string TypeDeclaration::get_relative_filepath() {
+std::string CompoundTypeDescriptor::get_relative_filepath() {
     return source->get_relative_path();
 }
 
-void TypeDeclaration::set_scope(Scope *value) {
+Function* CompoundTypeDescriptor::get_method(int idx) {
+    if (idx < methods_count()) {
+        return methods[idx];
+    }
+
+    return nullptr;
+}
+
+Function* CompoundTypeDescriptor::get_destructor() {
+    return destructor;
+}
+
+void CompoundTypeDescriptor::set_destructor(Function* value) {
+    destructor = value;
+}
+
+void CompoundTypeDescriptor::set_scope(Scope *value) {
     scope = value;
 }
 
-Type* TypeDeclaration::get_super_type() const {
+Type* CompoundTypeDescriptor::get_super_type() const {
     return super_type;
 }
 
-void TypeDeclaration::set_super_type(Type* value) {
+void CompoundTypeDescriptor::set_super_type(Type* value) {
     super_type = value;
 }
 
-Source* TypeDeclaration::get_source() const {
+Source* CompoundTypeDescriptor::get_source() const {
     return source;
 }
 
-void TypeDeclaration::set_source(Source* value) {
+void CompoundTypeDescriptor::set_source(Source* value) {
     source = value;
 }
 
-TypeList *TypeDeclaration::get_template_header() const {
+TypeList *CompoundTypeDescriptor::get_template_header() const {
     return template_header;
 }
 
-void TypeDeclaration::set_template_header(TypeList *value) {
+void CompoundTypeDescriptor::set_template_header(TypeList *value) {
     template_header = value;
 }
 
-int TypeDeclaration::get_begin() const {
+int CompoundTypeDescriptor::get_begin() const {
     return begin;
 }
 
-void TypeDeclaration::set_begin(int value) {
+void CompoundTypeDescriptor::set_begin(int value) {
     begin = value;
 }
 
-int TypeDeclaration::get_end() const {
+int CompoundTypeDescriptor::get_end() const {
     return end;
 }
 
-void TypeDeclaration::set_end(int value) {
+void CompoundTypeDescriptor::set_end(int value) {
     end = value;
 }
 
-void TypeDeclaration::set_from_token(Token& token) {
+void CompoundTypeDescriptor::set_from_token(Token& token) {
     set_name(token.get_lexeme());
     set_line(token.get_line());
     set_column(token.get_column());

@@ -4,7 +4,7 @@
 #include "ast/type_declaration.h"
 
 namespace haard {
-    class Enum : public TypeDeclaration {
+    class Enum : public CompoundTypeDescriptor {
         public:
             Enum();
     };

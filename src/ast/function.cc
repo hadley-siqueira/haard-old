@@ -129,7 +129,7 @@ std::string Function::get_qualified_name() {
     std::stringstream ss;
 
     if (is_method()) {
-        ss << klass->get_qualified_name() << "#" << name;
+        ss << compound->get_qualified_name() << "#" << name;
     } else {
         ss << source->get_relative_path() << "." << name;
     }
@@ -362,15 +362,6 @@ TypeList* Function::get_template_header() {
     return template_header;
 }
 
-
-void Function::set_class(Class* klass) {
-    this->klass = klass;
-}
-
-Class* Function::get_class() {
-    return klass;
-}
-
 std::vector<Annotation*> Function::get_annotations() const {
     return annotations;
 }
@@ -403,7 +394,7 @@ void Function::set_destructor(bool value) {
 
 std::string Function::get_path() {
     if (is_method()) {
-        return klass->get_path();
+        return compound->get_full_filepath();
     }
 
     return source->get_path();
@@ -423,4 +414,12 @@ int Function::get_end() const {
 
 void Function::set_end(int value) {
     end = value;
+}
+
+CompoundTypeDescriptor* Function::get_compound() const {
+    return compound;
+}
+
+void Function::set_compound(CompoundTypeDescriptor* value) {
+    compound = value;
 }

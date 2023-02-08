@@ -4,7 +4,7 @@
 #include "ast/type_declaration.h"
 
 namespace haard {
-    class Struct : public TypeDeclaration {
+    class Struct : public CompoundTypeDescriptor {
         public:
             Struct();
     };

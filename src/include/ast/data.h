@@ -4,7 +4,7 @@
 #include "ast/type_declaration.h"
 
 namespace haard {
-    class Data : public TypeDeclaration {
+    class Data : public CompoundTypeDescriptor {
         public:
             Data();
     };

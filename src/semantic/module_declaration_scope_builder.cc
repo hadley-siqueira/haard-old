@@ -108,7 +108,7 @@ void ModuleDeclarationScopeBuilder::define_function(Function* decl) {
     builder.define_function(decl);
 }
 
-void ModuleDeclarationScopeBuilder::define_type(TypeDeclaration* decl, int kind, std::string msg) {
+void ModuleDeclarationScopeBuilder::define_type(CompoundTypeDescriptor* decl, int kind, std::string msg) {
     std::string name = decl->get_qualified_name();
 
     if (current_scope->resolve_local(name)) {

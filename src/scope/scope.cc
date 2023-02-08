@@ -69,7 +69,7 @@ Symbol* Scope::define_union(std::string& name, Union* obj) {
     return sym;
 }
 
-Symbol* Scope::define_type(int kind, std::string& name, TypeDeclaration* obj) {
+Symbol* Scope::define_type(int kind, std::string& name, CompoundTypeDescriptor* obj) {
     Symbol* sym = new Symbol(kind, name, obj);
     symbols[name] = sym;
 
@@ -132,7 +132,7 @@ Symbol* Scope::define(Variable* var) {
         sym = new Symbol(SYM_VARIABLE, var->get_name(), var);
     } else if (var->get_kind() == VAR_PARAM) {
         sym = new Symbol(SYM_PARAMETER, var->get_name(), var);
-    } else if (var->get_kind() == VAR_CLASS) {
+    } else if (var->get_kind() == VAR_FIELD) {
         sym = new Symbol(SYM_CLASS_VARIABLE, var->get_name(), var);
     } else {
         std::cout << __FILE__ << ' ' << __LINE__ << std::endl;

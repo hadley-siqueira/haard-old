@@ -1253,9 +1253,9 @@ void ScopeBuilder::define_class_template_header(Class* klass) {
 
 void ScopeBuilder::define_class_super(Class* klass) {
     // FIXME handle super with templates
-    if (klass->has_super_class()) {
-        link_type(klass->get_super_class());
-        NamedType* named = (NamedType*) klass->get_super_class();
+    if (klass->get_super_type()) {
+        link_type(klass->get_super_type());
+        NamedType* named = (NamedType*) klass->get_super_type();
         Symbol* sym = named->get_symbol();
         Class* super = (Class*) sym->get_descriptor();
         current_scope->set_super(super->get_scope());
@@ -1289,11 +1289,11 @@ void ScopeBuilder::generate_deletables() {
 }
 
 void ScopeBuilder::add_parent_constructors_call(Function* function) {
-    Class* klass = function->get_class();
+    Class* klass = function->get_compound();
     Class* super;
     CompoundStatement* stmts;
 
-    if (klass->has_super_class()) {
+    if (klass->get_super_type()) {
         super = klass->get_super_class_descriptor();
         stmts = function->get_statements();
         std::string name = super->get_name();
@@ -1308,11 +1308,11 @@ void ScopeBuilder::add_parent_constructors_call(Function* function) {
 }
 
 void ScopeBuilder::add_parent_destructors_call(Function* function) {
-    Class* klass = function->get_class();
+    Class* klass = function->get_compound();
     Class* super;
     CompoundStatement* stmts;
 
-    if (klass->has_super_class()) {
+    if (klass->get_super_type()) {
         super = klass->get_super_class_descriptor();
         stmts = function->get_statements();
         std::string name = super->get_name();
@@ -1327,7 +1327,7 @@ void ScopeBuilder::add_parent_destructors_call(Function* function) {
 }
 
 void ScopeBuilder::add_members_initialization(Function* function) {
-    Class* klass = function->get_class();
+    Class* klass = function->get_compound();
     CompoundStatement* stmts;
     Variable* var;
     Type* type;
@@ -1352,7 +1352,7 @@ void ScopeBuilder::add_members_initialization(Function* function) {
 }
 
 void ScopeBuilder::add_members_destruction(Function* function) {
-    Class* klass = function->get_class();
+    Class* klass = function->get_compound();
     CompoundStatement* stmts;
     Variable* var;
     Type* type;

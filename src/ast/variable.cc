@@ -107,7 +107,7 @@ std::string Variable::get_unique_name() {
         ss << "p";
         break;
 
-    case VAR_CLASS:
+    case VAR_FIELD:
         ss << "cv";
         break;
     }

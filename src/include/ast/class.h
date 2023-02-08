@@ -8,106 +8,55 @@
 #include "ast/type.h"
 #include "ast/named_type.h"
 #include "ast/annotation.h"
+#include "ast/type_declaration.h"
 
 namespace haard {
     class Scope;
     class Source;
 
-    class Class {
-        public:
-            Class();
-            ~Class();
+    class Class : public CompoundTypeDescriptor {
+    public:
+        Class();
+        ~Class();
 
-        public:
-            std::string get_name();
-            std::string get_cpp_name();
-            int get_line();
-            int get_column();
-            int get_uid();
-            Function* get_method(int idx);
-            Variable* get_variable(int idx);
-            Scope* get_scope();
-            NamedType* get_self_type();
-            int get_size_in_bytes();
-            std::string get_qualified_name();
-            std::string get_original();
+    public:
+        std::string get_cpp_name();
+        int get_uid();
+        Variable* get_variable(int idx);
+        NamedType* get_self_type();
+        int get_size_in_bytes();
+        std::string get_qualified_name();
+        std::string get_original();
 
-            void set_from_token(Token& token);
-            void set_name(std::string name);
-            void set_line(int line);
-            void set_column(int column);
-            void set_uid(int uid);
-            void set_self_type(NamedType* type);
+        void set_from_token(Token& token);
+        void set_uid(int uid);
+        void set_self_type(NamedType* type);
 
-            void add_method(Function* method);
-            void add_variable(Variable* var);
-            void calculate_variables_offset();
+        void add_variable(Variable* var);
+        void calculate_variables_offset();
 
-            int methods_count();
-            int variables_count();
+        int variables_count();
 
-            int constructors_count();
-            Function* get_constructor(int idx);
+        Function* get_constructor(int idx);
 
-            Source* get_source();
-            void set_source(Source* source);
+        Class* get_super_class_descriptor();
 
-            Type* get_super_class();
-            void set_super_class(Type* type);
-            bool has_super_class();
-            Class* get_super_class_descriptor();
+        void set_virtual(bool flag);
+        bool is_virtual();
 
-            void set_template_header(TypeList* header);
-            TypeList* get_template_header();
+        int get_remaining_pad() const;
+        void set_remaining_pad(int value);
 
-            Function* get_destructor() const;
-            void set_destructor(Function* value);
+        bool is_template();
+        void set_template(bool value);
 
-            std::vector<Annotation*> get_annotations() const;
-            void set_annotations(const std::vector<Annotation*>& value);
-
-            int get_alignment() const;
-            void set_alignment(int value);
-
-            void set_virtual(bool flag);
-            bool is_virtual();
-
-            int get_remaining_pad() const;
-            void set_remaining_pad(int value);
-
-            bool is_template();
-            void set_template(bool value);
-
-            std::string get_path();
-
-            int get_begin() const;
-            void set_begin(int value);
-
-            int get_end() const;
-            void set_end(int value);
+        std::string get_path();
 
     private:
-            int line;
-            int column;
-            int uid;
-            int size_in_bytes;
-            int alignment;
-            int remaining_pad;
-            int begin;
-            int end;
-            bool is_virtual_flag;
-            bool template_flag;
-            std::string name;
-            Type* super_class;
-            TypeList* template_header;
-            Function* destructor;
-            Scope* scope;
-            NamedType* self_type;
-            Source* source; // source where this class is defined
-            std::vector<Function*> methods;
-            std::vector<Function*> constructors;
-            std::vector<Variable*> variables;
-            std::vector<Annotation*> annotations;
+        int uid;
+        int remaining_pad;
+        bool is_virtual_flag;
+        std::vector<Variable*> variables;
     };
 }
 

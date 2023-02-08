@@ -4,7 +4,7 @@
 #include "ast/type_declaration.h"
 
 namespace haard {
-    class Union : public TypeDeclaration {
+    class Union : public CompoundTypeDescriptor {
     public:
         Union();
     };

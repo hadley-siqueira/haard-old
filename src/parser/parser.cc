@@ -132,7 +132,7 @@ Class* Parser::parse_class() {
     }
 
     if (match(TK_LEFT_PARENTHESIS)) {
-        klass->set_super_class(parse_type());
+        klass->set_super_type(parse_type());
         expect(TK_RIGHT_PARENTHESIS);
     }
 

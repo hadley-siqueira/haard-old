@@ -224,7 +224,7 @@ std::string Symbol::get_qualified_name(int idx) {
     Function* func = (Function*) descriptors[idx];
     Variable* var = (Variable*) descriptors[idx];
     NamedType* type = (NamedType*) descriptors[idx];
-    TypeDeclaration* type_decl = (TypeDeclaration*) descriptors[idx];
+    CompoundTypeDescriptor* type_decl = (CompoundTypeDescriptor*) descriptors[idx];
 
     switch (kind) {
     case SYM_CLASS:
