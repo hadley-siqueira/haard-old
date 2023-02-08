@@ -7,7 +7,7 @@
 namespace haard {
     class ModulesScopeBuilder {
         public:
-            void build_modules(Sources* modules);
+            void build_modules(Modules* modules);
 
             Logger* get_logger() const;
             void set_logger(Logger* value);

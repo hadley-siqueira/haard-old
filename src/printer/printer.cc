@@ -12,29 +12,29 @@ std::string Printer::to_str() {
     return out.str();
 }
 
-void Printer::print_sources(Sources* sources) {
-    for (int i = 0; i < sources->sources_count(); ++i) {
-        print_source(sources->get_source(i));
+void Printer::print_modules(Modules* modules) {
+    for (int i = 0; i < modules->modules_count(); ++i) {
+        print_module(modules->get_module(i));
     }
 }
 
-void Printer::print_source(Source* source) {
-    if (source->import_count() > 0) {
-        for (int i = 0; i < source->import_count(); ++i) {
-            print_import(source->get_import(i));
+void Printer::print_module(Module* module) {
+    if (module->import_count() > 0) {
+        for (int i = 0; i < module->import_count(); ++i) {
+            print_import(module->get_import(i));
             out << '\n';
         }
 
         out << '\n';
     }
 
-    for (int i = 0; i < source->functions_count(); ++i) {
-        print_function(source->get_function(i));
+    for (int i = 0; i < module->functions_count(); ++i) {
+        print_function(module->get_function(i));
         out << '\n';
     }
 
-    for (int i = 0;i < source->classes_count(); ++i) {
-        print_class(source->get_class(i));
+    for (int i = 0;i < module->classes_count(); ++i) {
+        print_class(module->get_class(i));
         out << '\n';
     }
 }

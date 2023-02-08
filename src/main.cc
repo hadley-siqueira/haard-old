@@ -34,8 +34,8 @@ void test_scanner2(std::string str) {
 void test_parser(std::string path) {
     Parser parser;
     Printer printer;
-    Source* src = parser.read(path, "");
-    printer.print_source(src);
+    Module* src = parser.read(path, "");
+    printer.print_module(src);
 
     std::cout << printer.to_str();
 

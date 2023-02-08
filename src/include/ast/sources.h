@@ -8,22 +8,22 @@
 #include "ast/source.h"
 
 namespace haard {
-    class Sources {
-        public:
-            Sources();
-            ~Sources();
+    class Modules {
+    public:
+        Modules();
+        ~Modules();
 
-        public:
-            void add_source(std::string path, Source* source);
-            Source* get_source(std::string path);
-            Source* get_source(int i);
-            bool has_source(std::string path);
+    public:
+        void add_module(std::string path, Module* module);
+        Module* get_module(std::string path);
+        Module* get_module(int i);
+        bool has_module(std::string path);
 
-            int sources_count();
+        int modules_count();
 
-        private:
-            std::vector<Source*> sources;
-            std::map<std::string, Source*> sources_map;
+    private:
+        std::vector<Module*> modules;
+        std::map<std::string, Module*> modules_map;
     };
 }
 

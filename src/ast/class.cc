@@ -155,7 +155,7 @@ void Class::set_template(bool value) {
 }
 
 std::string Class::get_path() {
-    return source->get_path();
+    return module->get_path();
 }
 
 int Class::get_size_in_bytes() {
@@ -166,7 +166,7 @@ std::string Class::get_qualified_name() {
     int i;
     std::stringstream ss;
 
-    ss << source->get_relative_path() << "." << name;
+    ss << module->get_relative_path() << "." << name;
 
     if (template_header && template_header->types_count() > 0) {
         ss << "<";

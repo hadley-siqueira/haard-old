@@ -12,7 +12,7 @@
 
 namespace haard {
     class Scope;
-    class Source;
+    class Module;
 
     class Class : public CompoundTypeDescriptor {
     public:

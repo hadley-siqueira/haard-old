@@ -13,7 +13,7 @@
 
 namespace haard {
     class Scope;
-    class Source;
+    class Module;
     class Function;
 
     class CompoundTypeDescriptor {
@@ -42,8 +42,8 @@ namespace haard {
         int get_end() const;
         void set_end(int value);
 
-        Source* get_source() const;
-        void set_source(Source* value);
+        Module* get_module() const;
+        void set_module(Module* value);
 
         std::vector<Annotation*> get_annotations() const;
         void set_annotations(const std::vector<Annotation*>& value);
@@ -68,8 +68,6 @@ namespace haard {
         void set_template(bool value);
 
         void set_name(const std::string& value);
-
-
 
         void set_from_token(Token& token);
         void set_template_header(TypeList* value);
@@ -99,7 +97,7 @@ namespace haard {
         TypeList* template_header;
         NamedType* self_type;
         Type* super_type;
-        Source* source;
+        Module* module;
         Scope* scope;
         std::vector<Field*> fields;
         std::vector<Function*> methods;

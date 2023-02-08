@@ -15,8 +15,8 @@ namespace haard {
 
         public:
             std::string to_str();
-            void print_sources(Sources* sources);
-            void print_source(Source* source);
+            void print_modules(Modules* sources);
+            void print_source(Module* source);
             void print_import(Import* import);
             void print_class(Class* klass);
             void print_function(Function* function);

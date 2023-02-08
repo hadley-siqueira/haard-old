@@ -50,7 +50,7 @@ std::string CompoundTypeDescriptor::get_qualified_name() {
     int i;
     std::stringstream ss;
 
-    ss << source->get_relative_path() << "." << name;
+    ss << module->get_relative_path() << "." << name;
 
     if (template_header) {
         ss << template_header->get_qualified_name();
@@ -134,11 +134,11 @@ Scope *CompoundTypeDescriptor::get_scope() const {
 }
 
 std::string CompoundTypeDescriptor::get_full_filepath() {
-    return source->get_path();
+    return module->get_path();
 }
 
 std::string CompoundTypeDescriptor::get_relative_filepath() {
-    return source->get_relative_path();
+    return module->get_relative_path();
 }
 
 Function* CompoundTypeDescriptor::get_method(int idx) {
@@ -169,12 +169,12 @@ void CompoundTypeDescriptor::set_super_type(Type* value) {
     super_type = value;
 }
 
-Source* CompoundTypeDescriptor::get_source() const {
-    return source;
+Module* CompoundTypeDescriptor::get_module() const {
+    return module;
 }
 
-void CompoundTypeDescriptor::set_source(Source* value) {
-    source = value;
+void CompoundTypeDescriptor::set_module(Module* value) {
+    module = value;
 }
 
 TypeList *CompoundTypeDescriptor::get_template_header() const {

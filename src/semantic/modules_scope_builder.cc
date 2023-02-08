@@ -3,12 +3,12 @@
 
 using namespace haard;
 
-void ModulesScopeBuilder::build_modules(Sources* modules) {
-    for (int i = 0; i < modules->sources_count(); ++i) {
+void ModulesScopeBuilder::build_modules(Modules* modules) {
+    for (int i = 0; i < modules->modules_count(); ++i) {
         ModuleDeclarationScopeBuilder builder;
 
         builder.set_logger(get_logger());
-        builder.build_module(modules->get_source(i));
+        builder.build_module(modules->get_module(i));
     }
 }
 

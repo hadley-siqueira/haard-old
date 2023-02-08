@@ -21,7 +21,7 @@ Driver::Driver() {
     path_delimiter = '/';
     env_var = "HAARD_PATH";
     main_path = "main.hd";
-    sources = new Sources;
+    modules = new Modules;
 
     cpp_flag = false;
     pretty_flag = false;
@@ -32,7 +32,7 @@ Driver::Driver() {
 }
 
 Driver::~Driver() {
-    delete sources;
+    delete modules;
 }
 
 void Driver::run() {
@@ -42,7 +42,7 @@ void Driver::run() {
     run_info_flags();
 
     logger.info("starting parsing...");
-    parse_sources();
+    parse_modules();
 
     logger.info("ending parsing...");
     check_for_errors();
@@ -76,7 +76,7 @@ void Driver::run_info_flags() {
 
 void Driver::run_flags() {
     if (pretty_flag) {
-        print_sources();
+        print_modules();
     }
 
     if (cpp_flag) {
@@ -125,7 +125,7 @@ void Driver::print_information() {
     exit(0);
 }
 
-void Driver::parse_sources() {
+void Driver::parse_modules() {
     std::string path;
 
     if (root_path == ".") {
@@ -138,17 +138,10 @@ void Driver::parse_sources() {
 }
 
 void Driver::semantic_analysis() {
-    /*ScopeBuilder def_builder;
-    //ScopeBuilder sym_builder;
-
-    def_builder.set_logger(&logger);
-    def_builder.build(sources);
-    // sym_builder.build_sources(sources);*/
-
     ModulesScopeBuilder module_declarer;
 
     module_declarer.set_logger(&logger);
-    module_declarer.build_modules(sources);
+    module_declarer.build_modules(modules);
 
     if (show_logs_flag) {
         logger.print();
@@ -161,7 +154,7 @@ void Driver::ir_generation() {
     IRBuilder builder;
 
     builder.set_logger(&logger);
-    builder.build(sources);
+    builder.build(modules);
 
     auto modules = builder.get_modules();
 
@@ -178,7 +171,7 @@ void Driver::ir_generation() {
     delete modules;
 }
 
-void Driver::parse_imports(Source* file) {
+void Driver::parse_imports(Module* file) {
     if (file == nullptr)
         return;
 
@@ -196,21 +189,21 @@ void Driver::parse_import(Import* import) {
 }
 
 void Driver::parse_simple_import(Import* import) {
-    Source* file = nullptr;
+    Module* file = nullptr;
     std::string path = build_import_path(import);
 
-    file = sources->get_source(path);
+    file = modules->get_module(path);
 
     if (file != nullptr) {
-        import->set_source(file);
+        import->set_module(file);
     } else {
         file = parse_file(path);
-        import->set_source(file);
+        import->set_module(file);
         parse_imports(file);
     }
 }
 
-Source* Driver::parse_file(std::string path) {
+Module* Driver::parse_file(std::string path) {
     std::stringstream ss;
     std::string relative_path;
 
@@ -222,26 +215,26 @@ Source* Driver::parse_file(std::string path) {
     ss << "Parsing: " << path;
     logger.info(ss.str());
 
-    if (!sources->has_source(path)) {
+    if (!modules->has_module(path)) {
         Parser parser(&logger);
         relative_path = build_relative_path(path);
-        sources->add_source(path, parser.read(path, relative_path));
+        modules->add_module(path, parser.read(path, relative_path));
     }
 
-    return sources->get_source(path);
+    return modules->get_module(path);
 }
 
-void Driver::print_sources() {
+void Driver::print_modules() {
     Printer printer;
 
-    printer.print_sources(sources);
+    printer.print_modules(modules);
     std::cout << printer.to_str();
 }
 
 void Driver::generate_cpp() {
     CppPrinter printer;
 
-    printer.print_sources(sources);
+    printer.print_modules(modules);
     std::ofstream f("/tmp/out.cc");
     f << printer.to_str();
     f.close();

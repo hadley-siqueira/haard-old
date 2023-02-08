@@ -18,13 +18,13 @@ IRBuilder::~IRBuilder() {
 
 }
 
-void IRBuilder::build(Sources* sources) {
-    for (int i = 0; i < sources->sources_count(); ++i) {
-        build_source(sources->get_source(i));
+void IRBuilder::build(Modules* sources) {
+    for (int i = 0; i < sources->modules_count(); ++i) {
+        build_source(sources->get_module(i));
     }
 }
 
-void IRBuilder::build_source(Source* source) {
+void IRBuilder::build_source(Module* source) {
     IRModule* module = new IRModule();
     current_module = module;
 

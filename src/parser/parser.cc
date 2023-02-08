@@ -15,18 +15,18 @@ Parser::Parser(Logger* logger) {
     this->logger = logger;
 }
 
-Source* Parser::read(std::string path, std::string relative_path) {
+Module* Parser::read(std::string path, std::string relative_path) {
     Scanner s;
-    Source* source = nullptr;
+    Module* module = nullptr;
 
     idx = 0;
     this->path = path;
     tokens = s.read(path);
-    source = parse_source();
-    source->set_path(path);
-    source->set_relative_path(relative_path);
+    module = parse_module();
+    module->set_path(path);
+    module->set_relative_path(relative_path);
 
-    return source;
+    return module;
 }
 
 Expression* Parser::read_expression_from_string(std::string str) {
@@ -53,24 +53,24 @@ Class* Parser::read_class_from_string(std::string str) {
     return parse_class();
 }
 
-Source* Parser::parse_source() {
-    Source* source = new Source();
+Module* Parser::parse_module() {
+    Module* module = new Module();
 
     while (true) {
         if (lookahead(TK_IMPORT)) {
-            source->add_import(parse_import());
+            module->add_import(parse_import());
         } else if (lookahead(TK_DEF)) {
-            source->add_function(parse_function());
+            module->add_function(parse_function());
         } else if (lookahead(TK_CLASS)) {
-            source->add_class(parse_class());
+            module->add_class(parse_class());
         } else if (lookahead(TK_DATA)) {
-            source->add_data(parse_data());
+            module->add_data(parse_data());
         } else if (lookahead(TK_STRUCT)) {
-            source->add_struct(parse_struct());
+            module->add_struct(parse_struct());
         } else if (lookahead(TK_ENUM)) {
-            source->add_enum(parse_enum());
+            module->add_enum(parse_enum());
         } else if (lookahead(TK_UNION)) {
-            source->add_union(parse_union());
+            module->add_union(parse_union());
         } else if (lookahead(TK_AT)) {
             parse_annotation();
         } else if (match(TK_EOF)) {
@@ -80,7 +80,7 @@ Source* Parser::parse_source() {
         }
     }
 
-    return source;
+    return module;
 }
 
 Import* Parser::parse_import() {

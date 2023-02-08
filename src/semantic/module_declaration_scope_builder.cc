@@ -6,7 +6,7 @@
 
 using namespace haard;
 
-void ModuleDeclarationScopeBuilder::build_module(Source* module) {
+void ModuleDeclarationScopeBuilder::build_module(Module* module) {
     this->module = module;
     current_scope = module->get_scope();
     current_scope->set_qualified(module->get_relative_path() + ".");
@@ -16,7 +16,7 @@ void ModuleDeclarationScopeBuilder::build_module(Source* module) {
     define_functions(module);
 }
 
-void ModuleDeclarationScopeBuilder::define_types(Source* module) {
+void ModuleDeclarationScopeBuilder::define_types(Module* module) {
     define_classes(module);
     define_datas(module);
     define_structs(module);
@@ -24,37 +24,37 @@ void ModuleDeclarationScopeBuilder::define_types(Source* module) {
     define_unions(module);
 }
 
-void ModuleDeclarationScopeBuilder::define_classes(Source* module) {
+void ModuleDeclarationScopeBuilder::define_classes(Module* module) {
     for (int i = 0; i < module->classes_count(); ++i) {
         define_class(module->get_class(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::define_datas(Source* module) {
+void ModuleDeclarationScopeBuilder::define_datas(Module* module) {
     for (int i = 0; i < module->data_count(); ++i) {
         define_data(module->get_data(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::define_enums(Source* module) {
+void ModuleDeclarationScopeBuilder::define_enums(Module* module) {
     for (int i = 0; i < module->enums_count(); ++i) {
         define_enum(module->get_enum(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::define_unions(Source* module) {
+void ModuleDeclarationScopeBuilder::define_unions(Module* module) {
     for (int i = 0; i < module->unions_count(); ++i) {
         define_union(module->get_union(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::define_structs(Source* module) {
+void ModuleDeclarationScopeBuilder::define_structs(Module* module) {
     for (int i = 0; i < module->structs_count(); ++i) {
         define_struct(module->get_struct(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::define_classes_methods(Source* module) {
+void ModuleDeclarationScopeBuilder::define_classes_methods(Module* module) {
     for (int i = 0; i < module->classes_count(); ++i) {
         define_class_method(module->get_class(i));
     }
@@ -66,13 +66,13 @@ void ModuleDeclarationScopeBuilder::define_class_method(Class* decl) {
     }
 }
 
-void ModuleDeclarationScopeBuilder::define_functions(Source* module) {
+void ModuleDeclarationScopeBuilder::define_functions(Module* module) {
     for (int i = 0; i < module->functions_count(); ++i) {
         define_function(module->get_function(i));
     }
 }
 
-void ModuleDeclarationScopeBuilder::define_methods(Source* module) {
+void ModuleDeclarationScopeBuilder::define_methods(Module* module) {
     define_classes_methods(module);
 }
 

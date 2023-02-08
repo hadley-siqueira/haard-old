@@ -22,16 +22,16 @@ namespace haard {
         private:
             void run_info_flags();
             void run_flags();
-            void parse_sources();
+            void parse_modules();
             void semantic_analysis();
             void ir_generation();
 
-            void parse_imports(Source* file);
+            void parse_imports(Module* file);
             void parse_import(Import* import);
             void parse_simple_import(Import* import);
             void print_information();
-            Source* parse_file(std::string path);
-            void print_sources();
+            Module* parse_file(std::string path);
+            void print_modules();
             void generate_cpp();
             std::string build_import_path(Import* import);
             bool file_exists(std::string path);
@@ -51,7 +51,7 @@ namespace haard {
             std::string env_var;
             std::string output_name;
             std::vector<std::string> search_path;
-            Sources* sources;
+            Modules* modules;
             Logger logger;
 
             bool cpp_flag;

@@ -22,18 +22,18 @@ ScopeBuilder::ScopeBuilder() {
     sbuilder_counter = 0;
 }
 
-void ScopeBuilder::build(Sources* sources) {
+void ScopeBuilder::build(Modules* sources) {
     define_sources(sources);
     build_sources(sources);
 }
 
-void ScopeBuilder::build_sources(Sources* sources) {
-    for (int i = 0; i < sources->sources_count(); ++i) {
-        build_source(sources->get_source(i));
+void ScopeBuilder::build_sources(Modules* sources) {
+    for (int i = 0; i < sources->modules_count(); ++i) {
+        build_source(sources->get_module(i));
     }
 }
 
-void ScopeBuilder::build_source(Source* source) {
+void ScopeBuilder::build_source(Module* source) {
     enter_scope(source->get_scope());
     current_source = source;
 
@@ -462,7 +462,7 @@ void ScopeBuilder::build_identifier(Identifier* id) {
             logger->error_and_exit("There is no import with alias");
         }
 
-        Scope* scope = import->get_source()->get_scope();
+        Scope* scope = import->get_module()->get_scope();
         sym = scope->local_has(id->get_name());
     } else {
         sym = current_scope->has(id->get_name());
@@ -984,14 +984,14 @@ void ScopeBuilder::generate_templates(Identifier* id) {
 
             Function* res = generate_function_template(f, id->get_template_list());
 
-            Source* source = f->get_source();
+            Module* source = f->get_module();
 
             auto old_source = current_source;
             auto old_function = current_function;
             auto old_class = current_class;
             auto old_scope = current_scope;
 
-            current_source = f->get_source();
+            current_source = f->get_module();
             current_function = res;
             current_scope = source->get_scope();
 
@@ -1010,14 +1010,14 @@ void ScopeBuilder::generate_templates(Identifier* id) {
 
             Class* res = generate_class_template(f, id->get_template_list());
 
-            Source* source = f->get_source();
+            Module* source = f->get_module();
 
             auto old_source = current_source;
             auto old_function = current_function;
             auto old_class = current_class;
             auto old_scope = current_scope;
 
-            current_source = f->get_source();
+            current_source = f->get_module();
             current_class = res;
             current_scope = source->get_scope();
 
@@ -1075,26 +1075,26 @@ Class* ScopeBuilder::generate_class_template(Class* klass, TypeList* types) {
 }
 
 // define methods
-void ScopeBuilder::define_sources(Sources* sources) {
+void ScopeBuilder::define_sources(Modules* sources) {
     connect_sibling_scopes(sources);
 
     define_sources_classes(sources);
     define_sources_functions(sources);
 }
 
-void ScopeBuilder::define_sources_classes(Sources* sources) {
-    for (int i = 0; i < sources->sources_count(); ++i) {
-        define_source_classes(sources->get_source(i));
+void ScopeBuilder::define_sources_classes(Modules* sources) {
+    for (int i = 0; i < sources->modules_count(); ++i) {
+        define_source_classes(sources->get_module(i));
     }
 }
 
-void ScopeBuilder::define_sources_functions(Sources* sources) {
-    for (int i = 0; i < sources->sources_count(); ++i) {
-        define_source_functions(sources->get_source(i));
+void ScopeBuilder::define_sources_functions(Modules* sources) {
+    for (int i = 0; i < sources->modules_count(); ++i) {
+        define_source_functions(sources->get_module(i));
     }
 }
 
-void ScopeBuilder::define_source_classes(Source* source) {
+void ScopeBuilder::define_source_classes(Module* source) {
     enter_scope(source->get_scope());
 
     for (int i = 0; i < source->classes_count(); ++i) {
@@ -1104,7 +1104,7 @@ void ScopeBuilder::define_source_classes(Source* source) {
     leave_scope();
 }
 
-void ScopeBuilder::define_source_functions(Source* source) {
+void ScopeBuilder::define_source_functions(Module* source) {
     enter_scope(source->get_scope());
 
     for (int i = 0; i < source->functions_count(); ++i) {
@@ -1262,13 +1262,13 @@ void ScopeBuilder::define_class_super(Class* klass) {
     }
 }
 
-void ScopeBuilder::connect_sibling_scopes(Sources* sources) {
-    for (int i = 0; i < sources->sources_count(); ++i) {
-        Source* src = sources->get_source(i);
+void ScopeBuilder::connect_sibling_scopes(Modules* sources) {
+    for (int i = 0; i < sources->modules_count(); ++i) {
+        Module* src = sources->get_module(i);
         Scope* scope = src->get_scope();
 
         for (int j = 0; j < src->import_count(); ++j) {
-            scope->add_sibling(src->get_import(j)->get_source()->get_scope());
+            scope->add_sibling(src->get_import(j)->get_module()->get_scope());
         }
     }
 }

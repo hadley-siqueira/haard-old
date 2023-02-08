@@ -44,13 +44,13 @@ std::string CppPrinter::to_str() {
     return res.str();
 }
 
-void CppPrinter::print_sources(Sources* sources) {
-    for (int i = 0; i < sources->sources_count(); ++i) {
-        print_source(sources->get_source(i));
+void CppPrinter::print_modules(Modules* sources) {
+    for (int i = 0; i < sources->modules_count(); ++i) {
+        print_source(sources->get_module(i));
     }
 }
 
-void CppPrinter::print_source(Source* source) {
+void CppPrinter::print_source(Module* source) {
     /*if (source->import_count() > 0) {
         for (int i = 0; i < source->import_count(); ++i) {
             print_import(source->get_import(i));

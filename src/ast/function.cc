@@ -131,7 +131,7 @@ std::string Function::get_qualified_name() {
     if (is_method()) {
         ss << compound->get_qualified_name() << "#" << name;
     } else {
-        ss << source->get_relative_path() << "." << name;
+        ss << module->get_relative_path() << "." << name;
     }
 
     if (template_header) {
@@ -273,7 +273,7 @@ Function* Function::clone() {
     nfunc->method_flag = method_flag;
     nfunc->name = name;
     nfunc->scope->set_parent(scope->get_parent());
-    nfunc->source = source;
+    nfunc->module = module;
     
     for (int i = 0; i < parameters.size(); ++i) {
         nfunc->add_parameter(parameters[i]->clone());
@@ -311,12 +311,16 @@ std::string Function::get_type_signature() {
     return ss.str();
 }
 
-void Function::set_source(Source* source) {
-    this->source = source;
+void Function::set_module(Module* module) {
+    this->module = module;
 }
 
-Source* Function::get_source() {
-    return source;
+Module* Function::get_module() {
+    if (is_method()) {
+        return compound->get_module();
+    }
+
+    return module;
 }
 
 bool Function::same_signature(Function* other) {
@@ -390,7 +394,7 @@ std::string Function::get_path() {
         return compound->get_full_filepath();
     }
 
-    return source->get_path();
+    return module->get_path();
 }
 
 int Function::get_begin() const {

@@ -16,7 +16,7 @@ namespace haard {
             Parser(Logger* logger);
 
         public:
-            Source* read(std::string path, std::string relative_path);
+            Module* read(std::string path, std::string relative_path);
             Expression* read_expression_from_string(std::string str);
             Function* read_function_from_string(std::string str);
             Class* read_class_from_string(std::string str);
@@ -28,7 +28,7 @@ namespace haard {
             void set_logger(Logger* value);
 
     private:
-            Source* parse_source();
+            Module* parse_module();
             Import* parse_import();
             Class* parse_class();
             Struct* parse_struct();

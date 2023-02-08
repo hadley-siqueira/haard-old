@@ -16,7 +16,7 @@ file.hd:5:20: note: already defined as function <white>name</white>
 
 std::string haard::error_message_cant_define_class(Class* klass, Symbol* sym) {
     std::stringstream msg;
-    std::string path = klass->get_source()->get_path();
+    std::string path = klass->get_module()->get_path();
     int line = klass->get_line();
     int column = klass->get_column();
     int count = klass->get_name().size();
@@ -28,7 +28,7 @@ std::string haard::error_message_cant_define_class(Class* klass, Symbol* sym) {
     return msg.str();
 }
 
-std::string haard::error_message_id_not_in_scope(Source* source, Identifier* id) {
+std::string haard::error_message_id_not_in_scope(Module* source, Identifier* id) {
     std::stringstream msg;
     std::string path = source->get_path();
     int line = id->get_line();

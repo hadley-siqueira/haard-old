@@ -4,7 +4,7 @@
 using namespace haard;
 
 Import::Import() {
-    source = nullptr;
+    module = nullptr;
 }
 
 int Import::get_line() {
@@ -27,8 +27,8 @@ std::string Import::get_path(int idx) {
     return path[idx];
 }
 
-Source* Import::get_source() {
-    return source;
+Module* Import::get_module() {
+    return module;
 }
 
 void Import::set_line(int line) {
@@ -52,8 +52,8 @@ void Import::set_from_token(Token& token) {
     column = token.get_column();
 }
 
-void Import::set_source(Source* source) {
-    this->source = source;
+void Import::set_module(Module* module) {
+    this->module = module;
 }
 
 void Import::add_to_path(std::string s) {

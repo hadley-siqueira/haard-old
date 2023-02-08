@@ -22,8 +22,8 @@ namespace haard {
             ~IRBuilder();
 
         public:
-            void build(Sources* sources);
-            void build_source(Source* source);
+            void build(Modules* sources);
+            void build_source(Module* source);
             void build_class(Class* klass);
 
             void build_function(Function* function);

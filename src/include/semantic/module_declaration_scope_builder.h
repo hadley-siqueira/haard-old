@@ -8,19 +8,19 @@
 namespace haard {
     class ModuleDeclarationScopeBuilder {
         public:
-            void build_module(Source* module);
+            void build_module(Module* module);
 
-            void define_types(Source* module);
-            void define_functions(Source* module);
-            void define_methods(Source* module);
+            void define_types(Module* module);
+            void define_functions(Module* module);
+            void define_methods(Module* module);
 
-            void define_classes(Source* module);
-            void define_datas(Source* module);
-            void define_enums(Source* module);
-            void define_unions(Source* module);
-            void define_structs(Source* module);
+            void define_classes(Module* module);
+            void define_datas(Module* module);
+            void define_enums(Module* module);
+            void define_unions(Module* module);
+            void define_structs(Module* module);
 
-            void define_classes_methods(Source* module);
+            void define_classes_methods(Module* module);
             void define_class_method(Class* decl);
 
             void define_class(Class* decl);
@@ -37,7 +37,7 @@ namespace haard {
             void set_logger(Logger* value);
 
         private:
-            Source* module;
+            Module* module;
             Scope* current_scope;
             Logger* logger;
     };

@@ -2,41 +2,41 @@
 
 using namespace haard;
 
-Sources::Sources() {
+Modules::Modules() {
 
 }
 
-Sources::~Sources() {
-    for (int i = 0; i < sources.size(); ++i) {
-        delete sources[i];
+Modules::~Modules() {
+    for (int i = 0; i < modules.size(); ++i) {
+        delete modules[i];
     }
 }
 
-void Sources::add_source(std::string path, Source* source) {
-    sources_map[path] = source;
-    sources.push_back(source);
+void Modules::add_module(std::string path, Module* module) {
+    modules_map[path] = module;
+    modules.push_back(module);
 }
 
-Source* Sources::get_source(std::string path) {
-    if (has_source(path)) {
-        return sources_map[path];
-    }
-
-    return nullptr;
-}
-
-Source* Sources::get_source(int i) {
-    if (i < sources.size()) {
-        return sources[i];
+Module* Modules::get_module(std::string path) {
+    if (has_module(path)) {
+        return modules_map[path];
     }
 
     return nullptr;
 }
 
-bool Sources::has_source(std::string path) {
-    return sources_map.count(path) > 0;
+Module* Modules::get_module(int i) {
+    if (i < modules.size()) {
+        return modules[i];
+    }
+
+    return nullptr;
 }
 
-int Sources::sources_count() {
-    return sources.size();
+bool Modules::has_module(std::string path) {
+    return modules_map.count(path) > 0;
+}
+
+int Modules::modules_count() {
+    return modules.size();
 }
