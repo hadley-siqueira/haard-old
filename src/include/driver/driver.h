@@ -32,7 +32,7 @@ namespace haard {
             void print_information();
             Module* parse_file(std::string path);
             void print_modules();
-            void generate_cpp();
+
             std::string build_import_path(Import* import);
             bool file_exists(std::string path);
             std::string get_env_path(std::string key);
@@ -54,7 +54,6 @@ namespace haard {
             Modules* modules;
             Logger logger;
 
-            bool cpp_flag;
             bool pretty_flag;
             bool info_flag;
             bool help_flag;

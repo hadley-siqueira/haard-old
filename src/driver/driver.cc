@@ -8,7 +8,6 @@
 #include <dirent.h>
 #include "driver/driver.h"
 #include "printer/printer.h"
-#include "printer/cpp_printer.h"
 #include "scope/scope_builder.h"
 #include "ir/ir_builder.h"
 #include "vm/irvm.h"
@@ -23,7 +22,6 @@ Driver::Driver() {
     main_path = "main.hd";
     modules = new Modules;
 
-    cpp_flag = false;
     pretty_flag = false;
     info_flag = false;
     help_flag = false;
@@ -78,11 +76,6 @@ void Driver::run_flags() {
     if (pretty_flag) {
         print_modules();
     }
-
-    if (cpp_flag) {
-        generate_cpp();
-        exit(0);
-    }
 }
 
 void Driver::set_flags(int argc, char* argv[]) {
@@ -95,8 +88,6 @@ void Driver::set_flags(int argc, char* argv[]) {
         } else if (strcmp(argv[i], "-i") == 0) {
             ++i;
             search_path.push_back(argv[i]);
-        } else if (strcmp(argv[i], "-cpp") == 0) {
-            cpp_flag = true;
         } else if (strcmp(argv[i], "-pretty") == 0) {
             pretty_flag = true;
         } else if (strcmp(argv[i], "-info") == 0) {
@@ -229,16 +220,6 @@ void Driver::print_modules() {
 
     printer.print_modules(modules);
     std::cout << printer.to_str();
-}
-
-void Driver::generate_cpp() {
-    CppPrinter printer;
-
-    printer.print_modules(modules);
-    std::ofstream f("/tmp/out.cc");
-    f << printer.to_str();
-    f.close();
-    system("g++ /tmp/out.cc");
 }
 
 std::string Driver::build_import_path(Import* import) {
