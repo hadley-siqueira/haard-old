@@ -678,8 +678,6 @@ void ScopeBuilder::build_dot(BinOp* bin) {
         field->set_symbol(symbol);
         bin->set_type(symbol->get_type());
     } else {
-        std::cout << "debbuging...\n";
-        std::cout << tl->to_cpp() << std::endl;
         scope->debug();
         std::cout << field->get_name() << ' ' << field->get_line() << std::endl;
         DBG;
@@ -1133,7 +1131,6 @@ void ScopeBuilder::define_class(Class* klass) {
     }
 
     current_scope->define(klass);
-    klass->set_uid(class_counter++);
     logger->info(info_message_defining_class(klass));
 
     self_type->set_name(klass->get_name());

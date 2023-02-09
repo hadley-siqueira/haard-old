@@ -25,13 +25,6 @@ Class::~Class() {
     delete scope;
 }
 
-std::string Class::get_cpp_name() {
-    std::stringstream ss;
-
-    ss << "c" << uid << "_" << name;
-    return ss.str();
-}
-
 Variable* Class::get_variable(int idx) {
     if (idx < variables_count()) {
         return variables[idx];
@@ -48,14 +41,6 @@ void Class::set_from_token(Token& token) {
     set_name(token.get_lexeme());
     set_line(token.get_line());
     set_column(token.get_column());
-}
-
-int Class::get_uid() {
-    return uid;
-}
-
-void Class::set_uid(int uid) {
-    this->uid = uid;
 }
 
 void Class::set_self_type(NamedType* type) {

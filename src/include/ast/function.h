@@ -27,8 +27,6 @@ namespace haard {
         int get_line();
         int get_column();
         std::string get_name();
-        std::string get_cpp_name();
-        std::string get_cpp_signature();
         std::string get_type_signature();
         Variable* get_parameter(int idx);
         Variable* get_variable(int idx);

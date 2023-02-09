@@ -177,39 +177,6 @@ std::string Symbol::to_str(int idx) {
     ss << ">";
     return ss.str();
 }
-            
-std::string Symbol::to_cpp(int idx) {
-    std::stringstream ss;
-
-    // FIXME
-    if (descriptors.size() == 0) {
-        std::cout << __FILE__ << ' ' << __LINE__ << "Error: descriptor empty\n";
-        exit(0);
-    }
-
-    Class* klass = (Class*) descriptors[idx];
-    Function* func = (Function*) descriptors[idx];
-    Variable* var = (Variable*) descriptors[idx];
-
-    switch (kind) {
-    case SYM_CLASS:
-        ss << klass->get_cpp_name();
-        break;
-
-    case SYM_FUNCTION:
-    case SYM_METHOD:
-        ss << func->get_cpp_name();
-        break;
-
-    case SYM_PARAMETER:
-    case SYM_VARIABLE:
-    case SYM_CLASS_VARIABLE:
-        ss << var->get_unique_name();
-        break;
-    }
-
-    return ss.str();
-}
 
 std::string Symbol::get_qualified_name(int idx) {
     std::stringstream ss;
@@ -228,9 +195,6 @@ std::string Symbol::get_qualified_name(int idx) {
 
     switch (kind) {
     case SYM_CLASS:
-        ss << klass->get_qualified_name();
-        break;
-
     case SYM_ENUM:
     case SYM_STRUCT:
     case SYM_DATA:

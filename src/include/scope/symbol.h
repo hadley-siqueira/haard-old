@@ -30,7 +30,6 @@ namespace haard {
             void add_descriptor(void* descriptor);
 
             std::string to_str(int idx=0);
-            std::string to_cpp(int idx=0);
             std::string get_qualified_name(int idx=0);
 
             int overloaded_count();

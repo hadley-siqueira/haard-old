@@ -8,8 +8,6 @@ TypeDescriptorLink::TypeDescriptorLink(Scope* scope, Logger* logger) {
 }
 
 void TypeDescriptorLink::link_type(Type* type) {
-    IndirectionType* it = (IndirectionType*) type;
-
     if (type == nullptr) {
         return;
     }
@@ -42,7 +40,8 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
     Symbol* sym = current_scope->resolve(name);
 
     if (!sym) {
-        logger->error_and_exit("<red>error: </red> type <white>'" + name + "'</white> not in scope");
+        current_scope->debug();
+        logger->error_and_exit("<red>error:</red> type <white>'" + name + "'</white> not in scope");
     }
 
     int kind = sym->get_kind();

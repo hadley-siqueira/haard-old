@@ -307,7 +307,7 @@ void Scope::debug() {
         }
     }
 
-    std::cout << "}";
+    std::cout << "}\n";
 }
 
 Symbol* Scope::resolve(std::string& name) {

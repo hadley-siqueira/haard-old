@@ -43,59 +43,6 @@ std::string Function::get_name() {
     return name;
 }
 
-std::string Function::get_cpp_name() {
-    std::stringstream ss;
-
-    if (is_virtual()) {
-        if (get_parent_method() != nullptr) {
-            return get_parent_method()->get_cpp_name();
-        }
-    }
-
-    if (method_flag) {
-        ss << 'm';
-    } else {
-        ss << 'f';
-    }
-
-    ss << uid << '_' << name;
-    return ss.str();
-}
-
-std::string Function::get_cpp_signature() {
-    std::stringstream ss;
-
-    if (is_virtual()) {
-        if (get_parent_method() != nullptr) {
-            return get_parent_method()->get_cpp_signature();
-        }
-    }
-
-    if (annotations.size() > 0) {
-        ss << "virtual ";
-    }
-
-    ss << return_type->to_cpp();
-    ss << ' ';
-    ss << get_cpp_name() << '(';
-
-    if (parameters_count() > 0) {
-        int i;
-
-        for (i = 0; i < parameters_count() - 1; ++i) {
-            ss << get_parameter(i)->get_type()->to_cpp();
-            ss << ' ' << get_parameter(i)->get_unique_name() << ", ";
-        }
-
-        ss << get_parameter(i)->get_type()->to_cpp();
-        ss << ' ' << get_parameter(i)->get_unique_name();
-    }
-
-    ss << ')';
-
-    return ss.str();
-}
-
 Variable* Function::get_parameter(int idx) {
     if (idx < parameters.size()) {
         return parameters[idx];

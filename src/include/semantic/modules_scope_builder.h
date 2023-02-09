@@ -12,7 +12,8 @@ namespace haard {
         void set_qualified_scopes();
         void connect_sibling_scopes();
         void define_types();
-        void declare_functions();
+        void define_functions();
+        void link_super_types();
 
         Logger* get_logger() const;
         void set_logger(Logger* value);

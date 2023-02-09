@@ -20,7 +20,6 @@ namespace haard {
         ~Class();
 
     public:
-        std::string get_cpp_name();
         int get_uid();
         Variable* get_variable(int idx);
         NamedType* get_self_type();
@@ -51,7 +50,6 @@ namespace haard {
         std::string get_path();
 
     private:
-        int uid;
         int remaining_pad;
         bool is_virtual_flag;
         std::vector<Variable*> variables;

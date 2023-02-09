@@ -81,6 +81,8 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
     auto old_scope = scope;
     scope = decl->get_scope();
     scope->set_parent(old_scope);
+    NamedType* self_type = new NamedType();
+    std::string qname = decl->get_name();
 
     TypeList* templates = decl->get_template_header();
 
@@ -99,6 +101,8 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
                 linker.link_type(templates->get_type(i));
             }
         }
+
+        qname += templates->get_qualified_name();
     }
 
     scope = old_scope;
@@ -110,4 +114,8 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
         scope->define_type(kind, name, decl);
         logger->info(info_message_define_type(decl, msg));
     }
+
+    TypeDescriptorLink linker(scope, logger);
+    self_type->set_name(qname);
+    linker.link_type(self_type);
 }

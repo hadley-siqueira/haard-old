@@ -18,7 +18,6 @@ namespace haard {
 
             Type* clone();
             std::string to_str();
-            std::string to_cpp();
             std::string get_qualified_name();
 
             bool is_integer_scalar();

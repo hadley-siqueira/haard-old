@@ -7,6 +7,9 @@ class Foo:
     def to_str : char*
         n = 0
 
+class DerivedFoo(Foo):
+    j : int
+
 class Bar:
     n : int
 

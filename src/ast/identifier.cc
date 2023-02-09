@@ -83,7 +83,7 @@ void Identifier::set_overloaded_index(int idx) {
 }
 
 std::string Identifier::get_unique_name() {
-    return symbol->to_cpp(overloaded_index);
+    return symbol->get_qualified_name(overloaded_index);
 }
 
 Expression* Identifier::clone() {

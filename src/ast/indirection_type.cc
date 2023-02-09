@@ -48,14 +48,6 @@ std::string IndirectionType::to_str() {
     return subtype->to_str() + "&";
 }
 
-std::string IndirectionType::to_cpp() {
-    if (kind == TYPE_POINTER) {
-        return subtype->to_cpp() + "*";
-    }
-
-    return subtype->to_cpp() + "&";
-}
-
 std::string IndirectionType::get_qualified_name() {
     if (kind == TYPE_POINTER) {
         return subtype->get_qualified_name() + "*";

@@ -45,10 +45,6 @@ void NamedType::set_symbol(Symbol* symbol) {
     this->symbol = symbol;
 }
 
-std::string NamedType::to_cpp() {
-    return symbol->to_cpp();
-}
-
 std::string NamedType::to_str() {
     std::stringstream ss;
     int i;
