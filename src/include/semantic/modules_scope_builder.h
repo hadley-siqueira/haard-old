@@ -12,6 +12,7 @@ namespace haard {
         void set_qualified_scopes();
         void connect_sibling_scopes();
         void define_types();
+        void define_methods();
         void define_functions();
         void link_super_types();
 

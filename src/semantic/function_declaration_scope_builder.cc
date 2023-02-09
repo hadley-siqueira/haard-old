@@ -96,6 +96,4 @@ void FunctionDeclarationScopeBuilder::define_self_type(Function* function) {
     ftype->set_return_type(function->get_return_type());
     function->set_self_type(ftype);
     linker.link_type(ftype);
-    std::cout << ftype->to_str() << "\n";
-    std::cout << ftype->get_qualified_name() << "\n\n";
 }

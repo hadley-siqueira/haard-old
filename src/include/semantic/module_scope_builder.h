@@ -18,9 +18,6 @@ namespace haard {
         void define_methods(Module* module);
         void link_super_types(Module* module);
 
-        void define_classes_methods(Module* module);
-        void define_class_method(Class* decl);
-
         void connect_sibling_scopes(Module* module);
         void define_function(Function* decl);
 

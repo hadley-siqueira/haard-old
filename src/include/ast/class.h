@@ -20,7 +20,6 @@ namespace haard {
         ~Class();
 
     public:
-        int get_uid();
         Variable* get_variable(int idx);
         NamedType* get_self_type();
         int get_size_in_bytes();
