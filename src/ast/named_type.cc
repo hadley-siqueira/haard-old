@@ -6,62 +6,44 @@ using namespace haard;
 
 NamedType::NamedType() {
     kind = TYPE_NAMED;
-    symbol = nullptr;
-    template_header = nullptr;
+    id = new Identifier();
 }
 
 NamedType::NamedType(Token& token) {
     kind = TYPE_NAMED;
-    symbol = nullptr;
-    template_header = nullptr;
-    set_name(token.get_lexeme());
+    id = new Identifier(token);
 }
 
 NamedType::~NamedType() {
-    /* Empty */
+    delete id;
 }
 
 std::string NamedType::get_alias() {
-    return alias;
+    return id->get_alias();
 }
 
 std::string NamedType::get_name() {
-    return name;
+    return id->get_name();
 }
 
 Symbol* NamedType::get_symbol() {
-    return symbol;
+    return id->get_symbol();
 }
 
 void NamedType::set_alias(std::string id) {
-    alias = id;
+    this->id->set_alias(id);
 }
 
 void NamedType::set_name(std::string id) {
-    name = id;
+    this->id->set_name(id);
 }
 
 void NamedType::set_symbol(Symbol* symbol) {
-    this->symbol = symbol;
+    this->id->set_symbol(symbol);
 }
 
 std::string NamedType::to_str() {
-    std::stringstream ss;
-    int i;
-
-    ss << name;
-
-    if (template_header) {
-        ss << '<';
-
-        for (i = 0; i < template_header->types_count() - 1; ++i) {
-            ss << template_header->get_type(i)->to_str() << ", ";
-        }
-
-        ss << template_header->get_type(i)->to_str() << '>';
-    }
-
-    return ss.str();
+    return id->to_str();
 }
 
 bool NamedType::equal(Type* type) {
@@ -70,7 +52,7 @@ bool NamedType::equal(Type* type) {
     }
 
     NamedType* other = (NamedType*) type;
-    return symbol->get_descriptor() == other->symbol->get_descriptor();
+    return id->get_symbol()->get_descriptor() == other->get_symbol()->get_descriptor();
 }
 
 bool NamedType::is_integer_scalar() {
@@ -81,13 +63,13 @@ Symbol* NamedType::has_field(std::string name) {
     Class* klass;
     Symbol* sym = nullptr;
 
-    if (!symbol) {
+    if (!id->get_symbol()) {
         return nullptr;
     }
 
-    switch (symbol->get_kind()) {
+    switch (id->get_symbol()->get_kind()) {
     case SYM_CLASS:
-        klass = (Class*) symbol->get_descriptor();
+        klass = (Class*) id->get_symbol()->get_descriptor();
         sym = klass->get_scope()->has_field(name);
         break;
 
@@ -102,36 +84,34 @@ Symbol* NamedType::has_field(std::string name) {
 Type* NamedType::clone() {
     NamedType* other = new NamedType();
 
-    other->alias = alias;
-    other->name = name;
-
+    other->id = id->clone();
     return other;
 }
 
-void NamedType::set_template_header(TypeList* header) {
-    template_header = header;
+void NamedType::set_template_header(TemplateHeader* header) {
+    id->set_template_header(header);
 }
 
-TypeList* NamedType::get_template_header() {
-    return template_header;
+TemplateHeader *NamedType::get_template_header() {
+    return id->get_template_header();
 }
 
 int NamedType::get_size_in_bytes() {
-    return symbol->get_size_in_bytes();
+    return id->get_symbol()->get_size_in_bytes();
 }
 
 int NamedType::get_alignment() {
-    return symbol->get_alignment();
+    return id->get_symbol()->get_alignment();
 }
 
 Scope* NamedType::get_scope() {
-    return symbol->get_descriptor_scope();
+    return id->get_symbol()->get_descriptor_scope();
 }
 
 bool NamedType::is_class() {
-    return kind == TYPE_NAMED && symbol->get_kind() == SYM_CLASS;
+    return kind == TYPE_NAMED && id->get_symbol()->get_kind() == SYM_CLASS;
 }
 
 std::string NamedType::get_qualified_name() {
-    return symbol->get_qualified_name();
+    return id->get_symbol()->get_qualified_name();
 }

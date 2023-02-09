@@ -32,6 +32,9 @@ void TypeDescriptorLink::link_type(Type* type) {
     case TYPE_ARRAY:
         link_array_type((ArrayListType*) type);
         break;
+
+    case TYPE_TUPLE:
+        link_tuple_type((TupleType*) type);
     }
 }
 
@@ -74,6 +77,8 @@ void TypeDescriptorLink::link_reference_type(IndirectionType* type) {
 }
 
 void TypeDescriptorLink::link_function_type(FunctionType* type) {
+    link_type_list(type->get_template_header());
+
     for (int i = 0; i < type->params_count(); ++i) {
         link_type(type->get_param_type(i));
     }
@@ -83,6 +88,20 @@ void TypeDescriptorLink::link_function_type(FunctionType* type) {
 
 void TypeDescriptorLink::link_array_type(ArrayListType* type) {
     link_type(type->get_subtype());
+}
+
+void TypeDescriptorLink::link_tuple_type(TupleType* type) {
+    link_type_list(type->get_types());
+}
+
+void TypeDescriptorLink::link_type_list(TypeList* types) {
+    if (types == nullptr) {
+        return;
+    }
+
+    for (int i = 0; i < types->types_count(); ++i) {
+        link_type(types->get_type(i));
+    }
 }
 
 Scope* TypeDescriptorLink::get_current_scope() const {

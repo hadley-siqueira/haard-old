@@ -281,9 +281,9 @@ Scope* Symbol::get_descriptor_scope(int idx) {
     return nullptr;
 }
 
-bool Symbol::has_template(TypeList* types) {
+bool Symbol::has_template(TemplateHeader* types) {
     for (int i = 0; i < templates.size(); ++i) {
-        if (templates[i]->types_equal(types)) {
+        if (templates[i]->equal(types->get_types())) {
             return true;
         }
     }

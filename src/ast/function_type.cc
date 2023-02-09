@@ -46,7 +46,6 @@ Type* FunctionType::get_return_type() {
     return rtype;
 }
 
-
 // override
 bool FunctionType::equal(Type* type) {
     FunctionType* other = (FunctionType*) type;
@@ -102,6 +101,22 @@ std::string FunctionType::to_str() {
     }
 
     ss << rtype->to_str();
+    return ss.str();
+}
+
+std::string FunctionType::get_qualified_name() {
+    std::stringstream ss;
+
+    if (template_header) {
+        ss << template_header->get_qualified_name();
+        ss << " :: ";
+    }
+
+    for (int i = 0; i < params_count(); ++i) {
+        ss << get_param_type(i)->get_qualified_name() << " -> ";
+    }
+
+    ss << rtype->get_qualified_name();
     return ss.str();
 }
 

@@ -6,7 +6,7 @@
 #include "token/token.h"
 #include "ast/variable.h"
 #include "ast/type.h"
-#include "ast/type_list.h"
+#include "ast/template_header.h"
 #include "ast/function_type.h"
 #include "ast/compound_statement.h"
 #include "ast/annotation.h"
@@ -73,8 +73,8 @@ namespace haard {
         void set_overloaded_index(int idx);
         int get_overloaded_index();
 
-        void set_template_header(TypeList* header);
-        TypeList* get_template_header();
+        void set_template_header(TemplateHeader* header);
+        TemplateHeader* get_template_header();
 
         std::vector<Annotation*> get_annotations() const;
         void set_annotations(const std::vector<Annotation*> &value);
@@ -111,7 +111,7 @@ namespace haard {
         std::string name;
         Type* return_type;
         FunctionType* self_type;
-        TypeList* template_header;
+        TemplateHeader* template_header;
         CompoundStatement* statements;
         Function* parent_method;
         Scope* scope;

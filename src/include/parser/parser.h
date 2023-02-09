@@ -39,7 +39,7 @@ namespace haard {
             Field* parse_field();
             Field* parse_enum_field();
 
-            TypeList* parse_template_header();
+            TemplateHeader* parse_template_header();
             Variable* parse_class_variable();
             Function* parse_function();
             void parse_parameters(Function* function);
@@ -47,7 +47,6 @@ namespace haard {
             Type* parse_primary_type();
             Type* parse_function_type();
             Type* parse_tuple_type();
-            Type* parse_union_type();
             TypeList* parse_template_list();
             TypeList* parse_template_list_header();
             Statement* parse_statement();

@@ -135,7 +135,7 @@ namespace haard {
             void link_named_type(NamedType* type);
             void link_function_type(FunctionType* type);
             void link_array_list_type(ArrayListType* type);
-            void link_template_header(TypeList* header);
+            void link_template_header(TemplateHeader *header);
 
         private:
             bool is_new_var_assign(BinOp* bin);

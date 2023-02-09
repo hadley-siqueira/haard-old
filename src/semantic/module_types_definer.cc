@@ -84,7 +84,7 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
     NamedType* self_type = new NamedType();
     std::string qname = decl->get_name();
 
-    TypeList* templates = decl->get_template_header();
+    TemplateHeader* templates = decl->get_template_header();
 
     if (templates != nullptr) {
         if (decl->is_template()) {

@@ -1,6 +1,7 @@
 #include "semantic/function_declaration_scope_builder.h"
 #include "semantic/type_descriptor_linker.h"
 #include "log/info_messages.h"
+#include <iostream>
 
 using namespace haard;
 
@@ -12,6 +13,7 @@ void FunctionDeclarationScopeBuilder::define_function(Function* function) {
     scope = function->get_scope();
     define_template_header(function);
     define_parameters(function);
+    define_self_type(function);
 
     std::string name = function->get_qualified_name();
     scope = function->get_scope()->get_parent();
@@ -25,7 +27,7 @@ void FunctionDeclarationScopeBuilder::define_function(Function* function) {
 }
 
 void FunctionDeclarationScopeBuilder::define_template_header(Function* function) {
-    TypeList* templates = function->get_template_header();
+    TemplateHeader* templates = function->get_template_header();
 
     if (templates == nullptr) {
         return;
@@ -68,4 +70,32 @@ void FunctionDeclarationScopeBuilder::define_parameter(Variable* param) {
 
     TypeDescriptorLink linker(scope, logger);
     linker.link_type(param->get_type());
+}
+
+void FunctionDeclarationScopeBuilder::define_self_type(Function* function) {
+    TypeDescriptorLink linker(scope, logger);
+    FunctionType* ftype = new FunctionType();
+
+    if (function->get_template_header()) {
+        TemplateHeader* header = function->get_template_header();
+
+        for (int i = 0; i < header->types_count(); ++i) {
+            ftype->add_template(header->get_type(i));
+        }
+    }
+
+    if (function->parameters_count() > 0) {
+        for (int i = 0; i < function->parameters_count(); ++i) {
+            ftype->add_param_type(function->get_parameter(i)->get_type());
+        }
+    } else {
+        ftype->add_param_type(new Type(TYPE_VOID));
+    }
+
+    linker.link_type(function->get_return_type());
+    ftype->set_return_type(function->get_return_type());
+    function->set_self_type(ftype);
+    linker.link_type(ftype);
+    std::cout << ftype->to_str() << "\n";
+    std::cout << ftype->get_qualified_name() << "\n\n";
 }

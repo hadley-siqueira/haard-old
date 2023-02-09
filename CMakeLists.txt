@@ -41,12 +41,14 @@ set(AST_SRC
     src/ast/union.cc
     src/ast/enum.cc
     src/ast/data.cc
+    src/ast/template_header.cc
     src/ast/data_field.cc
     src/ast/data_field_single.cc
     src/ast/data_field_compound.cc
     src/ast/function.cc
     src/ast/variable.cc
     src/ast/type.cc
+    src/ast/tuple_type.cc
     src/ast/indirection_type.cc
     src/ast/array_list_type.cc
     src/ast/function_type.cc

@@ -6,6 +6,7 @@
 #include <string>
 #include "ast/type.h"
 #include "ast/type_list.h"
+#include "ast/template_header.h"
 
 namespace haard {
     class Scope;
@@ -38,7 +39,7 @@ namespace haard {
 
             Scope* get_descriptor_scope(int idx=0);
 
-            bool has_template(TypeList* types);
+            bool has_template(TemplateHeader *types);
             void add_template(TypeList* types);
 
     private:

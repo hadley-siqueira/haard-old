@@ -5,7 +5,7 @@
 
 #include <vector>
 #include "ast/identifier.h"
-#include "ast/type_list.h"
+#include "ast/template_header.h"
 #include "ast/function.h"
 #include "ast/field.h"
 #include "ast/annotation.h"
@@ -50,7 +50,6 @@ namespace haard {
 
         std::string get_name() const;
         std::string get_qualified_name();
-        TypeList* get_template_header() const;
 
         CompoundTypeDescriptor* get_super_descriptor();
         Type* get_super_type() const;
@@ -70,7 +69,9 @@ namespace haard {
         void set_name(const std::string& value);
 
         void set_from_token(Token& token);
-        void set_template_header(TypeList* value);
+
+        TemplateHeader* get_template_header() const;
+        void set_template_header(TemplateHeader* value);
 
         void set_scope(Scope *value);
 
@@ -94,7 +95,7 @@ namespace haard {
         bool template_flag;
 
         std::string name;
-        TypeList* template_header;
+        TemplateHeader* template_header;
         NamedType* self_type;
         Type* super_type;
         Module* module;

@@ -15,6 +15,7 @@ namespace haard {
         void define_template_header(Function* function);
         void define_parameters(Function* function);
         void define_parameter(Variable* param);
+        void define_self_type(Function* function);
 
     private:
         Scope* scope;

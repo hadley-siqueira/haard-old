@@ -7,11 +7,9 @@
 #include "ast/type.h"
 
 namespace haard {
-    class TypeList : public Type {
+    class TypeList {
         public:
             TypeList();
-            TypeList(int kind);
-            TypeList(int kind, Token& token, Type* t1=nullptr, Type* t2=nullptr);
             ~TypeList();
 
         public:
@@ -19,13 +17,9 @@ namespace haard {
             int types_count();
             void add_type(Type* type);
 
-            bool equal(Type* type);
-            bool types_equal(TypeList* other);
-            bool check_arguments_type(TypeList* args);
-            Type* get_return_type();
-            Type* clone();
+            bool equal(TypeList* other);
+            TypeList* clone();
             std::string get_qualified_name();
-
             std::string to_str();
 
         private:

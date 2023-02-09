@@ -95,16 +95,7 @@ void Printer::print_function(Function* function) {
     out << "def " << function->get_name();
 
     if (function->get_template_header()) {
-        TypeList* header = function->get_template_header();
-        int i;
-        out << '<';
-
-        for (i = 0; i < header->types_count() - 1; ++i) {
-            out << header->get_type(i)->to_str() << ", ";
-        }
-
-        out << header->get_type(i)->to_str();
-        out << '>';
+        out << function->get_template_header()->to_str();
     }
 
     out << " : ";
@@ -203,10 +194,6 @@ void Printer::print_type(Type* type) {
 
     case TYPE_TUPLE:
         print_type_list(", ", tl);
-        break;
-
-    case TYPE_UNION:
-        print_type_list(" | ", tl);
         break;
 
     case TYPE_POINTER:

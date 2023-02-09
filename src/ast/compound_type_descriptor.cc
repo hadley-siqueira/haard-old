@@ -177,7 +177,7 @@ void CompoundTypeDescriptor::set_module(Module* value) {
     module = value;
 }
 
-TypeList *CompoundTypeDescriptor::get_template_header() const {
+TemplateHeader* CompoundTypeDescriptor::get_template_header() const {
     return template_header;
 }
 
@@ -191,7 +191,7 @@ CompoundTypeDescriptor* CompoundTypeDescriptor::get_super_descriptor() {
     return super;
 }
 
-void CompoundTypeDescriptor::set_template_header(TypeList *value) {
+void CompoundTypeDescriptor::set_template_header(TemplateHeader* value) {
     template_header = value;
 }
 

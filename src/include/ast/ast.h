@@ -17,8 +17,10 @@
 #include "ast/indirection_type.h"
 #include "ast/array_list_type.h"
 #include "ast/hash_type.h"
+#include "ast/tuple_type.h"
 #include "ast/type_list.h"
 #include "ast/named_type.h"
+#include "ast/template_header.h"
 
 // Expressions
 #include "ast/expression.h"

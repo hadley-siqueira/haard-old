@@ -17,6 +17,9 @@ namespace haard {
         void link_reference_type(IndirectionType* type);
         void link_function_type(FunctionType* type);
         void link_array_type(ArrayListType* type);
+        void link_tuple_type(TupleType* type);
+
+        void link_type_list(TypeList* types);
 
     public:
         Scope* get_current_scope() const;

@@ -475,11 +475,11 @@ void ScopeBuilder::build_identifier(Identifier* id) {
     id->set_symbol(sym);
 
     if (id->has_template()) {
-        link_template_header(id->get_template_list());
+        link_template_header(id->get_template_header());
 
-        if (!sym->has_template(id->get_template_list())) {
+        if (!sym->has_template(id->get_template_header())) {
             generate_templates(id);
-            sym->add_template(id->get_template_list());
+            sym->add_template(id->get_template_header()->get_types());
         }
     }
 }
@@ -891,7 +891,7 @@ void ScopeBuilder::build_sizeof(UnOp* un) {
 void ScopeBuilder::build_expression_list(ExpressionList* exprlist) {
     if (exprlist == nullptr) return;
 
-    TypeList* types = new TypeList(TYPE_TUPLE);
+    TupleType* types = new TupleType();
 
     if (exprlist->expressions_count() > 0) {
         for (int i = 0; i < exprlist->expressions_count(); ++i) {
@@ -974,13 +974,13 @@ bool ScopeBuilder::is_member_call(BinOp* bin) {
 
 void ScopeBuilder::generate_templates(Identifier* id) {
     Symbol* sym = id->get_symbol();
-    std::vector<void*> descs = sym->get_descriptors(id->get_template_list());
+    std::vector<void*> descs = sym->get_descriptors(id->get_template_header()->get_types());
 
     if (sym->get_kind() == SYM_FUNCTION) {
         for (int i = 0; i < descs.size(); ++i) {
             Function* f = (Function*) descs[i];
 
-            Function* res = generate_function_template(f, id->get_template_list());
+            Function* res = generate_function_template(f, id->get_template_header()->get_types());
 
             Module* module = f->get_module();
 
@@ -1006,7 +1006,7 @@ void ScopeBuilder::generate_templates(Identifier* id) {
         for (int i = 0; i < descs.size(); ++i) {
             Class* f = (Class*) descs[i];
 
-            Class* res = generate_class_template(f, id->get_template_list());
+            Class* res = generate_class_template(f, id->get_template_header()->get_types());
 
             Module* module = f->get_module();
 
@@ -1034,7 +1034,7 @@ void ScopeBuilder::generate_templates(Identifier* id) {
 Function* ScopeBuilder::generate_function_template(Function* function, TypeList* types) {
     Function* output = nullptr;
     std::string body = function->get_original();
-    TypeList* templates = function->get_template_header();
+    TypeList* templates = function->get_template_header()->get_types();
 
     for (int i = 0; i < templates->types_count(); ++i) {
         std::string from = templates->get_type(i)->to_str();
@@ -1054,7 +1054,7 @@ Function* ScopeBuilder::generate_function_template(Function* function, TypeList*
 Class* ScopeBuilder::generate_class_template(Class* klass, TypeList* types) {
     Class* output = nullptr;
     std::string body = klass->get_original();
-    TypeList* templates = klass->get_template_header();
+    TypeList* templates = klass->get_template_header()->get_types();
 
     for (int i = 0; i < templates->types_count(); ++i) {
         std::string from = templates->get_type(i)->to_str();
@@ -1244,7 +1244,7 @@ void ScopeBuilder::define_method_signature(Function* method) {
 
 void ScopeBuilder::define_class_template_header(Class* klass) {
     if (klass->is_template()) {
-        define_template_header(klass->get_template_header());
+        define_template_header(klass->get_template_header()->get_types());
     }
 }
 
@@ -1403,7 +1403,7 @@ void ScopeBuilder::define_function_signature(Function* function) {
 
 void ScopeBuilder::define_function_template_header(Function* function) {
     if (function->is_template()) {
-        define_template_header(function->get_template_header());
+        define_template_header(function->get_template_header()->get_types());
     }
 }
 
@@ -1434,7 +1434,7 @@ void ScopeBuilder::define_function_self_type(Function* function) {
     FunctionType* ftype = new FunctionType();
 
     if (function->get_template_header()) {
-        TypeList* header = function->get_template_header();
+        TypeList* header = function->get_template_header()->get_types();
 
         for (int i = 0; i < header->types_count(); ++i) {
             ftype->add_template(header->get_type(i));
@@ -1542,7 +1542,7 @@ void ScopeBuilder::link_array_list_type(ArrayListType* type) {
     build_expression(type->get_expression());
 }
 
-void ScopeBuilder::link_template_header(TypeList* header) {
+void ScopeBuilder::link_template_header(TemplateHeader* header) {
     if (header) {
         for (int i = 0; i < header->types_count(); ++i) {
             link_type(header->get_type(i));

@@ -378,8 +378,8 @@ Field* Parser::parse_enum_field() {
     return field;
 }
 
-TypeList* Parser::parse_template_header() {
-    TypeList* header = new TypeList();
+TemplateHeader* Parser::parse_template_header() {
+    TemplateHeader* header = new TemplateHeader();
 
     expect(TK_BEGIN_TEMPLATE);
     header->add_type(parse_type());
@@ -464,29 +464,6 @@ void Parser::parse_parameters(Function* function) {
     }
 }
 
-Type* Parser::parse_type() {
-    return parse_function_type();
-}
-
-Type* Parser::parse_function_type() {
-    Token token;
-    TypeList* ftype = nullptr;
-    Type* type = parse_tuple_type();
-
-    if (match(TK_ARROW)) {
-        token = matched;
-        ftype = new TypeList(TYPE_FUNCTION, token, type, parse_tuple_type());
-
-        while (match(TK_ARROW)) {
-            ftype->add_type(parse_tuple_type());
-        }
-
-        type = ftype;
-    }
-
-    return type;
-}
-
 TypeList* Parser::parse_template_list_header() {
     TypeList* types = new TypeList();
 
@@ -517,48 +494,46 @@ TypeList* Parser::parse_template_list() {
     return types;
 }
 
-Type* Parser::parse_tuple_type() {
-    Token token;
-    TypeList* ftype = nullptr;
-
-    if (match(TK_LEFT_PARENTHESIS)) {
-        Type* type = parse_union_type();
-
-        if (match(TK_COMMA)) {
-            token = matched;
-            ftype = new TypeList(TYPE_TUPLE, token, type, parse_union_type());
-
-            while (match(TK_COMMA)) {
-                ftype->add_type(parse_union_type());
-            }
-
-            type = ftype;
-        }
-
-        expect(TK_RIGHT_PARENTHESIS);
-        return type;
-    } else {
-        return parse_union_type();
-    }
+Type* Parser::parse_type() {
+    return parse_function_type();
 }
 
-Type* Parser::parse_union_type() {
-    Token token;
-    TypeList* ftype = nullptr;
-    Type* type = parse_primary_type();
+Type* Parser::parse_function_type() {
+    FunctionType* ftype = nullptr;
+    Type* type = parse_tuple_type();
 
-    if (match(TK_BITWISE_OR)) {
-        token = matched;
-        ftype = new TypeList(TYPE_UNION, token, type, parse_primary_type());
+    if (lookahead(TK_ARROW)) {
+        ftype = new FunctionType();
 
-        while (match(TK_BITWISE_OR)) {
-            ftype->add_type(parse_primary_type());
+        while (match(TK_ARROW)) {
+            ftype->add_param_type(type);
+            type = parse_tuple_type();
         }
 
+        ftype->set_return_type(type);
         type = ftype;
     }
 
     return type;
+}
+
+Type* Parser::parse_tuple_type() {
+    TupleType* tuple_type = nullptr;
+
+    if (match(TK_LEFT_PARENTHESIS)) {
+        tuple_type = new TupleType();
+
+        tuple_type->add_type(parse_type());
+
+        while (match(TK_COMMA)) {
+            tuple_type->add_type(parse_type());
+        }
+
+        expect(TK_RIGHT_PARENTHESIS);
+        return tuple_type;
+    }
+
+    return parse_primary_type();
 }
 
 Type* Parser::parse_primary_type() {
@@ -1581,14 +1556,8 @@ Identifier* Parser::parse_identifier_expression() {
 
     id = new Identifier(scope, name);
 
-    if (match(TK_BEGIN_TEMPLATE)) {
-        id->add_template(parse_type());
-
-        while (match(TK_COMMA)) {
-            id->add_template(parse_type());
-        }
-
-        expect(TK_END_TEMPLATE);
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        id->set_template_header(parse_template_header());
     }
 
     return id;

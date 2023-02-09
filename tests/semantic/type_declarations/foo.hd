@@ -9,3 +9,6 @@ def foo4<K> : void
 
 struct UDPPacket:
     a : int
+
+def callback : (int -> int, int)
+    n = 0

@@ -231,7 +231,7 @@ Function* Function::clone() {
     }
 
     if (template_header) {
-        nfunc->template_header = (TypeList*) template_header->clone();
+        nfunc->template_header = template_header->clone();
     }
 
     if (return_type) {
@@ -298,11 +298,11 @@ int Function::get_overloaded_index() {
     return overloaded_index;
 }
 
-void Function::set_template_header(TypeList* header) {
+void Function::set_template_header(TemplateHeader* header) {
     template_header = header;
 }
 
-TypeList* Function::get_template_header() {
+TemplateHeader* Function::get_template_header() {
     return template_header;
 }
 
