@@ -4,9 +4,10 @@
 #include "ast/ast.h"
 #include "ast/module.h"
 #include "log/logger.h"
+#include "semantic/scope_builder.h"
 
 namespace haard {
-    class ModuleScopeBuilder {
+    class ModuleScopeBuilder  : public ScopeBuilder {
     public:
         ModuleScopeBuilder(Logger* logger=nullptr);
 
@@ -20,14 +21,6 @@ namespace haard {
 
         void connect_sibling_scopes(Module* module);
         void define_function(Function* decl);
-
-    public:
-        Logger* get_logger() const;
-        void set_logger(Logger* value);
-
-    private:
-        Scope* current_scope;
-        Logger* logger;
     };
 }
 

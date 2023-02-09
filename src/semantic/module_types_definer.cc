@@ -9,8 +9,8 @@ ModuleTypesDefiner::ModuleTypesDefiner(Logger* logger) {
 }
 
 void ModuleTypesDefiner::define_types(Module* module) {
-    this->module = module;
-    scope = module->get_scope();
+    set_module(module);
+    set_scope(module->get_scope());
 
     define_classes();
     define_datas();

@@ -1,5 +1,5 @@
-#ifndef HAARD_SCOPE_BUILDER_H
-#define HAARD_SCOPE_BUILDER_H
+#ifndef HAARD_OLD_SCOPE_BUILDER_H
+#define HAARD_OLD_SCOPE_BUILDER_H
 
 #include <stack>
 #include "ast/ast.h"
@@ -7,9 +7,9 @@
 #include "scope/scope.h"
 
 namespace haard {
-    class ScopeBuilder {
+    class OldScopeBuilder {
         public:
-            ScopeBuilder();
+            OldScopeBuilder();
 
         public:
             void build(Modules* modules);

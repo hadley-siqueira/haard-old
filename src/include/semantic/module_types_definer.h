@@ -3,9 +3,10 @@
 
 #include "ast/module.h"
 #include "log/logger.h"
+#include "semantic/scope_builder.h"
 
 namespace haard {
-    class ModuleTypesDefiner {
+    class ModuleTypesDefiner : public ScopeBuilder {
     public:
         ModuleTypesDefiner(Logger* logger=nullptr);
 
@@ -29,11 +30,6 @@ namespace haard {
         void define_struct(Struct* decl);
 
         void define_type(CompoundTypeDescriptor* decl, int kind, std::string msg);
-
-    private:
-        Scope* scope;
-        Logger* logger;
-        Module* module;
     };
 }
 

@@ -54,14 +54,6 @@ void ModuleScopeBuilder::define_function(Function* decl) {
     builder.define_function(decl);
 }
 
-Logger* ModuleScopeBuilder::get_logger() const {
-    return logger;
-}
-
-void ModuleScopeBuilder::set_logger(Logger* value) {
-    logger = value;
-}
-
 void ModuleScopeBuilder::connect_sibling_scopes(Module* module) {
     Scope* scope = module->get_scope();
 

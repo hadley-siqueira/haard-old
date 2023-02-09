@@ -8,7 +8,7 @@
 #include <dirent.h>
 #include "driver/driver.h"
 #include "printer/printer.h"
-#include "scope/scope_builder.h"
+#include "scope/old_scope_builder.h"
 #include "ir/ir_builder.h"
 #include "vm/irvm.h"
 #include "printer/ir_printer.h"

@@ -3,9 +3,10 @@
 
 #include "ast/module.h"
 #include "log/logger.h"
+#include "semantic/scope_builder.h"
 
 namespace haard {
-    class ModuleMethodsDefiner {
+    class ModuleMethodsDefiner : public ScopeBuilder {
     public:
         ModuleMethodsDefiner(Logger* logger=nullptr);
 
@@ -20,15 +21,6 @@ namespace haard {
 
         void define_compound_methods(CompoundTypeDescriptor* obj);
         void define_method(Function* method);
-
-    public:
-        Logger* get_logger() const;
-        void set_logger(Logger* value);
-
-    private:
-        Scope* scope;
-        Logger* logger;
-        Module* module;
     };
 }
 

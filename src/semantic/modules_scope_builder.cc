@@ -55,11 +55,3 @@ void ModulesScopeBuilder::link_super_types() {
         builder.link_super_types(modules->get_module(i));
     }
 }
-
-Logger* ModulesScopeBuilder::get_logger() const {
-    return logger;
-}
-
-void ModulesScopeBuilder::set_logger(Logger* value) {
-    logger = value;
-}

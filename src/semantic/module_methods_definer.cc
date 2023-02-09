@@ -8,7 +8,7 @@ ModuleMethodsDefiner::ModuleMethodsDefiner(Logger* logger) {
 }
 
 void ModuleMethodsDefiner::define_methods(Module* module) {
-    this->module= module;
+    set_module(module);
 
     define_classes_methods();
     define_datas_methods();
@@ -56,12 +56,4 @@ void ModuleMethodsDefiner::define_compound_methods(CompoundTypeDescriptor* decl)
 void ModuleMethodsDefiner::define_method(Function* method) {
     FunctionDeclarationScopeBuilder builder(logger);
     builder.define_function(method);
-}
-
-Logger* ModuleMethodsDefiner::get_logger() const {
-    return logger;
-}
-
-void ModuleMethodsDefiner::set_logger(Logger* value) {
-    logger = value;
 }

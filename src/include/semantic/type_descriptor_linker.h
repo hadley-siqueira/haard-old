@@ -4,9 +4,10 @@
 #include "ast/ast.h"
 #include "ast/module.h"
 #include "log/logger.h"
+#include "semantic/scope_builder.h"
 
 namespace haard {
-    class TypeDescriptorLink {
+    class TypeDescriptorLink : public ScopeBuilder {
     public:
         TypeDescriptorLink(Scope* scope=nullptr, Logger* logger=nullptr);
 
@@ -20,17 +21,6 @@ namespace haard {
         void link_tuple_type(TupleType* type);
 
         void link_type_list(TypeList* types);
-
-    public:
-        Scope* get_current_scope() const;
-        Logger* get_logger() const;
-
-        void set_current_scope(Scope* value);
-        void set_logger(Logger* value);
-
-    private:
-        Scope* current_scope;
-        Logger* logger;
     };
 }
 

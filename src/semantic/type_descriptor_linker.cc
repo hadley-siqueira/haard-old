@@ -3,8 +3,8 @@
 using namespace haard;
 
 TypeDescriptorLink::TypeDescriptorLink(Scope* scope, Logger* logger) {
-    current_scope = scope;
-    this->logger = logger;
+    set_scope(scope);
+    set_logger(logger);
 }
 
 void TypeDescriptorLink::link_type(Type* type) {
@@ -40,10 +40,10 @@ void TypeDescriptorLink::link_type(Type* type) {
 
 void TypeDescriptorLink::link_named_type(NamedType* type) {
     std::string name = type->get_name();
-    Symbol* sym = current_scope->resolve(name);
+    Symbol* sym = scope->resolve(name);
 
     if (!sym) {
-        current_scope->debug();
+        scope->debug();
         logger->error_and_exit("<red>error:</red> type <white>'" + name + "'</white> not in scope");
     }
 
@@ -102,20 +102,4 @@ void TypeDescriptorLink::link_type_list(TypeList* types) {
     for (int i = 0; i < types->types_count(); ++i) {
         link_type(types->get_type(i));
     }
-}
-
-Scope* TypeDescriptorLink::get_current_scope() const {
-    return current_scope;
-}
-
-void TypeDescriptorLink::set_current_scope(Scope* value) {
-    current_scope = value;
-}
-
-Logger* TypeDescriptorLink::get_logger() const {
-    return logger;
-}
-
-void TypeDescriptorLink::set_logger(Logger* value) {
-    logger = value;
 }

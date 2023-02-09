@@ -2,7 +2,7 @@
 #include <cstring>
 #include <set>
 #include <regex>
-#include "scope/scope_builder.h"
+#include "scope/old_scope_builder.h"
 #include "log/info_messages.h"
 #include "log/error_messages.h"
 #include "parser/parser.h"
@@ -10,7 +10,7 @@
 
 using namespace haard;
 
-ScopeBuilder::ScopeBuilder() {
+OldScopeBuilder::OldScopeBuilder() {
     logger = nullptr;
     current_scope = nullptr;
     current_class = nullptr;
@@ -22,18 +22,18 @@ ScopeBuilder::ScopeBuilder() {
     sbuilder_counter = 0;
 }
 
-void ScopeBuilder::build(Modules* modules) {
+void OldScopeBuilder::build(Modules* modules) {
     define_modules(modules);
     build_modules(modules);
 }
 
-void ScopeBuilder::build_modules(Modules* modules) {
+void OldScopeBuilder::build_modules(Modules* modules) {
     for (int i = 0; i < modules->modules_count(); ++i) {
         build_module(modules->get_module(i));
     }
 }
 
-void ScopeBuilder::build_module(Module* module) {
+void OldScopeBuilder::build_module(Module* module) {
     enter_scope(module->get_scope());
     current_module = module;
 
@@ -49,7 +49,7 @@ void ScopeBuilder::build_module(Module* module) {
     current_module = nullptr;
 }
 
-void ScopeBuilder::build_class(Class* klass) {
+void OldScopeBuilder::build_class(Class* klass) {
     if (klass->is_template()) {
         return;
     }
@@ -64,13 +64,13 @@ void ScopeBuilder::build_class(Class* klass) {
     current_class = nullptr;
 }
 
-void ScopeBuilder::build_class_methods(Class* klass) {
+void OldScopeBuilder::build_class_methods(Class* klass) {
     for (int i = 0; i < klass->methods_count(); ++i) {
         build_function(klass->get_method(i));
     }
 }
 
-void ScopeBuilder::build_function(Function* function) {
+void OldScopeBuilder::build_function(Function* function) {
     if (function->is_template()) {
         return;
     }
@@ -94,7 +94,7 @@ void ScopeBuilder::build_function(Function* function) {
     current_function = nullptr;
 }
 
-void ScopeBuilder::build_statement(Statement* statement) {
+void OldScopeBuilder::build_statement(Statement* statement) {
     int kind = statement->get_kind();
 
     switch (kind) {
@@ -155,7 +155,7 @@ void ScopeBuilder::build_statement(Statement* statement) {
     }
 }
 
-void ScopeBuilder::build_compound_statement(CompoundStatement* stmts) {
+void OldScopeBuilder::build_compound_statement(CompoundStatement* stmts) {
     enter_scope(stmts->get_scope());
 
     for (int i = 0; i < stmts->statements_count(); ++i) {
@@ -165,15 +165,15 @@ void ScopeBuilder::build_compound_statement(CompoundStatement* stmts) {
     leave_scope(true);
 }
 
-void ScopeBuilder::build_expression_statement(ExpressionStatement* statement) {
+void OldScopeBuilder::build_expression_statement(ExpressionStatement* statement) {
     build_expression(statement->get_expression());
 }
 
-void ScopeBuilder::build_jump_statement(JumpStatement* statement) {
+void OldScopeBuilder::build_jump_statement(JumpStatement* statement) {
     build_expression(statement->get_expression());
 }
 
-void ScopeBuilder::build_while_statement(WhileStatement* statement) {
+void OldScopeBuilder::build_while_statement(WhileStatement* statement) {
     enter_scope(statement->get_scope());
 
     build_expression(statement->get_condition());
@@ -182,7 +182,7 @@ void ScopeBuilder::build_while_statement(WhileStatement* statement) {
     leave_scope(true);
 }
 
-void ScopeBuilder::build_for_statement(ForStatement* statement) {
+void OldScopeBuilder::build_for_statement(ForStatement* statement) {
     enter_scope(statement->get_scope());
 
     if (statement->get_kind() == STMT_FOR) {
@@ -195,7 +195,7 @@ void ScopeBuilder::build_for_statement(ForStatement* statement) {
     leave_scope(true);
 }
 
-void ScopeBuilder::build_foreach_statement(ForStatement* statement) {
+void OldScopeBuilder::build_foreach_statement(ForStatement* statement) {
     BinOp* expr;
     enter_scope(statement->get_scope());
 
@@ -211,7 +211,7 @@ void ScopeBuilder::build_foreach_statement(ForStatement* statement) {
     leave_scope(true);
 }
 
-void ScopeBuilder::build_branch_statement(BranchStatement* statement) {
+void OldScopeBuilder::build_branch_statement(BranchStatement* statement) {
     enter_scope(statement->get_scope());
 
     if (statement->get_condition()) {
@@ -229,7 +229,7 @@ void ScopeBuilder::build_branch_statement(BranchStatement* statement) {
     }
 }
 
-void ScopeBuilder::build_variable_declaration(VarDeclaration *statement) {
+void OldScopeBuilder::build_variable_declaration(VarDeclaration *statement) {
     Variable* var = statement->get_variable();
 
     build_expression(statement->get_expression());
@@ -246,7 +246,7 @@ void ScopeBuilder::build_variable_declaration(VarDeclaration *statement) {
     current_function->add_variable(var);
 }
 
-void ScopeBuilder::build_expression(Expression* expression) {
+void OldScopeBuilder::build_expression(Expression* expression) {
     if (expression == nullptr) {
         return;
     }
@@ -452,7 +452,7 @@ void ScopeBuilder::build_expression(Expression* expression) {
     }
 }
 
-void ScopeBuilder::build_identifier(Identifier* id) {
+void OldScopeBuilder::build_identifier(Identifier* id) {
     Symbol* sym = nullptr;
 
     if (id->has_scope()) {
@@ -484,7 +484,7 @@ void ScopeBuilder::build_identifier(Identifier* id) {
     }
 }
 
-void ScopeBuilder::build_this(ThisExpression* expr) {
+void OldScopeBuilder::build_this(ThisExpression* expr) {
     if (current_class == nullptr) {
         logger->error_and_exit("<red>error: </red>: using this outside class");
     }
@@ -492,7 +492,7 @@ void ScopeBuilder::build_this(ThisExpression* expr) {
     expr->set_type(new IndirectionType(TYPE_POINTER, current_class->get_self_type()));
 }
 
-void ScopeBuilder::build_new(NewExpression* op) {
+void OldScopeBuilder::build_new(NewExpression* op) {
     Type* type;
 
     link_type(op->get_new_type());
@@ -508,12 +508,12 @@ void ScopeBuilder::build_new(NewExpression* op) {
     }
 }
 
-void ScopeBuilder::build_delete(UnOp* op) {
+void OldScopeBuilder::build_delete(UnOp* op) {
     build_expression(op->get_expression());
     op->set_type(op->get_expression()->get_type());
 }
 
-void ScopeBuilder::build_assignment(BinOp* bin) {
+void OldScopeBuilder::build_assignment(BinOp* bin) {
     bool new_var = false;
     build_expression(bin->get_right());
 
@@ -529,40 +529,40 @@ void ScopeBuilder::build_assignment(BinOp* bin) {
     }
 }
 
-void ScopeBuilder::build_pre_inc(UnOp* op) {
+void OldScopeBuilder::build_pre_inc(UnOp* op) {
     build_expression(op->get_expression());
     op->set_type(op->get_expression()->get_type());
 }
 
-void ScopeBuilder::build_pre_dec(UnOp* op) {
+void OldScopeBuilder::build_pre_dec(UnOp* op) {
     build_expression(op->get_expression());
     op->set_type(op->get_expression()->get_type());
 }
 
-void ScopeBuilder::build_pos_inc(UnOp* op) {
+void OldScopeBuilder::build_pos_inc(UnOp* op) {
     build_expression(op->get_expression());
     op->set_type(op->get_expression()->get_type());
 }
 
-void ScopeBuilder::build_pos_dec(UnOp* op) {
+void OldScopeBuilder::build_pos_dec(UnOp* op) {
     build_expression(op->get_expression());
     op->set_type(op->get_expression()->get_type());
 }
 
-void ScopeBuilder::build_parenthesis(UnOp* op) {
+void OldScopeBuilder::build_parenthesis(UnOp* op) {
     build_expression(op->get_expression());
     op->set_type(op->get_expression()->get_type());
 }
 
-void ScopeBuilder::build_logical_or(BinOp* op) {
+void OldScopeBuilder::build_logical_or(BinOp* op) {
     build_relational(op);
 }
 
-void ScopeBuilder::build_logical_and(BinOp* op) {
+void OldScopeBuilder::build_logical_and(BinOp* op) {
     build_relational(op);
 }
 
-void ScopeBuilder::build_call(BinOp* bin) {
+void OldScopeBuilder::build_call(BinOp* bin) {
     build_expression(bin->get_left());
     build_expression(bin->get_right());
 
@@ -577,7 +577,7 @@ void ScopeBuilder::build_call(BinOp* bin) {
     }
 }
 
-void ScopeBuilder::build_function_call(BinOp* bin) {
+void OldScopeBuilder::build_function_call(BinOp* bin) {
     Identifier* id = (Identifier*) bin->get_left();
     Symbol* sym = id->get_symbol();
 
@@ -597,7 +597,7 @@ void ScopeBuilder::build_function_call(BinOp* bin) {
     bin->set_type(ftype->get_return_type());
 }
 
-void ScopeBuilder::build_constructor_call(BinOp* bin) {
+void OldScopeBuilder::build_constructor_call(BinOp* bin) {
     Identifier* id = (Identifier*) bin->get_left();
     Symbol* sym = id->get_symbol();
     Class* klass = (Class*) sym->get_descriptor();
@@ -622,7 +622,7 @@ void ScopeBuilder::build_constructor_call(BinOp* bin) {
     bin->set_type(sym->get_type());
 }
 
-void ScopeBuilder::build_member_call(BinOp* bin) {
+void OldScopeBuilder::build_member_call(BinOp* bin) {
     BinOp* dot = (BinOp*) bin->get_left();
     Identifier* id = (Identifier*) dot->get_right();
     Symbol* sym = id->get_symbol();
@@ -647,7 +647,7 @@ void ScopeBuilder::build_member_call(BinOp* bin) {
     }
 }
 
-void ScopeBuilder::build_dot(BinOp* bin) {
+void OldScopeBuilder::build_dot(BinOp* bin) {
     Scope* scope;
     Symbol* symbol;
     Identifier* field;
@@ -685,7 +685,7 @@ void ScopeBuilder::build_dot(BinOp* bin) {
     }
 }
 
-void ScopeBuilder::build_index_access(BinOp* bin) {
+void OldScopeBuilder::build_index_access(BinOp* bin) {
     Type* tleft;
     IndirectionType* ptype;
     ArrayListType* atype;
@@ -704,82 +704,82 @@ void ScopeBuilder::build_index_access(BinOp* bin) {
     }
 }
 
-void ScopeBuilder::build_expression_in(BinOp* bin) {
+void OldScopeBuilder::build_expression_in(BinOp* bin) {
     build_expression(bin->get_left());
     build_expression(bin->get_right());
     bin->set_type(new Type(TYPE_BOOL));
 }
 
-void ScopeBuilder::build_inclusive_range(BinOp* bin) {
+void OldScopeBuilder::build_inclusive_range(BinOp* bin) {
     build_expression(bin->get_left());
     build_expression(bin->get_right());
     //FIXME should set a range type?
     bin->set_type(bin->get_left()->get_type());
 }
 
-void ScopeBuilder::build_cast_expression(CastExpression* expr) {
+void OldScopeBuilder::build_cast_expression(CastExpression* expr) {
     build_expression(expr->get_expression());
     link_type(expr->get_cast_type());
     expr->set_type(expr->get_cast_type());
 }
 
-void ScopeBuilder::build_plus(BinOp* bin) {
+void OldScopeBuilder::build_plus(BinOp* bin) {
     build_binop(bin);
 }
 
-void ScopeBuilder::build_minus(BinOp* bin) {
+void OldScopeBuilder::build_minus(BinOp* bin) {
     build_binop(bin);
 }
 
-void ScopeBuilder::build_bitwise_or(BinOp* bin) {
+void OldScopeBuilder::build_bitwise_or(BinOp* bin) {
     build_binop(bin);
 }
 
-void ScopeBuilder::build_bitwise_xor(BinOp* bin) {
+void OldScopeBuilder::build_bitwise_xor(BinOp* bin) {
     build_binop(bin);
 }
 
-void ScopeBuilder::build_bitwise_and(BinOp* bin) {
+void OldScopeBuilder::build_bitwise_and(BinOp* bin) {
     build_binop(bin);
 }
 
-void ScopeBuilder::build_sll(BinOp* bin) {
+void OldScopeBuilder::build_sll(BinOp* bin) {
     build_binop(bin);
 }
 
-void ScopeBuilder::build_srl(BinOp* bin) {
+void OldScopeBuilder::build_srl(BinOp* bin) {
     build_binop(bin);
 }
 
-void ScopeBuilder::build_sra(BinOp* bin) {
+void OldScopeBuilder::build_sra(BinOp* bin) {
     build_binop(bin);
 }
 
-void ScopeBuilder::build_greater_than(BinOp* bin) {
+void OldScopeBuilder::build_greater_than(BinOp* bin) {
     build_relational(bin);
 }
 
-void ScopeBuilder::build_less_than(BinOp* bin) {
+void OldScopeBuilder::build_less_than(BinOp* bin) {
     build_relational(bin);
 }
 
-void ScopeBuilder::build_greater_or_equal_than(BinOp* bin) {
+void OldScopeBuilder::build_greater_or_equal_than(BinOp* bin) {
     build_relational(bin);
 }
 
-void ScopeBuilder::build_less_or_equal_than(BinOp* bin) {
+void OldScopeBuilder::build_less_or_equal_than(BinOp* bin) {
     build_relational(bin);
 }
 
-void ScopeBuilder::build_equal(BinOp* bin) {
+void OldScopeBuilder::build_equal(BinOp* bin) {
     build_relational(bin);
 }
 
-void ScopeBuilder::build_not_equal(BinOp* bin) {
+void OldScopeBuilder::build_not_equal(BinOp* bin) {
     build_relational(bin);
 }
 
-void ScopeBuilder::build_address_of(UnOp* op) {
+void OldScopeBuilder::build_address_of(UnOp* op) {
     Type* type;
 
     build_expression(op->get_expression());
@@ -790,7 +790,7 @@ void ScopeBuilder::build_address_of(UnOp* op) {
     op->set_type(type);
 }
 
-void ScopeBuilder::build_dereference(UnOp* op) {
+void OldScopeBuilder::build_dereference(UnOp* op) {
     IndirectionType* ptype;
 
     build_expression(op->get_expression());
@@ -798,7 +798,7 @@ void ScopeBuilder::build_dereference(UnOp* op) {
     op->set_type(ptype->get_subtype());
 }
 
-void ScopeBuilder::build_binop(BinOp* bin) {
+void OldScopeBuilder::build_binop(BinOp* bin) {
     build_expression(bin->get_left());
     build_expression(bin->get_right());
 
@@ -811,7 +811,7 @@ void ScopeBuilder::build_binop(BinOp* bin) {
     bin->set_type(tleft);
 }
 
-void ScopeBuilder::build_relational(BinOp* bin) {
+void OldScopeBuilder::build_relational(BinOp* bin) {
     build_expression(bin->get_left());
     build_expression(bin->get_right());
 
@@ -819,16 +819,16 @@ void ScopeBuilder::build_relational(BinOp* bin) {
     bin->set_type(new Type(TYPE_BOOL));
 }
 
-void ScopeBuilder::build_literal(Literal* literal, int kind) {
+void OldScopeBuilder::build_literal(Literal* literal, int kind) {
     literal->set_type(new Type(kind));
 }
 
-void ScopeBuilder::build_literal_string(Literal* literal) {
+void OldScopeBuilder::build_literal_string(Literal* literal) {
     literal->set_type(new IndirectionType(TYPE_POINTER, new Type(TYPE_CHAR)));
     //build_literal(literal, TYPE_STR);
 }
 
-void ScopeBuilder::build_string_builder(StringBuilder* sb) {
+void OldScopeBuilder::build_string_builder(StringBuilder* sb) {
     std::stringstream ss;
     NamedType* type;
     Variable* var = sb->get_variable();
@@ -883,12 +883,12 @@ void ScopeBuilder::build_string_builder(StringBuilder* sb) {
     sb->set_type(new IndirectionType(TYPE_POINTER, new Type(TYPE_CHAR)));
 }
 
-void ScopeBuilder::build_sizeof(UnOp* un) {
+void OldScopeBuilder::build_sizeof(UnOp* un) {
     build_expression(un->get_expression());
     un->set_type(new Type(TYPE_U64));
 }
 
-void ScopeBuilder::build_expression_list(ExpressionList* exprlist) {
+void OldScopeBuilder::build_expression_list(ExpressionList* exprlist) {
     if (exprlist == nullptr) return;
 
     TupleType* types = new TupleType();
@@ -905,7 +905,7 @@ void ScopeBuilder::build_expression_list(ExpressionList* exprlist) {
     exprlist->set_type(types);
 }
 
-bool ScopeBuilder::is_new_var_assign(BinOp* bin) {
+bool OldScopeBuilder::is_new_var_assign(BinOp* bin) {
     if (bin->get_left()->get_kind() != EXPR_ID) {
         return false;
     }
@@ -916,7 +916,7 @@ bool ScopeBuilder::is_new_var_assign(BinOp* bin) {
     return sym == nullptr;
 }
 
-void ScopeBuilder::create_new_var(BinOp* bin) {
+void OldScopeBuilder::create_new_var(BinOp* bin) {
     Identifier* id = (Identifier*) bin->get_left();
 
     Variable* var = new Variable(id);
@@ -928,7 +928,7 @@ void ScopeBuilder::create_new_var(BinOp* bin) {
     current_function->add_variable(var);
 }
 
-bool ScopeBuilder::is_constructor_call_assignment(BinOp* bin) {
+bool OldScopeBuilder::is_constructor_call_assignment(BinOp* bin) {
     BinOp* call;
     Identifier* id;
     Symbol* sym;
@@ -949,7 +949,7 @@ bool ScopeBuilder::is_constructor_call_assignment(BinOp* bin) {
     return false;
 }
 
-bool ScopeBuilder::is_function_call(BinOp* bin) {
+bool OldScopeBuilder::is_function_call(BinOp* bin) {
     if (bin->get_left()->get_kind() != EXPR_ID) {
         return false;
     }
@@ -957,7 +957,7 @@ bool ScopeBuilder::is_function_call(BinOp* bin) {
     return bin->get_left()->get_type()->get_kind() == TYPE_FUNCTION;
 }
 
-bool ScopeBuilder::is_constructor_call(BinOp* bin) {
+bool OldScopeBuilder::is_constructor_call(BinOp* bin) {
     if (bin->get_left()->get_kind() != EXPR_ID) {
         return false;
     }
@@ -968,11 +968,11 @@ bool ScopeBuilder::is_constructor_call(BinOp* bin) {
             id->get_symbol()->get_kind() == SYM_CLASS;
 }
 
-bool ScopeBuilder::is_member_call(BinOp* bin) {
+bool OldScopeBuilder::is_member_call(BinOp* bin) {
     return bin->get_left()->get_kind() == EXPR_DOT;
 }
 
-void ScopeBuilder::generate_templates(Identifier* id) {
+void OldScopeBuilder::generate_templates(Identifier* id) {
     Symbol* sym = id->get_symbol();
     std::vector<void*> descs = sym->get_descriptors(id->get_template_header()->get_types());
 
@@ -1031,7 +1031,7 @@ void ScopeBuilder::generate_templates(Identifier* id) {
     }
 }
 
-Function* ScopeBuilder::generate_function_template(Function* function, TypeList* types) {
+Function* OldScopeBuilder::generate_function_template(Function* function, TypeList* types) {
     Function* output = nullptr;
     std::string body = function->get_original();
     TypeList* templates = function->get_template_header()->get_types();
@@ -1051,7 +1051,7 @@ Function* ScopeBuilder::generate_function_template(Function* function, TypeList*
     return output;
 }
 
-Class* ScopeBuilder::generate_class_template(Class* klass, TypeList* types) {
+Class* OldScopeBuilder::generate_class_template(Class* klass, TypeList* types) {
     Class* output = nullptr;
     std::string body = klass->get_original();
     TypeList* templates = klass->get_template_header()->get_types();
@@ -1073,26 +1073,26 @@ Class* ScopeBuilder::generate_class_template(Class* klass, TypeList* types) {
 }
 
 // define methods
-void ScopeBuilder::define_modules(Modules* modules) {
+void OldScopeBuilder::define_modules(Modules* modules) {
     connect_sibling_scopes(modules);
 
     define_modules_classes(modules);
     define_modules_functions(modules);
 }
 
-void ScopeBuilder::define_modules_classes(Modules* modules) {
+void OldScopeBuilder::define_modules_classes(Modules* modules) {
     for (int i = 0; i < modules->modules_count(); ++i) {
         define_module_classes(modules->get_module(i));
     }
 }
 
-void ScopeBuilder::define_modules_functions(Modules* modules) {
+void OldScopeBuilder::define_modules_functions(Modules* modules) {
     for (int i = 0; i < modules->modules_count(); ++i) {
         define_module_functions(modules->get_module(i));
     }
 }
 
-void ScopeBuilder::define_module_classes(Module* module) {
+void OldScopeBuilder::define_module_classes(Module* module) {
     enter_scope(module->get_scope());
 
     for (int i = 0; i < module->classes_count(); ++i) {
@@ -1102,7 +1102,7 @@ void ScopeBuilder::define_module_classes(Module* module) {
     leave_scope();
 }
 
-void ScopeBuilder::define_module_functions(Module* module) {
+void OldScopeBuilder::define_module_functions(Module* module) {
     enter_scope(module->get_scope());
 
     for (int i = 0; i < module->functions_count(); ++i) {
@@ -1112,7 +1112,7 @@ void ScopeBuilder::define_module_functions(Module* module) {
     leave_scope();
 }
 
-void ScopeBuilder::define_class(Class* klass) {
+void OldScopeBuilder::define_class(Class* klass) {
     Symbol* sym;
     NamedType* self_type = new NamedType();
     Class* other;
@@ -1147,14 +1147,14 @@ void ScopeBuilder::define_class(Class* klass) {
     current_class = nullptr;
 }
 
-void ScopeBuilder::define_class_variables(Class* klass) {
+void OldScopeBuilder::define_class_variables(Class* klass) {
     for (int i = 0; i < klass->variables_count(); ++i) {
         define_class_variable(klass->get_variable(i));
         klass->get_variable(i)->set_uid(i);
     }
 }
 
-void ScopeBuilder::define_class_variable(Variable* var) {
+void OldScopeBuilder::define_class_variable(Variable* var) {
     Symbol* sym;
     Symbol* lsym;
 
@@ -1176,7 +1176,7 @@ void ScopeBuilder::define_class_variable(Variable* var) {
     }
 }
 
-void ScopeBuilder::add_default_constructor(Class* klass) {
+void OldScopeBuilder::add_default_constructor(Class* klass) {
     if (klass->constructors_count() == 0) {
         std::string c = "def init : void\n    pass\n";
         Parser parser;
@@ -1186,7 +1186,7 @@ void ScopeBuilder::add_default_constructor(Class* klass) {
     }
 }
 
-void ScopeBuilder::add_default_destructor(Class* klass) {
+void OldScopeBuilder::add_default_destructor(Class* klass) {
     if (klass->get_destructor() == nullptr) {
         std::string c = "def destroy : void\n    pass\n";
         Parser parser;
@@ -1196,7 +1196,7 @@ void ScopeBuilder::add_default_destructor(Class* klass) {
     }
 }
 
-void ScopeBuilder::define_class_methods(Class* klass) {
+void OldScopeBuilder::define_class_methods(Class* klass) {
     for (int i = 0; i < klass->methods_count(); ++i) {
         define_class_method(klass->get_method(i));
     }
@@ -1205,7 +1205,7 @@ void ScopeBuilder::define_class_methods(Class* klass) {
     add_default_destructor(klass);
 }
 
-void ScopeBuilder::define_class_method(Function* method) {
+void OldScopeBuilder::define_class_method(Function* method) {
     Symbol* sym = current_scope->local_has(method->get_name());
     Symbol* sym2 = current_scope->has_field(method->get_name());
 
@@ -1238,17 +1238,17 @@ void ScopeBuilder::define_class_method(Function* method) {
     }
 }
 
-void ScopeBuilder::define_method_signature(Function* method) {
+void OldScopeBuilder::define_method_signature(Function* method) {
     define_function_signature(method);
 }
 
-void ScopeBuilder::define_class_template_header(Class* klass) {
+void OldScopeBuilder::define_class_template_header(Class* klass) {
     if (klass->is_template()) {
         define_template_header(klass->get_template_header()->get_types());
     }
 }
 
-void ScopeBuilder::define_class_super(Class* klass) {
+void OldScopeBuilder::define_class_super(Class* klass) {
     // FIXME handle super with templates
     if (klass->get_super_type()) {
         link_type(klass->get_super_type());
@@ -1259,7 +1259,7 @@ void ScopeBuilder::define_class_super(Class* klass) {
     }
 }
 
-void ScopeBuilder::connect_sibling_scopes(Modules* modules) {
+void OldScopeBuilder::connect_sibling_scopes(Modules* modules) {
     for (int i = 0; i < modules->modules_count(); ++i) {
         Module* src = modules->get_module(i);
         Scope* scope = src->get_scope();
@@ -1270,7 +1270,7 @@ void ScopeBuilder::connect_sibling_scopes(Modules* modules) {
     }
 }
 
-void ScopeBuilder::generate_deletables() {
+void OldScopeBuilder::generate_deletables() {
     std::vector<Variable*> vars = current_scope->get_variables_to_be_deleted();
 
     for (int i = vars.size() - 1; i >= 0; --i) {
@@ -1285,7 +1285,7 @@ void ScopeBuilder::generate_deletables() {
     }
 }
 
-void ScopeBuilder::add_parent_constructors_call(Function* function) {
+void OldScopeBuilder::add_parent_constructors_call(Function* function) {
     Class* klass = (Class*) function->get_compound();
     Class* super;
     CompoundStatement* stmts;
@@ -1304,7 +1304,7 @@ void ScopeBuilder::add_parent_constructors_call(Function* function) {
     }
 }
 
-void ScopeBuilder::add_parent_destructors_call(Function* function) {
+void OldScopeBuilder::add_parent_destructors_call(Function* function) {
     Class* klass = (Class*) function->get_compound();
     Class* super;
     CompoundStatement* stmts;
@@ -1323,7 +1323,7 @@ void ScopeBuilder::add_parent_destructors_call(Function* function) {
     }
 }
 
-void ScopeBuilder::add_members_initialization(Function* function) {
+void OldScopeBuilder::add_members_initialization(Function* function) {
     Class* klass = (Class*) function->get_compound();
     CompoundStatement* stmts;
     Variable* var;
@@ -1348,7 +1348,7 @@ void ScopeBuilder::add_members_initialization(Function* function) {
     }
 }
 
-void ScopeBuilder::add_members_destruction(Function* function) {
+void OldScopeBuilder::add_members_destruction(Function* function) {
     Class* klass = (Class*) function->get_compound();
     CompoundStatement* stmts;
     Variable* var;
@@ -1373,7 +1373,7 @@ void ScopeBuilder::add_members_destruction(Function* function) {
     }
 }
 
-void ScopeBuilder::define_function(Function* function) {
+void OldScopeBuilder::define_function(Function* function) {
     Symbol* sym = current_scope->local_has(function->get_name());
 
     define_function_signature(function);
@@ -1390,7 +1390,7 @@ void ScopeBuilder::define_function(Function* function) {
     }
 }
 
-void ScopeBuilder::define_function_signature(Function* function) {
+void OldScopeBuilder::define_function_signature(Function* function) {
     enter_scope(function->get_scope());
 
     define_function_template_header(function);
@@ -1401,13 +1401,13 @@ void ScopeBuilder::define_function_signature(Function* function) {
     leave_scope();
 }
 
-void ScopeBuilder::define_function_template_header(Function* function) {
+void OldScopeBuilder::define_function_template_header(Function* function) {
     if (function->is_template()) {
         define_template_header(function->get_template_header()->get_types());
     }
 }
 
-void ScopeBuilder::define_function_parameters(Function* function) {
+void OldScopeBuilder::define_function_parameters(Function* function) {
     Variable* param;
     Symbol* sym;
 
@@ -1430,7 +1430,7 @@ void ScopeBuilder::define_function_parameters(Function* function) {
     }
 }
 
-void ScopeBuilder::define_function_self_type(Function* function) {
+void OldScopeBuilder::define_function_self_type(Function* function) {
     FunctionType* ftype = new FunctionType();
 
     if (function->get_template_header()) {
@@ -1454,7 +1454,7 @@ void ScopeBuilder::define_function_self_type(Function* function) {
     link_type(ftype);
 }
 
-void ScopeBuilder::define_overloaded_function(Symbol* symbol, Function* function) {
+void OldScopeBuilder::define_overloaded_function(Symbol* symbol, Function* function) {
     for (int i = 0; i < symbol->overloaded_count(); ++i) {
         Function* other = (Function*) symbol->get_descriptor(i);
 
@@ -1469,7 +1469,7 @@ void ScopeBuilder::define_overloaded_function(Symbol* symbol, Function* function
     function->set_overloaded_index(symbol->overloaded_count() - 1);
 }
 
-void ScopeBuilder::define_template_header(TypeList* types) {
+void OldScopeBuilder::define_template_header(TypeList* types) {
     if (types) {
         for (int i = 0; i < types->types_count(); ++i) {
             NamedType* t = (NamedType*) types->get_type(i);
@@ -1483,7 +1483,7 @@ void ScopeBuilder::define_template_header(TypeList* types) {
     }
 }
 
-void ScopeBuilder::link_type(Type* type) {
+void OldScopeBuilder::link_type(Type* type) {
     IndirectionType* it = (IndirectionType*) type;
 
     if (type == nullptr) {
@@ -1510,7 +1510,7 @@ void ScopeBuilder::link_type(Type* type) {
     }
 }
 
-void ScopeBuilder::link_named_type(NamedType* type) {
+void OldScopeBuilder::link_named_type(NamedType* type) {
     Symbol* sym = current_scope->has(type->get_name());
     std::string name = type->get_name();
 
@@ -1529,7 +1529,7 @@ void ScopeBuilder::link_named_type(NamedType* type) {
     }
 }
 
-void ScopeBuilder::link_function_type(FunctionType* type) {
+void OldScopeBuilder::link_function_type(FunctionType* type) {
     for (int i = 0; i < type->params_count(); ++i) {
         link_type(type->get_param_type(i));
     }
@@ -1537,12 +1537,12 @@ void ScopeBuilder::link_function_type(FunctionType* type) {
     link_type(type->get_return_type());
 }
 
-void ScopeBuilder::link_array_list_type(ArrayListType* type) {
+void OldScopeBuilder::link_array_list_type(ArrayListType* type) {
     link_type(type->get_subtype());
     build_expression(type->get_expression());
 }
 
-void ScopeBuilder::link_template_header(TemplateHeader* header) {
+void OldScopeBuilder::link_template_header(TemplateHeader* header) {
     if (header) {
         for (int i = 0; i < header->types_count(); ++i) {
             link_type(header->get_type(i));
@@ -1550,17 +1550,17 @@ void ScopeBuilder::link_template_header(TemplateHeader* header) {
     }
 }
 
-void ScopeBuilder::set_logger(Logger* logger) {
+void OldScopeBuilder::set_logger(Logger* logger) {
     this->logger = logger;
 }
 
-void ScopeBuilder::enter_scope(Scope* scope) {
+void OldScopeBuilder::enter_scope(Scope* scope) {
     scopes.push(current_scope);
     scope->set_parent(current_scope);
     current_scope = scope;
 }
 
-void ScopeBuilder::leave_scope(bool has_deletables) {
+void OldScopeBuilder::leave_scope(bool has_deletables) {
     if (has_deletables) {
         generate_deletables();
     }

@@ -4,9 +4,10 @@
 #include "ast/function.h"
 #include "scope/scope.h"
 #include "log/logger.h"
+#include "semantic/scope_builder.h"
 
 namespace haard {
-    class FunctionDeclarationScopeBuilder {
+    class FunctionDeclarationScopeBuilder : public ScopeBuilder {
     public:
         FunctionDeclarationScopeBuilder(Logger* logger=nullptr);
 
@@ -16,10 +17,6 @@ namespace haard {
         void define_parameters(Function* function);
         void define_parameter(Variable* param);
         void define_self_type(Function* function);
-
-    private:
-        Scope* scope;
-        Logger* logger;
     };
 }
 

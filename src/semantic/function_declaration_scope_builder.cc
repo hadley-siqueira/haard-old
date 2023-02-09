@@ -6,17 +6,17 @@
 using namespace haard;
 
 FunctionDeclarationScopeBuilder::FunctionDeclarationScopeBuilder(Logger *logger) {
-    this->logger = logger;
+    set_logger(logger);
 }
 
 void FunctionDeclarationScopeBuilder::define_function(Function* function) {
-    scope = function->get_scope();
+    set_scope(function->get_scope());
     define_template_header(function);
     define_parameters(function);
     define_self_type(function);
 
     std::string name = function->get_qualified_name();
-    scope = function->get_scope()->get_parent();
+    set_scope(function->get_scope()->get_parent());
 
     if (scope->resolve_local(name)) {
         logger->error_and_exit(name + " already defined");

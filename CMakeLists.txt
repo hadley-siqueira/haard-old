@@ -105,10 +105,11 @@ set(DRIVER_SRC
 set(SCOPE_SRC
     src/scope/symbol.cc
     src/scope/scope.cc
-    src/scope/scope_builder.cc
+    src/scope/old_scope_builder.cc
 )
 
 set(SEMANTIC_SRC
+    src/semantic/scope_builder.cc
     src/semantic/modules_scope_builder.cc
     src/semantic/module_scope_builder.cc
     src/semantic/module_types_definer.cc

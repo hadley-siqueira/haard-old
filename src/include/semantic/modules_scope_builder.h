@@ -3,9 +3,10 @@
 
 #include "ast/modules.h"
 #include "log/logger.h"
+#include "semantic/scope_builder.h"
 
 namespace haard {
-    class ModulesScopeBuilder {
+    class ModulesScopeBuilder : public ScopeBuilder {
     public:
         void build_modules(Modules* modules);
 
@@ -16,11 +17,7 @@ namespace haard {
         void define_functions();
         void link_super_types();
 
-        Logger* get_logger() const;
-        void set_logger(Logger* value);
-
     private:
-        Logger* logger;
         Modules* modules;
     };
 }
