@@ -10,7 +10,6 @@ namespace haard {
     class TypeList {
         public:
             TypeList();
-            ~TypeList();
 
         public:
             Type* get_type(int idx);

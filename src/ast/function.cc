@@ -21,6 +21,7 @@ Function::Function() {
 Function::~Function() {
     delete statements;
     delete scope;
+    delete template_header;
     
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];

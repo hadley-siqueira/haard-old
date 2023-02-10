@@ -8,16 +8,32 @@ Module::Module() {
 }
 
 Module::~Module() {
-    for (int i = 0; i < imports.size(); ++i) {
+    for (int i = 0; i < import_count(); ++i) {
         delete imports[i];
     }
 
-    for (int i = 0; i < functions.size(); ++i) {
+    for (int i = 0; i < functions_count(); ++i) {
         delete functions[i];
     }
 
-    for (int i = 0; i < classes.size(); ++i) {
+    for (int i = 0; i < classes_count(); ++i) {
         delete classes[i];
+    }
+
+    for (int i = 0; i < data_count(); ++i) {
+        delete datas[i];
+    }
+
+    for (int i = 0; i < structs_count(); ++i) {
+        delete structs[i];
+    }
+
+    for (int i = 0; i < enums_count(); ++i) {
+        delete enums[i];
+    }
+
+    for (int i = 0; i < unions_count(); ++i) {
+        delete unions[i];
     }
 
     delete scope;

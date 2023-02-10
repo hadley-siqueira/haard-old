@@ -11,7 +11,7 @@ FunctionType::FunctionType() {
 }
 
 FunctionType::~FunctionType() {
-
+    delete template_header;
 }
 
 void FunctionType::add_param_type(Type* type) {

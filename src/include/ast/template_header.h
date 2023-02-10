@@ -8,6 +8,7 @@ namespace haard {
     class TemplateHeader {
     public:
         TemplateHeader();
+        ~TemplateHeader();
 
     public:
         void add_type(Type* type);

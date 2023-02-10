@@ -24,6 +24,7 @@ CompoundTypeDescriptor::~CompoundTypeDescriptor() {
     }
 
     delete scope;
+    delete template_header;
 }
 
 int CompoundTypeDescriptor::get_kind() const {

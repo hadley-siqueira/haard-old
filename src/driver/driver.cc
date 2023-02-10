@@ -20,7 +20,7 @@ Driver::Driver() {
     path_delimiter = '/';
     env_var = "HAARD_PATH";
     main_path = "main.hd";
-    modules = new Modules;
+    modules = new Modules();
 
     pretty_flag = false;
     info_flag = false;
@@ -53,7 +53,7 @@ void Driver::run() {
     run_flags();
 
     logger.info("starting ir generation...");
-    ir_generation();
+    //ir_generation();
     check_for_errors();
     logger.info("ir generation done...");
 
@@ -138,7 +138,7 @@ void Driver::semantic_analysis() {
         logger.print();
     }
 
-    exit(0);
+    //exit(0);
 }
 
 void Driver::ir_generation() {

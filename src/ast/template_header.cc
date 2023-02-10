@@ -7,6 +7,10 @@ TemplateHeader::TemplateHeader() {
     types = new TypeList();
 }
 
+TemplateHeader::~TemplateHeader() {
+    delete types;
+}
+
 void TemplateHeader::add_type(Type* type) {
     types->add_type(type);
 }

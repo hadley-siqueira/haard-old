@@ -8,6 +8,10 @@ TupleType::TupleType() {
     types = new TypeList();
 }
 
+TupleType::~TupleType() {
+    delete types;
+}
+
 void TupleType::add_type(Type* type) {
     types->add_type(type);
 }

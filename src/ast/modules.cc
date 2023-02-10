@@ -1,4 +1,5 @@
 #include "ast/modules.h"
+#include <iostream>
 
 using namespace haard;
 
@@ -7,7 +8,7 @@ Modules::Modules() {
 }
 
 Modules::~Modules() {
-    for (int i = 0; i < modules.size(); ++i) {
+    for (int i = 0; i < modules_count(); ++i) {
         delete modules[i];
     }
 }

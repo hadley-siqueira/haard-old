@@ -41,6 +41,10 @@ Identifier::Identifier(std::string name) {
     template_header = nullptr;
 }
 
+Identifier::~Identifier() {
+    delete template_header;
+}
+
 int Identifier::get_line() {
     return line;
 }

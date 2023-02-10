@@ -8,6 +8,7 @@ namespace haard {
     class TupleType : public Type {
     public:
         TupleType();
+        ~TupleType();
 
     public:
         void add_type(Type* type);
