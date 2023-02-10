@@ -5,6 +5,7 @@
 #include "log/info_messages.h"
 #include "semantic/module_types_definer.h"
 #include "semantic/module_methods_definer.h"
+#include "semantic/module_functions_definer.h"
 #include <iostream>
 
 using namespace haard;
@@ -30,9 +31,9 @@ void ModuleScopeBuilder::define_methods(Module* module) {
 }
 
 void ModuleScopeBuilder::define_functions(Module* module) {
-    for (int i = 0; i < module->functions_count(); ++i) {
-        define_function(module->get_function(i));
-    }
+    ModuleFunctionsDefiner builder(logger);
+
+    builder.define_functions(module);
 }
 
 void ModuleScopeBuilder::link_super_types(Module* module) {
@@ -47,11 +48,6 @@ void ModuleScopeBuilder::link_super_types(Module* module) {
         TypeDescriptorLink linker(module->get_scope(), logger);
         linker.link_type(decl->get_super_type());
     }
-}
-
-void ModuleScopeBuilder::define_function(Function* decl) {
-    FunctionDeclarationScopeBuilder builder(logger);
-    builder.define_function(decl);
 }
 
 void ModuleScopeBuilder::connect_sibling_scopes(Module* module) {

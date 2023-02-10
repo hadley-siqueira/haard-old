@@ -114,6 +114,7 @@ set(SEMANTIC_SRC
     src/semantic/module_scope_builder.cc
     src/semantic/module_types_definer.cc
     src/semantic/module_methods_definer.cc
+    src/semantic/module_functions_definer.cc
     src/semantic/function_declaration_scope_builder.cc
     src/semantic/type_descriptor_linker.cc
 )
