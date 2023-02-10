@@ -133,12 +133,6 @@ void Driver::semantic_analysis() {
 
     builder.set_logger(&logger);
     builder.build_modules(modules);
-
-    if (show_logs_flag) {
-        logger.print();
-    }
-
-    //exit(0);
 }
 
 void Driver::ir_generation() {

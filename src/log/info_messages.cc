@@ -36,7 +36,7 @@ std::string haard::info_message_defining_method(Function* method) {
 std::string haard::info_header(std::string path, int line, int column) {
     std::stringstream ss;
 
-    ss << path << ':' << line << ':' << column << ": <blue>info:</blue> ";
+    ss << "<white>" << path << ':' << line << ':' << column << ":</white> <blue>info:</blue> ";
     return ss.str();
 }
 
