@@ -6,6 +6,7 @@
 #include "semantic/module_types_definer.h"
 #include "semantic/module_methods_definer.h"
 #include "semantic/module_functions_definer.h"
+#include "semantic/module_functions_builder.h"
 #include <iostream>
 
 using namespace haard;
@@ -48,6 +49,12 @@ void ModuleScopeBuilder::link_super_types(Module* module) {
         TypeDescriptorLink linker(module->get_scope(), logger);
         linker.link_type(decl->get_super_type());
     }
+}
+
+void ModuleScopeBuilder::build_functions(Module* module) {
+    ModuleFunctionsBuilder builder(logger);
+
+    builder.build_functions(module);
 }
 
 void ModuleScopeBuilder::connect_sibling_scopes(Module* module) {

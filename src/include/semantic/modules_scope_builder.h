@@ -15,6 +15,9 @@ namespace haard {
         void define_types();
         void define_methods();
         void define_functions();
+
+        void build_functions();
+
         void link_super_types();
 
     private:

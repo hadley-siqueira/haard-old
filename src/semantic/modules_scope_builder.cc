@@ -49,6 +49,13 @@ void ModulesScopeBuilder::define_functions() {
     }
 }
 
+void ModulesScopeBuilder::build_functions() {
+    for (int i = 0; i < modules->modules_count(); ++i) {
+        ModuleScopeBuilder builder(get_logger());
+        builder.build_functions(modules->get_module(i));
+    }
+}
+
 void ModulesScopeBuilder::link_super_types() {
     for (int i = 0; i < modules->modules_count(); ++i) {
         ModuleScopeBuilder builder(get_logger());
