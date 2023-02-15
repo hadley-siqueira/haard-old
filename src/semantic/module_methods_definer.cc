@@ -3,8 +3,8 @@
 
 using namespace haard;
 
-ModuleMethodsDefiner::ModuleMethodsDefiner(Logger* logger) {
-    set_logger(logger);
+ModuleMethodsDefiner::ModuleMethodsDefiner(ScopeBuilderContext* context) {
+    set_context(context);
 }
 
 void ModuleMethodsDefiner::define_methods(Module* module) {

@@ -4,8 +4,8 @@
 
 using namespace haard;
 
-ModuleTypesDefiner::ModuleTypesDefiner(Logger* logger) {
-    set_logger(logger);
+ModuleTypesDefiner::ModuleTypesDefiner(ScopeBuilderContext *context) {
+    set_context(context);
 }
 
 void ModuleTypesDefiner::define_types(Module* module) {

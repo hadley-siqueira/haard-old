@@ -20,19 +20,19 @@ void ModuleScopeBuilder::set_qualified_scope(Module* module) {
 }
 
 void ModuleScopeBuilder::define_types(Module* module) {
-    ModuleTypesDefiner builder(logger);
+    ModuleTypesDefiner builder(get_context());
 
     builder.define_types(module);
 }
 
 void ModuleScopeBuilder::define_methods(Module* module) {
-    ModuleMethodsDefiner builder(logger);
+    ModuleMethodsDefiner builder(get_context());
 
     builder.define_methods(module);
 }
 
 void ModuleScopeBuilder::define_functions(Module* module) {
-    ModuleFunctionsDefiner builder(logger);
+    ModuleFunctionsDefiner builder(get_context());
 
     builder.define_functions(module);
 }

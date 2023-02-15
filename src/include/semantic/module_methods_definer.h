@@ -8,7 +8,7 @@
 namespace haard {
     class ModuleMethodsDefiner : public ScopeBuilder {
     public:
-        ModuleMethodsDefiner(Logger* logger=nullptr);
+        ModuleMethodsDefiner(ScopeBuilderContext* context=nullptr);
 
     public:
         void define_methods(Module* module);

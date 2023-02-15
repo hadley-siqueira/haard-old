@@ -4,6 +4,7 @@
 #include "log/logger.h"
 #include "scope/scope.h"
 #include "ast/module.h"
+#include "semantic/scope_builder_context.h"
 
 namespace haard {
     class ScopeBuilder {
@@ -11,6 +12,10 @@ namespace haard {
         ScopeBuilder();
 
     public:
+        void copy_state(ScopeBuilder* other);
+        void enter_scope(Scope* scope);
+        void leave_scope();
+
         Logger* get_logger() const;
         void set_logger(Logger* value);
 
@@ -20,11 +25,11 @@ namespace haard {
         Module* get_module() const;
         void set_module(Module* value);
 
-    protected:
-        Logger* logger;
-        Scope* scope;
-        Module* module;
+        ScopeBuilderContext* get_context() const;
+        void set_context(ScopeBuilderContext* value);
 
+    protected:
+        ScopeBuilderContext* context;
     };
 }
 

@@ -8,7 +8,7 @@
 namespace haard {
     class ModuleTypesDefiner : public ScopeBuilder {
     public:
-        ModuleTypesDefiner(Logger* logger=nullptr);
+        ModuleTypesDefiner(ScopeBuilderContext* context=nullptr);
 
     public:
         void define_types(Module* module);
