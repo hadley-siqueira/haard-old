@@ -10,7 +10,7 @@ ModuleTypesDefiner::ModuleTypesDefiner(ScopeBuilderContext *context) {
 
 void ModuleTypesDefiner::define_types(Module* module) {
     set_module(module);
-    set_scope(module->get_scope());
+    set_scope(get_module()->get_scope());
 
     define_classes();
     define_datas();
@@ -20,40 +20,40 @@ void ModuleTypesDefiner::define_types(Module* module) {
 }
 
 Logger* ModuleTypesDefiner::get_logger() const {
-    return logger;
+    return context->get_logger();
 }
 
 void ModuleTypesDefiner::set_logger(Logger* value) {
-    logger = value;
+    context->set_logger(value);
 }
 
 void ModuleTypesDefiner::define_classes() {
-    for (int i = 0; i < module->classes_count(); ++i) {
-        define_class(module->get_class(i));
+    for (int i = 0; i < get_module()->classes_count(); ++i) {
+        define_class(get_module()->get_class(i));
     }
 }
 
 void ModuleTypesDefiner::define_datas() {
-    for (int i = 0; i < module->data_count(); ++i) {
-        define_data(module->get_data(i));
+    for (int i = 0; i < get_module()->data_count(); ++i) {
+        define_data(get_module()->get_data(i));
     }
 }
 
 void ModuleTypesDefiner::define_enums() {
-    for (int i = 0; i < module->enums_count(); ++i) {
-        define_enum(module->get_enum(i));
+    for (int i = 0; i < get_module()->enums_count(); ++i) {
+        define_enum(get_module()->get_enum(i));
     }
 }
 
 void ModuleTypesDefiner::define_unions() {
-    for (int i = 0; i < module->unions_count(); ++i) {
-        define_union(module->get_union(i));
+    for (int i = 0; i < get_module()->unions_count(); ++i) {
+        define_union(get_module()->get_union(i));
     }
 }
 
 void ModuleTypesDefiner::define_structs() {
-    for (int i = 0; i < module->structs_count(); ++i) {
-        define_struct(module->get_struct(i));
+    for (int i = 0; i < get_module()->structs_count(); ++i) {
+        define_struct(get_module()->get_struct(i));
     }
 }
 
@@ -78,7 +78,7 @@ void ModuleTypesDefiner::define_struct(Struct* decl) {
 }
 
 void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std::string msg) {
-    auto old_scope = scope;
+    auto old_scope = get_scope();
     scope = decl->get_scope();
     scope->set_parent(old_scope);
     NamedType* self_type = new NamedType();
@@ -92,12 +92,12 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
                 NamedType* named = (NamedType*) templates->get_type(i);
                 std::string name = named->get_name();
                 scope->define_template(name, i);
-                TypeDescriptorLink linker(scope, logger);
+                TypeDescriptorLink linker(scope, get_logger());
                 linker.link_type(named);
             }
         } else {
             for (int i = 0; i < templates->types_count(); ++i) {
-                TypeDescriptorLink linker(scope, logger);
+                TypeDescriptorLink linker(scope, get_logger());
                 linker.link_type(templates->get_type(i));
             }
         }
@@ -109,13 +109,13 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
     std::string name = decl->get_qualified_name();
 
     if (scope->resolve_local(name)) {
-        logger->error_and_exit(name + " already defined");
+        get_logger()->error_and_exit(name + " already defined");
     } else {
         scope->define_type(kind, name, decl);
-        logger->info(info_message_define_type(decl, msg));
+        get_logger()->info(info_message_define_type(decl, msg));
     }
 
-    TypeDescriptorLink linker(scope, logger);
+    TypeDescriptorLink linker(scope, get_logger());
     self_type->set_name(qname);
     linker.link_type(self_type);
 }

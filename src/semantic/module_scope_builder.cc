@@ -40,19 +40,19 @@ void ModuleScopeBuilder::define_functions(Module* module) {
 void ModuleScopeBuilder::link_super_types(Module* module) {
     for (int i = 0; i < module->classes_count(); ++i) {
         CompoundTypeDescriptor* decl = module->get_class(i);
-        TypeDescriptorLink linker(module->get_scope(), logger);
+        TypeDescriptorLink linker(module->get_scope(), get_logger());
         linker.link_type(decl->get_super_type());
     }
 
     for (int i = 0; i < module->enums_count(); ++i) {
         CompoundTypeDescriptor* decl = module->get_enum(i);
-        TypeDescriptorLink linker(module->get_scope(), logger);
+        TypeDescriptorLink linker(module->get_scope(), get_logger());
         linker.link_type(decl->get_super_type());
     }
 }
 
 void ModuleScopeBuilder::build_functions(Module* module) {
-    ModuleFunctionsBuilder builder(logger);
+    ModuleFunctionsBuilder builder(get_logger());
 
     builder.build_functions(module);
 }
