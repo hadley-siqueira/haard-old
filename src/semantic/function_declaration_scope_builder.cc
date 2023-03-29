@@ -6,11 +6,11 @@
 using namespace haard;
 
 FunctionDeclarationScopeBuilder::FunctionDeclarationScopeBuilder(Logger *logger) {
-    set_logger(logger);
+    //set_logger(logger);
 }
 
 void FunctionDeclarationScopeBuilder::define_function(Function* function) {
-    set_scope(function->get_scope());
+    /*set_scope(function->get_scope());
     define_template_header(function);
     define_parameters(function);
     define_self_type(function);
@@ -23,11 +23,11 @@ void FunctionDeclarationScopeBuilder::define_function(Function* function) {
     } else {
         scope->define_function(name, function);
         logger->info(info_message_define_function(function));
-    }
+    }*/
 }
 
 void FunctionDeclarationScopeBuilder::define_template_header(Function* function) {
-    TemplateHeader* templates = function->get_template_header();
+    /*TemplateHeader* templates = function->get_template_header();
 
     if (templates == nullptr) {
         return;
@@ -46,7 +46,7 @@ void FunctionDeclarationScopeBuilder::define_template_header(Function* function)
             TypeDescriptorLink linker(scope, logger);
             linker.link_type(templates->get_type(i));
         }
-    }
+    }*/
 }
 
 void FunctionDeclarationScopeBuilder::define_parameters(Function* function) {
@@ -56,7 +56,7 @@ void FunctionDeclarationScopeBuilder::define_parameters(Function* function) {
 }
 
 void FunctionDeclarationScopeBuilder::define_parameter(Variable* param) {
-    std::string name = param->get_name();
+    /*std::string name = param->get_name();
     Symbol* sym = scope->resolve_local(name);
 
     if (!sym) {
@@ -69,11 +69,11 @@ void FunctionDeclarationScopeBuilder::define_parameter(Variable* param) {
     }
 
     TypeDescriptorLink linker(scope, logger);
-    linker.link_type(param->get_type());
+    linker.link_type(param->get_type());*/
 }
 
 void FunctionDeclarationScopeBuilder::define_self_type(Function* function) {
-    TypeDescriptorLink linker(scope, logger);
+    /*TypeDescriptorLink linker(scope, logger);
     FunctionType* ftype = new FunctionType();
 
     if (function->get_template_header()) {
@@ -95,5 +95,5 @@ void FunctionDeclarationScopeBuilder::define_self_type(Function* function) {
     linker.link_type(function->get_return_type());
     ftype->set_return_type(function->get_return_type());
     function->set_self_type(ftype);
-    linker.link_type(ftype);
+    linker.link_type(ftype);*/
 }

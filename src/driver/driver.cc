@@ -131,7 +131,6 @@ void Driver::parse_modules() {
 void Driver::semantic_analysis() {
     ModulesScopeBuilder builder;
 
-    builder.set_logger(&logger);
     builder.build_modules(modules);
 }
 

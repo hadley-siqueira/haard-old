@@ -40,10 +40,3 @@ void ScopeBuilderContext::set_scope(Scope* value) {
     scope = value;
 }
 
-Logger* ScopeBuilderContext::get_logger() const {
-    return logger;
-}
-
-void ScopeBuilderContext::set_logger(Logger* value) {
-    logger = value;
-}

@@ -2,15 +2,8 @@
 
 using namespace haard;
 
-
 ScopeBuilder::ScopeBuilder() {
     context = nullptr;
-}
-
-void ScopeBuilder::copy_state(ScopeBuilder* other) {
-    set_logger(other->get_logger());
-    set_module(other->get_module());
-    set_scope(other->get_scope());
 }
 
 void ScopeBuilder::enter_scope(Scope* scope) {
@@ -20,14 +13,6 @@ void ScopeBuilder::enter_scope(Scope* scope) {
 
 void ScopeBuilder::leave_scope() {
 
-}
-
-Logger* ScopeBuilder::get_logger() const {
-    return context->get_logger();
-}
-
-void ScopeBuilder::set_logger(Logger* value) {
-    context->set_logger(value);
 }
 
 Scope* ScopeBuilder::get_scope() const {

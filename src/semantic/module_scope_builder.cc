@@ -11,11 +11,17 @@
 
 using namespace haard;
 
-ModuleScopeBuilder::ModuleScopeBuilder(Logger* logger) {
-    set_logger(logger);
+ModuleScopeBuilder::ModuleScopeBuilder() {
+    context = new ScopeBuilderContext();
 }
 
-void ModuleScopeBuilder::set_qualified_scope(Module* module) {
+ModuleScopeBuilder::~ModuleScopeBuilder() {
+    delete context;
+}
+
+void ModuleScopeBuilder::set_qualified_scope() {
+    Module* module = get_module();
+
     module->get_scope()->set_qualified(module->get_relative_path() + ".");
 }
 
@@ -38,7 +44,7 @@ void ModuleScopeBuilder::define_functions(Module* module) {
 }
 
 void ModuleScopeBuilder::link_super_types(Module* module) {
-    for (int i = 0; i < module->classes_count(); ++i) {
+    /*for (int i = 0; i < module->classes_count(); ++i) {
         CompoundTypeDescriptor* decl = module->get_class(i);
         TypeDescriptorLink linker(module->get_scope(), get_logger());
         linker.link_type(decl->get_super_type());
@@ -48,13 +54,13 @@ void ModuleScopeBuilder::link_super_types(Module* module) {
         CompoundTypeDescriptor* decl = module->get_enum(i);
         TypeDescriptorLink linker(module->get_scope(), get_logger());
         linker.link_type(decl->get_super_type());
-    }
+    }*/
 }
 
 void ModuleScopeBuilder::build_functions(Module* module) {
-    ModuleFunctionsBuilder builder(get_logger());
+    /*ModuleFunctionsBuilder builder(get_logger());
 
-    builder.build_functions(module);
+    builder.build_functions(module);*/
 }
 
 void ModuleScopeBuilder::connect_sibling_scopes(Module* module) {

@@ -4,7 +4,7 @@
 using namespace haard;
 
 ModuleFunctionsBuilder::ModuleFunctionsBuilder(Logger* logger) {
-    set_logger(logger);
+    //set_logger(logger);
 }
 
 void ModuleFunctionsBuilder::build_functions(Module* module) {

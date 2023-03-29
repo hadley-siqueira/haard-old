@@ -7,12 +7,13 @@
 #include "semantic/scope_builder.h"
 
 namespace haard {
-    class ModuleScopeBuilder  : public ScopeBuilder {
+    class ModuleScopeBuilder : public ScopeBuilder {
     public:
-        ModuleScopeBuilder(Logger* logger=nullptr);
+        ModuleScopeBuilder();
+        ~ModuleScopeBuilder();
 
     public:
-        void set_qualified_scope(Module* module);
+        void set_qualified_scope();
 
         void define_types(Module* module);
         void define_functions(Module* module);

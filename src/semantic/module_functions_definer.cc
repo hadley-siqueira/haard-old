@@ -14,6 +14,6 @@ void ModuleFunctionsDefiner::define_functions(Module* module) {
 }
 
 void ModuleFunctionsDefiner::define_function(Function* function) {
-    FunctionDeclarationScopeBuilder builder(logger);
-    builder.define_function(function);
+    /*FunctionDeclarationScopeBuilder builder(logger);
+    builder.define_function(function);*/
 }

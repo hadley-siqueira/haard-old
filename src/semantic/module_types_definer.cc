@@ -19,14 +19,6 @@ void ModuleTypesDefiner::define_types(Module* module) {
     define_unions();
 }
 
-Logger* ModuleTypesDefiner::get_logger() const {
-    return context->get_logger();
-}
-
-void ModuleTypesDefiner::set_logger(Logger* value) {
-    context->set_logger(value);
-}
-
 void ModuleTypesDefiner::define_classes() {
     for (int i = 0; i < get_module()->classes_count(); ++i) {
         define_class(get_module()->get_class(i));
@@ -78,9 +70,9 @@ void ModuleTypesDefiner::define_struct(Struct* decl) {
 }
 
 void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std::string msg) {
-    auto old_scope = get_scope();
-    scope = decl->get_scope();
-    scope->set_parent(old_scope);
+    /*auto old_scope = get_scope();
+    set_scope(decl->get_scope());
+    get_scope()->set_parent(old_scope);
     NamedType* self_type = new NamedType();
     std::string qname = decl->get_name();
 
@@ -91,13 +83,13 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
             for (int i = 0; i < templates->types_count(); ++i) {
                 NamedType* named = (NamedType*) templates->get_type(i);
                 std::string name = named->get_name();
-                scope->define_template(name, i);
-                TypeDescriptorLink linker(scope, get_logger());
+                get_scope()->define_template(name, i);
+                TypeDescriptorLink linker(get_scope(), get_logger());
                 linker.link_type(named);
             }
         } else {
             for (int i = 0; i < templates->types_count(); ++i) {
-                TypeDescriptorLink linker(scope, get_logger());
+                TypeDescriptorLink linker(get_scope(), get_logger());
                 linker.link_type(templates->get_type(i));
             }
         }
@@ -105,17 +97,17 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
         qname += templates->get_qualified_name();
     }
 
-    scope = old_scope;
+    set_scope(old_scope);
     std::string name = decl->get_qualified_name();
 
-    if (scope->resolve_local(name)) {
+    if (get_scope()->resolve_local(name)) {
         get_logger()->error_and_exit(name + " already defined");
     } else {
-        scope->define_type(kind, name, decl);
+        get_scope()->define_type(kind, name, decl);
         get_logger()->info(info_message_define_type(decl, msg));
     }
 
-    TypeDescriptorLink linker(scope, get_logger());
+    TypeDescriptorLink linker(get_scope(), get_logger());
     self_type->set_name(qname);
-    linker.link_type(self_type);
+    linker.link_type(self_type);*/
 }

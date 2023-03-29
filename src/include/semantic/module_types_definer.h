@@ -13,9 +13,6 @@ namespace haard {
     public:
         void define_types(Module* module);
 
-        Logger* get_logger() const;
-        void set_logger(Logger* value);
-
     private:
         void define_classes();
         void define_datas();

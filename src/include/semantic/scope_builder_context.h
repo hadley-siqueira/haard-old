@@ -4,7 +4,6 @@
 #include "ast/module.h"
 #include "ast/function.h"
 #include "ast/compound_type_descriptor.h"
-#include "log/logger.h"
 
 namespace haard {
     class ScopeBuilderContext {
@@ -23,15 +22,11 @@ namespace haard {
         Scope* get_scope() const;
         void set_scope(Scope* value);
 
-        Logger* get_logger() const;
-        void set_logger(Logger* value);
-
     private:
         Module* module;
         Function* function;
         CompoundTypeDescriptor* compound;
         Scope* scope;
-        Logger* logger;
     };
 }
 

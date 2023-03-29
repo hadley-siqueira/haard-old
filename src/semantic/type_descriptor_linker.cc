@@ -4,7 +4,6 @@ using namespace haard;
 
 TypeDescriptorLink::TypeDescriptorLink(Scope* scope, Logger* logger) {
     set_scope(scope);
-    set_logger(logger);
 }
 
 void TypeDescriptorLink::link_type(Type* type) {
@@ -39,7 +38,7 @@ void TypeDescriptorLink::link_type(Type* type) {
 }
 
 void TypeDescriptorLink::link_named_type(NamedType* type) {
-    std::string name = type->get_name();
+    /*std::string name = type->get_name();
     Symbol* sym = scope->resolve(name);
 
     if (!sym) {
@@ -65,7 +64,7 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
     default:
         logger->error_and_exit("error: named type not in scope but is another entity");
         break;
-    }
+    }*/
 }
 
 void TypeDescriptorLink::link_pointer_type(IndirectionType* type) {
