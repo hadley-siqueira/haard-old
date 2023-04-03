@@ -25,10 +25,10 @@ void ModuleScopeBuilder::set_qualified_scope() {
     module->get_scope()->set_qualified(module->get_relative_path() + ".");
 }
 
-void ModuleScopeBuilder::define_types(Module* module) {
+void ModuleScopeBuilder::define_types() {
     ModuleTypesDefiner builder(get_context());
 
-    builder.define_types(module);
+    builder.define_types();
 }
 
 void ModuleScopeBuilder::define_methods(Module* module) {
@@ -63,7 +63,8 @@ void ModuleScopeBuilder::build_functions(Module* module) {
     builder.build_functions(module);*/
 }
 
-void ModuleScopeBuilder::connect_sibling_scopes(Module* module) {
+void ModuleScopeBuilder::connect_sibling_scopes() {
+    Module* module = get_module();
     Scope* scope = module->get_scope();
 
     for (int i = 0; i < module->import_count(); ++i) {

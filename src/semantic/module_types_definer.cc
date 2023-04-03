@@ -8,8 +8,7 @@ ModuleTypesDefiner::ModuleTypesDefiner(ScopeBuilderContext *context) {
     set_context(context);
 }
 
-void ModuleTypesDefiner::define_types(Module* module) {
-    set_module(module);
+void ModuleTypesDefiner::define_types() {
     set_scope(get_module()->get_scope());
 
     define_classes();
@@ -70,7 +69,7 @@ void ModuleTypesDefiner::define_struct(Struct* decl) {
 }
 
 void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std::string msg) {
-    /*auto old_scope = get_scope();
+    auto old_scope = get_scope();
     set_scope(decl->get_scope());
     get_scope()->set_parent(old_scope);
     NamedType* self_type = new NamedType();
@@ -84,12 +83,12 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
                 NamedType* named = (NamedType*) templates->get_type(i);
                 std::string name = named->get_name();
                 get_scope()->define_template(name, i);
-                TypeDescriptorLink linker(get_scope(), get_logger());
+                TypeDescriptorLink linker(get_context());
                 linker.link_type(named);
             }
         } else {
             for (int i = 0; i < templates->types_count(); ++i) {
-                TypeDescriptorLink linker(get_scope(), get_logger());
+                TypeDescriptorLink linker(get_context());
                 linker.link_type(templates->get_type(i));
             }
         }
@@ -101,13 +100,13 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
     std::string name = decl->get_qualified_name();
 
     if (get_scope()->resolve_local(name)) {
-        get_logger()->error_and_exit(name + " already defined");
+        //get_logger()->error_and_exit(name + " already defined");
     } else {
         get_scope()->define_type(kind, name, decl);
-        get_logger()->info(info_message_define_type(decl, msg));
+        //get_logger()->info(info_message_define_type(decl, msg));
     }
 
-    TypeDescriptorLink linker(get_scope(), get_logger());
+    TypeDescriptorLink linker(get_context());
     self_type->set_name(qname);
-    linker.link_type(self_type);*/
+    linker.link_type(self_type);
 }

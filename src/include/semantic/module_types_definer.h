@@ -11,7 +11,7 @@ namespace haard {
         ModuleTypesDefiner(ScopeBuilderContext* context=nullptr);
 
     public:
-        void define_types(Module* module);
+        void define_types();
 
     private:
         void define_classes();

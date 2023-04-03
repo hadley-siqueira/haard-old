@@ -2,8 +2,8 @@
 
 using namespace haard;
 
-TypeDescriptorLink::TypeDescriptorLink(Scope* scope, Logger* logger) {
-    set_scope(scope);
+TypeDescriptorLink::TypeDescriptorLink(ScopeBuilderContext* context) {
+    set_context(context);
 }
 
 void TypeDescriptorLink::link_type(Type* type) {
@@ -38,12 +38,13 @@ void TypeDescriptorLink::link_type(Type* type) {
 }
 
 void TypeDescriptorLink::link_named_type(NamedType* type) {
-    /*std::string name = type->get_name();
+    std::string name = type->get_name();
+    Scope* scope = get_scope();
     Symbol* sym = scope->resolve(name);
 
     if (!sym) {
         scope->debug();
-        logger->error_and_exit("<red>error:</red> type <white>'" + name + "'</white> not in scope");
+        //logger->error_and_exit("<red>error:</red> type <white>'" + name + "'</white> not in scope");
     }
 
     int kind = sym->get_kind();
@@ -62,9 +63,9 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
         break;
 
     default:
-        logger->error_and_exit("error: named type not in scope but is another entity");
+        //logger->error_and_exit("error: named type not in scope but is another entity");
         break;
-    }*/
+    }
 }
 
 void TypeDescriptorLink::link_pointer_type(IndirectionType* type) {

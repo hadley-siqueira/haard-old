@@ -9,7 +9,7 @@
 namespace haard {
     class TypeDescriptorLink : public ScopeBuilder {
     public:
-        TypeDescriptorLink(Scope* scope=nullptr, Logger* logger=nullptr);
+        TypeDescriptorLink(ScopeBuilderContext* context=nullptr);
 
     public:
         void link_type(Type* type);
