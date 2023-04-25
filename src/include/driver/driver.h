@@ -52,7 +52,6 @@ namespace haard {
             std::string output_name;
             std::vector<std::string> search_path;
             Modules* modules;
-            Logger logger;
 
             bool pretty_flag;
             bool info_flag;

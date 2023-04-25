@@ -13,6 +13,7 @@
 #include "vm/irvm.h"
 #include "printer/ir_printer.h"
 #include "semantic/modules_scope_builder.h"
+#include "log/log_messages.h"
 
 using namespace haard;
 
@@ -39,26 +40,26 @@ void Driver::run() {
 
     run_info_flags();
 
-    logger.info("starting parsing...");
+    log_info("starting parsing...");
     parse_modules();
 
-    logger.info("ending parsing...");
+    log_info("ending parsing...");
     check_for_errors();
 
-    logger.info("starting semantic analysis...");
+    log_info("starting semantic analysis...");
     semantic_analysis();
     check_for_errors();
-    logger.info("ending semantic analysis...");
+    log_info("ending semantic analysis...");
 
     run_flags();
 
-    logger.info("starting ir generation...");
+    log_info("starting ir generation...");
     //ir_generation();
     check_for_errors();
-    logger.info("ir generation done...");
+    log_info("ir generation done...");
 
     if (show_logs_flag) {
-        logger.print();
+        log_print();
     }
 }
 
@@ -137,7 +138,6 @@ void Driver::semantic_analysis() {
 void Driver::ir_generation() {
     IRBuilder builder;
 
-    builder.set_logger(&logger);
     builder.build(modules);
 
     auto modules = builder.get_modules();
@@ -193,14 +193,14 @@ Module* Driver::parse_file(std::string path) {
 
     if (!file_exists(path)) {
         ss << "Error: file '" << path << "' doesn't exist";
-        logger.error_and_exit(ss.str());
+        log_error_and_exit(ss.str());
     }
 
     ss << "Parsing: " << path;
-    logger.info(ss.str());
+    log_info(ss.str());
 
     if (!modules->has_module(path)) {
-        Parser parser(&logger);
+        Parser parser;
         relative_path = build_relative_path(path);
         modules->add_module(path, parser.read(path, relative_path));
     }
@@ -337,8 +337,8 @@ void Driver::show_help() {
 }
 
 void Driver::check_for_errors() {
-    if (logger.has_error()) {
-        logger.print();
+    if (log_has_error()) {
+        log_print();
         exit(0);
     }
 }
