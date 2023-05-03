@@ -13,7 +13,6 @@ void ModuleTypesDefiner::define_types() {
     set_scope(get_module()->get_scope());
 
     define_classes();
-    define_datas();
     define_structs();
     define_enums();
     define_unions();
@@ -22,12 +21,6 @@ void ModuleTypesDefiner::define_types() {
 void ModuleTypesDefiner::define_classes() {
     for (int i = 0; i < get_module()->classes_count(); ++i) {
         define_class(get_module()->get_class(i));
-    }
-}
-
-void ModuleTypesDefiner::define_datas() {
-    for (int i = 0; i < get_module()->data_count(); ++i) {
-        define_data(get_module()->get_data(i));
     }
 }
 
@@ -51,10 +44,6 @@ void ModuleTypesDefiner::define_structs() {
 
 void ModuleTypesDefiner::define_class(Class* decl) {
     define_type(decl, SYM_CLASS, "class");
-}
-
-void ModuleTypesDefiner::define_data(Data* decl) {
-    define_type(decl, SYM_DATA, "data");
 }
 
 void ModuleTypesDefiner::define_enum(Enum* decl) {

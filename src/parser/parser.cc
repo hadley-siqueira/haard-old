@@ -63,8 +63,6 @@ Module* Parser::parse_module() {
             module->add_function(parse_function());
         } else if (lookahead(TK_CLASS)) {
             module->add_class(parse_class());
-        } else if (lookahead(TK_DATA)) {
-            module->add_data(parse_data());
         } else if (lookahead(TK_STRUCT)) {
             module->add_struct(parse_struct());
         } else if (lookahead(TK_ENUM)) {
@@ -224,6 +222,11 @@ Enum* Parser::parse_enum() {
     expect(TK_ID);
     data->set_from_token(matched);
 
+    if (lookahead(TK_BEGIN_TEMPLATE)) {
+        data->set_template_header(parse_template_header());
+        data->set_template(true);
+    }
+
     if (match(TK_LEFT_PARENTHESIS)) {
         data->set_super_type(parse_type());
         expect(TK_RIGHT_PARENTHESIS);
@@ -302,53 +305,6 @@ Union* Parser::parse_union() {
     return data;
 }
 
-Data* Parser::parse_data() {
-    Data* data = new Data();
-    int begin;
-    int end;
-
-    if (annotations.size() > 0) {
-        data->set_annotations(annotations);
-        annotations.clear();
-    }
-
-    expect(TK_DATA);
-    begin = matched.get_begin();
-
-    expect(TK_ID);
-    data->set_from_token(matched);
-
-    if (lookahead(TK_BEGIN_TEMPLATE)) {
-        data->set_template_header(parse_template_header());
-        data->set_template(true);
-    }
-
-    expect(TK_COLON);
-    indent();
-
-    while (is_indentend()) {
-        if (lookahead(TK_DEF)) {
-            data->add_method(parse_function());
-        } else if (lookahead(TK_ID)) {
-            data->add_field(parse_field());
-        } else if (lookahead(TK_AT)) {
-            parse_annotation();
-        } else if (match(TK_PASS)) {
-            break;
-        } else {
-            break;
-        }
-    }
-
-    end = matched.get_end();
-    dedent();
-
-    data->set_begin(begin);
-    data->set_end(end);
-
-    return data;
-}
-
 Field *Parser::parse_field() {
     Field* field = new Field();
 
@@ -370,6 +326,10 @@ Field* Parser::parse_enum_field() {
 
     expect(TK_ID);
     field->set_from_token(matched);
+
+    if (match(TK_COLON)) {
+        field->set_type(parse_type());
+    }
 
     if (match(TK_ASSIGNMENT)) {
         field->set_initial_value(parse_expression());

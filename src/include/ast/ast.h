@@ -6,8 +6,6 @@
 #include "ast/import.h"
 #include "ast/compound_type_descriptor.h"
 #include "ast/class.h"
-#include "ast/data.h"
-#include "ast/data_field.h"
 #include "ast/enum.h"
 #include "ast/union.h"
 #include "ast/struct.h"

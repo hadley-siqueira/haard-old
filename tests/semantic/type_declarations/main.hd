@@ -24,12 +24,12 @@ class Bar<T>:
 class Bar<K, N>:
     n : int
 
-data Tree:
+enum Tree:
     Leaf : void
     Node : int
     Node : (int, int)
 
-data Tree<T>:
+enum Tree<T>:
     Leaf : void
     Node : (T, Tree<T>*, Tree<T>*)
 
@@ -57,11 +57,11 @@ union Packet:
     header : int
     align  : u8
 
-data Option<T>: 
+enum Option<T>: 
     None : void
     Some : T
 
-data List<T>:
+enum List<T>:
     None : void
     Cons : (T, List<T>*)
 

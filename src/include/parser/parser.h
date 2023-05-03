@@ -34,7 +34,6 @@ namespace haard {
         Struct* parse_struct();
         Enum* parse_enum();
         Union* parse_union();
-        Data* parse_data();
 
         Field* parse_field();
         Field* parse_enum_field();

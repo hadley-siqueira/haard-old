@@ -734,7 +734,6 @@ namespace haard {
         SYM_STRUCT,
         SYM_ENUM,
         SYM_UNION,
-        SYM_DATA,
         SYM_FUNCTION,
         SYM_METHOD,
         SYM_VARIABLE,

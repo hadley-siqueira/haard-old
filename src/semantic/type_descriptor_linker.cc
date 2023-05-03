@@ -54,7 +54,6 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
     case SYM_STRUCT:
     case SYM_UNION:
     case SYM_ENUM:
-    case SYM_DATA:
         type->set_symbol(sym);
         break;
 

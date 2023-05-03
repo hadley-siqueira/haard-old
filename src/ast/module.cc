@@ -20,10 +20,6 @@ Module::~Module() {
         delete classes[i];
     }
 
-    for (int i = 0; i < data_count(); ++i) {
-        delete datas[i];
-    }
-
     for (int i = 0; i < structs_count(); ++i) {
         delete structs[i];
     }
@@ -81,14 +77,6 @@ Class* Module::get_class(int idx) {
     return nullptr;
 }
 
-Data* Module::get_data(int idx) {
-    if (idx < data_count()) {
-        return datas[idx];
-    }
-
-    return nullptr;
-}
-
 Struct* Module::get_struct(int idx) {
     if (idx < structs_count()) {
         return structs[idx];
@@ -136,11 +124,6 @@ void Module::add_class(Class* klass) {
     klass->set_module(this);
 }
 
-void Module::add_data(Data* data) {
-    datas.push_back(data);
-    data->set_module(this);
-}
-
 void Module::add_struct(Struct* obj) {
     structs.push_back(obj);
     obj->set_module(this);
@@ -166,10 +149,6 @@ int Module::functions_count() {
 
 int Module::classes_count() {
     return classes.size();
-}
-
-int Module::data_count() {
-    return datas.size();
 }
 
 int Module::structs_count() {

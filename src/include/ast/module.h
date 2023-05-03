@@ -5,7 +5,6 @@
 #include <vector>
 #include "ast/import.h"
 #include "ast/class.h"
-#include "ast/data.h"
 #include "ast/struct.h"
 #include "ast/enum.h"
 #include "ast/union.h"
@@ -27,7 +26,6 @@ namespace haard {
         Import* get_import_with_alias(std::string alias);
         Function* get_function(int idx);
         Class* get_class(int idx);
-        Data* get_data(int idx);
         Struct* get_struct(int idx);
         Enum* get_enum(int idx);
         Union* get_union(int idx);
@@ -37,7 +35,6 @@ namespace haard {
         void add_import(Import* import);
         void add_function(Function* function);
         void add_class(Class* klass);
-        void add_data(Data* data);
         void add_struct(Struct* obj);
         void add_enum(Enum* obj);
         void add_union(Union* obj);
@@ -45,7 +42,6 @@ namespace haard {
         int import_count();
         int functions_count();
         int classes_count();
-        int data_count();
         int structs_count();
         int enums_count();
         int unions_count();
@@ -59,7 +55,6 @@ namespace haard {
         std::vector<Import*> imports;
         std::vector<Function*> functions;
         std::vector<Class*> classes;
-        std::vector<Data*> datas;
         std::vector<Struct*> structs;
         std::vector<Enum*> enums;
         std::vector<Union*> unions;

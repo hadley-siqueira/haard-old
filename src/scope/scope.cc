@@ -41,13 +41,6 @@ Symbol *Scope::define_class(std::string& name, Class* klass) {
     return sym;
 }
 
-Symbol* Scope::define_data(std::string& name, Data* data) {
-    Symbol* sym = new Symbol(SYM_DATA, name, data);
-    symbols[name] = sym;
-
-    return sym;
-}
-
 Symbol* Scope::define_struct(std::string& name, Struct* obj) {
     Symbol* sym = new Symbol(SYM_STRUCT, name, obj);
     symbols[name] = sym;

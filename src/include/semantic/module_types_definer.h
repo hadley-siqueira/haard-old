@@ -15,13 +15,11 @@ namespace haard {
 
     private:
         void define_classes();
-        void define_datas();
         void define_enums();
         void define_unions();
         void define_structs();
 
         void define_class(Class* decl);
-        void define_data(Data* decl);
         void define_enum(Enum* decl);
         void define_union(Union* decl);
         void define_struct(Struct* decl);

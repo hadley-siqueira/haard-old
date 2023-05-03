@@ -125,10 +125,6 @@ std::string Symbol::to_str(int idx) {
         ss << "union";
         break;
 
-    case SYM_DATA:
-        ss << "data";
-        break;
-
     case SYM_ENUM:
         ss << "enum";
         break;
@@ -197,7 +193,6 @@ std::string Symbol::get_qualified_name(int idx) {
     case SYM_CLASS:
     case SYM_ENUM:
     case SYM_STRUCT:
-    case SYM_DATA:
     case SYM_UNION:
         ss << type_decl->get_qualified_name();
         break;
