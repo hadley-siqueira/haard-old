@@ -9,7 +9,7 @@
 namespace haard {
     class FunctionDeclarationScopeBuilder : public ScopeBuilder {
     public:
-        FunctionDeclarationScopeBuilder(Logger* logger=nullptr);
+        FunctionDeclarationScopeBuilder(ScopeBuilderContext* context=nullptr);
 
     public:
         void define_function(Function* function);

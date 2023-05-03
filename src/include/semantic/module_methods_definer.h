@@ -11,10 +11,9 @@ namespace haard {
         ModuleMethodsDefiner(ScopeBuilderContext* context=nullptr);
 
     public:
-        void define_methods(Module* module);
+        void define_methods();
 
         void define_classes_methods();
-        void define_datas_methods();
         void define_structs_methods();
         void define_enums_methods();
         void define_unions_methods();

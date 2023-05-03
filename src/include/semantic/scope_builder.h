@@ -20,6 +20,9 @@ namespace haard {
         Module* get_module() const;
         void set_module(Module* value);
 
+        Function* get_function() const;
+        void set_function(Function* value);
+
         ScopeBuilderContext* get_context() const;
         void set_context(ScopeBuilderContext* value);
 

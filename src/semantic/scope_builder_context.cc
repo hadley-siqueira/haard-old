@@ -6,6 +6,7 @@ ScopeBuilderContext::ScopeBuilderContext() {
     module = nullptr;
     function = nullptr;
     compound = nullptr;
+    scope = nullptr;
 }
 
 Module* ScopeBuilderContext::get_module() const {

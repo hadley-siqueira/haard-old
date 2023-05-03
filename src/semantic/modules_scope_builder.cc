@@ -9,9 +9,9 @@ void ModulesScopeBuilder::build_modules(Modules* modules) {
     set_qualified_scopes();
     connect_sibling_scopes();
     define_types();
-    /*link_super_types();
+    link_super_types();
     define_methods();
-    define_functions();*/
+    /*define_functions();*/
 }
 
 void ModulesScopeBuilder::set_qualified_scopes() {
@@ -42,10 +42,12 @@ void ModulesScopeBuilder::define_types() {
 }
 
 void ModulesScopeBuilder::define_methods() {
-    /*for (int i = 0; i < modules->modules_count(); ++i) {
-        ModuleScopeBuilder builder(get_logger());
-        builder.define_methods(modules->get_module(i));
-    }*/
+    for (int i = 0; i < modules->modules_count(); ++i) {
+        ModuleScopeBuilder builder;
+
+        builder.set_module(modules->get_module(i));
+        builder.define_methods();
+    }
 }
 
 void ModulesScopeBuilder::define_functions() {
@@ -63,8 +65,10 @@ void ModulesScopeBuilder::build_functions() {
 }
 
 void ModulesScopeBuilder::link_super_types() {
-    /*for (int i = 0; i < modules->modules_count(); ++i) {
-        ModuleScopeBuilder builder(get_logger());
-        builder.link_super_types(modules->get_module(i));
-    }*/
+    for (int i = 0; i < modules->modules_count(); ++i) {
+        ModuleScopeBuilder builder;
+
+        builder.set_module(modules->get_module(i));
+        builder.link_super_types();
+    }
 }

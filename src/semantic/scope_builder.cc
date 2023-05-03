@@ -12,7 +12,7 @@ void ScopeBuilder::enter_scope(Scope* scope) {
 }
 
 void ScopeBuilder::leave_scope() {
-
+    set_scope(get_scope()->get_parent());
 }
 
 Scope* ScopeBuilder::get_scope() const {
@@ -29,6 +29,15 @@ Module* ScopeBuilder::get_module() const {
 
 void ScopeBuilder::set_module(Module* value) {
     context->set_module(value);
+    context->set_scope(value->get_scope());
+}
+
+Function *ScopeBuilder::get_function() const {
+    return context->get_function();
+}
+
+void ScopeBuilder::set_function(Function *value) {
+    context->set_function(value);
 }
 
 ScopeBuilderContext* ScopeBuilder::get_context() const {

@@ -1,4 +1,5 @@
 #include "semantic/type_descriptor_linker.h"
+#include "log/log_messages.h"
 
 using namespace haard;
 
@@ -44,7 +45,7 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
 
     if (!sym) {
         scope->debug();
-        //logger->error_and_exit("<red>error:</red> type <white>'" + name + "'</white> not in scope");
+        log_error_and_exit("<red>error:</red> type <white>'" + name + "'</white> not in scope");
     }
 
     int kind = sym->get_kind();
@@ -62,7 +63,7 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
         break;
 
     default:
-        //logger->error_and_exit("error: named type not in scope but is another entity");
+        log_error_and_exit("error: named type not in scope but is another entity");
         break;
     }
 }
