@@ -44,8 +44,12 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
     Symbol* sym = scope->resolve(name);
 
     if (!sym) {
-        scope->debug();
-        log_error_and_exit("<red>error:</red> type <white>'" + name + "'</white> not in scope");
+        std::string msg;
+
+        msg = "<red>error:</red> type <white>'" + name + "'</white> not in scope.\n";
+        msg += "Current scope is:\n";
+        msg += scope->debug();
+        log_error_and_exit(msg);
     }
 
     int kind = sym->get_kind();

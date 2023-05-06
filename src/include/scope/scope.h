@@ -51,7 +51,7 @@ namespace haard {
             int deletables_count();
             Expression* get_deletable(int i);
 
-            void debug();
+            std::string debug();
 
             // new stuff
             Symbol* resolve(std::string& name);

@@ -59,10 +59,7 @@ void ModuleTypesDefiner::define_struct(Struct* decl) {
 }
 
 void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std::string msg) {
-    auto old_scope = get_scope();
-    set_scope(decl->get_scope());
-    get_scope()->set_parent(old_scope);
-    //enter_scope(decl->get_scope());
+    enter_scope(decl->get_scope());
     NamedType* self_type = new NamedType();
     std::string qname = decl->get_name();
 
@@ -87,8 +84,7 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
         qname += templates->get_qualified_name();
     }
 
-    set_scope(old_scope);
-    //leave_scope();
+    leave_scope();
     std::string name = decl->get_qualified_name();
 
     if (get_scope()->resolve_local(name)) {

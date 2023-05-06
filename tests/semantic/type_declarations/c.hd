@@ -1,0 +1,10 @@
+class Player<T>:
+    def to_str : void
+        @a : int
+
+        return 0
+
+    def to_str1 : void
+        @a : T
+
+        return 0

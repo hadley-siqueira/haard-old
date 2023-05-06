@@ -12,8 +12,9 @@ FunctionDeclarationScopeBuilder::FunctionDeclarationScopeBuilder(ScopeBuilderCon
 
 void FunctionDeclarationScopeBuilder::define_function(Function* function) {
     set_function(function);
-
+    log_info("foo: " + get_scope()->debug());
     enter_scope(function->get_scope());
+    log_info("bar: " + get_scope()->debug());
     define_template_header(function);
     define_parameters(function);
     define_self_type(function);

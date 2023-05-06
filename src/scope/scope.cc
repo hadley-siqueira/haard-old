@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include "scope/scope.h"
 
 using namespace haard;
@@ -282,25 +283,28 @@ Expression* Scope::get_deletable(int i) {
     return nullptr;
 }
 
-void Scope::debug() {
+std::string Scope::debug() {
+    std::stringstream ss;
     Symbol* sym;
 
     if (has_parent()) {
         parent->debug();
-        std::cout << " -> ";
+        ss << " -> ";
     }
 
-    std::cout << "{";
+    ss << "{";
 
     for (auto it = symbols.begin(); it != symbols.end(); ++it) {
         sym = it->second;
 
         for (int i = 0; i < sym->overloaded_count(); ++i) {
-            std::cout << sym->to_str(i) << ", ";
+            ss << sym->to_str(i) << ", ";
         }
     }
 
-    std::cout << "}\n";
+    ss << "}\n";
+    std::cout << ss.str();
+    return ss.str();
 }
 
 Symbol* Scope::resolve(std::string& name) {
