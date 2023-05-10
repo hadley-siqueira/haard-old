@@ -16,7 +16,7 @@ namespace haard {
         void set_qualified_scope();
 
         void define_types();
-        void define_functions(Module* module);
+        void define_functions();
         void define_methods();
         void link_super_types();
         void build_functions(Module* module);

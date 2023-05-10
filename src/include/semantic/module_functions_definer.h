@@ -11,7 +11,7 @@ namespace haard {
         ModuleFunctionsDefiner(ScopeBuilderContext* context=nullptr);
 
     public:
-        void define_functions(Module* module);
+        void define_functions();
         void define_function(Function* function);
     };
 }

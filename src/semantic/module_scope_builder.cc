@@ -37,10 +37,10 @@ void ModuleScopeBuilder::define_methods() {
     builder.define_methods();
 }
 
-void ModuleScopeBuilder::define_functions(Module* module) {
+void ModuleScopeBuilder::define_functions() {
     ModuleFunctionsDefiner builder(get_context());
 
-    builder.define_functions(module);
+    builder.define_functions();
 }
 
 void ModuleScopeBuilder::link_super_types() {
@@ -55,8 +55,9 @@ void ModuleScopeBuilder::link_super_types() {
 
     for (int i = 0; i < module->enums_count(); ++i) {
         CompoundTypeDescriptor* decl = module->get_enum(i);
-        /*TypeDescriptorLink linker(module->get_scope(), get_logger());
-        linker.link_type(decl->get_super_type());*/
+
+        TypeDescriptorLink linker(get_context());
+        linker.link_type(decl->get_super_type());
     }
 }
 
