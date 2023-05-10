@@ -47,9 +47,13 @@ void ModuleMethodsDefiner::define_unions_methods() {
 }
 
 void ModuleMethodsDefiner::define_compound_methods(CompoundTypeDescriptor* decl) {
+    enter_scope(decl->get_scope());
+
     for (int i = 0; i < decl->methods_count(); ++i) {
         define_method(decl->get_method(i));
     }
+
+    leave_scope();
 }
 
 void ModuleMethodsDefiner::define_method(Function* method) {

@@ -1,4 +1,5 @@
 #include "semantic/scope_builder.h"
+#include "log/log_messages.h"
 
 using namespace haard;
 

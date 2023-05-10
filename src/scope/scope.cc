@@ -303,7 +303,6 @@ std::string Scope::debug() {
     }
 
     ss << "}\n";
-    std::cout << ss.str();
     return ss.str();
 }
 

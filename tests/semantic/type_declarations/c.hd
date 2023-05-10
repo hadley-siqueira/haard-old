@@ -8,3 +8,13 @@ class Player<T>:
         @a : T
 
         return 0
+
+    def add : int
+        @a : int
+        @b : int
+
+        return a + b
+
+class Pixel:
+    def to_gray : void
+        return
