@@ -288,17 +288,17 @@ std::string Scope::debug() {
     Symbol* sym;
 
     if (has_parent()) {
-        parent->debug();
+        ss << parent->debug();
         ss << " -> ";
     }
 
-    ss << "{";
+    ss << "{\n";
 
     for (auto it = symbols.begin(); it != symbols.end(); ++it) {
         sym = it->second;
 
         for (int i = 0; i < sym->overloaded_count(); ++i) {
-            ss << sym->to_str(i) << ", ";
+            ss << "    " << sym->to_str(i) << ",\n";
         }
     }
 

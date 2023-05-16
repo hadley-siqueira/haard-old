@@ -8,10 +8,10 @@
 namespace haard {
     class ModuleFunctionsBuilder : public ScopeBuilder {
     public:
-        ModuleFunctionsBuilder(Logger* logger=nullptr);
+        ModuleFunctionsBuilder(ScopeBuilderContext* context);
 
     public:
-        void build_functions(Module* module);
+        void build_functions();
         void build_function(Function* function);
 
     };

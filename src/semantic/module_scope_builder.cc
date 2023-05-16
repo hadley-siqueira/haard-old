@@ -61,10 +61,10 @@ void ModuleScopeBuilder::link_super_types() {
     }
 }
 
-void ModuleScopeBuilder::build_functions(Module* module) {
-    /*ModuleFunctionsBuilder builder(get_logger());
+void ModuleScopeBuilder::build_functions() {
+    ModuleFunctionsBuilder builder(get_context());
 
-    builder.build_functions(module);*/
+    builder.build_functions();
 }
 
 void ModuleScopeBuilder::connect_sibling_scopes() {

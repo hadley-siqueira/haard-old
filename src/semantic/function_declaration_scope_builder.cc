@@ -18,6 +18,7 @@ void FunctionDeclarationScopeBuilder::define_function(Function* function) {
     define_self_type(function);
 
     std::string name = function->get_qualified_name();
+    log_info(get_scope()->debug());
     leave_scope();
 
     if (get_scope()->resolve_local(name)) {
@@ -68,7 +69,10 @@ void FunctionDeclarationScopeBuilder::define_parameter(Variable* param) {
     } else if (sym->get_kind() != SYM_PARAMETER) {
         get_scope()->define_parameter(name, param);
     } else {
-        std::string msg = "<red>error: </red>parameter '" + name + "' already defined";
+        std::string msg = "<red>error: </red>parameter '" + name + "' already defined. Line " + get_function()->get_name();
+        msg += param->get_line();
+        log_info(get_scope()->debug());
+        log_info(get_scope()->get_parent()->debug());
         log_error_and_exit(msg);
     }
 

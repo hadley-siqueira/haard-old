@@ -12,6 +12,8 @@ void ModulesScopeBuilder::build_modules(Modules* modules) {
     link_super_types();
     define_methods();
     define_functions();
+
+    build_functions();
 }
 
 void ModulesScopeBuilder::set_qualified_scopes() {
@@ -51,11 +53,6 @@ void ModulesScopeBuilder::define_methods() {
 }
 
 void ModulesScopeBuilder::define_functions() {
-   /* for (int i = 0; i < modules->modules_count(); ++i) {
-        ModuleScopeBuilder builder(get_logger());
-        builder.define_functions(modules->get_module(i));
-    }*/
-
     for (int i = 0; i < modules->modules_count(); ++i) {
         ModuleScopeBuilder builder;
 
@@ -65,10 +62,12 @@ void ModulesScopeBuilder::define_functions() {
 }
 
 void ModulesScopeBuilder::build_functions() {
-    /*for (int i = 0; i < modules->modules_count(); ++i) {
-        ModuleScopeBuilder builder(get_logger());
-        builder.build_functions(modules->get_module(i));
-    }*/
+    for (int i = 0; i < modules->modules_count(); ++i) {
+        ModuleScopeBuilder builder;
+
+        builder.set_module(modules->get_module(i));
+        builder.build_functions();
+    }
 }
 
 void ModulesScopeBuilder::link_super_types() {
