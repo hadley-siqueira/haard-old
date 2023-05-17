@@ -7,6 +7,10 @@
 namespace haard {
     class StatementScopeBuilder : public ScopeBuilder {
     public:
+        StatementScopeBuilder(ScopeBuilderContext* context);
+
+    public:
+        void build_statement(Statement* stmt);
         void build_compound_statement(CompoundStatement* stmt);
     };
 }

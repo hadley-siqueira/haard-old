@@ -6,6 +6,9 @@
 namespace haard {
     class FunctionScopeBuilder : ScopeBuilder {
     public:
+        FunctionScopeBuilder(ScopeBuilderContext* context);
+
+    public:
         void build_function(Function* function);
     };
 }

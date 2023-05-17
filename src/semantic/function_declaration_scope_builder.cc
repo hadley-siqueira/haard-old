@@ -18,7 +18,6 @@ void FunctionDeclarationScopeBuilder::define_function(Function* function) {
     define_self_type(function);
 
     std::string name = function->get_qualified_name();
-    log_info(get_scope()->debug());
     leave_scope();
 
     if (get_scope()->resolve_local(name)) {

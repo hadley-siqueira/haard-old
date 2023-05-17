@@ -16,7 +16,7 @@ void ModuleFunctionsBuilder::build_functions() {
 }
 
 void ModuleFunctionsBuilder::build_function(Function* function) {
-    /*FunctionScopeBuilder builder;
+    FunctionScopeBuilder builder(get_context());
 
-    builder.build_function(function);*/
+    builder.build_function(function);
 }

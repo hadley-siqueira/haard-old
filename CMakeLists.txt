@@ -118,6 +118,7 @@ set(SEMANTIC_SRC
     src/semantic/function_scope_builder.cc
     src/semantic/type_descriptor_linker.cc
     src/semantic/statement_scope_builder.cc
+    src/semantic/compound_statement_scope_builder.cc
 )
 
 set(IRVM_SRC

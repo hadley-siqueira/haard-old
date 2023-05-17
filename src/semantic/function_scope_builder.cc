@@ -3,9 +3,14 @@
 
 using namespace haard;
 
-void FunctionScopeBuilder::build_function(Function* function) {
-    StatementScopeBuilder stmt_builder;
+FunctionScopeBuilder::FunctionScopeBuilder(ScopeBuilderContext* context) {
+    set_context(context);
+}
 
+void FunctionScopeBuilder::build_function(Function* function) {
+    StatementScopeBuilder stmt_builder(get_context());
+
+    set_function(function);
     if (function->is_template()) {
         return;
     }
