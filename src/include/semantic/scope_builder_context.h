@@ -22,11 +22,15 @@ namespace haard {
         Scope* get_scope() const;
         void set_scope(Scope* value);
 
+        int get_var_counter() const;
+        void set_var_counter(int value);
+
     private:
         Module* module;
         Function* function;
         CompoundTypeDescriptor* compound;
         Scope* scope;
+        int var_counter;
     };
 }
 

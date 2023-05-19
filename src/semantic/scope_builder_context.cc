@@ -7,6 +7,7 @@ ScopeBuilderContext::ScopeBuilderContext() {
     function = nullptr;
     compound = nullptr;
     scope = nullptr;
+    var_counter = 0;
 }
 
 Module* ScopeBuilderContext::get_module() const {
@@ -39,5 +40,13 @@ Scope* ScopeBuilderContext::get_scope() const {
 
 void ScopeBuilderContext::set_scope(Scope* value) {
     scope = value;
+}
+
+int ScopeBuilderContext::get_var_counter() const {
+    return var_counter;
+}
+
+void ScopeBuilderContext::set_var_counter(int value) {
+    var_counter = value;
 }
 

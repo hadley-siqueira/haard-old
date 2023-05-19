@@ -12,6 +12,10 @@ namespace haard {
     public:
         void build_assignment(BinOp* bin);
 
+    private:
+        bool is_new_var_assignment(BinOp* bin);
+        void create_new_var(BinOp* bin);
+
     };
 }
 

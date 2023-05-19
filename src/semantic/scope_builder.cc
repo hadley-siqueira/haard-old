@@ -48,3 +48,10 @@ ScopeBuilderContext* ScopeBuilder::get_context() const {
 void ScopeBuilder::set_context(ScopeBuilderContext* value) {
     context = value;
 }
+
+int ScopeBuilder::get_next_var_counter() {
+    int c = context->get_var_counter();
+    ++c;
+    context->set_var_counter(c);
+    return c;
+}

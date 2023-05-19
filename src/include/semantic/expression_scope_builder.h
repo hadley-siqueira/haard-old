@@ -11,6 +11,8 @@ namespace haard {
 
     public:
         void build_expression(Expression* expr);
+
+    private:
         void build_identifier(Identifier* id);
         void build_assignment(BinOp* bin);
 
