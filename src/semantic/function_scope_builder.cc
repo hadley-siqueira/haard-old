@@ -11,6 +11,8 @@ void FunctionScopeBuilder::build_function(Function* function) {
     StatementScopeBuilder stmt_builder(get_context());
 
     set_function(function);
+    context->set_local_var_counter(0);
+
     if (function->is_template()) {
         return;
     }

@@ -13,7 +13,6 @@ FunctionDeclarationScopeBuilder::FunctionDeclarationScopeBuilder(ScopeBuilderCon
 void FunctionDeclarationScopeBuilder::define_function(Function* function) {
     set_function(function);
     context->set_param_counter(0);
-    context->set_local_var_counter(0);
 
     enter_scope(function->get_scope());
     define_template_header(function);
