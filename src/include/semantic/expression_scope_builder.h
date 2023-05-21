@@ -22,7 +22,7 @@ namespace haard {
         void build_literal_symbol(Literal* literal);
 
         void build_assignment(BinOp* bin);
-        void build_plus(BinOp* oper);
+        void build_plus(Plus *oper);
 
     };
 }

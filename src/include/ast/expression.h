@@ -19,6 +19,8 @@ namespace haard {
 
             virtual Expression* clone();
 
+            virtual std::string to_str();
+
         protected:
             int kind;
             Type* type;

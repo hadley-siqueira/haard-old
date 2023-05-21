@@ -1,3 +1,4 @@
+#include <iostream>
 #include "semantic/plus_scope_builder.h"
 #include "semantic/expression_scope_builder.h"
 
@@ -7,7 +8,7 @@ PlusScopeBuilder::PlusScopeBuilder(ScopeBuilderContext* context) {
     set_context(context);
 }
 
-void PlusScopeBuilder::build_plus(BinOp* bin) {
+void PlusScopeBuilder::build_plus(Plus* bin) {
     ExpressionScopeBuilder b1(get_context());
     ExpressionScopeBuilder b2(get_context());
 

@@ -10,7 +10,7 @@ namespace haard {
         PlusScopeBuilder(ScopeBuilderContext* context);
 
     public:
-        void build_plus(BinOp* bin);
+        void build_plus(Plus* bin);
     };
 }
 

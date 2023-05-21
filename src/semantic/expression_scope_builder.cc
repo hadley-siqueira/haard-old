@@ -34,6 +34,10 @@ void ExpressionScopeBuilder::build_expression(Expression* expr) {
         build_assignment((BinOp*) expr);
         break;
 
+    case EXPR_PLUS:
+        build_plus((Plus*) expr);
+        break;
+
     default:
         break;
     }
@@ -75,7 +79,7 @@ void ExpressionScopeBuilder::build_assignment(BinOp* bin) {
     builder.build_assignment(bin);
 }
 
-void ExpressionScopeBuilder::build_plus(BinOp* oper) {
+void ExpressionScopeBuilder::build_plus(Plus* oper) {
     PlusScopeBuilder builder(get_context());
 
     builder.build_plus(oper);

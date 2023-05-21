@@ -31,3 +31,7 @@ Expression* Expression::clone() {
     std::cout << __FILE__ << ' ' << __LINE__ << " clone\n"; exit(0);
 }
 
+std::string Expression::to_str() {
+    return "unknown expression";
+}
+

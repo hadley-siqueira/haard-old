@@ -33,6 +33,8 @@
 #include "ast/cast_expression.h"
 #include "ast/string_builder.h"
 
+#include "ast/plus.h"
+
 // Statements
 #include "ast/statement.h"
 #include "ast/while_statement.h"

@@ -55,7 +55,6 @@ set(AST_SRC
     src/ast/expression.cc
     src/ast/identifier.cc
     src/ast/unop.cc
-    src/ast/binop.cc
     src/ast/literal.cc
     src/ast/expression_list.cc
     src/ast/new_expression.cc
@@ -71,6 +70,9 @@ set(AST_SRC
     src/ast/var_decl.cc
     src/ast/cast_expression.cc
     src/ast/string_builder.cc
+    src/ast/binop.cc
+    src/ast/assignment.cc
+    src/ast/plus.cc
 )
 
 set(IR_SRC
