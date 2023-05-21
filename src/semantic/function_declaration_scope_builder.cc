@@ -12,6 +12,9 @@ FunctionDeclarationScopeBuilder::FunctionDeclarationScopeBuilder(ScopeBuilderCon
 
 void FunctionDeclarationScopeBuilder::define_function(Function* function) {
     set_function(function);
+    context->set_param_counter(0);
+    context->set_local_var_counter(0);
+
     enter_scope(function->get_scope());
     define_template_header(function);
     define_parameters(function);
@@ -62,6 +65,7 @@ void FunctionDeclarationScopeBuilder::define_parameters(Function* function) {
 void FunctionDeclarationScopeBuilder::define_parameter(Variable* param) {
     std::string name = param->get_name();
     Symbol* sym = get_scope()->resolve_local(name);
+    param->set_uid(get_next_param_counter());
 
     if (!sym) {
         get_scope()->define_parameter(name, param);

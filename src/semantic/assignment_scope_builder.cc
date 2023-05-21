@@ -45,7 +45,7 @@ void AssignmentScopeBuilder::create_new_var(BinOp* bin) {
 
     Variable* var = new Variable(id);
     var->set_type(bin->get_right()->get_type());
-    var->set_uid(get_next_var_counter());
+    var->set_uid(get_next_local_var_counter());
     var->set_kind(VAR_LOCAL);
     bin->set_initial_assign(true);
     get_scope()->define(var);

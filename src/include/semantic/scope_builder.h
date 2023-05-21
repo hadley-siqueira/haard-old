@@ -26,7 +26,8 @@ namespace haard {
         ScopeBuilderContext* get_context() const;
         void set_context(ScopeBuilderContext* value);
 
-        int get_next_var_counter();
+        int get_next_local_var_counter();
+        int get_next_param_counter();
 
     protected:
         ScopeBuilderContext* context;

@@ -7,7 +7,8 @@ ScopeBuilderContext::ScopeBuilderContext() {
     function = nullptr;
     compound = nullptr;
     scope = nullptr;
-    var_counter = 0;
+    local_var_counter = 0;
+    param_counter = 0;
 }
 
 Module* ScopeBuilderContext::get_module() const {
@@ -42,11 +43,19 @@ void ScopeBuilderContext::set_scope(Scope* value) {
     scope = value;
 }
 
-int ScopeBuilderContext::get_var_counter() const {
-    return var_counter;
+int ScopeBuilderContext::get_local_var_counter() const {
+    return local_var_counter;
 }
 
-void ScopeBuilderContext::set_var_counter(int value) {
-    var_counter = value;
+void ScopeBuilderContext::set_local_var_counter(int value) {
+    local_var_counter = value;
+}
+
+int ScopeBuilderContext::get_param_counter() const {
+    return param_counter;
+}
+
+void ScopeBuilderContext::set_param_counter(int value) {
+    param_counter = value;
 }
 

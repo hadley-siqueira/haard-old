@@ -54,7 +54,7 @@ void Driver::run() {
     run_flags();
 
     log_info("starting ir generation...");
-    //ir_generation();
+    ir_generation();
     check_for_errors();
     log_info("ir generation done...");
 

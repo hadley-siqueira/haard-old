@@ -49,9 +49,14 @@ void ScopeBuilder::set_context(ScopeBuilderContext* value) {
     context = value;
 }
 
-int ScopeBuilder::get_next_var_counter() {
-    int c = context->get_var_counter();
-    ++c;
-    context->set_var_counter(c);
+int ScopeBuilder::get_next_local_var_counter() {
+    int c = context->get_local_var_counter();
+    context->set_local_var_counter(c + 1);
+    return c;
+}
+
+int ScopeBuilder::get_next_param_counter() {
+    int c = context->get_param_counter();
+    context->set_param_counter(c + 1);
     return c;
 }
