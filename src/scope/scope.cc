@@ -306,7 +306,7 @@ std::string Scope::debug() {
     return ss.str();
 }
 
-Symbol* Scope::resolve(std::string& name) {
+Symbol* Scope::resolve(const std::string& name) {
     Symbol* sym = nullptr;
 
     sym = resolve_local(name);
@@ -338,7 +338,7 @@ Symbol* Scope::resolve(std::string& name) {
     return sym;
 }
 
-Symbol* Scope::resolve_local(std::string& name) {
+Symbol* Scope::resolve_local(const std::string& name) {
     if (symbols.count(name) > 0) {
         return symbols[name];
     }
@@ -350,7 +350,7 @@ Symbol* Scope::resolve_local(std::string& name) {
     return nullptr;
 }
 
-Symbol* Scope::resolve_field(std::string& name) {
+Symbol* Scope::resolve_field(const std::string& name) {
     if (symbols.count(name) > 0) {
         return symbols[name];
     }

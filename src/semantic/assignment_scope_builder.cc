@@ -13,7 +13,6 @@ void AssignmentScopeBuilder::build_assignment(BinOp* bin) {
     ExpressionScopeBuilder b1(get_context());
     ExpressionScopeBuilder b2(get_context());
 
-    std::cout << "=\n";
     bool new_var = false;
 
     b1.build_expression(bin->get_right());
@@ -51,5 +50,4 @@ void AssignmentScopeBuilder::create_new_var(BinOp* bin) {
     bin->set_initial_assign(true);
     get_scope()->define(var);
     get_function()->add_variable(var);
-    std::cout << get_scope()->debug() << '\n';
 }

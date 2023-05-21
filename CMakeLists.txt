@@ -121,8 +121,9 @@ set(SEMANTIC_SRC
     src/semantic/compound_statement_scope_builder.cc
     src/semantic/expression_statement_scope_builder.cc
     src/semantic/expression_scope_builder.cc
-    src/semantic/assignment_scope_builder.cc
     src/semantic/identifier_scope_builder.cc
+    src/semantic/assignment_scope_builder.cc
+    src/semantic/plus_scope_builder.cc
 )
 
 set(IRVM_SRC

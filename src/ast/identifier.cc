@@ -53,7 +53,7 @@ int Identifier::get_column() {
     return column;
 }
 
-std::string Identifier::get_name() {
+std::string& Identifier::get_name() {
     return name;
 }
 

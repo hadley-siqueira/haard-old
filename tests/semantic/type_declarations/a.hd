@@ -4,8 +4,15 @@ def sum : int
 
     return a + b
 
+def sum : int
+    @a : int
+    @b : int
+    @c : int
+
+    return a + b + c
+
 def main : void
     a = 0
     b = 0
-    c = sum
+    c = a + b
     return 0

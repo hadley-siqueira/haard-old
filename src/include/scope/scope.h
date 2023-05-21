@@ -54,9 +54,9 @@ namespace haard {
             std::string debug();
 
             // new stuff
-            Symbol* resolve(std::string& name);
-            Symbol* resolve_local(std::string& name);
-            Symbol* resolve_field(std::string& name);
+            Symbol* resolve(const std::string& name);
+            Symbol* resolve_local(const std::string& name);
+            Symbol* resolve_field(const std::string& name);
 
             std::string get_qualified() const;
             void set_qualified(const std::string& value);

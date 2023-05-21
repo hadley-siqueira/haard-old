@@ -19,7 +19,7 @@ namespace haard {
     public:
         int get_line();
         int get_column();
-        std::string get_name();
+        std::string& get_name();
         Symbol* get_symbol();
 
         void set_line(int line);

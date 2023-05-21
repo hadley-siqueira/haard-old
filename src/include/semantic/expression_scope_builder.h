@@ -14,7 +14,15 @@ namespace haard {
 
     private:
         void build_identifier(Identifier* id);
+        void build_literal_bool(Literal* literal);
+        void build_literal_char(Literal* literal);
+        void build_literal_integer(Literal* literal);
+        void build_literal_float(Literal* literal);
+        void build_literal_double(Literal* literal);
+        void build_literal_symbol(Literal* literal);
+
         void build_assignment(BinOp* bin);
+        void build_plus(BinOp* oper);
 
     };
 }

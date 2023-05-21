@@ -23,10 +23,11 @@ void IdentifierScopeBuilder::build_identifier(Identifier* id) {
         Scope* scope = import->get_module()->get_scope();
         sym = scope->local_has(id->get_name());
     } else {
-        sym = get_scope()->has(id->get_name());
+        sym = get_scope()->resolve(id->get_name());
     }
 
     if (!sym) {
+        log_info("scope: " + get_scope()->debug());
         log_error_and_exit(error_message_id_not_in_scope(get_module(), id));
     }
 
