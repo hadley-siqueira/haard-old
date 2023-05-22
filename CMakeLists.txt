@@ -73,6 +73,7 @@ set(AST_SRC
     src/ast/binop.cc
     src/ast/assignment.cc
     src/ast/plus.cc
+    src/ast/minus.cc
 )
 
 set(IR_SRC
@@ -126,6 +127,7 @@ set(SEMANTIC_SRC
     src/semantic/identifier_scope_builder.cc
     src/semantic/assignment_scope_builder.cc
     src/semantic/plus_scope_builder.cc
+    src/semantic/minus_scope_builder.cc
 )
 
 set(IRVM_SRC

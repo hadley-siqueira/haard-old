@@ -34,6 +34,7 @@
 #include "ast/string_builder.h"
 
 #include "ast/plus.h"
+#include "ast/minus.h"
 
 // Statements
 #include "ast/statement.h"

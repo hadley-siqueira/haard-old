@@ -3,6 +3,7 @@
 #include "semantic/identifier_scope_builder.h"
 #include "semantic/assignment_scope_builder.h"
 #include "semantic/plus_scope_builder.h"
+#include "semantic/minus_scope_builder.h"
 
 using namespace haard;
 
@@ -36,6 +37,10 @@ void ExpressionScopeBuilder::build_expression(Expression* expr) {
 
     case EXPR_PLUS:
         build_plus((Plus*) expr);
+        break;
+
+    case EXPR_MINUS:
+        build_minus((Minus*) expr);
         break;
 
     default:
@@ -83,4 +88,10 @@ void ExpressionScopeBuilder::build_plus(Plus* oper) {
     PlusScopeBuilder builder(get_context());
 
     builder.build_plus(oper);
+}
+
+void ExpressionScopeBuilder::build_minus(Minus* oper) {
+    MinusScopeBuilder builder(get_context());
+
+    builder.build_minus(oper);
 }

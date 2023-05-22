@@ -1028,11 +1028,10 @@ Expression* Parser::parse_arith_expression() {
     while (true) {
         if (match(TK_PLUS)) {
             oper = matched;
-            //expr = new BinOp(EXPR_PLUS, oper, expr, parse_term_expression());
             expr = new Plus(oper, expr, parse_term_expression());
         } else if (match(TK_MINUS)) {
             oper = matched;
-            expr = new BinOp(EXPR_MINUS, oper, expr, parse_term_expression());
+            expr = new Minus(oper, expr, parse_term_expression());
         } else {
             break;
         }
