@@ -3,6 +3,34 @@
 #include <vector>
 #include <sstream>
 
+/* This generator is used for generate binops
+ * It generates the .h and .cc files
+ *
+ * The reason I decided to go down this path of using generators
+ * is to keep a sane mind: organization.
+ *
+ * First I used just a BinOp class with a constructor receiving the kind
+ * but as I programmed, it turned out that was hard to keep track of what
+ * operators I have implemented. It was prone error due to copy n paste
+ *
+ * By having all those classes, it is a lot more verbose, but help me keep track
+ * of what was already implemented and what is missing. For instance, g++ can help me
+ * by reporting wrong node types on function calls.
+ *
+ * The theory of compilers are not so hard after you understand them, but implementing 
+ * is a pain in the ass because there are many cases to handle. Lot of operators and
+ * corner cases. Hard to keep track of all of this.
+ *
+ * Probably not the best strategy in the world, but you know? It works for me
+ * and keep me going. Next reimplementation of the compiler I may come up with
+ * a better solution :)
+ */
+
+typedef struct ClassInfo {
+    std::string name;
+    std::string lexeme;
+} ClassInfo;
+
 std::string to_upper(std::string s) {
     std::stringstream ss;
 
@@ -49,34 +77,40 @@ std::string to_snake_case(std::string s) {
     return ss.str();
 }
 
-int main() {
-    std::vector<std::string> class_names = {
-        "Plus", "Minus", 
-        "Times", "Division", "Modulo",
-        "ShiftLeftLogical", "ShiftRightLogical", "ShiftRightArithmetic"
-    };
-
+void generate_headers(std::vector<ClassInfo>& class_names) {
     for (int i = 0; i < class_names.size(); ++i) {
         std::stringstream ss;
+        ClassInfo c = class_names[i];
 
-        ss << to_snake_case(class_names[i]) << "\n";
-        ss << "#ifndef HAARD_AST_" << to_upper(to_snake_case(class_names[i])) << "_H\n";
-        ss << "#define HAARD_AST_" << to_upper(to_snake_case(class_names[i])) << "_H\n\n";
+        ss << "src/include/ast/" << to_snake_case(c.name) << ".h\n";
+        ss << "#ifndef HAARD_AST_" << to_upper(to_snake_case(c.name)) << "_H\n";
+        ss << "#define HAARD_AST_" << to_upper(to_snake_case(c.name)) << "_H\n\n";
 
         ss << "#include \"token.h\"\n";
         ss << "#include \"expression.h\"\n\n";
 
         ss << "namespace haard {\n";
-        ss << "    class " << class_names[i] << " : public Expression {\n";
+        ss << "    class " << c.name << " : public Expression {\n";
         ss << "    public:\n";
-        ss << "        " << class_names[i] << "(Token& token, Expression* left=nullptr, Expression* right=nullptr);\n";
-        ss << "        ~" << class_names[i] << "();\n\n";
+        ss << "        " << c.name << "(Token& token, Expression* left=nullptr, Expression* right=nullptr);\n";
+        ss << "        ~" << c.name << "();\n\n";
         ss << "    public:\n";
-        ss << "        std::string to_str();\n";
+        ss << "        std::string to_str();\n\n";
+
+        ss << "        int get_line();\n";
+        ss << "        void set_line(int value);\n\n";
+
+        ss << "        int get_column();\n";
+        ss << "        void set_column(int value);\n\n";
+
         ss << "        Expression* get_left();\n";
         ss << "        void set_left(Expression* value);\n\n";
+        ss << "        Expression* get_left();\n";
+        ss << "        void set_left(Expression* value);\n\n";
+
         ss << "        Expression* get_right();\n";
         ss << "        void set_right(Expression* value);\n\n";
+
         ss << "    private:\n";
         ss << "        int line;\n";
         ss << "        int column;\n";
@@ -87,6 +121,78 @@ int main() {
         ss << "#endif\n";
         std::cout << ss.str() << std::endl;
     }
+}
+
+void generate_cc_files(std::vector<ClassInfo>& class_names) {
+    for (int i = 0; i < class_names.size(); ++i) {
+        std::stringstream ss;
+
+        ClassInfo c = class_names[i];
+
+        ss << "#include <sstream>\n";
+        ss << "#include \"ast/" << to_snake_case(c.name) << ".h\"\n\n";
+
+        ss << "using namespace haard;\n\n";
+
+        ss << "" << c.name << "::" << c.name << "(Expression* left, Expression* right) {\n";
+        ss << "    this->kind = EXPR_" << to_upper(to_snake_case(c.name)) << ";\n";
+        ss << "    this->left = left;\n";
+        ss << "    this->right = right;\n";
+        ss << "}\n\n";
+
+        ss << "" << c.name << "::" << c.name << "(Token& token, Expression* left, Expression* right) {\n";
+        ss << "    this->kind = EXPR_" << to_upper(to_snake_case(c.name)) << ";\n";
+        ss << "    this->left = left;\n";
+        ss << "    this->right = right;\n";
+        ss << "    this->line = token.get_line();\n";
+        ss << "    this->column = token.get_column();\n";
+        ss << "}\n\n";
+
+        ss << "" << c.name << "::~" << c.name << "() {\n";
+        ss << "    delete left;\n";
+        ss << "    delete right;\n";
+        ss << "}\n\n";
+
+        ss << "Expression* " << c.name << "::get_left() const {\n";
+        ss << "    return left;\n";
+        ss << "}\n\n";
+
+        ss << "void " << c.name << "::set_left(Expression* value) {\n";
+        ss << "    left = value;\n";
+        ss << "}\n\n";
+
+        ss << "Expression* " << c.name << "::get_right() const {\n";
+        ss << "    return right;\n";
+        ss << "}\n\n";
+
+        ss << "void " << c.name << "::set_right(Expression* value) {\n";
+        ss << "    right = value;\n";
+        ss << "}\n\n";
+
+        ss << "std::string " << c.name << "::to_str() {\n";
+        ss << "    std::stringstream ss;\n\n";
+
+        ss << "    ss << left->to_str();\n";
+        ss << "    ss << \" " << c.lexeme << " \";\n";
+        ss << "    ss << right->to_str();\n\n";
+
+        ss << "    return ss.str();\n";
+        ss << "}\n\n";
+
+        std::cout << ss.str() << std::endl;
+    }
+}
+
+int main() {
+    std::vector<ClassInfo> class_names = {
+        { "Plus", "+"},
+        { "Minus", "-"},
+        { "Times", "*"},
+        { "ShiftLeftLogical", "<<"}
+    };
+
+    generate_headers(class_names);
+    generate_cc_files(class_names);
 
     return 0;
 };
