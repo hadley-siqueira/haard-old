@@ -80,9 +80,13 @@ std::string to_snake_case(std::string s) {
 void generate_headers(std::vector<ClassInfo>& class_names) {
     for (int i = 0; i < class_names.size(); ++i) {
         std::stringstream ss;
+        std::stringstream path;
+        std::ofstream f;
         ClassInfo c = class_names[i];
 
-        ss << "src/include/ast/" << to_snake_case(c.name) << ".h\n";
+        path << "../src/include/ast/" << to_snake_case(c.name) << ".h\n";
+        f.open(path.str());
+
         ss << "#ifndef HAARD_AST_" << to_upper(to_snake_case(c.name)) << "_H\n";
         ss << "#define HAARD_AST_" << to_upper(to_snake_case(c.name)) << "_H\n\n";
 
@@ -119,7 +123,9 @@ void generate_headers(std::vector<ClassInfo>& class_names) {
         ss << "    };\n";
         ss << "}\n\n";
         ss << "#endif\n";
-        std::cout << ss.str() << std::endl;
+
+        f << ss.str();
+        f.close();
     }
 }
 
