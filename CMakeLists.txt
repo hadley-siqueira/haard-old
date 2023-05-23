@@ -74,6 +74,41 @@ set(AST_SRC
     src/ast/assignment.cc
     src/ast/plus.cc
     src/ast/minus.cc
+    src/ast/bitwise_and.cc
+	src/ast/bitwise_and_assignment.cc
+	src/ast/bitwise_not_assignment.cc
+	src/ast/bitwise_or.cc
+	src/ast/bitwise_or_assignment.cc
+	src/ast/bitwise_xor.cc
+	src/ast/bitwise_xor_assignment.cc
+	src/ast/division.cc
+	src/ast/division_assignment.cc
+	src/ast/equal.cc
+	src/ast/greater_than.cc
+	src/ast/greater_than_or_equal.cc
+	src/ast/integer_division.cc
+	src/ast/integer_division_assignment.cc
+	src/ast/less_than.cc
+	src/ast/less_than_or_equal.cc
+	src/ast/logical_and.cc
+	src/ast/logical_and_oper.cc
+	src/ast/logical_or.cc
+	src/ast/logical_or_oper.cc
+	src/ast/minus_assignment.cc
+	src/ast/modulo.cc
+	src/ast/not_equal.cc
+	src/ast/plus_assignment.cc
+	src/ast/power.cc
+	src/ast/shift_left_logical.cc
+	src/ast/shift_left_logical_assignment.cc
+	src/ast/shift_right_arithmetic.cc
+	src/ast/shift_right_arithmetic_assignment.cc
+	src/ast/shift_right_logical.cc
+	src/ast/shift_right_logical_assignment.cc
+	src/ast/special_assignment.cc
+	src/ast/times.cc
+	src/ast/times_assignment.cc
+
 )
 
 set(IR_SRC

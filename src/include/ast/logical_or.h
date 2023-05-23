@@ -1,15 +1,15 @@
-#ifndef HAARD_AST_MINUS_H
-#define HAARD_AST_MINUS_H
+#ifndef HAARD_AST_LOGICAL_OR_H
+#define HAARD_AST_LOGICAL_OR_H
 
 #include "token/token.h"
 #include "expression.h"
 
 namespace haard {
-    class Minus : public Expression {
+    class LogicalOr : public Expression {
     public:
-        Minus(Expression* left=nullptr, Expression* right=nullptr);
-        Minus(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~Minus();
+        LogicalOr(Expression* left=nullptr, Expression* right=nullptr);
+        LogicalOr(Token& token, Expression* left=nullptr, Expression* right=nullptr);
+        ~LogicalOr();
 
     public:
         std::string to_str();

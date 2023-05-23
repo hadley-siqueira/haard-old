@@ -1,15 +1,15 @@
-#ifndef HAARD_AST_MINUS_H
-#define HAARD_AST_MINUS_H
+#ifndef HAARD_AST_BITWISE_OR_ASSIGNMENT_H
+#define HAARD_AST_BITWISE_OR_ASSIGNMENT_H
 
 #include "token/token.h"
 #include "expression.h"
 
 namespace haard {
-    class Minus : public Expression {
+    class BitwiseOrAssignment : public Expression {
     public:
-        Minus(Expression* left=nullptr, Expression* right=nullptr);
-        Minus(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~Minus();
+        BitwiseOrAssignment(Expression* left=nullptr, Expression* right=nullptr);
+        BitwiseOrAssignment(Token& token, Expression* left=nullptr, Expression* right=nullptr);
+        ~BitwiseOrAssignment();
 
     public:
         std::string to_str();

@@ -84,35 +84,34 @@ void generate_headers(std::vector<ClassInfo>& class_names) {
         std::ofstream f;
         ClassInfo c = class_names[i];
 
-        path << "../src/include/ast/" << to_snake_case(c.name) << ".h\n";
+        path << "../src/include/ast/" << to_snake_case(c.name) << ".h";
         f.open(path.str());
 
         ss << "#ifndef HAARD_AST_" << to_upper(to_snake_case(c.name)) << "_H\n";
         ss << "#define HAARD_AST_" << to_upper(to_snake_case(c.name)) << "_H\n\n";
 
-        ss << "#include \"token.h\"\n";
+        ss << "#include \"token/token.h\"\n";
         ss << "#include \"expression.h\"\n\n";
 
         ss << "namespace haard {\n";
         ss << "    class " << c.name << " : public Expression {\n";
         ss << "    public:\n";
+        ss << "        " << c.name << "(Expression* left=nullptr, Expression* right=nullptr);\n";
         ss << "        " << c.name << "(Token& token, Expression* left=nullptr, Expression* right=nullptr);\n";
         ss << "        ~" << c.name << "();\n\n";
         ss << "    public:\n";
         ss << "        std::string to_str();\n\n";
 
-        ss << "        int get_line();\n";
+        ss << "        int get_line() const;\n";
         ss << "        void set_line(int value);\n\n";
 
-        ss << "        int get_column();\n";
+        ss << "        int get_column() const;\n";
         ss << "        void set_column(int value);\n\n";
 
-        ss << "        Expression* get_left();\n";
-        ss << "        void set_left(Expression* value);\n\n";
-        ss << "        Expression* get_left();\n";
+        ss << "        Expression* get_left() const;\n";
         ss << "        void set_left(Expression* value);\n\n";
 
-        ss << "        Expression* get_right();\n";
+        ss << "        Expression* get_right() const;\n";
         ss << "        void set_right(Expression* value);\n\n";
 
         ss << "    private:\n";
@@ -132,8 +131,13 @@ void generate_headers(std::vector<ClassInfo>& class_names) {
 void generate_cc_files(std::vector<ClassInfo>& class_names) {
     for (int i = 0; i < class_names.size(); ++i) {
         std::stringstream ss;
+        std::stringstream path;
+        std::ofstream f;
 
         ClassInfo c = class_names[i];
+
+        path << "../src/ast/" << to_snake_case(c.name) << ".cc";
+        f.open(path.str());
 
         ss << "#include <sstream>\n";
         ss << "#include \"ast/" << to_snake_case(c.name) << ".h\"\n\n";
@@ -183,9 +187,10 @@ void generate_cc_files(std::vector<ClassInfo>& class_names) {
         ss << "    ss << right->to_str();\n\n";
 
         ss << "    return ss.str();\n";
-        ss << "}\n\n";
+        ss << "}\n";
 
-        std::cout << ss.str() << std::endl;
+        f << ss.str();
+        f.close();
     }
 }
 
@@ -238,6 +243,7 @@ int main() {
         {"ShiftRightArithmetic", ">>"}
     };
 
+    generate_headers(class_names);
     generate_cc_files(class_names);
 
     return 0;

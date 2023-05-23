@@ -1,15 +1,15 @@
-#ifndef HAARD_AST_MINUS_H
-#define HAARD_AST_MINUS_H
+#ifndef HAARD_AST_BITWISE_AND_H
+#define HAARD_AST_BITWISE_AND_H
 
 #include "token/token.h"
 #include "expression.h"
 
 namespace haard {
-    class Minus : public Expression {
+    class BitwiseAnd : public Expression {
     public:
-        Minus(Expression* left=nullptr, Expression* right=nullptr);
-        Minus(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~Minus();
+        BitwiseAnd(Expression* left=nullptr, Expression* right=nullptr);
+        BitwiseAnd(Token& token, Expression* left=nullptr, Expression* right=nullptr);
+        ~BitwiseAnd();
 
     public:
         std::string to_str();

@@ -1,15 +1,15 @@
-#ifndef HAARD_AST_MINUS_H
-#define HAARD_AST_MINUS_H
+#ifndef HAARD_AST_SHIFT_RIGHT_LOGICAL_ASSIGNMENT_H
+#define HAARD_AST_SHIFT_RIGHT_LOGICAL_ASSIGNMENT_H
 
 #include "token/token.h"
 #include "expression.h"
 
 namespace haard {
-    class Minus : public Expression {
+    class ShiftRightLogicalAssignment : public Expression {
     public:
-        Minus(Expression* left=nullptr, Expression* right=nullptr);
-        Minus(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~Minus();
+        ShiftRightLogicalAssignment(Expression* left=nullptr, Expression* right=nullptr);
+        ShiftRightLogicalAssignment(Token& token, Expression* left=nullptr, Expression* right=nullptr);
+        ~ShiftRightLogicalAssignment();
 
     public:
         std::string to_str();

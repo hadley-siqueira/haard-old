@@ -1,15 +1,15 @@
-#ifndef HAARD_AST_MINUS_H
-#define HAARD_AST_MINUS_H
+#ifndef HAARD_AST_MODULO_H
+#define HAARD_AST_MODULO_H
 
 #include "token/token.h"
 #include "expression.h"
 
 namespace haard {
-    class Minus : public Expression {
+    class Modulo : public Expression {
     public:
-        Minus(Expression* left=nullptr, Expression* right=nullptr);
-        Minus(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~Minus();
+        Modulo(Expression* left=nullptr, Expression* right=nullptr);
+        Modulo(Token& token, Expression* left=nullptr, Expression* right=nullptr);
+        ~Modulo();
 
     public:
         std::string to_str();

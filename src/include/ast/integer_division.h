@@ -1,15 +1,15 @@
-#ifndef HAARD_AST_MINUS_H
-#define HAARD_AST_MINUS_H
+#ifndef HAARD_AST_INTEGER_DIVISION_H
+#define HAARD_AST_INTEGER_DIVISION_H
 
 #include "token/token.h"
 #include "expression.h"
 
 namespace haard {
-    class Minus : public Expression {
+    class IntegerDivision : public Expression {
     public:
-        Minus(Expression* left=nullptr, Expression* right=nullptr);
-        Minus(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~Minus();
+        IntegerDivision(Expression* left=nullptr, Expression* right=nullptr);
+        IntegerDivision(Token& token, Expression* left=nullptr, Expression* right=nullptr);
+        ~IntegerDivision();
 
     public:
         std::string to_str();

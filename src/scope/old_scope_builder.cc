@@ -321,27 +321,27 @@ void OldScopeBuilder::build_expression(Expression* expression) {
         build_logical_and(bin);
         break;
 
-    case EXPR_EQ:
+    case EXPR_EQUAL:
         build_equal(bin);
         break;
 
-    case EXPR_NE:
+    case EXPR_NOT_EQUAL:
         build_not_equal(bin);
         break;
 
-    case EXPR_GT:
+    case EXPR_GREATER_THAN:
         build_greater_than(bin);
         break;
 
-    case EXPR_LT:
+    case EXPR_LESS_THAN:
         build_less_than(bin);
         break;
 
-    case EXPR_GE:
+    case EXPR_GREATER_THAN_OR_EQUAL:
         build_greater_or_equal_than(bin);
         break;
 
-    case EXPR_LE:
+    case EXPR_LESS_THAN_OR_EQUAL:
         build_less_or_equal_than(bin);
         break;
 
@@ -373,15 +373,15 @@ void OldScopeBuilder::build_expression(Expression* expression) {
         build_bitwise_and(bin);
         break;
 
-    case EXPR_SLL:
+    case EXPR_SHIFT_LEFT_LOGICAL:
         build_sll(bin);
         break;
 
-    case EXPR_SRL:
+    case EXPR_SHIFT_RIGHT_LOGICAL:
         build_sll(bin);
         break;
 
-    case EXPR_SRA:
+    case EXPR_SHIFT_RIGHT_ARITHMETIC:
         build_sra(bin);
         break;
 

@@ -1,15 +1,15 @@
-#ifndef HAARD_AST_MINUS_H
-#define HAARD_AST_MINUS_H
+#ifndef HAARD_AST_EQUAL_H
+#define HAARD_AST_EQUAL_H
 
 #include "token/token.h"
 #include "expression.h"
 
 namespace haard {
-    class Minus : public Expression {
+    class Equal : public Expression {
     public:
-        Minus(Expression* left=nullptr, Expression* right=nullptr);
-        Minus(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~Minus();
+        Equal(Expression* left=nullptr, Expression* right=nullptr);
+        Equal(Token& token, Expression* left=nullptr, Expression* right=nullptr);
+        ~Equal();
 
     public:
         std::string to_str();

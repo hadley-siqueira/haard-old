@@ -421,59 +421,59 @@ void Printer::print_expression(Expression* expression) {
         print_binop("=", bin);
         break;
 
-    case EXPR_SPECIAL_ASSIGN:
+    case EXPR_SPECIAL_ASSIGNMENT:
         print_binop(":=", bin);
         break;
 
-    case EXPR_SRL_ASSIGN:
+    case EXPR_SHIFT_RIGHT_LOGICAL_ASSIGNMENT:
         print_binop(">>>=", bin);
         break;
 
-    case EXPR_SRA_ASSIGN:
+    case EXPR_SHIFT_RIGHT_ARITHMETIC_ASSIGNMENT:
         print_binop(">>=", bin);
         break;
 
-    case EXPR_SLL_ASSIGN:
+    case EXPR_SHIFT_LEFT_LOGICAL_ASSIGNMENT:
         print_binop("<<=", bin);
         break;
 
-    case EXPR_TIMES_ASSIGN:
+    case EXPR_TIMES_ASSIGNMENT:
         print_binop("*=", bin);
         break;
 
-    case EXPR_PLUS_ASSIGN:
+    case EXPR_PLUS_ASSIGNMENT:
         print_binop("+=", bin);
         break;
 
-    case EXPR_MODULO_ASSIGN:
+    case EXPR_MODULO_ASSIGNMENT:
         print_binop("%=", bin);
         break;
 
-    case EXPR_MINUS_ASSIGN:
+    case EXPR_MINUS_ASSIGNMENT:
         print_binop("-=", bin);
         break;
 
-    case EXPR_INTEGER_DIVISION_ASSIGN:
+    case EXPR_INTEGER_DIVISION_ASSIGNMENT:
         print_binop("//=", bin);
         break;
 
-    case EXPR_DIVISION_ASSIGN:
+    case EXPR_DIVISION_ASSIGNMENT:
         print_binop("/=", bin);
         break;
 
-    case EXPR_BITWISE_NOT_ASSIGN:
+    case EXPR_BITWISE_NOT_ASSIGNMENT:
         print_binop("~=", bin);
         break;
 
-    case EXPR_BITWISE_OR_ASSIGN:
+    case EXPR_BITWISE_OR_ASSIGNMENT:
         print_binop("|=", bin);
         break;
 
-    case EXPR_BITWISE_XOR_ASSIGN:
+    case EXPR_BITWISE_XOR_ASSIGNMENT:
         print_binop("^=", bin);
         break;
 
-    case EXPR_BITWISE_AND_ASSIGN:
+    case EXPR_BITWISE_AND_ASSIGNMENT:
         print_binop("&=", bin);
         break;
 
@@ -517,15 +517,15 @@ void Printer::print_expression(Expression* expression) {
         print_binop("&", bin);
         break;
 
-    case EXPR_SLL:
+    case EXPR_SHIFT_LEFT_LOGICAL:
         print_binop("<<", bin);
         break;
 
-    case EXPR_SRL:
+    case EXPR_SHIFT_RIGHT_LOGICAL:
         print_binop(">>>", bin);
         break;
 
-    case EXPR_SRA:
+    case EXPR_SHIFT_RIGHT_ARITHMETIC:
         print_binop(">>", bin);
         break;
 
@@ -553,27 +553,27 @@ void Printer::print_expression(Expression* expression) {
         print_binop("&&", bin);
         break;
 
-    case EXPR_EQ:
+    case EXPR_EQUAL:
         print_binop("==", bin);
         break;
 
-    case EXPR_NE:
+    case EXPR_NOT_EQUAL:
         print_binop("!=", bin);
         break;
 
-    case EXPR_LT:
+    case EXPR_LESS_THAN:
         print_binop("<", bin);
         break;
 
-    case EXPR_GT:
+    case EXPR_GREATER_THAN:
         print_binop(">", bin);
         break;
 
-    case EXPR_LE:
+    case EXPR_LESS_THAN_OR_EQUAL:
         print_binop("<=", bin);
         break;
 
-    case EXPR_GE:
+    case EXPR_GREATER_THAN_OR_EQUAL:
         print_binop(">=", bin);
         break;
 
