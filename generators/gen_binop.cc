@@ -223,6 +223,11 @@ int main() {
         {"GreaterThan", ">"},
         {"LessThanOrEqual", "<="},
         {"GreaterThanOrEqual", ">="},
+        {"In", "in"},
+        {"NotIn", "not in"},
+
+        {"InclusiveRange", ".."},
+        {"ExclusiveRange", "..."},
 
         {"Plus", "+"},
         {"Minus", "-"},

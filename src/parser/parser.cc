@@ -865,46 +865,46 @@ Expression* Parser::parse_assignment_expression() {
             expr = new BinOp(EXPR_ASSIGN, oper, expr, parse_cast_expression());
         } else if (match(TK_BITWISE_AND_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_AND_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new BitwiseAndAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_BITWISE_XOR_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_XOR_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new BitwiseXorAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_BITWISE_OR_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_OR_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new BitwiseOrAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_BITWISE_NOT_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_NOT_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new BitwiseNotAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_DIVISION_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_DIVISION_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new DivisionAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_INTEGER_DIVISION_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_INTEGER_DIVISION_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new IntegerDivisionAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_MINUS_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_MINUS_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new MinusAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_MODULO_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_MODULO_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new Modulo(oper, expr, parse_cast_expression());
         } else if (match(TK_PLUS_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_PLUS_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new PlusAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_TIMES_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_TIMES_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new TimesAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_SLL_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_SHIFT_LEFT_LOGICAL_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new ShiftLeftLogicalAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_SRA_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_SHIFT_RIGHT_ARITHMETIC_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new ShiftRightArithmeticAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_SRL_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_SHIFT_RIGHT_LOGICAL_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new ShiftRightLogicalAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_SPECIAL_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_SPECIAL_ASSIGNMENT, oper, expr, parse_cast_expression());
+            expr = new SpecialAssignment(oper, expr, parse_cast_expression());
         } else {
             break;
         }
@@ -920,10 +920,10 @@ Expression* Parser::parse_logical_or_expression() {
     while (true) {
         if (match(TK_OR)) {
             oper = matched;
-            expr = new BinOp(EXPR_LOGICAL_OR, oper, expr, parse_logical_and_expression());
+            expr = new LogicalOr(oper, expr, parse_logical_and_expression());
         } else if (match(TK_LOGICAL_OR)) {
             oper = matched;
-            expr = new BinOp(EXPR_LOGICAL_OR_OPER, oper, expr, parse_logical_and_expression());
+            expr = new LogicalOrOper(oper, expr, parse_logical_and_expression());
         } else {
             break;
         }
@@ -939,10 +939,10 @@ Expression* Parser::parse_logical_and_expression() {
     while (true) {
         if (match(TK_AND)) {
             oper = matched;
-            expr = new BinOp(EXPR_LOGICAL_AND, oper, expr, parse_equality_expression());
+            expr = new LogicalAnd(oper, expr, parse_equality_expression());
         } else if (match(TK_LOGICAL_AND)) {
             oper = matched;
-            expr = new BinOp(EXPR_LOGICAL_AND_OPER, oper, expr, parse_equality_expression());
+            expr = new LogicalAndOper(oper, expr, parse_equality_expression());
         } else {
             break;
         }
@@ -958,10 +958,10 @@ Expression* Parser::parse_equality_expression() {
     while (true) {
         if (match(TK_EQ)) {
             oper = matched;
-            expr = new BinOp(EXPR_EQUAL, oper, expr, parse_relational_expression());
+            expr = new Equal(oper, expr, parse_relational_expression());
         } else if (match(TK_NE)) {
             oper = matched;
-            expr = new BinOp(EXPR_NOT_EQUAL, oper, expr, parse_relational_expression());
+            expr = new NotEqual(oper, expr, parse_relational_expression());
         } else {
             break;
         }
@@ -977,23 +977,23 @@ Expression* Parser::parse_relational_expression() {
     while (true) {
         if (match(TK_LT)) {
             oper = matched;
-            expr = new BinOp(EXPR_LESS_THAN, oper, expr, parse_range_expression());
+            expr = new LessThan(oper, expr, parse_range_expression());
         } else if (match(TK_GT)) {
             oper = matched;
-            expr = new BinOp(EXPR_GREATER_THAN, oper, expr, parse_range_expression());
+            expr = new GreaterThan(oper, expr, parse_range_expression());
         } else if (match(TK_LE)) {
             oper = matched;
-            expr = new BinOp(EXPR_LESS_THAN_OR_EQUAL, oper, expr, parse_range_expression());
+            expr = new LessThanOrEqual(oper, expr, parse_range_expression());
         } else if (match(TK_GE)) {
             oper = matched;
-            expr = new BinOp(EXPR_GREATER_THAN_OR_EQUAL, oper, expr, parse_range_expression());
+            expr = new GreaterThanOrEqual(oper, expr, parse_range_expression());
         } else if (match(TK_IN)) {
             oper = matched;
-            expr = new BinOp(EXPR_IN, oper, expr, parse_range_expression());
+            expr = new In(oper, expr, parse_range_expression());
         } else if (match(TK_NOT)) {
             oper = matched;
             expect(TK_IN);
-            expr = new BinOp(EXPR_NOT_IN, oper, expr, parse_range_expression());
+            expr = new NotIn(oper, expr, parse_range_expression());
         } else {
             break;
         }
@@ -1009,10 +1009,10 @@ Expression* Parser::parse_range_expression() {
     while (true) {
         if (match(TK_INCLUSIVE_RANGE)) {
             oper = matched;
-            expr = new BinOp(EXPR_INCLUSIVE_RANGE, oper, expr, parse_arith_expression());
+            expr = new InclusiveRange(oper, expr, parse_arith_expression());
         } else if (match(TK_EXCLUSIVE_RANGE)) {
             oper = matched;
-            expr = new BinOp(EXPR_EXCLUSIVE_RANGE, oper, expr, parse_arith_expression());
+            expr = new ExclusiveRange(oper, expr, parse_arith_expression());
         } else {
             break;
         }
@@ -1048,19 +1048,19 @@ Expression* Parser::parse_term_expression() {
         if (next_token_same_line() && lookahead(TK_TIMES)) {
             match(TK_TIMES);
             oper = matched;
-            expr = new BinOp(EXPR_TIMES, oper, expr, parse_bitwise_or_expression());
+            expr = new Times(oper, expr, parse_bitwise_or_expression());
         } else if (match(TK_DIVISION)) {
             oper = matched;
-            expr = new BinOp(EXPR_DIVISION, oper, expr, parse_bitwise_or_expression());
+            expr = new Division(oper, expr, parse_bitwise_or_expression());
         } else if (match(TK_INTEGER_DIVISION)) {
             oper = matched;
-            expr = new BinOp(EXPR_INTEGER_DIVISION, oper, expr, parse_bitwise_or_expression());
+            expr = new IntegerDivision(oper, expr, parse_bitwise_or_expression());
         } else if (match(TK_MODULO)) {
             oper = matched;
-            expr = new BinOp(EXPR_MODULO, oper, expr, parse_bitwise_or_expression());
+            expr = new Modulo(oper, expr, parse_bitwise_or_expression());
         } else if (match(TK_POWER)) {
             oper = matched;
-            expr = new BinOp(EXPR_MODULO, oper, expr, parse_bitwise_or_expression());
+            expr = new Power(oper, expr, parse_bitwise_or_expression());
         } else {
             break;
         }
@@ -1076,7 +1076,7 @@ Expression* Parser::parse_bitwise_or_expression() {
     while (true) {
         if (match(TK_BITWISE_OR)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_OR, oper, expr, parse_bitwise_xor_expression()); 
+            expr = new BitwiseOr(oper, expr, parse_bitwise_xor_expression());
         } else {
             break;
         }
@@ -1092,7 +1092,7 @@ Expression* Parser::parse_bitwise_xor_expression() {
     while (true) {
         if (match(TK_BITWISE_XOR)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_XOR, oper, expr, parse_bitwise_and_expression()); 
+            expr = new BitwiseXor(oper, expr, parse_bitwise_and_expression());
         } else {
             break;
         }
@@ -1108,7 +1108,7 @@ Expression* Parser::parse_bitwise_and_expression() {
     while (true) {
         if (match(TK_BITWISE_AND)) {
             oper = matched;
-            expr = new BinOp(EXPR_BITWISE_AND, oper, expr, parse_shift_expression()); 
+            expr = new BitwiseAnd(oper, expr, parse_shift_expression());
         } else {
             break;
         }
@@ -1124,13 +1124,13 @@ Expression* Parser::parse_shift_expression() {
     while (true) {
         if (match(TK_SLL)) {
             oper = matched;
-            expr = new BinOp(EXPR_SHIFT_LEFT_LOGICAL, oper, expr, parse_unary_expression());
+            expr = new ShiftLeftLogical(oper, expr, parse_unary_expression());
         } else if (match(TK_SRL)) {
             oper = matched;
-            expr = new BinOp(EXPR_SHIFT_RIGHT_LOGICAL, oper, expr, parse_unary_expression());
+            expr = new ShiftRightLogical(oper, expr, parse_unary_expression());
         } else if (match(TK_SRA)) {
             oper = matched;
-            expr = new BinOp(EXPR_SHIFT_RIGHT_ARITHMETIC, oper, expr, parse_unary_expression());
+            expr = new ShiftRightArithmetic(oper, expr, parse_unary_expression());
         } else {
             break;
         }
