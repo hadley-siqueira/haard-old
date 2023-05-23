@@ -185,6 +185,26 @@ void generate_cc_files(std::vector<ClassInfo>& class_names) {
 
 int main() {
     std::vector<ClassInfo> class_names = {
+        {"SpecialAssignment", ":="},
+        {"BitwiseAndAssignment", "&="},
+        {"BitwiseXorAssignment", "^="},
+        {"BitwiseOrAssignment", "|="},
+        {"BitwiseNotAssignment", "~="},
+        {"TimesAssignment", "*="},
+        {"DivisionAssignment", "/="},
+        {"IntegerDivisionAssignment", "//="},
+        {"MinusAssignment", "-="},
+        {"PlusAssignment", "+="},
+        {"ShiftLeftLogicalAssignment", "<<="},
+        {"ShiftRightLogicalAssignment", ">>>="},
+        {"ShiftRightArithmeticAssignment", ">>="},
+
+        {"LogicalOr", "or"},
+        {"LogicalOrOper", "or"},
+        {"LogicalAnd", "and"},
+        {"LogicalAndOper", "and"},
+
+
         {"Equal", "=="},
         {"NotEqual", "!="},
 

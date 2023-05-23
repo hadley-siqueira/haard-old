@@ -453,7 +453,7 @@ void Printer::print_expression(Expression* expression) {
         print_binop("-=", bin);
         break;
 
-    case EXPR_INTEGER_DIVISIO_ASSIGN:
+    case EXPR_INTEGER_DIVISION_ASSIGN:
         print_binop("//=", bin);
         break;
 
