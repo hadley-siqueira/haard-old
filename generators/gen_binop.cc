@@ -185,13 +185,33 @@ void generate_cc_files(std::vector<ClassInfo>& class_names) {
 
 int main() {
     std::vector<ClassInfo> class_names = {
-        { "Plus", "+"},
-        { "Minus", "-"},
-        { "Times", "*"},
-        { "ShiftLeftLogical", "<<"}
+        {"Equal", "=="},
+        {"NotEqual", "!="},
+
+        {"LessThan", "<"},
+        {"GreaterThan", ">"},
+        {"LessThanOrEqual", "<="},
+        {"GreaterThanOrEqual", ">="},
+
+        {"Plus", "+"},
+        {"Minus", "-"},
+
+        {"Times", "*"},
+        {"Division", "*"},
+        {"Modulo", "*"},
+        {"IntegerDivision", "*"},
+
+        {"Power", "**"},
+
+        {"BitwiseOr", "|"},
+        {"BitwiseXor", "^"},
+        {"BitwiseAnd", "&"},
+
+        {"ShiftLeftLogical", "<<"},
+        {"ShiftRightLogical", ">>>"},
+        {"ShiftRightArithmetic", ">>"}
     };
 
-    generate_headers(class_names);
     generate_cc_files(class_names);
 
     return 0;
