@@ -164,6 +164,8 @@ set(SEMANTIC_SRC
     src/semantic/expression_scope_builder.cc
     src/semantic/identifier_scope_builder.cc
     src/semantic/assignment_scope_builder.cc
+    src/semantic/equal_scope_builder.cc
+    src/semantic/not_equal_scope_builder.cc
     src/semantic/plus_scope_builder.cc
     src/semantic/minus_scope_builder.cc
 )

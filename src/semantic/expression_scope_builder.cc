@@ -2,6 +2,8 @@
 #include "semantic/expression_scope_builder.h"
 #include "semantic/identifier_scope_builder.h"
 #include "semantic/assignment_scope_builder.h"
+#include "semantic/equal_scope_builder.h"
+#include "semantic/not_equal_scope_builder.h"
 #include "semantic/plus_scope_builder.h"
 #include "semantic/minus_scope_builder.h"
 
@@ -33,6 +35,14 @@ void ExpressionScopeBuilder::build_expression(Expression* expr) {
 
     case EXPR_ASSIGN:
         build_assignment((BinOp*) expr);
+        break;
+
+    case EXPR_EQUAL:
+        build_equal((Equal*) expr);
+        break;
+
+    case EXPR_NOT_EQUAL:
+        build_not_equal((NotEqual*) expr);
         break;
 
     case EXPR_PLUS:
@@ -82,6 +92,18 @@ void ExpressionScopeBuilder::build_assignment(BinOp* bin) {
     AssignmentScopeBuilder builder(get_context());
 
     builder.build_assignment(bin);
+}
+
+void ExpressionScopeBuilder::build_equal(Equal* oper) {
+    EqualScopeBuilder builder(get_context());
+
+    builder.build_equal(oper);
+}
+
+void ExpressionScopeBuilder::build_not_equal(NotEqual* oper) {
+    NotEqualScopeBuilder builder(get_context());
+
+    builder.build_not_equal(oper);
 }
 
 void ExpressionScopeBuilder::build_plus(Plus* oper) {

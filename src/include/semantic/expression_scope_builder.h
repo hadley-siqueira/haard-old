@@ -22,6 +22,10 @@ namespace haard {
         void build_literal_symbol(Literal* literal);
 
         void build_assignment(BinOp* bin);
+
+        void build_equal(Equal* oper);
+        void build_not_equal(NotEqual* oper);
+
         void build_plus(Plus* oper);
         void build_minus(Minus* oper);
 
