@@ -112,6 +112,10 @@ set(AST_SRC
     src/ast/inclusive_range.cc
     src/ast/in.cc
     src/ast/not_in.cc
+    src/ast/dot.cc
+    src/ast/arrow.cc
+    src/ast/index.cc
+    src/ast/call.cc
 )
 
 set(IR_SRC

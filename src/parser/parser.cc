@@ -1200,13 +1200,13 @@ Expression* Parser::parse_postfix_expression() {
     while (true) {
         if (match(TK_DOT)) {
             oper = matched;
-            expr = new BinOp(EXPR_DOT, oper, expr, parse_identifier_expression());
+            expr = new Dot(oper, expr, parse_identifier_expression());
         } else if (match(TK_ARROW)) {
             oper = matched;
-            expr = new BinOp(EXPR_ARROW, oper, expr, parse_identifier_expression());
+            expr = new Arrow(oper, expr, parse_identifier_expression());
         } else if (match(TK_LEFT_SQUARE_BRACKET)) {
             oper = matched;
-            expr = new BinOp(EXPR_INDEX, oper, expr, parse_expression());
+            expr = new Index(oper, expr, parse_expression());
             expect(TK_RIGHT_SQUARE_BRACKET);
         } else if (next_token_same_line() && match(TK_LEFT_PARENTHESIS)) {
             oper = matched;

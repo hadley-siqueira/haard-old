@@ -74,6 +74,10 @@
 #include "ast/inclusive_range.h"
 #include "ast/in.h"
 #include "ast/not_in.h"
+#include "ast/dot.h"
+#include "ast/arrow.h"
+#include "ast/call.h"
+#include "ast/index.h"
 
 // Statements
 #include "ast/statement.h"
