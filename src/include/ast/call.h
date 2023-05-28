@@ -8,6 +8,13 @@
 namespace haard {
     class Call : public Expression {
     public:
+        Call(Expression* object=nullptr, ExpressionList* arguments=nullptr);
+        Call(Token& token, Expression* object=nullptr, ExpressionList* arguments=nullptr);
+        ~Call();
+
+    public:
+        std::string to_str();
+
         int get_line() const;
         void set_line(int value);
 

@@ -1210,7 +1210,7 @@ Expression* Parser::parse_postfix_expression() {
             expect(TK_RIGHT_SQUARE_BRACKET);
         } else if (next_token_same_line() && match(TK_LEFT_PARENTHESIS)) {
             oper = matched;
-            expr = new BinOp(EXPR_CALL, oper, expr, parse_argument_list());
+            expr = new Call(oper, expr, parse_argument_list());
             expect(TK_RIGHT_PARENTHESIS);
         } else if (next_token_same_line() && match(TK_INC)) {
             oper = matched;
