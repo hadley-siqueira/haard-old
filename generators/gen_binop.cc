@@ -233,9 +233,9 @@ int main() {
         {"Minus", "-"},
 
         {"Times", "*"},
-        {"Division", "*"},
-        {"Modulo", "*"},
-        {"IntegerDivision", "*"},
+        {"Division", "/"},
+        {"Modulo", "%"},
+        {"IntegerDivision", "//"},
 
         {"Power", "**"},
 

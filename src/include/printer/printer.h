@@ -41,6 +41,12 @@ namespace haard {
             void print_new_expression(NewExpression* expr);
 
             void print_plus(Plus* expr);
+            void print_minus(Minus* expr);
+
+            void print_times(Times* expr);
+            void print_division(Division* expr);
+            void print_integer_division(IntegerDivision* expr);
+            void print_modulo(Modulo* expr);
 
         private:
             void indent();

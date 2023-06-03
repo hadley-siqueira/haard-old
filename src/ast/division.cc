@@ -42,7 +42,7 @@ std::string Division::to_str() {
     std::stringstream ss;
 
     ss << left->to_str();
-    ss << " * ";
+    ss << " / ";
     ss << right->to_str();
 
     return ss.str();

@@ -482,23 +482,23 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_MINUS:
-        print_binop("-", bin);
+        print_minus((Minus*) expression);
         break;
 
     case EXPR_TIMES:
-        print_binop("*", bin);
+        print_times((Times*) expression);
         break;
 
     case EXPR_DIVISION:
-        print_binop("/", bin);
+        print_division((Division*) expression);
         break;
 
     case EXPR_INTEGER_DIVISION:
-        print_binop("//", bin);
+        print_integer_division((IntegerDivision*) expression);
         break;
 
     case EXPR_MODULO:
-        print_binop("%", bin);
+        print_modulo((Modulo*) expression);
         break;
 
     case EXPR_POWER:
@@ -821,6 +821,26 @@ void Printer::print_new_expression(NewExpression* expr) {
 }
 
 void Printer::print_plus(Plus* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_minus(Minus* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_times(Times* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_division(Division* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_integer_division(IntegerDivision* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_modulo(Modulo* expr) {
     out << expr->to_str();
 }
 

@@ -46,12 +46,12 @@ void Driver::run() {
     log_info("ending parsing...");
     check_for_errors();
 
+    run_flags();
+
     log_info("starting semantic analysis...");
     semantic_analysis();
     check_for_errors();
     log_info("ending semantic analysis...");
-
-    run_flags();
 
     log_info("starting ir generation...");
    // ir_generation();
@@ -213,6 +213,7 @@ void Driver::print_modules() {
 
     printer.print_modules(modules);
     std::cout << printer.to_str();
+    exit(0);
 }
 
 std::string Driver::build_import_path(Import* import) {
