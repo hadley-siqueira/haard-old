@@ -64,16 +64,15 @@ namespace haard {
 
         Expression* parse_expression();
         Expression* parse_assignment_expression();
-        Expression* parse_range_expression();
+        Expression* parse_cast_expression();
         Expression* parse_logical_or_expression();
         Expression* parse_logical_and_expression();
         Expression* parse_equality_expression();
         Expression* parse_relational_expression();
+        Expression* parse_range_expression();
         Expression* parse_arith_expression();
         Expression* parse_term_expression();
-
         Expression* parse_power_expression();
-
         Expression* parse_bitwise_or_expression();
         Expression* parse_bitwise_xor_expression();
         Expression* parse_bitwise_and_expression();
@@ -92,7 +91,7 @@ namespace haard {
         ExpressionList* parse_hash(Expression* key);
         NewExpression* parse_new_expression();
         Expression* parse_delete_expression();
-        Expression* parse_cast_expression();
+
 
         void advance();
         void expect(int kind);

@@ -913,6 +913,16 @@ Expression* Parser::parse_assignment_expression() {
     return expr;
 }
 
+Expression* Parser::parse_cast_expression() {
+    Expression* expr = parse_logical_or_expression();
+
+    if (match(TK_AS)) {
+        expr = new CastExpression(expr, parse_type());
+    }
+
+    return expr;
+}
+
 Expression* Parser::parse_logical_or_expression() {
     Token oper;
     Expression* expr = parse_logical_and_expression();
@@ -1491,16 +1501,6 @@ Expression* Parser::parse_delete_expression() {
     }
 
     expr = new UnOp(kind, oper, parse_expression());
-    return expr;
-}
-
-Expression *Parser::parse_cast_expression() {
-    Expression* expr = parse_logical_or_expression();
-
-    if (match(TK_AS)) {
-        expr = new CastExpression(expr, parse_type());
-    }
-
     return expr;
 }
 

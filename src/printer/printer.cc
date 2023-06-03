@@ -477,6 +477,10 @@ void Printer::print_expression(Expression* expression) {
         print_binop("&=", bin);
         break;
 
+    case EXPR_CAST:
+        print_cast((CastExpression*) expression);
+        break;
+
     case EXPR_LOGICAL_OR:
         print_logical_or((LogicalOr*) expression);
         break;
@@ -818,6 +822,10 @@ void Printer::print_new_expression(NewExpression* expr) {
     if (expr->has_arguments()) {
         print_expression_list("(", ")", expr->get_arguments());
     }
+}
+
+void Printer::print_cast(CastExpression* expr) {
+    out << expr->to_str();
 }
 
 void Printer::print_logical_or(LogicalOr* expr) {

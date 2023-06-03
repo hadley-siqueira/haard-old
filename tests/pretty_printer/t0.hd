@@ -1,4 +1,7 @@
 def main : int
+    a = 0 as int
+    a = 0 as int**
+
     a = true and true
     b = true or true
     c = true || false

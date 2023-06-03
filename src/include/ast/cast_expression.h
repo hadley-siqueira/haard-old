@@ -11,6 +11,8 @@ namespace haard {
             ~CastExpression();
 
         public:
+            std::string to_str();
+
             Type* get_cast_type();
             Expression* get_expression();
 
