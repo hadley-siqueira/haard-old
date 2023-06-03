@@ -502,31 +502,31 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_POWER:
-        print_binop("**", bin);
+        print_power((Power*) expression);
         break;
 
     case EXPR_BITWISE_OR:
-        print_binop("|", bin);
+        print_bitwise_or((BitwiseOr*) expression);
         break;
 
     case EXPR_BITWISE_XOR:
-        print_binop("^", bin);
+        print_bitwise_xor((BitwiseXor*) expression);
         break;
 
     case EXPR_BITWISE_AND:
-        print_binop("&", bin);
+        print_bitwise_and((BitwiseAnd*) expression);
         break;
 
     case EXPR_SHIFT_LEFT_LOGICAL:
-        print_binop("<<", bin);
+        print_shift_left_logical((ShiftLeftLogical*) expression);
         break;
 
     case EXPR_SHIFT_RIGHT_LOGICAL:
-        print_binop(">>>", bin);
+        print_shift_right_logical((ShiftRightLogical*) expression);
         break;
 
     case EXPR_SHIFT_RIGHT_ARITHMETIC:
-        print_binop(">>", bin);
+        print_shift_right_arithmetic((ShiftRightArithmetic*) expression);
         break;
 
     case EXPR_INCLUSIVE_RANGE:
@@ -841,6 +841,34 @@ void Printer::print_integer_division(IntegerDivision* expr) {
 }
 
 void Printer::print_modulo(Modulo* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_power(Power* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_bitwise_or(BitwiseOr* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_bitwise_xor(BitwiseXor* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_bitwise_and(BitwiseAnd* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_shift_left_logical(ShiftLeftLogical* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_shift_right_logical(ShiftRightLogical* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_shift_right_arithmetic(ShiftRightArithmetic* expr) {
     out << expr->to_str();
 }
 

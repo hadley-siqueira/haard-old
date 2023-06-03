@@ -48,6 +48,16 @@ namespace haard {
             void print_integer_division(IntegerDivision* expr);
             void print_modulo(Modulo* expr);
 
+            void print_power(Power* expr);
+
+            void print_bitwise_or(BitwiseOr* expr);
+            void print_bitwise_xor(BitwiseXor* expr);
+            void print_bitwise_and(BitwiseAnd* expr);
+
+            void print_shift_left_logical(ShiftLeftLogical* expr);
+            void print_shift_right_logical(ShiftRightLogical* expr);
+            void print_shift_right_arithmetic(ShiftRightArithmetic* expr);
+
         private:
             void indent();
             void dedent();
