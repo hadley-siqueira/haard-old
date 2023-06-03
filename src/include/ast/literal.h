@@ -16,6 +16,8 @@ namespace haard {
             Expression* clone();
             uint64_t to_u64();
 
+            std::string to_str();
+
         private:
             std::string lexeme;
             int line;

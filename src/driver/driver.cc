@@ -324,6 +324,7 @@ std::vector<std::string> Driver::get_files_from_dir(std::string path) {
 
 void Driver::show_help() {
     const char msg[] = 
+        "Usage: hdc [options] file...\n";
         "Options:\n"
         "    -h         Show this help message\n"
         "    -o         Choose output name\n"
@@ -331,7 +332,7 @@ void Driver::show_help() {
         "    -cpp       Generate high level C++\n"
         "    -pretty    Pretty Print file\n"
         "    -info      Show compiler info\n";
-        
+
     std::cout << msg;
     exit(0);
 }

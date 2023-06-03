@@ -40,6 +40,8 @@ namespace haard {
             void print_function_expression(FunctionExpression* function);
             void print_new_expression(NewExpression* expr);
 
+            void print_plus(Plus* expr);
+
         private:
             void indent();
             void dedent();

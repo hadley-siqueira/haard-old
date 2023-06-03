@@ -478,7 +478,7 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_PLUS:
-        print_binop("+", bin);
+        print_plus((Plus*) expression);
         break;
 
     case EXPR_MINUS:
@@ -818,6 +818,10 @@ void Printer::print_new_expression(NewExpression* expr) {
     if (expr->has_arguments()) {
         print_expression_list("(", ")", expr->get_arguments());
     }
+}
+
+void Printer::print_plus(Plus* expr) {
+    out << expr->to_str();
 }
 
 void Printer::indent() {

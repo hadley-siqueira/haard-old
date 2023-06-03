@@ -61,3 +61,7 @@ uint64_t Literal::to_u64() {
     return res;
 }
 
+std::string Literal::to_str() {
+    return lexeme;
+}
+
