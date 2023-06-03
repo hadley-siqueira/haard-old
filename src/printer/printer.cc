@@ -477,6 +477,14 @@ void Printer::print_expression(Expression* expression) {
         print_binop("&=", bin);
         break;
 
+    case EXPR_INCLUSIVE_RANGE:
+        print_inclusive_range((InclusiveRange*) expression);
+        break;
+
+    case EXPR_EXCLUSIVE_RANGE:
+        print_exclusive_range((ExclusiveRange*) expression);
+        break;
+
     case EXPR_PLUS:
         print_plus((Plus*) expression);
         break;
@@ -527,14 +535,6 @@ void Printer::print_expression(Expression* expression) {
 
     case EXPR_SHIFT_RIGHT_ARITHMETIC:
         print_shift_right_arithmetic((ShiftRightArithmetic*) expression);
-        break;
-
-    case EXPR_INCLUSIVE_RANGE:
-        print_binop("..", bin);
-        break;
-
-    case EXPR_EXCLUSIVE_RANGE:
-        print_binop("...", bin);
         break;
 
     case EXPR_LOGICAL_OR:
@@ -818,6 +818,14 @@ void Printer::print_new_expression(NewExpression* expr) {
     if (expr->has_arguments()) {
         print_expression_list("(", ")", expr->get_arguments());
     }
+}
+
+void Printer::print_inclusive_range(InclusiveRange* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_exclusive_range(ExclusiveRange* expr) {
+    out << expr->to_str();
 }
 
 void Printer::print_plus(Plus* expr) {
