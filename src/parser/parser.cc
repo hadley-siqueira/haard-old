@@ -1042,23 +1042,36 @@ Expression* Parser::parse_arith_expression() {
 
 Expression* Parser::parse_term_expression() {
     Token oper;
-    Expression* expr = parse_bitwise_or_expression();
+    Expression* expr = parse_power_expression();
 
     while (true) {
         if (next_token_same_line() && lookahead(TK_TIMES)) {
             match(TK_TIMES);
             oper = matched;
-            expr = new Times(oper, expr, parse_bitwise_or_expression());
+            expr = new Times(oper, expr, parse_power_expression());
         } else if (match(TK_DIVISION)) {
             oper = matched;
-            expr = new Division(oper, expr, parse_bitwise_or_expression());
+            expr = new Division(oper, expr, parse_power_expression());
         } else if (match(TK_INTEGER_DIVISION)) {
             oper = matched;
-            expr = new IntegerDivision(oper, expr, parse_bitwise_or_expression());
+            expr = new IntegerDivision(oper, expr, parse_power_expression());
         } else if (match(TK_MODULO)) {
             oper = matched;
-            expr = new Modulo(oper, expr, parse_bitwise_or_expression());
-        } else if (match(TK_POWER)) {
+            expr = new Modulo(oper, expr, parse_power_expression());
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expression* Parser::parse_power_expression() {
+    Token oper;
+    Expression* expr = parse_bitwise_or_expression();
+
+    while (true) {
+        if (match(TK_POWER)) {
             oper = matched;
             expr = new Power(oper, expr, parse_bitwise_or_expression());
         } else {

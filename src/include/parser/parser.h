@@ -71,6 +71,9 @@ namespace haard {
         Expression* parse_relational_expression();
         Expression* parse_arith_expression();
         Expression* parse_term_expression();
+
+        Expression* parse_power_expression();
+
         Expression* parse_bitwise_or_expression();
         Expression* parse_bitwise_xor_expression();
         Expression* parse_bitwise_and_expression();
