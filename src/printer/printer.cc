@@ -477,6 +477,54 @@ void Printer::print_expression(Expression* expression) {
         print_binop("&=", bin);
         break;
 
+    case EXPR_LOGICAL_OR:
+        print_binop("or", bin);
+        break;
+
+    case EXPR_LOGICAL_OR_OPER:
+        print_binop("||", bin);
+        break;
+
+    case EXPR_LOGICAL_AND:
+        print_binop("and", bin);
+        break;
+
+    case EXPR_LOGICAL_AND_OPER:
+        print_binop("&&", bin);
+        break;
+
+    case EXPR_EQUAL:
+        print_binop("==", bin);
+        break;
+
+    case EXPR_NOT_EQUAL:
+        print_binop("!=", bin);
+        break;
+
+    case EXPR_LESS_THAN:
+        print_less_than((LessThan*) expression);
+        break;
+
+    case EXPR_GREATER_THAN:
+        print_greater_than((GreaterThan*) expression);
+        break;
+
+    case EXPR_LESS_THAN_OR_EQUAL:
+        print_less_than_or_equal((LessThanOrEqual*) expression);
+        break;
+
+    case EXPR_GREATER_THAN_OR_EQUAL:
+        print_greater_than_or_equal((GreaterThanOrEqual*) expression);
+        break;
+
+    case EXPR_IN:
+        print_in((In*) expression);
+        break;
+
+    case EXPR_NOT_IN:
+        print_not_in((NotIn*) expression);
+        break;
+
     case EXPR_INCLUSIVE_RANGE:
         print_inclusive_range((InclusiveRange*) expression);
         break;
@@ -535,54 +583,6 @@ void Printer::print_expression(Expression* expression) {
 
     case EXPR_SHIFT_RIGHT_ARITHMETIC:
         print_shift_right_arithmetic((ShiftRightArithmetic*) expression);
-        break;
-
-    case EXPR_LOGICAL_OR:
-        print_binop("or", bin);
-        break;
-
-    case EXPR_LOGICAL_OR_OPER:
-        print_binop("||", bin);
-        break;
-
-    case EXPR_LOGICAL_AND:
-        print_binop("and", bin);
-        break;
-
-    case EXPR_LOGICAL_AND_OPER:
-        print_binop("&&", bin);
-        break;
-
-    case EXPR_EQUAL:
-        print_binop("==", bin);
-        break;
-
-    case EXPR_NOT_EQUAL:
-        print_binop("!=", bin);
-        break;
-
-    case EXPR_LESS_THAN:
-        print_binop("<", bin);
-        break;
-
-    case EXPR_GREATER_THAN:
-        print_binop(">", bin);
-        break;
-
-    case EXPR_LESS_THAN_OR_EQUAL:
-        print_binop("<=", bin);
-        break;
-
-    case EXPR_GREATER_THAN_OR_EQUAL:
-        print_binop(">=", bin);
-        break;
-
-    case EXPR_IN:
-        print_binop("in", bin);
-        break;
-
-    case EXPR_NOT_IN:
-        print_binop("not in", bin);
         break;
 
     case EXPR_LOGICAL_NOT_OPER:
@@ -818,6 +818,30 @@ void Printer::print_new_expression(NewExpression* expr) {
     if (expr->has_arguments()) {
         print_expression_list("(", ")", expr->get_arguments());
     }
+}
+
+void Printer::print_less_than(LessThan* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_greater_than(GreaterThan* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_less_than_or_equal(LessThanOrEqual* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_greater_than_or_equal(GreaterThanOrEqual *expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_in(In* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_not_in(NotIn* expr) {
+    out << expr->to_str();
 }
 
 void Printer::print_inclusive_range(InclusiveRange* expr) {
