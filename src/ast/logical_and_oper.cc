@@ -42,7 +42,7 @@ std::string LogicalAndOper::to_str() {
     std::stringstream ss;
 
     ss << left->to_str();
-    ss << " and ";
+    ss << " && ";
     ss << right->to_str();
 
     return ss.str();

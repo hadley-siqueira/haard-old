@@ -40,6 +40,14 @@ namespace haard {
             void print_function_expression(FunctionExpression* function);
             void print_new_expression(NewExpression* expr);
 
+            void print_logical_or(LogicalOr* expr);
+            void print_logical_or_oper(LogicalOrOper* expr);
+            void print_logical_and(LogicalAnd* expr);
+            void print_logical_and_oper(LogicalAndOper* expr);
+
+            void print_equal(Equal* expr);
+            void print_not_equal(NotEqual* expr);
+
             void print_less_than(LessThan* expr);
             void print_greater_than(GreaterThan* expr);
             void print_less_than_or_equal(LessThanOrEqual* expr);

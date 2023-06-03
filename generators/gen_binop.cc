@@ -211,9 +211,9 @@ int main() {
         {"ShiftRightArithmeticAssignment", ">>="},
 
         {"LogicalOr", "or"},
-        {"LogicalOrOper", "or"},
+        {"LogicalOrOper", "||"},
         {"LogicalAnd", "and"},
-        {"LogicalAndOper", "and"},
+        {"LogicalAndOper", "&&"},
 
 
         {"Equal", "=="},

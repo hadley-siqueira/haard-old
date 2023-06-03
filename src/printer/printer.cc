@@ -478,27 +478,27 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_LOGICAL_OR:
-        print_binop("or", bin);
+        print_logical_or((LogicalOr*) expression);
         break;
 
     case EXPR_LOGICAL_OR_OPER:
-        print_binop("||", bin);
+        print_logical_or_oper((LogicalOrOper*) expression);
         break;
 
     case EXPR_LOGICAL_AND:
-        print_binop("and", bin);
+        print_logical_and((LogicalAnd*) expression);
         break;
 
     case EXPR_LOGICAL_AND_OPER:
-        print_binop("&&", bin);
+        print_logical_and_oper((LogicalAndOper*) expression);
         break;
 
     case EXPR_EQUAL:
-        print_binop("==", bin);
+        print_equal((Equal*) expression);
         break;
 
     case EXPR_NOT_EQUAL:
-        print_binop("!=", bin);
+        print_not_equal((NotEqual*) expression);
         break;
 
     case EXPR_LESS_THAN:
@@ -820,6 +820,30 @@ void Printer::print_new_expression(NewExpression* expr) {
     }
 }
 
+void Printer::print_logical_or(LogicalOr* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_logical_or_oper(LogicalOrOper* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_logical_and(LogicalAnd* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_logical_and_oper(LogicalAndOper* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_equal(Equal* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_not_equal(NotEqual* expr) {
+    out << expr->to_str();
+}
+
 void Printer::print_less_than(LessThan* expr) {
     out << expr->to_str();
 }
@@ -832,7 +856,7 @@ void Printer::print_less_than_or_equal(LessThanOrEqual* expr) {
     out << expr->to_str();
 }
 
-void Printer::print_greater_than_or_equal(GreaterThanOrEqual *expr) {
+void Printer::print_greater_than_or_equal(GreaterThanOrEqual* expr) {
     out << expr->to_str();
 }
 

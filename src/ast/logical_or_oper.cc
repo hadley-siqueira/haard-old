@@ -42,7 +42,7 @@ std::string LogicalOrOper::to_str() {
     std::stringstream ss;
 
     ss << left->to_str();
-    ss << " or ";
+    ss << " || ";
     ss << right->to_str();
 
     return ss.str();

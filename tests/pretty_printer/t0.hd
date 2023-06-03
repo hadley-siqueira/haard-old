@@ -1,4 +1,12 @@
 def main : int
+    a = true and true
+    b = true or true
+    c = true || false
+    d = true && true
+
+    a = 0 == 0
+    a = 0 != 1
+
     a = 1 < 0
     a = 1 > 0
     a = 1 <= 0
