@@ -61,7 +61,22 @@ def main : int
     a = 2 * (1 + 2)
     a = sizeof(*a)
 
-    a = a->field + a.field + a[i + 7] + obj->field.m(2, true)
+    a = a->field + a.field + a[i + 7] + obj->field.m(2, true, :post)
     io::print("Hello, world")
     ::print('Hello, world!')
 
+#   assignment operators
+#    my_call(|a| {
+#        return a + 1
+#    })
+
+#   v = {1, 2}
+#   v = [1, 2]
+#   v = {method: :post, msg: 'hello'}
+#   v = {"method": "post"}
+#   v = new Class[2]
+#   v = new Class<int>(2)
+#   v = new Hash<str, int>(2)
+#   v = new int*[100]
+#   delete v
+#   delete[] v
