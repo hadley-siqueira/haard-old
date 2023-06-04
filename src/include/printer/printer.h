@@ -79,6 +79,8 @@ namespace haard {
             void print_shift_right_logical(ShiftRightLogical* expr);
             void print_shift_right_arithmetic(ShiftRightArithmetic* expr);
 
+            void print_call(Call* expr);
+
         private:
             void indent();
             void dedent();

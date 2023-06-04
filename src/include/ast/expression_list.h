@@ -13,6 +13,8 @@ namespace haard {
             ~ExpressionList();
 
         public:
+            std::string to_str();
+
             Expression* get_expression(int idx);
 
             void add_expression(Expression* expression);

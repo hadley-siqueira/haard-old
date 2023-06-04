@@ -644,8 +644,7 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_CALL:
-        print_expression(bin->get_left());
-        print_expression(bin->get_right());
+        print_call((Call*) expression);
         break;
 
     case EXPR_INDEX:
@@ -933,6 +932,10 @@ void Printer::print_shift_right_logical(ShiftRightLogical* expr) {
 }
 
 void Printer::print_shift_right_arithmetic(ShiftRightArithmetic* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_call(Call* expr) {
     out << expr->to_str();
 }
 

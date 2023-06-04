@@ -16,7 +16,6 @@ namespace haard {
             Expression* get_expression();
 
             void set_expression(Expression* expression);
-            void set_right(Expression* right);
             Expression* clone();
 
         private:

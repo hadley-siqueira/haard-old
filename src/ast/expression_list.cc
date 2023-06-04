@@ -1,3 +1,4 @@
+#include <sstream>
 #include "ast/expression_list.h"
 
 using namespace haard;
@@ -23,6 +24,21 @@ ExpressionList::~ExpressionList() {
     for (int i = 0; i < expressions.size(); ++i) {
         delete expressions[i];
     }
+}
+
+std::string ExpressionList::to_str() {
+    int i;
+    std::stringstream ss;
+
+    if (expressions_count() > 0) {
+        for (i = 0; i < expressions_count() - 1; ++i) {
+            ss << expressions[i]->to_str() << ", ";
+        }
+
+        ss << expressions[i]->to_str();
+    }
+
+    return ss.str();
 }
 
 Expression* ExpressionList::get_expression(int idx) {

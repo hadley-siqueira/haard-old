@@ -3,7 +3,7 @@
 #include <vector>
 #include <sstream>
 
-/* This generator is used for generate binops
+/* This generator is used for generate unary operators (most of them)
  * It generates the .h and .cc files
  *
  * The reason I decided to go down this path of using generators
@@ -96,9 +96,10 @@ void generate_headers(std::vector<ClassInfo>& class_names) {
         ss << "namespace haard {\n";
         ss << "    class " << c.name << " : public Expression {\n";
         ss << "    public:\n";
-        ss << "        " << c.name << "(Expression* left=nullptr, Expression* right=nullptr);\n";
-        ss << "        " << c.name << "(Token& token, Expression* left=nullptr, Expression* right=nullptr);\n";
+        ss << "        " << c.name << "(Expression* expression=nullptr);\n";
+        ss << "        " << c.name << "(Token& token, Expression* expression=nullptr);\n";
         ss << "        ~" << c.name << "();\n\n";
+
         ss << "    public:\n";
         ss << "        std::string to_str();\n\n";
 
@@ -107,20 +108,17 @@ void generate_headers(std::vector<ClassInfo>& class_names) {
 
         ss << "        int get_column() const;\n";
         ss << "        void set_column(int value);\n\n";
-
-        ss << "        Expression* get_left() const;\n";
-        ss << "        void set_left(Expression* value);\n\n";
-
-        ss << "        Expression* get_right() const;\n";
-        ss << "        void set_right(Expression* value);\n\n";
+        ss << "
+        ss << "        Expression* get_expression() const;\n";
+        ss << "        void set_expression(Expression* expression);\n\n";
 
         ss << "    private:\n";
         ss << "        int line;\n";
         ss << "        int column;\n";
-        ss << "        Expression* left;\n";
-        ss << "        Expression* right;\n";
+        ss << "        Expression* expression;\n";
         ss << "    };\n";
         ss << "}\n\n";
+
         ss << "#endif\n";
 
         f << ss.str();
