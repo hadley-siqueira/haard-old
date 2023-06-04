@@ -1410,7 +1410,7 @@ Expression* Parser::parse_parenthesis_or_tuple() {
 }
 
 Expression* Parser::parse_list_expression() {
-    ExpressionList* list = new ExpressionList(EXPR_LIST);
+    List* list = new List();
 
     expect(TK_LEFT_SQUARE_BRACKET);
 
@@ -1431,6 +1431,7 @@ Expression* Parser::parse_list_expression() {
 Expression* Parser::parse_array_or_hash() {
     Expression* expr = nullptr;
     ExpressionList* list = nullptr;
+    Array* array;
 
     expect(TK_LEFT_CURLY_BRACKET);
 
@@ -1441,18 +1442,21 @@ Expression* Parser::parse_array_or_hash() {
             list = parse_hash(expr);
             list->set_kind(EXPR_HASH);
         } else {
-            list = new ExpressionList(EXPR_ARRAY, expr);
+            array = new Array();
+            array->add_expression(expr);
 
             while (match(TK_COMMA)) {
                 if (!lookahead(TK_RIGHT_CURLY_BRACKET)) {
-                    list->add_expression(parse_expression());
+                    array->add_expression(parse_expression());
                 }
             }
+
+            expr = array;
         }
     }
 
     expect(TK_RIGHT_CURLY_BRACKET);
-    return list;
+    return expr;
 }
 
 ExpressionList* Parser::parse_hash(Expression* key) {

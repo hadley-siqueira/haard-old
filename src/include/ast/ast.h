@@ -79,6 +79,10 @@
 #include "ast/call.h"
 #include "ast/index.h"
 
+#include "ast/array.h"
+#include "ast/list.h"
+#include "ast/hash.h"
+
 // Unary operators
 #include "ast/address_of.h"
 #include "ast/bitwise_not.h"

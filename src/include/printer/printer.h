@@ -97,6 +97,9 @@ namespace haard {
             void print_arrow(Arrow* expr);
             void print_dot(Dot* expr);
 
+            void print_array(Array* expr);
+            void print_list(List* expr);
+
         private:
             void indent();
             void dedent();

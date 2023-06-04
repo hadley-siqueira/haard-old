@@ -129,6 +129,9 @@ set(AST_SRC
     src/ast/sizeof.cc
     src/ast/unary_minus.cc
     src/ast/unary_plus.cc
+    src/ast/array.cc
+    src/ast/list.cc
+    src/ast/hash.cc
 )
 
 set(IR_SRC

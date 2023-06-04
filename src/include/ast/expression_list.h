@@ -14,6 +14,7 @@ namespace haard {
 
         public:
             std::string to_str();
+            std::string to_str(std::string begin, std::string end);
 
             Expression* get_expression(int idx);
 

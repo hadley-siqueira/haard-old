@@ -64,14 +64,22 @@ def main : int
     a = a->field + a.field + a[i + 7] + obj->field.m(2, true, :post)
     io::print("Hello, world")
     ::print('Hello, world!')
+    v = {1, 2}
+    v = [1, 2]
+    sine_lut = {
+        0x8000,0x80c9,0x8192,0x825b,0x8324,0x83ee,0x84b7,0x8580,
+        0x8649,0x8712,0x87db,0x88a4,0x896c,0x8a35,0x8afe,0x8bc6,
+        0x8c8e,0x8d57,0x8e1f,0x8ee7,0x8fae,0x9076,0x913e,0x9205,
+        0x92cc,0x9393,0x945a,0x9521,0x95e7,0x96ad,0x9773,0x9839,
+        0x98fe,0x99c4,0x9a89,0x9b4d,0x9c12,0x9cd6,0x9d9a,0x9e5e,
+        0x1   ,0x2   ,0x3   ,   0x1
+    }
 
 #   assignment operators
 #    my_call(|a| {
 #        return a + 1
 #    })
 
-#   v = {1, 2}
-#   v = [1, 2]
 #   v = {method: :post, msg: 'hello'}
 #   v = {"method": "post"}
 #   v = new Class[2]
@@ -80,3 +88,4 @@ def main : int
 #   v = new int*[100]
 #   delete v
 #   delete[] v
+

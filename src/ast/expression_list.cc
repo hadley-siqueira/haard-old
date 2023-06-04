@@ -41,6 +41,13 @@ std::string ExpressionList::to_str() {
     return ss.str();
 }
 
+std::string ExpressionList::to_str(std::string begin, std::string end) {
+    std::stringstream ss;
+
+    ss << begin << to_str() << end;
+    return ss.str();
+}
+
 Expression* ExpressionList::get_expression(int idx) {
     if (idx < expressions.size()) {
         return expressions[idx];
