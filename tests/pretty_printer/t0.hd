@@ -55,4 +55,9 @@ def main : int
     a = -1
     ++a
     --a
+    a++
+    a--
+
+    a = 2 * (1 + 2)
+    a = sizeof(*a)
 

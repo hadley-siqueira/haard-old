@@ -30,7 +30,7 @@ void Sizeof::set_expression(Expression* value) {
 std::string Sizeof::to_str() {
     std::stringstream ss;
 
-    ss << "sizeof" << expression->to_str();
+    ss << "sizeof(" << expression->to_str() << ")";
 
     return ss.str();
 }

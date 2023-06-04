@@ -1200,7 +1200,7 @@ Expression* Parser::parse_unary_expression() {
     } else if (match(TK_SIZEOF)) {
         oper = matched;
         expect(TK_LEFT_PARENTHESIS);
-        expr = new UnOp(EXPR_SIZEOF, oper, parse_unary_expression());
+        expr = new Sizeof(oper, parse_unary_expression());
         expect(TK_RIGHT_PARENTHESIS);
     } else if (match(TK_DOUBLE_DOLAR)) {
         oper = matched;
@@ -1237,10 +1237,10 @@ Expression* Parser::parse_postfix_expression() {
             expect(TK_RIGHT_PARENTHESIS);
         } else if (next_token_same_line() && match(TK_INC)) {
             oper = matched;
-            expr = new UnOp(EXPR_POS_INCREMENT, oper, expr);
+            expr = new PosIncrement(oper, expr);
         } else if (next_token_same_line() && match(TK_DEC)) {
             oper = matched;
-            expr = new UnOp(EXPR_POS_DECREMENT, oper, expr);
+            expr = new PosDecrement(oper, expr);
         } else {
             break;
         }
@@ -1401,7 +1401,7 @@ Expression* Parser::parse_parenthesis_or_tuple() {
 
         expr = list;
     } else if (lookahead(TK_RIGHT_PARENTHESIS)) {
-        expr = new UnOp(EXPR_PARENTHESIS, oper, expr);
+        expr = new Parenthesis(oper, expr);
     }
 
     expect(TK_RIGHT_PARENTHESIS);

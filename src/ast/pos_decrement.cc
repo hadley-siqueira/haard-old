@@ -30,7 +30,7 @@ void PosDecrement::set_expression(Expression* value) {
 std::string PosDecrement::to_str() {
     std::stringstream ss;
 
-    ss << "--" << expression->to_str();
+    ss << expression->to_str() << "--";
 
     return ss.str();
 }

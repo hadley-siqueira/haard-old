@@ -88,7 +88,10 @@ namespace haard {
             void print_unary_plus(UnaryPlus* expr);
             void print_pre_increment(PreIncrement* expr);
             void print_pre_decrement(PreDecrement* expr);
-
+            void print_pos_increment(PosIncrement* expr);
+            void print_pos_decrement(PosDecrement* expr);
+            void print_sizeof(Sizeof* expr);
+            void print_parenthesis(Parenthesis* expr);
             void print_call(Call* expr);
 
         private:

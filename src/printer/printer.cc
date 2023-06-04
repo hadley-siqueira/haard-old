@@ -626,21 +626,19 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_POS_INCREMENT:
-        print_unop("++", un, false);
+        print_pos_increment((PosIncrement*) expression);
         break;
 
     case EXPR_POS_DECREMENT:
-        print_unop("--", un, false);
+        print_pos_decrement((PosDecrement*) expression);
         break;
 
     case EXPR_SIZEOF:
-        print_unop("!", un);
+        print_sizeof((Sizeof*) expression);
         break;
 
     case EXPR_PARENTHESIS:
-        out << "(";
-        print_expression(un->get_expression());
-        out << ")";
+        print_parenthesis((Parenthesis*) expression);
         break;
 
     case EXPR_CALL:
@@ -968,6 +966,22 @@ void Printer::print_pre_increment(PreIncrement* expr) {
 }
 
 void Printer::print_pre_decrement(PreDecrement* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_pos_increment(PosIncrement* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_pos_decrement(PosDecrement* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_parenthesis(Parenthesis* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_sizeof(Sizeof* expr) {
     out << expr->to_str();
 }
 
