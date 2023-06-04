@@ -61,3 +61,6 @@ def main : int
     a = 2 * (1 + 2)
     a = sizeof(*a)
 
+    a = a->field + a.field + a[i + 7]
+    io::print("Hello, world")
+

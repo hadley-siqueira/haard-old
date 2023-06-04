@@ -89,9 +89,9 @@ void Driver::set_flags(int argc, char* argv[]) {
         } else if (strcmp(argv[i], "-i") == 0) {
             ++i;
             search_path.push_back(argv[i]);
-        } else if (strcmp(argv[i], "-pretty") == 0) {
+        } else if (strcmp(argv[i], "--pretty") == 0) {
             pretty_flag = true;
-        } else if (strcmp(argv[i], "-info") == 0) {
+        } else if (strcmp(argv[i], "--info") == 0) {
             info_flag = true;
         } else if (strcmp(argv[i], "-h") == 0) {
             help_flag = true;

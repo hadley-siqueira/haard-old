@@ -403,12 +403,17 @@ void Printer::print_variable_declaration(VarDeclaration* decl) {
     out << '\n';
 }
 
+// You may wonder why so much boilerplate code. After all, most cases
+// could be handled with a simple call to the virtual to_str() method.
+//
+// Well, the reason is because it helps me to keep track of what is already
+// implemented and what is missing. Yeah, I know, not the best strategy, but
+// at least keep me going on
 void Printer::print_expression(Expression* expression) {
     if (expression == nullptr) return;
 
     int kind = expression->get_kind();
     BinOp* bin = (BinOp*) expression;
-    UnOp* un = (UnOp*) expression;
     Literal* literal = (Literal*) expression;
     ExpressionList* exprlist = (ExpressionList*) expression;
 
@@ -646,22 +651,15 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_INDEX:
-        print_expression(bin->get_left());
-        out << "[";
-        print_expression(bin->get_right());
-        out << "]";
+        print_index((Index*) expression);
         break;
 
     case EXPR_ARROW:
-        print_expression(bin->get_left());
-        out << "->";
-        print_expression(bin->get_right());
+        print_arrow((Arrow*) expression);
         break;
 
     case EXPR_DOT:
-        print_expression(bin->get_left());
-        out << ".";
-        print_expression(bin->get_right());
+        print_dot((Dot*) expression);
         break;
 
     case EXPR_LITERAL_BOOL:
@@ -718,18 +716,6 @@ void Printer::print_binop(std::string oper, BinOp* bin) {
     print_expression(bin->get_left());
     out << " " << oper << " ";
     print_expression(bin->get_right());
-}
-
-void Printer::print_unop(std::string oper, UnOp* un, bool before) {
-    if (before) {
-        out << oper;
-    }
-
-    print_expression(un->get_expression());
-
-    if (!before) {
-        out << oper;
-    }
 }
 
 void Printer::print_identifier(Identifier* id) {
@@ -986,6 +972,18 @@ void Printer::print_sizeof(Sizeof* expr) {
 }
 
 void Printer::print_call(Call* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_index(Index* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_arrow(Arrow* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_dot(Dot* expr) {
     out << expr->to_str();
 }
 
