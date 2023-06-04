@@ -82,7 +82,12 @@ namespace haard {
             void print_logical_not_oper(LogicalNotOper* expr);
             void print_logical_not(LogicalNot* expr);
             void print_address_of(AddressOf* expr);
-
+            void print_dereference(Dereference* expr);
+            void print_bitwise_not(BitwiseNot* expr);
+            void print_unary_minus(UnaryMinus* expr);
+            void print_unary_plus(UnaryPlus* expr);
+            void print_pre_increment(PreIncrement* expr);
+            void print_pre_decrement(PreDecrement* expr);
 
             void print_call(Call* expr);
 

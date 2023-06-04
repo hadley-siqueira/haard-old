@@ -1177,26 +1177,26 @@ Expression* Parser::parse_unary_expression() {
         expr = new AddressOf(oper, parse_unary_expression());
     } else if (match(TK_TIMES)) {
         oper = matched;
-        expr = new UnOp(EXPR_DEREFERENCE, oper, parse_unary_expression());
+        expr = new Dereference(oper, parse_unary_expression());
     } else if (match(TK_POWER)) {
         oper = matched;
-        expr = new UnOp(EXPR_DEREFERENCE, oper, parse_unary_expression());
-        expr = new UnOp(EXPR_DEREFERENCE, oper, expr);
+        expr = new Dereference(oper, parse_unary_expression());
+        expr = new Dereference(oper, expr);
     } else if (match(TK_BITWISE_NOT)) {
         oper = matched;
-        expr = new UnOp(EXPR_BITWISE_NOT, oper, parse_unary_expression());
+        expr = new BitwiseNot(oper, parse_unary_expression());
     } else if (match(TK_MINUS)) {
         oper = matched;
-        expr = new UnOp(EXPR_UNARY_MINUS, oper, parse_unary_expression());
+        expr = new UnaryMinus(oper, parse_unary_expression());
     } else if (match(TK_PLUS)) {
         oper = matched;
-        expr = new UnOp(EXPR_UNARY_PLUS, oper, parse_unary_expression());
+        expr = new UnaryPlus(oper, parse_unary_expression());
     } else if (match(TK_INC)) {
         oper = matched;
-        expr = new UnOp(EXPR_PRE_INCREMENT, oper, parse_unary_expression());
+        expr = new PreIncrement(oper, parse_unary_expression());
     } else if (match(TK_DEC)) {
         oper = matched;
-        expr = new UnOp(EXPR_PRE_DECREMENT, oper, parse_unary_expression());
+        expr = new PreDecrement(oper, parse_unary_expression());
     } else if (match(TK_SIZEOF)) {
         oper = matched;
         expect(TK_LEFT_PARENTHESIS);

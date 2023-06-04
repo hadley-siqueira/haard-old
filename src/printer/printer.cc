@@ -594,7 +594,7 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_LOGICAL_NOT:
-        print_unop("not ", un);
+        print_logical_not((LogicalNot*) expression);
         break;
 
     case EXPR_ADDRESS_OF:
@@ -602,27 +602,27 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_DEREFERENCE:
-        print_unop("*", un);
+        print_dereference((Dereference*) expression);
         break;
 
     case EXPR_BITWISE_NOT:
-        print_unop("~", un);
+        print_bitwise_not((BitwiseNot*) expression);
         break;
 
     case EXPR_UNARY_MINUS:
-        print_unop("-", un);
+        print_unary_minus((UnaryMinus*) expression);
         break;
 
     case EXPR_UNARY_PLUS:
-        print_unop("+", un);
+        print_unary_plus((UnaryPlus*) expression);
         break;
 
     case EXPR_PRE_INCREMENT:
-        print_unop("++", un);
+        print_pre_increment((PreIncrement*) expression);
         break;
 
     case EXPR_PRE_DECREMENT:
-        print_unop("--", un);
+        print_pre_decrement((PreDecrement*) expression);
         break;
 
     case EXPR_POS_INCREMENT:
@@ -944,6 +944,30 @@ void Printer::print_logical_not(LogicalNot* expr) {
 }
 
 void Printer::print_address_of(AddressOf* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_dereference(Dereference* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_bitwise_not(BitwiseNot* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_unary_minus(UnaryMinus* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_unary_plus(UnaryPlus* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_pre_increment(PreIncrement* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_pre_decrement(PreDecrement* expr) {
     out << expr->to_str();
 }
 
