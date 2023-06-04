@@ -719,15 +719,7 @@ void Printer::print_binop(std::string oper, BinOp* bin) {
 }
 
 void Printer::print_identifier(Identifier* id) {
-    if (id->has_scope()) {
-        out << id->get_alias();
-
-        if (id->get_alias() != "::") {
-            out << "::";
-        }
-    }
-
-    out << id->get_name();
+    out << id->to_str();
 }
 
 void Printer::print_literal(Literal* literal) {

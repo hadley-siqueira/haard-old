@@ -61,6 +61,7 @@ def main : int
     a = 2 * (1 + 2)
     a = sizeof(*a)
 
-    a = a->field + a.field + a[i + 7]
+    a = a->field + a.field + a[i + 7] + obj->field.m(2, true)
     io::print("Hello, world")
+    ::print('Hello, world!')
 
