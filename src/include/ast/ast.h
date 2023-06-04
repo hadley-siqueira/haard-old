@@ -79,6 +79,22 @@
 #include "ast/call.h"
 #include "ast/index.h"
 
+// Unary operators
+#include "ast/address_of.h"
+#include "ast/bitwise_not.h"
+#include "ast/dereference.h"
+#include "ast/logical_not.h"
+#include "ast/logical_not_oper.h"
+#include "ast/parenthesis.h"
+#include "ast/pos_decrement.h"
+#include "ast/pos_increment.h"
+#include "ast/pre_decrement.h"
+#include "ast/pre_increment.h"
+#include "ast/sizeof.h"
+#include "ast/unary_minus.h"
+#include "ast/unary_plus.h"
+
+
 // Statements
 #include "ast/statement.h"
 #include "ast/while_statement.h"

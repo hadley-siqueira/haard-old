@@ -590,7 +590,7 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_LOGICAL_NOT_OPER:
-        print_unop("!", un);
+        print_logical_not_oper((LogicalNotOper*) expression);
         break;
 
     case EXPR_LOGICAL_NOT:
@@ -598,7 +598,7 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_ADDRESS_OF:
-        print_unop("&", un);
+        print_address_of((AddressOf*) expression);
         break;
 
     case EXPR_DEREFERENCE:
@@ -617,19 +617,19 @@ void Printer::print_expression(Expression* expression) {
         print_unop("+", un);
         break;
 
-    case EXPR_PRE_INC:
+    case EXPR_PRE_INCREMENT:
         print_unop("++", un);
         break;
 
-    case EXPR_PRE_DEC:
+    case EXPR_PRE_DECREMENT:
         print_unop("--", un);
         break;
 
-    case EXPR_POS_INC:
+    case EXPR_POS_INCREMENT:
         print_unop("++", un, false);
         break;
 
-    case EXPR_POS_DEC:
+    case EXPR_POS_DECREMENT:
         print_unop("--", un, false);
         break;
 
@@ -932,6 +932,18 @@ void Printer::print_shift_right_logical(ShiftRightLogical* expr) {
 }
 
 void Printer::print_shift_right_arithmetic(ShiftRightArithmetic* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_logical_not_oper(LogicalNotOper* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_logical_not(LogicalNot* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_address_of(AddressOf* expr) {
     out << expr->to_str();
 }
 

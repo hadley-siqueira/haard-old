@@ -215,7 +215,6 @@ int main() {
         {"LogicalAnd", "and"},
         {"LogicalAndOper", "&&"},
 
-
         {"Equal", "=="},
         {"NotEqual", "!="},
 

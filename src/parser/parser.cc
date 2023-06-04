@@ -1168,13 +1168,13 @@ Expression* Parser::parse_unary_expression() {
 
     if (match(TK_LOGICAL_NOT)) {
         oper = matched;
-        expr = new UnOp(EXPR_LOGICAL_NOT_OPER, oper, parse_unary_expression());
+        expr = new LogicalNotOper(oper, parse_unary_expression());
     } else if (match(TK_NOT)) {
         oper = matched;
-        expr = new UnOp(EXPR_LOGICAL_NOT, oper, parse_unary_expression());
+        expr = new LogicalNot(oper, parse_unary_expression());
     } else if (match(TK_BITWISE_AND)) {
         oper = matched;
-        expr = new UnOp(EXPR_ADDRESS_OF, oper, parse_unary_expression());
+        expr = new AddressOf(oper, parse_unary_expression());
     } else if (match(TK_TIMES)) {
         oper = matched;
         expr = new UnOp(EXPR_DEREFERENCE, oper, parse_unary_expression());
@@ -1193,10 +1193,10 @@ Expression* Parser::parse_unary_expression() {
         expr = new UnOp(EXPR_UNARY_PLUS, oper, parse_unary_expression());
     } else if (match(TK_INC)) {
         oper = matched;
-        expr = new UnOp(EXPR_PRE_INC, oper, parse_unary_expression());
+        expr = new UnOp(EXPR_PRE_INCREMENT, oper, parse_unary_expression());
     } else if (match(TK_DEC)) {
         oper = matched;
-        expr = new UnOp(EXPR_PRE_DEC, oper, parse_unary_expression());
+        expr = new UnOp(EXPR_PRE_DECREMENT, oper, parse_unary_expression());
     } else if (match(TK_SIZEOF)) {
         oper = matched;
         expect(TK_LEFT_PARENTHESIS);
@@ -1237,10 +1237,10 @@ Expression* Parser::parse_postfix_expression() {
             expect(TK_RIGHT_PARENTHESIS);
         } else if (next_token_same_line() && match(TK_INC)) {
             oper = matched;
-            expr = new UnOp(EXPR_POS_INC, oper, expr);
+            expr = new UnOp(EXPR_POS_INCREMENT, oper, expr);
         } else if (next_token_same_line() && match(TK_DEC)) {
             oper = matched;
-            expr = new UnOp(EXPR_POS_DEC, oper, expr);
+            expr = new UnOp(EXPR_POS_DECREMENT, oper, expr);
         } else {
             break;
         }

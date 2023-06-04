@@ -275,19 +275,19 @@ void OldScopeBuilder::build_expression(Expression* expression) {
         build_delete(un);
         break;
 
-    case EXPR_PRE_INC:
+    case EXPR_PRE_INCREMENT:
         build_pre_inc(un);
         break;
 
-    case EXPR_PRE_DEC:
+    case EXPR_PRE_DECREMENT:
         build_pre_dec(un);
         break;
 
-    case EXPR_POS_INC:
+    case EXPR_POS_INCREMENT:
         build_pos_inc(un);
         break;
 
-    case EXPR_POS_DEC:
+    case EXPR_POS_DECREMENT:
         build_pos_dec(un);
         break;
 

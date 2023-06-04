@@ -116,6 +116,19 @@ set(AST_SRC
     src/ast/arrow.cc
     src/ast/index.cc
     src/ast/call.cc
+    src/ast/address_of.cc
+    src/ast/bitwise_not.cc
+    src/ast/dereference.cc
+    src/ast/logical_not.cc
+    src/ast/logical_not_oper.cc
+    src/ast/parenthesis.cc
+    src/ast/pos_decrement.cc
+    src/ast/pos_increment.cc
+    src/ast/pre_decrement.cc
+    src/ast/pre_increment.cc
+    src/ast/sizeof.cc
+    src/ast/unary_minus.cc
+    src/ast/unary_plus.cc
 )
 
 set(IR_SRC

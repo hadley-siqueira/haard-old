@@ -79,6 +79,11 @@ namespace haard {
             void print_shift_right_logical(ShiftRightLogical* expr);
             void print_shift_right_arithmetic(ShiftRightArithmetic* expr);
 
+            void print_logical_not_oper(LogicalNotOper* expr);
+            void print_logical_not(LogicalNot* expr);
+            void print_address_of(AddressOf* expr);
+
+
             void print_call(Call* expr);
 
         private:

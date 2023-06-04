@@ -108,7 +108,7 @@ void generate_headers(std::vector<ClassInfo>& class_names) {
 
         ss << "        int get_column() const;\n";
         ss << "        void set_column(int value);\n\n";
-        ss << "
+
         ss << "        Expression* get_expression() const;\n";
         ss << "        void set_expression(Expression* expression);\n\n";
 
@@ -142,47 +142,34 @@ void generate_cc_files(std::vector<ClassInfo>& class_names) {
 
         ss << "using namespace haard;\n\n";
 
-        ss << "" << c.name << "::" << c.name << "(Expression* left, Expression* right) {\n";
+        ss << "" << c.name << "::" << c.name << "(Expression* expression) {\n";
         ss << "    this->kind = EXPR_" << to_upper(to_snake_case(c.name)) << ";\n";
-        ss << "    this->left = left;\n";
-        ss << "    this->right = right;\n";
+        ss << "    this->expression = expression;\n";
         ss << "}\n\n";
 
-        ss << "" << c.name << "::" << c.name << "(Token& token, Expression* left, Expression* right) {\n";
+        ss << "" << c.name << "::" << c.name << "(Token& token, Expression* expression) {\n";
         ss << "    this->kind = EXPR_" << to_upper(to_snake_case(c.name)) << ";\n";
-        ss << "    this->left = left;\n";
-        ss << "    this->right = right;\n";
+        ss << "    this->expression = expression;\n";
         ss << "    this->line = token.get_line();\n";
         ss << "    this->column = token.get_column();\n";
         ss << "}\n\n";
 
         ss << "" << c.name << "::~" << c.name << "() {\n";
-        ss << "    delete left;\n";
-        ss << "    delete right;\n";
+        ss << "    delete expression;\n";
         ss << "}\n\n";
 
-        ss << "Expression* " << c.name << "::get_left() const {\n";
-        ss << "    return left;\n";
+        ss << "Expression* " << c.name << "::get_expression() const {\n";
+        ss << "    return expression;\n";
         ss << "}\n\n";
 
-        ss << "void " << c.name << "::set_left(Expression* value) {\n";
-        ss << "    left = value;\n";
-        ss << "}\n\n";
-
-        ss << "Expression* " << c.name << "::get_right() const {\n";
-        ss << "    return right;\n";
-        ss << "}\n\n";
-
-        ss << "void " << c.name << "::set_right(Expression* value) {\n";
-        ss << "    right = value;\n";
+        ss << "void " << c.name << "::set_expression(Expression* value) {\n";
+        ss << "    expression = value;\n";
         ss << "}\n\n";
 
         ss << "std::string " << c.name << "::to_str() {\n";
         ss << "    std::stringstream ss;\n\n";
 
-        ss << "    ss << left->to_str();\n";
-        ss << "    ss << \" " << c.lexeme << " \";\n";
-        ss << "    ss << right->to_str();\n\n";
+        ss << "    ss << \"" << c.lexeme << "\" << expression->to_str();\n\n";
 
         ss << "    return ss.str();\n";
         ss << "}\n";
@@ -194,56 +181,19 @@ void generate_cc_files(std::vector<ClassInfo>& class_names) {
 
 int main() {
     std::vector<ClassInfo> class_names = {
-        {"SpecialAssignment", ":="},
-        {"BitwiseAndAssignment", "&="},
-        {"BitwiseXorAssignment", "^="},
-        {"BitwiseOrAssignment", "|="},
-        {"BitwiseNotAssignment", "~="},
-        {"TimesAssignment", "*="},
-        {"DivisionAssignment", "/="},
-        {"IntegerDivisionAssignment", "//="},
-        {"MinusAssignment", "-="},
-        {"PlusAssignment", "+="},
-        {"ShiftLeftLogicalAssignment", "<<="},
-        {"ShiftRightLogicalAssignment", ">>>="},
-        {"ShiftRightArithmeticAssignment", ">>="},
-
-        {"LogicalOr", "or"},
-        {"LogicalOrOper", "or"},
-        {"LogicalAnd", "and"},
-        {"LogicalAndOper", "and"},
-
-
-        {"Equal", "=="},
-        {"NotEqual", "!="},
-
-        {"LessThan", "<"},
-        {"GreaterThan", ">"},
-        {"LessThanOrEqual", "<="},
-        {"GreaterThanOrEqual", ">="},
-        {"In", "in"},
-        {"NotIn", "not in"},
-
-        {"InclusiveRange", ".."},
-        {"ExclusiveRange", "..."},
-
-        {"Plus", "+"},
-        {"Minus", "-"},
-
-        {"Times", "*"},
-        {"Division", "*"},
-        {"Modulo", "*"},
-        {"IntegerDivision", "*"},
-
-        {"Power", "**"},
-
-        {"BitwiseOr", "|"},
-        {"BitwiseXor", "^"},
-        {"BitwiseAnd", "&"},
-
-        {"ShiftLeftLogical", "<<"},
-        {"ShiftRightLogical", ">>>"},
-        {"ShiftRightArithmetic", ">>"}
+        {"LogicalNot", "not "},
+        {"LogicalNotOper", "!"},
+        {"AddressOf", "&"},
+        {"Dereference", "*"},
+        {"BitwiseNot", "~"},
+        {"UnaryPlus", "+"},
+        {"UnaryMinus", "-"},
+        {"PreIncrement","++"},
+        {"PreDecrement", "--"},
+        {"PosIncrement", "++"},
+        {"PosDecrement", "--"},
+        {"Parenthesis", "()"}, 
+        {"Sizeof", "sizeof"},
     };
 
     generate_headers(class_names);

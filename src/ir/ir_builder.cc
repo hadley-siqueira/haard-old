@@ -340,7 +340,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_identifier((Identifier*) expression, lvalue);
         break;
 
-    case EXPR_PRE_INC:
+    case EXPR_PRE_INCREMENT:
         build_pre_inc(un);
         break;
 
