@@ -676,10 +676,6 @@ void Printer::print_expression(Expression* expression) {
         out << "null";
         break;
 
-    case EXPR_TUPLE:
-        print_expression_list("(", ")", exprlist);
-        break;
-
     case EXPR_ARRAY:
         print_array((Array*) expression);
         break;
@@ -688,8 +684,8 @@ void Printer::print_expression(Expression* expression) {
         print_list((List*) expression);
         break;
 
-    case EXPR_ARGS:
-        print_expression_list("(", ")", exprlist);
+    case EXPR_TUPLE:
+        print_tuple((Tuple*) expression);
         break;
 
     case EXPR_FOR_INIT:
@@ -984,6 +980,10 @@ void Printer::print_array(Array* expr) {
 }
 
 void Printer::print_list(List* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_tuple(Tuple* expr) {
     out << expr->to_str();
 }
 

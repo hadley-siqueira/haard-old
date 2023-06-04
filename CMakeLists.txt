@@ -132,6 +132,7 @@ set(AST_SRC
     src/ast/array.cc
     src/ast/list.cc
     src/ast/hash.cc
+    src/ast/tuple.cc
 )
 
 set(IR_SRC

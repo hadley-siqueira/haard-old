@@ -82,6 +82,7 @@
 #include "ast/array.h"
 #include "ast/list.h"
 #include "ast/hash.h"
+#include "ast/tuple.h"
 
 // Unary operators
 #include "ast/address_of.h"

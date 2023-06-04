@@ -99,6 +99,7 @@ namespace haard {
 
             void print_array(Array* expr);
             void print_list(List* expr);
+            void print_tuple(Tuple* expr);
 
         private:
             void indent();

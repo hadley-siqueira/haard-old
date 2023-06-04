@@ -75,6 +75,11 @@ def main : int
         0x1   ,0x2   ,0x3   ,   0x1
     }
 
+    v = (1, true, 'a tuple')
+
+    v = {1, 2, 3, }
+    v = [1, 2, 3, ]
+    v = (1, 2, 3, )
 #   assignment operators
 #    my_call(|a| {
 #        return a + 1
