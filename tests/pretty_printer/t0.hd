@@ -80,6 +80,23 @@ def main : int
     v = {1, 2, 3, }
     v = [1, 2, 3, ]
     v = (1, 2, 3, )
+
+    v = 2
+    v := 2
+    v &= 2
+    v ^= 2
+    v |= 2
+    v ~= 2
+    v /= 2
+    v //= 2
+    v -= 2
+    v += 2
+    v %= 2
+    v *= 2
+    v >>= 2
+    v <<= 2
+    v >>>= 2
+    
 #   assignment operators
 #    my_call(|a| {
 #        return a + 1
@@ -93,4 +110,5 @@ def main : int
 #   v = new int*[100]
 #   delete v
 #   delete[] v
-
+#   v += 2
+#   v -= 2 ...

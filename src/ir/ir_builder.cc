@@ -360,7 +360,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_constructor_assignment(bin);
         break;
 
-    case EXPR_ASSIGN:
+    case EXPR_ASSIGNMENT:
         build_assignment(bin, lvalue);
         break;
 

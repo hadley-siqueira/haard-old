@@ -422,64 +422,22 @@ void Printer::print_expression(Expression* expression) {
         print_identifier((Identifier*) expression);
         break;
 
-    case EXPR_ASSIGN:
-        print_binop("=", bin);
-        break;
-
+    case EXPR_ASSIGNMENT:
     case EXPR_SPECIAL_ASSIGNMENT:
-        print_binop(":=", bin);
-        break;
-
     case EXPR_SHIFT_RIGHT_LOGICAL_ASSIGNMENT:
-        print_binop(">>>=", bin);
-        break;
-
     case EXPR_SHIFT_RIGHT_ARITHMETIC_ASSIGNMENT:
-        print_binop(">>=", bin);
-        break;
-
     case EXPR_SHIFT_LEFT_LOGICAL_ASSIGNMENT:
-        print_binop("<<=", bin);
-        break;
-
     case EXPR_TIMES_ASSIGNMENT:
-        print_binop("*=", bin);
-        break;
-
     case EXPR_PLUS_ASSIGNMENT:
-        print_binop("+=", bin);
-        break;
-
     case EXPR_MODULO_ASSIGNMENT:
-        print_binop("%=", bin);
-        break;
-
     case EXPR_MINUS_ASSIGNMENT:
-        print_binop("-=", bin);
-        break;
-
     case EXPR_INTEGER_DIVISION_ASSIGNMENT:
-        print_binop("//=", bin);
-        break;
-
     case EXPR_DIVISION_ASSIGNMENT:
-        print_binop("/=", bin);
-        break;
-
     case EXPR_BITWISE_NOT_ASSIGNMENT:
-        print_binop("~=", bin);
-        break;
-
     case EXPR_BITWISE_OR_ASSIGNMENT:
-        print_binop("|=", bin);
-        break;
-
     case EXPR_BITWISE_XOR_ASSIGNMENT:
-        print_binop("^=", bin);
-        break;
-
     case EXPR_BITWISE_AND_ASSIGNMENT:
-        print_binop("&=", bin);
+        out << expression->to_str();
         break;
 
     case EXPR_CAST:

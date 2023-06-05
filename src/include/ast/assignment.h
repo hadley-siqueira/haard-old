@@ -2,15 +2,24 @@
 #define HAARD_AST_ASSIGNMENT_H
 
 #include "token/token.h"
-#include "ast/expression.h"
+#include "expression.h"
 
 namespace haard {
     class Assignment : public Expression {
     public:
         Assignment(Expression* left=nullptr, Expression* right=nullptr);
-        virtual ~Assignment();
+        Assignment(Token& token, Expression* left=nullptr, Expression* right=nullptr);
+        ~Assignment();
 
     public:
+        std::string to_str();
+
+        int get_line() const;
+        void set_line(int value);
+
+        int get_column() const;
+        void set_column(int value);
+
         Expression* get_left() const;
         void set_left(Expression* value);
 
@@ -18,6 +27,8 @@ namespace haard {
         void set_right(Expression* value);
 
     private:
+        int line;
+        int column;
         Expression* left;
         Expression* right;
     };

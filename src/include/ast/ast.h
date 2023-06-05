@@ -36,6 +36,7 @@
 // Binary operators
 #include "ast/plus.h"
 #include "ast/minus.h"
+#include "ast/assignment.h"
 #include "ast/bitwise_and.h"
 #include "ast/bitwise_and_assignment.h"
 #include "ast/bitwise_not_assignment.h"

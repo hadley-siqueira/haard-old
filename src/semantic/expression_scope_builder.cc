@@ -33,7 +33,7 @@ void ExpressionScopeBuilder::build_expression(Expression* expr) {
         build_literal_integer((Literal*) expr);
         break;
 
-    case EXPR_ASSIGN:
+    case EXPR_ASSIGNMENT:
         build_assignment((BinOp*) expr);
         break;
 

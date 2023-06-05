@@ -307,7 +307,7 @@ void OldScopeBuilder::build_expression(Expression* expression) {
         build_dot(bin);
         break;
 
-    case EXPR_ASSIGN:
+    case EXPR_ASSIGNMENT:
         build_assignment(bin);
         break;
 

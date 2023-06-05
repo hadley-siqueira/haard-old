@@ -862,7 +862,7 @@ Expression* Parser::parse_assignment_expression() {
     while (true) {
         if (match(TK_ASSIGNMENT)) {
             oper = matched;
-            expr = new BinOp(EXPR_ASSIGN, oper, expr, parse_cast_expression());
+            expr = new Assignment(oper, expr, parse_cast_expression());
         } else if (match(TK_BITWISE_AND_ASSIGNMENT)) {
             oper = matched;
             expr = new BitwiseAndAssignment(oper, expr, parse_cast_expression());

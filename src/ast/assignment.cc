@@ -1,11 +1,20 @@
+#include <sstream>
 #include "ast/assignment.h"
 
 using namespace haard;
 
 Assignment::Assignment(Expression* left, Expression* right) {
-    this->kind = EXPR_ASSIGN;
+    this->kind = EXPR_ASSIGNMENT;
     this->left = left;
     this->right = right;
+}
+
+Assignment::Assignment(Token& token, Expression* left, Expression* right) {
+    this->kind = EXPR_ASSIGNMENT;
+    this->left = left;
+    this->right = right;
+    this->line = token.get_line();
+    this->column = token.get_column();
 }
 
 Assignment::~Assignment() {
@@ -27,4 +36,14 @@ Expression* Assignment::get_right() const {
 
 void Assignment::set_right(Expression* value) {
     right = value;
+}
+
+std::string Assignment::to_str() {
+    std::stringstream ss;
+
+    ss << left->to_str();
+    ss << " = ";
+    ss << right->to_str();
+
+    return ss.str();
 }
