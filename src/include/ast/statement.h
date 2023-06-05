@@ -3,18 +3,16 @@
 
 namespace haard {
     class Statement {
-        public:
-            Statement();
-            virtual ~Statement();
+    public:
+        Statement();
+        virtual ~Statement();
 
-        public:
-            int get_kind();
+    public:
+        int get_kind();
+        void set_kind(int kind);
 
-            void set_kind(int kind);
-            virtual Statement* clone();
-
-        protected:
-            int kind;
+    protected:
+        int kind;
     };
 }
 

@@ -30,7 +30,3 @@ Expression* UnOp::get_expression() {
 void UnOp::set_expression(Expression* expression) {
     this->expression = expression;
 }
-
-Expression* UnOp::clone() {
-    return new UnOp(kind, expression->clone());
-}

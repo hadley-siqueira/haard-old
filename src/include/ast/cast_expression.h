@@ -11,15 +11,11 @@ namespace haard {
             ~CastExpression();
 
         public:
-            std::string to_str();
-
             Type* get_cast_type();
             Expression* get_expression();
 
             void set_cast_type(Type* type);
             void set_expression(Expression* expr);
-
-            Expression* clone();
 
         private:
             Type* cast_type;

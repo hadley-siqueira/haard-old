@@ -13,15 +13,10 @@ namespace haard {
             ~ExpressionList();
 
         public:
-            std::string to_str();
-            std::string to_str(std::string begin, std::string end);
-
             Expression* get_expression(int idx);
 
             void add_expression(Expression* expression);
             int expressions_count();
-
-            Expression* clone();
             
         private:
             std::vector<Expression*> expressions;

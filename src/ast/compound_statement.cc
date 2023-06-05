@@ -37,16 +37,6 @@ void CompoundStatement::add_front(Statement* stmt) {
     statements.insert(statements.begin(), stmt);
 }
 
-Statement* CompoundStatement::clone() {
-    CompoundStatement* other = new CompoundStatement();
-
-    for (int i = 0; i < statements.size(); ++i) {
-        other->add_statement(statements[i]->clone());
-    }
-
-    return other;
-}
-
 Scope* CompoundStatement::get_scope() const {
     return scope;
 }

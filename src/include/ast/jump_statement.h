@@ -6,18 +6,16 @@
 
 namespace haard {
     class JumpStatement : public Statement {
-        public:
-            JumpStatement(int kind);
-            ~JumpStatement();
+    public:
+        JumpStatement(int kind);
+        ~JumpStatement();
 
-        public:
-            Expression* get_expression();
-            void set_expression(Expression* expression);
+    public:
+        Expression* get_expression();
+        void set_expression(Expression* expression);
 
-            Statement* clone();
-
-        private:
-            Expression* expression;
+    private:
+        Expression* expression;
     };
 }
 

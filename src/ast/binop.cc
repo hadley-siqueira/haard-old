@@ -54,25 +54,6 @@ bool BinOp::get_initial_assign() {
     return initial_assign;
 }
 
-Expression* BinOp::clone() {
-    BinOp* other = new BinOp();
-
-    other->kind = kind;
-    other->line = line;
-    other->column = column;
-    other->initial_assign = initial_assign;
-
-    if (left) {
-        other->left = left->clone();
-    }
-
-    if (right) {
-        other->right = right->clone();
-    }
-
-    return other;
-}
-
 Symbol* BinOp::get_constructor_call() const {
     return constructor_call;
 }

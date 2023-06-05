@@ -19,7 +19,3 @@ int Statement::get_kind() {
 void Statement::set_kind(int kind) {
     this->kind = kind;
 }
-
-Statement* Statement::clone() {
-    std::cout << __FILE__ << ' ' << __LINE__ << " clone\n"; exit(0);
-}

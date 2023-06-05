@@ -6,24 +6,22 @@
 
 namespace haard {
     class NewExpression : public Expression {
-        public:
-            NewExpression();
-            ~NewExpression();
+    public:
+        NewExpression();
+        ~NewExpression();
 
-        public:
-            Type* get_new_type();
-            ExpressionList* get_arguments();
+    public:
+        Type* get_new_type();
+        ExpressionList* get_arguments();
 
-            void set_new_type(Type* type);
-            void set_arguments(ExpressionList* args);
+        void set_new_type(Type* type);
+        void set_arguments(ExpressionList* args);
 
-            bool has_arguments();
+        bool has_arguments();
 
-            Expression* clone();
-
-        private:
-            Type* new_type;
-            ExpressionList* args;
+    private:
+        Type* new_type;
+        ExpressionList* args;
     };
 }
 

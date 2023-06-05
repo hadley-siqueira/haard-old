@@ -55,21 +55,3 @@ void ForStatement::set_statements(CompoundStatement* statements) {
 Scope* ForStatement::get_scope() {
     return scope;
 }
-
-Statement* ForStatement::clone() {
-    ForStatement* other = new ForStatement();
-
-    if (condition) {
-        other->condition = condition->clone();
-    }
-
-    if (init) {
-        other->init = (ExpressionList*) init->clone();
-    }
-
-    if (statements) {
-        other->statements = (CompoundStatement*) statements->clone();
-    }
-
-    return other;
-}

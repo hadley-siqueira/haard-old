@@ -19,14 +19,6 @@ CastExpression::~CastExpression() {
     delete expression;
 }
 
-std::string CastExpression::to_str() {
-    std::stringstream ss;
-
-    ss << expression->to_str() << " as " << cast_type->to_str();
-
-    return ss.str();
-}
-
 Type* CastExpression::get_cast_type() {
     return cast_type;
 }
@@ -41,8 +33,4 @@ void CastExpression::set_cast_type(Type* type) {
 
 void CastExpression::set_expression(Expression* expr) {
     expression = expr;
-}
-
-Expression* CastExpression::clone() {
-    return nullptr;
 }

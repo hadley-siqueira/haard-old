@@ -22,8 +22,6 @@ namespace haard {
 
             Scope* get_scope();
 
-            Statement* clone();
-
         private:
             Expression* condition;
             Statement* true_statements;

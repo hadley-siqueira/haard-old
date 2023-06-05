@@ -64,7 +64,6 @@ namespace haard {
         bool is_destructor();
         bool is_virtual();
 
-        Function* clone();
         bool same_signature(Function* other);
 
         void set_module(Module* module);

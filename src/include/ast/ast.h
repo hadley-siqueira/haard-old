@@ -34,6 +34,7 @@
 #include "ast/string_builder.h"
 
 // Binary operators
+#include "ast/binary_operator.h"
 #include "ast/plus.h"
 #include "ast/minus.h"
 #include "ast/assignment.h"
@@ -87,6 +88,7 @@
 #include "ast/tuple.h"
 
 // Unary operators
+#include "ast/unary_operator.h"
 #include "ast/address_of.h"
 #include "ast/bitwise_not.h"
 #include "ast/dereference.h"

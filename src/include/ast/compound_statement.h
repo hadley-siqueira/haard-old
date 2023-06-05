@@ -6,21 +6,20 @@
 
 namespace haard {
     class Scope;
+
     class CompoundStatement : public Statement {
-        public:
-            CompoundStatement();
-            ~CompoundStatement();
+    public:
+        CompoundStatement();
+        ~CompoundStatement();
 
-        public:
-            Statement* get_statement(int idx);
-            int statements_count();
-            void add_statement(Statement* stmt);
-            void add_front(Statement* stmt);
+    public:
+        Statement* get_statement(int idx);
+        int statements_count();
+        void add_statement(Statement* stmt);
+        void add_front(Statement* stmt);
 
-            Statement* clone();
-
-            Scope* get_scope() const;
-            void set_scope(Scope* value);
+        Scope* get_scope() const;
+        void set_scope(Scope* value);
 
     private:
             std::vector<Statement*> statements;

@@ -1,15 +1,14 @@
-#ifndef HAARD_AST_MINUS_H
-#define HAARD_AST_MINUS_H
+#ifndef HAARD_AST_BINARY_OPERATOR_H
+#define HAARD_AST_BINARY_OPERATOR_H
 
 #include "token/token.h"
 #include "expression.h"
 
 namespace haard {
-    class Minus : public BinaryOperator {
+    class BinaryOperator : public Expression {
     public:
-        Minus(Expression* left=nullptr, Expression* right=nullptr);
-        Minus(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~Minus();
+        BinaryOperator();
+        ~BinaryOperator();
 
     public:
         Expression* get_left() const;
@@ -19,8 +18,6 @@ namespace haard {
         void set_right(Expression* value);
 
     private:
-        int line;
-        int column;
         Expression* left;
         Expression* right;
     };

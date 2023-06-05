@@ -18,13 +18,3 @@ Expression* JumpStatement::get_expression() {
 void JumpStatement::set_expression(Expression* expression) {
     this->expression = expression;
 }
-
-Statement* JumpStatement::clone() {
-    JumpStatement* other = new JumpStatement(kind);
-
-    if (expression) {
-        other->expression = expression->clone();
-    }
-
-    return other;
-}

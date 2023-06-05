@@ -3,27 +3,20 @@
 
 #include "defs.h"
 #include "ast/type.h"
+#include "ast/ast_node.h"
 
 namespace haard {
-    class Expression {
-        public:
-            Expression();
-            virtual ~Expression();
+    class Expression : public AstNode {
+    public:
+        Expression();
+        virtual ~Expression();
 
-        public:
-            int get_kind();
-            Type* get_type();
+    public:
+        Type* get_type();
+        void set_type(Type* type);
 
-            void set_kind(int kind);
-            void set_type(Type* type);
-
-            virtual Expression* clone();
-
-            virtual std::string to_str();
-
-        protected:
-            int kind;
-            Type* type;
+    protected:
+        Type* type;
     };
 }
 

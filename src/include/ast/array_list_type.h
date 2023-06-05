@@ -18,8 +18,6 @@ namespace haard {
 
             /* virtual */
             bool equal(Type* type);
-            std::string to_str();
-            Type* clone();
             bool is_primitive();
             Type* promote(Type* other);
             int rank();

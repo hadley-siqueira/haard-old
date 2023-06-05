@@ -12,8 +12,6 @@ namespace haard {
         ~Assignment();
 
     public:
-        std::string to_str();
-
         int get_line() const;
         void set_line(int value);
 

@@ -37,13 +37,3 @@ Expression* ModuloAssignment::get_right() const {
 void ModuloAssignment::set_right(Expression* value) {
     right = value;
 }
-
-std::string ModuloAssignment::to_str() {
-    std::stringstream ss;
-
-    ss << left->to_str();
-    ss << " %= ";
-    ss << right->to_str();
-
-    return ss.str();
-}

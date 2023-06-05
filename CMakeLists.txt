@@ -31,6 +31,7 @@ set(PARSER_SRC
 )
 
 set(AST_SRC
+    src/ast/ast_node.cc
     src/ast/modules.cc
     src/ast/module.cc
     src/ast/annotation.cc
@@ -71,6 +72,8 @@ set(AST_SRC
     src/ast/cast_expression.cc
     src/ast/string_builder.cc
     src/ast/binop.cc
+    src/ast/binary_operator.cc
+    src/ast/unary_operator.cc
     src/ast/assignment.cc
     src/ast/plus.cc
     src/ast/minus.cc

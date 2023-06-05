@@ -31,17 +31,3 @@ void NewExpression::set_arguments(ExpressionList* args) {
 bool NewExpression::has_arguments() {
     return args != nullptr;
 }
-
-Expression* NewExpression::clone() {
-    NewExpression* other = new NewExpression();
-
-    if (new_type) {
-        other->new_type = new_type->clone();
-    }
-
-    if (args) {
-        other->args = (ExpressionList*) args->clone();
-    }
-
-    return other;
-}

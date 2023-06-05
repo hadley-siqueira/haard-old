@@ -8,24 +8,23 @@
 
 namespace haard {
     class WhileStatement : public Statement {
-        public:
-            WhileStatement();
-            ~WhileStatement();
+    public:
+        WhileStatement();
+        ~WhileStatement();
 
-        public:
-            Expression* get_condition();
-            CompoundStatement* get_statements();
+    public:
+        Expression* get_condition();
+        CompoundStatement* get_statements();
 
-            void set_condition(Expression* expression);
-            void set_statements(CompoundStatement* statements);
+        void set_condition(Expression* expression);
+        void set_statements(CompoundStatement* statements);
 
-            Scope* get_scope();
-            Statement* clone();
+        Scope* get_scope();
 
-        private:
-            Expression* condition;
-            CompoundStatement* statements;
-            Scope* scope;         
+    private:
+        Expression* condition;
+        CompoundStatement* statements;
+        Scope* scope;
     };
 }
 

@@ -11,27 +11,10 @@ Expression::~Expression() {
     // delete type;
 }
 
-int Expression::get_kind() {
-    return kind;
-}
-
 Type* Expression::get_type() {
     return type;
-}
-
-void Expression::set_kind(int kind) {
-    this->kind = kind;
 }
 
 void Expression::set_type(Type* type) {
     this->type = type;
 }
-
-Expression* Expression::clone() {
-    std::cout << __FILE__ << ' ' << __LINE__ << " clone\n"; exit(0);
-}
-
-std::string Expression::to_str() {
-    return "unknown expression";
-}
-

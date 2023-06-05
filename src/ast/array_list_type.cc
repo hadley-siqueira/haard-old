@@ -55,28 +55,6 @@ bool ArrayListType::equal(Type* type) {
     return true;
 }
 
-std::string ArrayListType::to_str() {
-    return "ARRAY";
-}
-
-Type* ArrayListType::clone() {
-    ArrayListType* other = new ArrayListType();
-
-    other->kind = kind;
-    other->line = line;
-    other->column = column;
-
-    if (expression) {
-        other->expression = expression->clone();
-    }
-
-    if (subtype) {
-        other->subtype = subtype->clone();
-    }
-
-    return other;
-}
-
 bool ArrayListType::is_primitive() {
     return false;
 }

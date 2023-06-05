@@ -28,4 +28,10 @@ std::string Array::to_str() {
     return expressions->to_str("{", "}");
 }
 
+ExpressionList* Array::get_expressions() const {
+    return expressions;
+}
 
+void Array::set_expressions(ExpressionList* value) {
+    expressions = value;
+}

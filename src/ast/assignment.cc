@@ -37,13 +37,3 @@ Expression* Assignment::get_right() const {
 void Assignment::set_right(Expression* value) {
     right = value;
 }
-
-std::string Assignment::to_str() {
-    std::stringstream ss;
-
-    ss << left->to_str();
-    ss << " = ";
-    ss << right->to_str();
-
-    return ss.str();
-}

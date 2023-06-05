@@ -6,16 +6,15 @@
 
 namespace haard {
     class FunctionExpression : public Expression {
-        public:
-            FunctionExpression(Function* function);
-            ~FunctionExpression();
+    public:
+        FunctionExpression(Function* function);
+        ~FunctionExpression();
 
-        public:
-            Function* get_function();
-            Expression* clone();
+    public:
+        Function* get_function();
 
-        private:
-            Function* function;
+    private:
+        Function* function;
     };
 }
 

@@ -34,17 +34,3 @@ void WhileStatement::set_statements(CompoundStatement* statements) {
 Scope* WhileStatement::get_scope() {
     return scope;
 }
-
-Statement* WhileStatement::clone() {
-    WhileStatement* other = new WhileStatement();
-
-    if (condition) {
-        other->condition = condition->clone();
-    }
-
-    if (statements) {
-        other->statements = (CompoundStatement*) statements->clone();
-    }
-
-    return other;
-}

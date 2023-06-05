@@ -44,24 +44,3 @@ void BranchStatement::set_false_statements(Statement* stmt) {
 Scope* BranchStatement::get_scope() {
     return scope;
 }
-
-Statement* BranchStatement::clone() {
-    BranchStatement* other = new BranchStatement(kind);
-
-    other->kind = kind;
-
-    if (condition) {
-        other->condition = condition->clone();
-    }
-
-    if (true_statements) {
-        other->true_statements = true_statements->clone();
-    }
-
-    if (false_statements) {
-        other->false_statements = false_statements->clone();
-    }
-
-    return other;
-}
-

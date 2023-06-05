@@ -212,44 +212,6 @@ bool Function::is_virtual() {
     return virtual_flag;
 }
 
-Function* Function::clone() {
-    Function* nfunc = new Function();
-
-    nfunc->uid = uid;
-    nfunc->line = line;
-    nfunc->column = column;
-    nfunc->method_flag = method_flag;
-    nfunc->name = name;
-    nfunc->scope->set_parent(scope->get_parent());
-    nfunc->module = module;
-    
-    for (int i = 0; i < parameters.size(); ++i) {
-        nfunc->add_parameter(parameters[i]->clone());
-    }
-
-    for (int i = 0; i < variables.size(); ++i) {
-        nfunc->add_variable(variables[i]->clone());
-    }
-
-    if (template_header) {
-        nfunc->template_header = template_header->clone();
-    }
-
-    if (return_type) {
-        nfunc->return_type = return_type->clone();
-    }
-
-    if (self_type) {
-        nfunc->self_type = (FunctionType*) self_type->clone();
-    }
-
-    if (statements) {
-        nfunc->statements = (CompoundStatement*) statements->clone();
-    }
-
-    return nfunc;
-}
-
 std::string Function::get_type_signature() {
     int i;
     std::stringstream ss;

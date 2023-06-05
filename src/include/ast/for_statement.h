@@ -9,30 +9,29 @@
 
 namespace haard {
     class ForStatement : public Statement {
-        public:
-            ForStatement();
-            ~ForStatement();
+    public:
+        ForStatement();
+        ~ForStatement();
 
-        public:
-            ExpressionList* get_initialization();
-            Expression* get_condition();
-            ExpressionList* get_increment();
-            CompoundStatement* get_statements();
+    public:
+        ExpressionList* get_initialization();
+        Expression* get_condition();
+        ExpressionList* get_increment();
+        CompoundStatement* get_statements();
 
-            void add_initialization(Expression* expression);
-            void set_condition(Expression* expression);
-            void add_increment(Expression* expression);
-            void set_statements(CompoundStatement* statements);
+        void add_initialization(Expression* expression);
+        void set_condition(Expression* expression);
+        void add_increment(Expression* expression);
+        void set_statements(CompoundStatement* statements);
 
-            Scope* get_scope();
-            Statement* clone();
+        Scope* get_scope();
 
-        private:
-            Expression* condition;
-            ExpressionList* init;
-            ExpressionList* increment;
-            CompoundStatement* statements;
-            Scope* scope;
+    private:
+        Expression* condition;
+        ExpressionList* init;
+        ExpressionList* increment;
+        CompoundStatement* statements;
+        Scope* scope;
     };
 }
 
