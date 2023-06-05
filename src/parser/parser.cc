@@ -886,7 +886,7 @@ Expression* Parser::parse_assignment_expression() {
             expr = new MinusAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_MODULO_ASSIGNMENT)) {
             oper = matched;
-            expr = new Modulo(oper, expr, parse_cast_expression());
+            expr = new ModuloAssignment(oper, expr, parse_cast_expression());
         } else if (match(TK_PLUS_ASSIGNMENT)) {
             oper = matched;
             expr = new PlusAssignment(oper, expr, parse_cast_expression());

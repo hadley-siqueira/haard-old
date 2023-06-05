@@ -83,6 +83,7 @@ set(AST_SRC
     src/ast/bitwise_xor_assignment.cc
     src/ast/division.cc
     src/ast/division_assignment.cc
+    src/ast/modulo_assignment.cc
     src/ast/equal.cc
     src/ast/greater_than.cc
     src/ast/greater_than_or_equal.cc

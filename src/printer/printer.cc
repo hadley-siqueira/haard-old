@@ -423,21 +423,63 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_ASSIGNMENT:
+        print_assignment((Assignment*) expression);
+        break;
+
     case EXPR_SPECIAL_ASSIGNMENT:
+        print_special_assignment((SpecialAssignment*) expression);
+        break;
+
     case EXPR_SHIFT_RIGHT_LOGICAL_ASSIGNMENT:
+        print_shift_right_logical_assignment((ShiftRightLogicalAssignment*) expression);
+        break;
+
     case EXPR_SHIFT_RIGHT_ARITHMETIC_ASSIGNMENT:
+        print_shift_right_arithmetic_assignment((ShiftRightArithmeticAssignment*) expression);
+        break;
+
     case EXPR_SHIFT_LEFT_LOGICAL_ASSIGNMENT:
+        print_shift_left_logical_assignment((ShiftLeftLogicalAssignment*) expression);
+        break;
+
     case EXPR_TIMES_ASSIGNMENT:
+        print_times_assignment((TimesAssignment*) expression);
+        break;
+
     case EXPR_PLUS_ASSIGNMENT:
+        print_plus_assignment((PlusAssignment*) expression);
+        break;
+
     case EXPR_MODULO_ASSIGNMENT:
+        print_modulo_assignment((ModuloAssignment*) expression);
+        break;
+
     case EXPR_MINUS_ASSIGNMENT:
+        print_minus_assignment((MinusAssignment*) expression);
+        break;
+
     case EXPR_INTEGER_DIVISION_ASSIGNMENT:
+        print_integer_division_assignment((IntegerDivisionAssignment*) expression);
+        break;
+
     case EXPR_DIVISION_ASSIGNMENT:
+        print_division_assignment((DivisionAssignment*) expression);
+        break;
+
     case EXPR_BITWISE_NOT_ASSIGNMENT:
+        print_bitwise_not_assignment((BitwiseNotAssignment*) expression);
+        break;
+
     case EXPR_BITWISE_OR_ASSIGNMENT:
+        print_bitwise_or_assignment((BitwiseOrAssignment*) expression);
+        break;
+
     case EXPR_BITWISE_XOR_ASSIGNMENT:
+        print_bitwise_xor_assignment((BitwiseXorAssignment*) expression);
+        break;
+
     case EXPR_BITWISE_AND_ASSIGNMENT:
-        out << expression->to_str();
+        print_bitwise_and_assignment((BitwiseAndAssignment*) expression);
         break;
 
     case EXPR_CAST:
@@ -751,6 +793,66 @@ void Printer::print_new_expression(NewExpression* expr) {
     if (expr->has_arguments()) {
         print_expression_list("(", ")", expr->get_arguments());
     }
+}
+
+void Printer::print_assignment(Assignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_special_assignment(SpecialAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_shift_right_logical_assignment(ShiftRightLogicalAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_shift_right_arithmetic_assignment(ShiftRightArithmeticAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_shift_left_logical_assignment(ShiftLeftLogicalAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_times_assignment(TimesAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_plus_assignment(PlusAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_modulo_assignment(ModuloAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_minus_assignment(MinusAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_integer_division_assignment(IntegerDivisionAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_division_assignment(DivisionAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_bitwise_not_assignment(BitwiseNotAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_bitwise_or_assignment(BitwiseOrAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_bitwise_xor_assignment(BitwiseXorAssignment* expr) {
+    out << expr->to_str();
+}
+
+void Printer::print_bitwise_and_assignment(BitwiseAndAssignment* expr) {
+    out << expr->to_str();
 }
 
 void Printer::print_cast(CastExpression* expr) {

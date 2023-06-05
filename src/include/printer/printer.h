@@ -40,6 +40,22 @@ namespace haard {
             void print_function_expression(FunctionExpression* function);
             void print_new_expression(NewExpression* expr);
 
+            void print_assignment(Assignment* expr);
+            void print_special_assignment(SpecialAssignment* expr);
+            void print_shift_right_logical_assignment(ShiftRightLogicalAssignment* expr);
+            void print_shift_right_arithmetic_assignment(ShiftRightArithmeticAssignment* expr);
+            void print_shift_left_logical_assignment(ShiftLeftLogicalAssignment* expr);
+            void print_times_assignment(TimesAssignment* expr);
+            void print_plus_assignment(PlusAssignment* expr);
+            void print_modulo_assignment(ModuloAssignment* expr);
+            void print_minus_assignment(MinusAssignment* expr);
+            void print_integer_division_assignment(IntegerDivisionAssignment* expr);
+            void print_division_assignment(DivisionAssignment* expr);
+            void print_bitwise_not_assignment(BitwiseNotAssignment* expr);
+            void print_bitwise_or_assignment(BitwiseOrAssignment* expr);
+            void print_bitwise_xor_assignment(BitwiseXorAssignment* expr);
+            void print_bitwise_and_assignment(BitwiseAndAssignment* expr);
+
             void print_cast(CastExpression* expr);
 
             void print_logical_or(LogicalOr* expr);

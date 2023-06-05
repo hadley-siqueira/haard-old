@@ -59,6 +59,7 @@
 #include "ast/logical_or_oper.h"
 #include "ast/minus_assignment.h"
 #include "ast/modulo.h"
+#include "ast/modulo_assignment.h"
 #include "ast/not_equal.h"
 #include "ast/plus_assignment.h"
 #include "ast/power.h"
