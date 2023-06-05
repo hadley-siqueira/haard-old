@@ -798,93 +798,63 @@ void Printer::print_new_expression(NewExpression* expr) {
 }
 
 void Printer::print_assignment(Assignment* expr) {
-    print_expression(expr->get_left());
-    out << " = ";
-    print_expression(expr->get_right());
+    print_binary_operator("=", expr);
 }
 
 void Printer::print_special_assignment(SpecialAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " := ";
-    print_expression(expr->get_right());
+    print_binary_operator(":=", expr);
 }
 
 void Printer::print_shift_right_logical_assignment(ShiftRightLogicalAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " >>>= ";
-    print_expression(expr->get_right());
+    print_binary_operator(">>>=", expr);
 }
 
 void Printer::print_shift_right_arithmetic_assignment(ShiftRightArithmeticAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " >>= ";
-    print_expression(expr->get_right());
+    print_binary_operator(">>=", expr);
 }
 
 void Printer::print_shift_left_logical_assignment(ShiftLeftLogicalAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " <<= ";
-    print_expression(expr->get_right());
+    print_binary_operator("<<=", expr);
 }
 
 void Printer::print_times_assignment(TimesAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " *= ";
-    print_expression(expr->get_right());
+    print_binary_operator("*=", expr);
 }
 
 void Printer::print_plus_assignment(PlusAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " += ";
-    print_expression(expr->get_right());
+    print_binary_operator("+=", expr);
 }
 
 void Printer::print_modulo_assignment(ModuloAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " %= ";
-    print_expression(expr->get_right());
+    print_binary_operator("%=", expr);
 }
 
 void Printer::print_minus_assignment(MinusAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " -= ";
-    print_expression(expr->get_right());
+    print_binary_operator("-=", expr);
 }
 
 void Printer::print_integer_division_assignment(IntegerDivisionAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " //= ";
-    print_expression(expr->get_right());
+    print_binary_operator("//=", expr);
 }
 
 void Printer::print_division_assignment(DivisionAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " /= ";
-    print_expression(expr->get_right());
+    print_binary_operator("/=", expr);
 }
 
 void Printer::print_bitwise_not_assignment(BitwiseNotAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " ~= ";
-    print_expression(expr->get_right());
+    print_binary_operator("~=", expr);
 }
 
 void Printer::print_bitwise_or_assignment(BitwiseOrAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " |= ";
-    print_expression(expr->get_right());
+    print_binary_operator("|=", expr);
 }
 
 void Printer::print_bitwise_xor_assignment(BitwiseXorAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " ^= ";
-    print_expression(expr->get_right());
+    print_binary_operator("^=", expr);
 }
 
 void Printer::print_bitwise_and_assignment(BitwiseAndAssignment* expr) {
-    print_expression(expr->get_left());
-    out << " &= ";
-    print_expression(expr->get_right());
+    print_binary_operator("&=", expr);
 }
 
 void Printer::print_cast(CastExpression* expr) {
@@ -894,139 +864,119 @@ void Printer::print_cast(CastExpression* expr) {
 }
 
 void Printer::print_logical_or(LogicalOr* expr) {
-    print_expression(expr->get_left());
-    out << " or ";
-    print_expression(expr->get_right());
+    print_binary_operator("or", expr);
 }
 
 void Printer::print_logical_or_oper(LogicalOrOper* expr) {
-    print_expression(expr->get_left());
-    out << " || ";
-    print_expression(expr->get_right());
+    print_binary_operator("||", expr);
 }
 
 void Printer::print_logical_and(LogicalAnd* expr) {
-    print_expression(expr->get_left());
-    out << " and ";
-    print_expression(expr->get_right());
+    print_binary_operator("and", expr);
 }
 
 void Printer::print_logical_and_oper(LogicalAndOper* expr) {
-    print_expression(expr->get_left());
-    out << " && ";
-    print_expression(expr->get_right());
+    print_binary_operator("&&", expr);
 }
 
 void Printer::print_equal(Equal* expr) {
-    print_expression(expr->get_left());
-    out << " == ";
-    print_expression(expr->get_right());
+    print_binary_operator("==", expr);
 }
 
 void Printer::print_not_equal(NotEqual* expr) {
-    print_expression(expr->get_left());
-    out << " != ";
-    print_expression(expr->get_right());
+    print_binary_operator("!=", expr);
 }
 
 void Printer::print_less_than(LessThan* expr) {
-    print_expression(expr->get_left());
-    out << " < ";
-    print_expression(expr->get_right());
+    print_binary_operator("<", expr);
 }
 
 void Printer::print_greater_than(GreaterThan* expr) {
-    print_expression(expr->get_left());
-    out << " > ";
-    print_expression(expr->get_right());
+    print_binary_operator(">", expr);
 }
 
 void Printer::print_less_than_or_equal(LessThanOrEqual* expr) {
-    print_expression(expr->get_left());
-    out << " <= ";
-    print_expression(expr->get_right());
+    print_binary_operator("<=", expr);
 }
 
 void Printer::print_greater_than_or_equal(GreaterThanOrEqual* expr) {
-    print_expression(expr->get_left());
-    out << " >= ";
-    print_expression(expr->get_right());
+    print_binary_operator(">=", expr);
 }
 
 void Printer::print_in(In* expr) {
-    out << expr->to_str();
+    print_binary_operator("in", expr);
 }
 
 void Printer::print_not_in(NotIn* expr) {
-    out << expr->to_str();
+    print_binary_operator("not in", expr);
 }
 
 void Printer::print_inclusive_range(InclusiveRange* expr) {
-    out << expr->to_str();
+    print_binary_operator("..", expr);
 }
 
 void Printer::print_exclusive_range(ExclusiveRange* expr) {
-    out << expr->to_str();
+    print_binary_operator("...", expr);
 }
 
 void Printer::print_plus(Plus* expr) {
-    out << expr->to_str();
+    print_binary_operator("+", expr);
 }
 
 void Printer::print_minus(Minus* expr) {
-    out << expr->to_str();
+    print_binary_operator("-", expr);
 }
 
 void Printer::print_times(Times* expr) {
-    out << expr->to_str();
+    print_binary_operator("*", expr);
 }
 
 void Printer::print_division(Division* expr) {
-    out << expr->to_str();
+    print_binary_operator("/", expr);
 }
 
 void Printer::print_integer_division(IntegerDivision* expr) {
-    out << expr->to_str();
+    print_binary_operator("//", expr);
 }
 
 void Printer::print_modulo(Modulo* expr) {
-    out << expr->to_str();
+    print_binary_operator("%", expr);
 }
 
 void Printer::print_power(Power* expr) {
-    out << expr->to_str();
+    print_binary_operator("**", expr);
 }
 
 void Printer::print_bitwise_or(BitwiseOr* expr) {
-    out << expr->to_str();
+    print_binary_operator("|", expr);
 }
 
 void Printer::print_bitwise_xor(BitwiseXor* expr) {
-    out << expr->to_str();
+    print_binary_operator("^", expr);
 }
 
 void Printer::print_bitwise_and(BitwiseAnd* expr) {
-    out << expr->to_str();
+    print_binary_operator("&", expr);
 }
 
 void Printer::print_shift_left_logical(ShiftLeftLogical* expr) {
-    out << expr->to_str();
+    print_binary_operator("<<", expr);
 }
 
 void Printer::print_shift_right_logical(ShiftRightLogical* expr) {
-    out << expr->to_str();
+    print_binary_operator(">>>", expr);
 }
 
 void Printer::print_shift_right_arithmetic(ShiftRightArithmetic* expr) {
-    out << expr->to_str();
+    print_binary_operator(">>", expr);
 }
 
 void Printer::print_logical_not_oper(LogicalNotOper* expr) {
-    out << expr->to_str();
+    print_unary_operator("!", expr);
 }
 
 void Printer::print_logical_not(LogicalNot* expr) {
-    out << expr->to_str();
+    print_unary_operator("not ", expr);
 }
 
 void Printer::print_address_of(AddressOf* expr) {
@@ -1034,35 +984,35 @@ void Printer::print_address_of(AddressOf* expr) {
 }
 
 void Printer::print_dereference(Dereference* expr) {
-    out << expr->to_str();
+    print_unary_operator("*", expr);
 }
 
 void Printer::print_bitwise_not(BitwiseNot* expr) {
-    out << expr->to_str();
+    print_unary_operator("~", expr);
 }
 
 void Printer::print_unary_minus(UnaryMinus* expr) {
-    out << expr->to_str();
+    print_unary_operator("-", expr);
 }
 
 void Printer::print_unary_plus(UnaryPlus* expr) {
-    out << expr->to_str();
+    print_unary_operator("+", expr);
 }
 
 void Printer::print_pre_increment(PreIncrement* expr) {
-    out << expr->to_str();
+    print_unary_operator("++", expr);
 }
 
 void Printer::print_pre_decrement(PreDecrement* expr) {
-    out << expr->to_str();
+    print_unary_operator("--", expr);
 }
 
 void Printer::print_pos_increment(PosIncrement* expr) {
-    out << expr->to_str();
+    print_unary_operator("++", expr, true);
 }
 
 void Printer::print_pos_decrement(PosDecrement* expr) {
-    out << expr->to_str();
+    print_unary_operator("--", expr, true);
 }
 
 void Printer::print_parenthesis(Parenthesis* expr) {
@@ -1099,6 +1049,22 @@ void Printer::print_list(List* expr) {
 
 void Printer::print_tuple(Tuple* expr) {
     out << expr->to_str();
+}
+
+void Printer::print_binary_operator(const char* oper, BinaryOperator* expr) {
+    print_expression(expr->get_left());
+    out << " " << oper << " ";
+    print_expression(expr->get_right());
+}
+
+void Printer::print_unary_operator(const char* oper, UnaryOperator* expr, bool after) {
+    if (after) {
+        print_expression(expr);
+        out << oper;
+    } else {
+        out << oper;
+        print_expression(expr);
+    }
 }
 
 Printer::print_unary_operator(const char* oper, UnaryOperator* expr) {

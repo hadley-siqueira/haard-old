@@ -118,7 +118,8 @@ namespace haard {
         void print_tuple(Tuple* expr);
 
     private:
-        void print_unary_operator(const char* oper, UnaryOperator* expr);
+        void print_binary_operator(const char* oper, BinaryOperator* expr);
+        void print_unary_operator(const char* oper, UnaryOperator* expr, bool after=false);
 
         void indent();
         void dedent();
