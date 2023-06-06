@@ -1,8 +1,7 @@
+#include <iostream>
 #include "semantic/function_declaration_scope_builder.h"
 #include "semantic/type_descriptor_linker.h"
-#include "log/log_messages.h"
-#include "log/info_messages.h"
-#include <iostream>
+#include "log/actions.h"
 
 using namespace haard;
 
@@ -26,7 +25,8 @@ void FunctionDeclarationScopeBuilder::define_function(Function* function) {
         log_error_and_exit(name + " already defined");
     } else {
         get_scope()->define_function(name, function);
-        log_info(info_message_define_function(function));
+        //log_info(info_message_define_function(function));
+        DBG; exit(0);
     }
 
     set_function(nullptr);

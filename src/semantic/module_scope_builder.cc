@@ -1,8 +1,6 @@
 #include "semantic/module_scope_builder.h"
 #include "semantic/type_descriptor_linker.h"
 #include "semantic/function_declaration_scope_builder.h"
-#include "log/messages.h"
-#include "log/info_messages.h"
 #include "semantic/module_types_definer.h"
 #include "semantic/module_methods_definer.h"
 #include "semantic/module_functions_definer.h"

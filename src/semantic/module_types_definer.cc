@@ -1,7 +1,7 @@
+#include <iostream>
 #include "semantic/module_types_definer.h"
 #include "semantic/type_descriptor_linker.h"
-#include "log/info_messages.h"
-#include "log/log_messages.h"
+#include "log/actions.h"
 
 using namespace haard;
 
@@ -91,7 +91,8 @@ void ModuleTypesDefiner::define_type(CompoundTypeDescriptor* decl, int kind, std
         log_error_and_exit(name + " already defined");
     } else {
         get_scope()->define_type(kind, name, decl);
-        log_info(info_message_define_type(decl, msg));
+        //log_info(info_message_define_type(decl, msg));
+        DBG; exit(0);
     }
 
     TypeDescriptorLink linker(get_context());

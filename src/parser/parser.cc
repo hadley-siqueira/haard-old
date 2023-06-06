@@ -1,9 +1,8 @@
 #include <iostream>
 #include <sstream>
 #include "parser/parser.h"
-#include "log/messages.h"
 #include "log/actions.h"
-#include "log/info_messages.h"
+#include "log/errors.h"
 
 using namespace haard;
 
@@ -70,7 +69,7 @@ Module* Parser::parse_module() {
         } else if (match(TK_EOF)) {
             break;
         } else {
-            log_error_and_exit(error_message_unexpected_token(path, tokens[idx]));
+            log_error_and_exit(error_unexpected_token(path, tokens[idx]));
         }
     }
 
@@ -388,7 +387,8 @@ Function* Parser::parse_function() {
     type = parse_type();
 
     if (type == nullptr) {
-        log_error(error_message_no_return_type(path, tokens[idx - 1]));
+        //log_error(error_message_no_return_type(path, tokens[idx - 1]));
+        DBG; exit(0);
     } 
 
     function->set_return_type(type);
@@ -1548,7 +1548,7 @@ void Parser::expect(int kind) {
         return;
     }
 
-    log_error(error_message_expected_token(path, kind, tokens[idx]));
+    log_error_and_exit(error_unexpected_token(path, tokens[idx]));
 }
 
 void Parser::expect_on_same_line(int kind) {
@@ -1556,7 +1556,8 @@ void Parser::expect_on_same_line(int kind) {
         return;
     }
 
-    log_error(error_message_expected_token(path, kind, tokens[idx]));
+    //log_error(error_message_expected_token(path, kind, tokens[idx]));
+    DBG; exit(0);
 }
 
 bool Parser::match(int kind) {

@@ -1,5 +1,5 @@
 #include "semantic/type_descriptor_linker.h"
-#include "log/log_messages.h"
+#include "log/actions.h"
 
 using namespace haard;
 

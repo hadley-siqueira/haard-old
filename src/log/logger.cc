@@ -6,6 +6,7 @@
 #include <cstring>
 #include "defs.h"
 #include "log/logger.h"
+#include "log/utils.h"
 
 using namespace haard;
 

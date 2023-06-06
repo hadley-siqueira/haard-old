@@ -1,10 +1,8 @@
 #include <iostream>
 #include "semantic/identifier_scope_builder.h"
-#include "log/log_messages.h"
-#include "log/error_messages.h"
+#include "log/actions.h"
 
 using namespace haard;
-
 
 IdentifierScopeBuilder::IdentifierScopeBuilder(ScopeBuilderContext* context) {
     set_context(context);
@@ -28,7 +26,8 @@ void IdentifierScopeBuilder::build_identifier(Identifier* id) {
 
     if (!sym) {
         log_info("scope: " + get_scope()->debug());
-        log_error_and_exit(error_message_id_not_in_scope(get_module(), id));
+        //log_error_and_exit(error_message_id_not_in_scope(get_module(), id));
+        DBG; exit(0);
     }
 
     id->set_symbol(sym);

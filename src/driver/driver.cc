@@ -13,7 +13,7 @@
 #include "vm/irvm.h"
 #include "printer/ir_printer.h"
 #include "semantic/modules_scope_builder.h"
-#include "log/log_messages.h"
+#include "log/actions.h"
 
 using namespace haard;
 

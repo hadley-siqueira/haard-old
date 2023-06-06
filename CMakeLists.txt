@@ -12,12 +12,10 @@ set(UTILS_SRC
 set(LOG_SRC
     src/log/log.cc
     src/log/logger.cc
-    src/log/messages.cc
-    src/log/info_messages.cc
-    src/log/error_messages.cc
     src/log/actions.cc
     src/log/errors.cc
     src/log/infos.cc
+    src/log/utils.cc
 )
 
 set(TOKEN_SRC
