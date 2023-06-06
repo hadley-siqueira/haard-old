@@ -5,8 +5,8 @@ using namespace haard;
 ForStatement::ForStatement() {
     kind = STMT_FOR;
     condition = nullptr;
-    init = new ExpressionList(EXPR_FOR_INIT);
-    increment = new ExpressionList(EXPR_FOR_INC);
+    init = new ExpressionList();
+    increment = new ExpressionList();
     statements = nullptr;
     scope = new Scope();
 }

@@ -8,7 +8,7 @@ namespace haard {
     class UnaryOperator : public Expression {
     public:
         UnaryOperator();
-        ~UnaryOperator();
+        virtual ~UnaryOperator();
 
     public:
         Expression* get_expression() const;

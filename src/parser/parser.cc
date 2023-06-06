@@ -702,7 +702,7 @@ void Parser::parse_for_statement_init(ForStatement* stmt) {
             exprs.pop_back();
             exprs.push_back(bin->get_left());
             //bin->set_left(new ExpressionList(EXPR_TUPLE, exprs));
-            std::cout << __FILE__ << " " << __LINE__ << " fixme\n"; exit(0);
+            DBG; exit(0);
             stmt->set_condition(bin);
         } else { // for expr ; expr; expr
             for (int i = 0; i < exprs.size(); ++i) {
@@ -1438,7 +1438,8 @@ Expression* Parser::parse_array_or_hash() {
 
         if (expr->get_kind() == EXPR_ID && lookahead(TK_COLON)) {
             list = parse_hash(expr);
-            list->set_kind(EXPR_HASH);
+            //list->set_kind(EXPR_HASH);
+            DBG;
         } else {
             array = new Array();
             array->add_expression(expr);
@@ -1459,7 +1460,7 @@ Expression* Parser::parse_array_or_hash() {
 
 ExpressionList* Parser::parse_hash(Expression* key) {
     Expression* expr = nullptr;
-    ExpressionList* hash = new ExpressionList(EXPR_HASH_RAW);
+    ExpressionList* hash = new ExpressionList();
 
     expect(TK_COLON);
     expr = new BinOp(EXPR_HASH_PAIR, key, parse_expression());

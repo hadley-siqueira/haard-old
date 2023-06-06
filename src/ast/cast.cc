@@ -4,13 +4,13 @@
 using namespace haard;
 
 Cast::Cast() {
-    kind = EXPR_CAST;
+    set_kind(EXPR_CAST);
     cast_type = nullptr;
     expression = nullptr;
 }
 
 Cast::Cast(Expression* expr, Type* type) {
-    kind = EXPR_CAST;
+    set_kind(EXPR_CAST);
     cast_type = type;
     expression = expr;
 }

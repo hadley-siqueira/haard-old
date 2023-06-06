@@ -2,33 +2,13 @@
 #define HAARD_AST_MODULO_ASSIGNMENT_H
 
 #include "token/token.h"
-#include "expression.h"
+#include "binary_operator.h"
 
 namespace haard {
-    class ModuloAssignment : public Expression {
+    class ModuloAssignment : public BinaryOperator {
     public:
         ModuloAssignment(Expression* left=nullptr, Expression* right=nullptr);
         ModuloAssignment(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~ModuloAssignment();
-
-    public:
-        int get_line() const;
-        void set_line(int value);
-
-        int get_column() const;
-        void set_column(int value);
-
-        Expression* get_left() const;
-        void set_left(Expression* value);
-
-        Expression* get_right() const;
-        void set_right(Expression* value);
-
-    private:
-        int line;
-        int column;
-        Expression* left;
-        Expression* right;
     };
 }
 

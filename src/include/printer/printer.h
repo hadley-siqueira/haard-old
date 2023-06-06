@@ -31,7 +31,6 @@ namespace haard {
         void print_variable_declaration(VarDeclaration* decl);
 
         void print_expression(Expression* expression);
-        void print_binop(std::string oper, BinOp* bin);
 
         void print_identifier(Identifier* id);
         void print_literal(Literal* literal);

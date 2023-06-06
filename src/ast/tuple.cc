@@ -5,7 +5,7 @@ using namespace haard;
 
 Tuple::Tuple() {
     set_kind(EXPR_TUPLE);
-    expressions = new ExpressionList(EXPR_TUPLE);
+    expressions = new ExpressionList();
 }
 
 Tuple::~Tuple() {
@@ -22,8 +22,4 @@ int Tuple::expressions_count() {
 
 Expression* Tuple::get_expression(int idx) {
     return expressions->get_expression(idx);
-}
-
-std::string Tuple::to_str() {
-    return expressions->to_str("(", ")");
 }

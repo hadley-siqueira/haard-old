@@ -4,36 +4,14 @@
 using namespace haard;
 
 ModuloAssignment::ModuloAssignment(Expression* left, Expression* right) {
-    this->kind = EXPR_MODULO_ASSIGNMENT;
-    this->left = left;
-    this->right = right;
+    set_kind(EXPR_MODULO_ASSIGNMENT);
+    set_left(left);
+    set_right(right);
 }
 
 ModuloAssignment::ModuloAssignment(Token& token, Expression* left, Expression* right) {
-    this->kind = EXPR_MODULO_ASSIGNMENT;
-    this->left = left;
-    this->right = right;
-    this->line = token.get_line();
-    this->column = token.get_column();
-}
-
-ModuloAssignment::~ModuloAssignment() {
-    delete left;
-    delete right;
-}
-
-Expression* ModuloAssignment::get_left() const {
-    return left;
-}
-
-void ModuloAssignment::set_left(Expression* value) {
-    left = value;
-}
-
-Expression* ModuloAssignment::get_right() const {
-    return right;
-}
-
-void ModuloAssignment::set_right(Expression* value) {
-    right = value;
+    set_kind(EXPR_MODULO_ASSIGNMENT);
+    set_left(left);
+    set_right(right);
+    set_from_token(token);
 }

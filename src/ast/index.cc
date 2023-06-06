@@ -4,47 +4,30 @@
 using namespace haard;
 
 Index::Index(Expression* object, Expression* index) {
-    this->kind = EXPR_INDEX;
-    this->object = object;
-    this->index = index;
+    set_kind(EXPR_INDEX);
+    set_object(object);
+    set_index(index);
 }
 
 Index::Index(Token& token, Expression* object, Expression* index) {
-    this->kind = EXPR_INDEX;
-    this->object = object;
-    this->index = index;
-    this->line = token.get_line();
-    this->column = token.get_column();
-}
-
-Index::~Index() {
-    delete object;
-    delete index;
+    set_kind(EXPR_INDEX);
+    set_object(object);
+    set_index(index);
+    set_from_token(token);
 }
 
 Expression* Index::get_object() const {
-    return object;
+    return get_left();
 }
 
 void Index::set_object(Expression* value) {
-    object = value;
+    set_left(value);
 }
 
 Expression* Index::get_index() const {
-    return index;
+    return get_right();
 }
 
 void Index::set_index(Expression* value) {
-    index = value;
-}
-
-std::string Index::to_str() {
-    std::stringstream ss;
-
-    ss << object->to_str();
-    ss << "[";
-    ss << index->to_str();
-    ss << "]";
-
-    return ss.str();
+    set_right(value);
 }

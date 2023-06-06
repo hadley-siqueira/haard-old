@@ -5,7 +5,7 @@ using namespace haard;
 
 Array::Array() {
     set_kind(EXPR_ARRAY);
-    expressions = new ExpressionList(EXPR_ARRAY);
+    expressions = new ExpressionList();
 }
 
 Array::~Array() {
@@ -22,10 +22,6 @@ int Array::expressions_count() {
 
 Expression* Array::get_expression(int idx) {
     return expressions->get_expression(idx);
-}
-
-std::string Array::to_str() {
-    return expressions->to_str("{", "}");
 }
 
 ExpressionList* Array::get_expressions() const {

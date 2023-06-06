@@ -5,7 +5,7 @@ using namespace haard;
 
 List::List() {
     set_kind(EXPR_LIST);
-    expressions = new ExpressionList(EXPR_LIST);
+    expressions = new ExpressionList();
 }
 
 List::~List() {
@@ -22,8 +22,4 @@ int List::expressions_count() {
 
 Expression* List::get_expression(int idx) {
     return expressions->get_expression(idx);
-}
-
-std::string List::to_str() {
-    return expressions->to_str("[", "]");
 }

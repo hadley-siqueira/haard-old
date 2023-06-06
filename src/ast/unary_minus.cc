@@ -4,33 +4,12 @@
 using namespace haard;
 
 UnaryMinus::UnaryMinus(Expression* expression) {
-    this->kind = EXPR_UNARY_MINUS;
-    this->expression = expression;
+    set_kind(EXPR_UNARY_MINUS);
+    set_expression(expression);
 }
 
 UnaryMinus::UnaryMinus(Token& token, Expression* expression) {
-    this->kind = EXPR_UNARY_MINUS;
-    this->expression = expression;
-    this->line = token.get_line();
-    this->column = token.get_column();
-}
-
-UnaryMinus::~UnaryMinus() {
-    delete expression;
-}
-
-Expression* UnaryMinus::get_expression() const {
-    return expression;
-}
-
-void UnaryMinus::set_expression(Expression* value) {
-    expression = value;
-}
-
-std::string UnaryMinus::to_str() {
-    std::stringstream ss;
-
-    ss << "-" << expression->to_str();
-
-    return ss.str();
+    set_kind(EXPR_UNARY_MINUS);
+    set_expression(expression);
+    set_from_token(token);
 }

@@ -707,12 +707,6 @@ void Printer::print_expression(Expression* expression) {
     }
 }
 
-void Printer::print_binop(std::string oper, BinOp* bin) {
-    print_expression(bin->get_left());
-    out << " " << oper << " ";
-    print_expression(bin->get_right());
-}
-
 void Printer::print_identifier(Identifier* id) {
     out << id->to_str();
 }

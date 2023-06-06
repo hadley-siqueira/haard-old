@@ -4,46 +4,30 @@
 using namespace haard;
 
 Dot::Dot(Expression* object, Expression* field) {
-    this->kind = EXPR_DOT;
-    this->object = object;
-    this->field = field;
+    set_kind(EXPR_DOT);
+    set_object(object);
+    set_field(field);
 }
 
 Dot::Dot(Token& token, Expression* object, Expression* field) {
-    this->kind = EXPR_DOT;
-    this->object = object;
-    this->field = field;
-    this->line = token.get_line();
-    this->column = token.get_column();
-}
-
-Dot::~Dot() {
-    delete object;
-    delete field;
+    set_kind(EXPR_DOT);
+    set_object(object);
+    set_field(field);
+    set_from_token(token);
 }
 
 Expression* Dot::get_object() const {
-    return object;
+    return get_left();
 }
 
 void Dot::set_object(Expression* value) {
-    object = value;
+    set_left(value);
 }
 
 Expression* Dot::get_field() const {
-    return field;
+    return get_right();
 }
 
 void Dot::set_field(Expression* value) {
-    field = value;
-}
-
-std::string Dot::to_str() {
-    std::stringstream ss;
-
-    ss << object->to_str();
-    ss << ".";
-    ss << field->to_str();
-
-    return ss.str();
+    set_right(value);
 }

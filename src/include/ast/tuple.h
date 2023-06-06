@@ -14,7 +14,6 @@ namespace haard {
         void add_expression(Expression* expr);
         int expressions_count();
         Expression* get_expression(int idx);
-        std::string to_str();
 
     private:
         ExpressionList* expressions;

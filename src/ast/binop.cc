@@ -3,21 +3,21 @@
 using namespace haard;
 
 BinOp::BinOp() {
-    kind = EXPR_UNKNOWN;
+    set_kind(EXPR_UNKNOWN);
     left = nullptr;
     right = nullptr;
     initial_assign = false;
 }
 
 BinOp::BinOp(int kind, Expression* left, Expression* right) {
-    this->kind = kind;
+    set_kind(kind);
     this->left = left;
     this->right = right;
     initial_assign = false;
 }
 
 BinOp::BinOp(int kind, Token& token, Expression* left, Expression* right) {
-    this->kind = kind;
+    set_kind(kind);
     this->left = left;
     this->right = right;
     line = token.get_line();

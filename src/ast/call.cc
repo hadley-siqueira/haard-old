@@ -5,49 +5,21 @@ using namespace haard;
 
 
 Call::Call(Expression* object, ExpressionList* arguments) {
-    this->kind = EXPR_CALL;
-    this->object = object;
-    this->arguments = arguments;
+    set_kind(EXPR_CALL);
+    set_object(object);
+    set_arguments(arguments);
 }
 
 Call::Call(Token& token, Expression* object, ExpressionList* arguments) {
-    this->kind = EXPR_CALL;
-    this->object = object;
-    this->arguments = arguments;
-    this->line = token.get_line();
-    this->column = token.get_column();
+    set_kind(EXPR_CALL);
+    set_object(object);
+    set_arguments(arguments);
+    set_from_token(token);
 }
 
 Call::~Call() {
     delete object;
     delete arguments;
-}
-
-std::string Call::to_str() {
-    std::stringstream ss;
-
-    ss << object->to_str();
-    ss << "(";
-    ss << arguments->to_str();
-    ss << ")";
-
-    return ss.str();
-}
-
-int Call::get_line() const {
-    return line;
-}
-
-void Call::set_line(int value) {
-    line = value;
-}
-
-int Call::get_column() const {
-    return column;
-}
-
-void Call::set_column(int value) {
-    column = value;
 }
 
 Expression* Call::get_object() const {
