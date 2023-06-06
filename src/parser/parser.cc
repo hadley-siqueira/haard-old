@@ -731,11 +731,8 @@ void Parser::parse_for_statement_increment(ForStatement* stmt) {
     }
 }
 
-BranchStatement* Parser::parse_if_statement() {
-    Token token;
-    Expression* expression;
-    CompoundStatement* statements;
-    BranchStatement* stmt = new BranchStatement(STMT_IF);
+Statement* Parser::parse_if_statement() {
+    If* stmt = new If();
 
     expect(TK_IF);
     stmt->set_condition(parse_expression());

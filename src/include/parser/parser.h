@@ -54,7 +54,7 @@ namespace haard {
         void parse_for_statement_init(ForStatement* stmt);
         void parse_for_statement_condition(ForStatement* stmt);
         void parse_for_statement_increment(ForStatement* stmt);
-        BranchStatement* parse_if_statement();
+        Statement* parse_if_statement();
         BranchStatement* parse_elif_statement();
         BranchStatement* parse_else_statement();
         JumpStatement* parse_jump_statement(int tkind, int skind);

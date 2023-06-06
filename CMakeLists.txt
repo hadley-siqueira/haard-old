@@ -65,6 +65,9 @@ set(AST_SRC
     src/ast/statement.cc
     src/ast/while_statement.cc
     src/ast/for_statement.cc
+    src/ast/if.cc
+    src/ast/elif.cc
+    src/ast/else.cc
     src/ast/branch_statement.cc
     src/ast/jump_statement.cc
     src/ast/compound_statement.cc

@@ -1,18 +1,21 @@
 #ifndef HAARD_AST_STATEMENT_H
 #define HAARD_AST_STATEMENT_H
 
+#include "ast_node.h"
+
 namespace haard {
-    class Statement {
+    class Scope;
+
+    class Statement : public AstNode {
     public:
         Statement();
         virtual ~Statement();
 
-    public:
-        int get_kind();
-        void set_kind(int kind);
+        Scope* get_scope() const;
+        void set_scope(Scope* value);
 
-    protected:
-        int kind;
+    private:
+        Scope* scope;
     };
 }
 

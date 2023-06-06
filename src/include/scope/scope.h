@@ -8,6 +8,8 @@
 #include "ast/expression.h"
 
 namespace haard {
+    class Statement;
+
     class Scope {
         public:
             Scope();

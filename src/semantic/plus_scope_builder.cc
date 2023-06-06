@@ -23,5 +23,3 @@ void PlusScopeBuilder::build_plus(Plus* bin) {
     // FIXME
     bin->set_type(tleft);
 }
-
-

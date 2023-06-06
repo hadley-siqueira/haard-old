@@ -3,10 +3,9 @@
 using namespace haard;
 
 WhileStatement::WhileStatement() {
-    kind = STMT_WHILE;
-    condition = nullptr;
-    statements = nullptr;
-    scope = new Scope();
+    set_kind(STMT_WHILE);
+    set_condition(nullptr);
+    set_statements(nullptr);
 }
 
 WhileStatement::~WhileStatement() {

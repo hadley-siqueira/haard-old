@@ -3,7 +3,7 @@
 using namespace haard;
 
 BranchStatement::BranchStatement(int kind) {
-    this->kind = kind;
+    set_kind(kind);
     true_statements = nullptr;
     false_statements = nullptr;
     condition = nullptr;

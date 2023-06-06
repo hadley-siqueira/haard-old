@@ -1,21 +1,23 @@
 #include <iostream>
 #include "defs.h"
 #include "ast/statement.h"
+#include "scope/scope.h"
 
 using namespace haard;
 
 Statement::Statement() {
-    kind = STMT_UNKNOWN;
+    scope = new Scope();
 }
 
 Statement::~Statement() {
-
+    delete scope;
 }
 
-int Statement::get_kind() {
-    return kind;
+Scope* Statement::get_scope() const {
+    return scope;
 }
 
-void Statement::set_kind(int kind) {
-    this->kind = kind;
+void Statement::set_scope(Scope* value) {
+    scope = value;
 }
+

@@ -3,7 +3,7 @@
 using namespace haard;
 
 JumpStatement::JumpStatement(int kind) {
-    this->kind = kind;
+    set_kind(kind);
     expression = nullptr;
 }
 

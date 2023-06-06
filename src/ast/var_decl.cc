@@ -3,7 +3,7 @@
 using namespace haard;
 
 VarDeclaration::VarDeclaration() {
-    kind = STMT_VAR_DECL;
+    set_kind(STMT_VAR_DECL);
     expr = nullptr;
     var = nullptr;
 }

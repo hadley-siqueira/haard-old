@@ -3,7 +3,7 @@
 using namespace haard;
 
 ForStatement::ForStatement() {
-    kind = STMT_FOR;
+    set_kind(STMT_FOR);
     condition = nullptr;
     init = new ExpressionList();
     increment = new ExpressionList();

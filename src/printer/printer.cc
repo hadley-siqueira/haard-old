@@ -249,6 +249,9 @@ void Printer::print_statement(Statement* statement) {
         break;
 
     case STMT_IF:
+        print_if((If*) statement);
+        break;
+
     case STMT_ELIF:
     case STMT_ELSE:
         print_branch_statement((BranchStatement*) statement);
@@ -277,6 +280,21 @@ void Printer::print_statement(Statement* statement) {
     case STMT_VAR_DECL:
         print_variable_declaration((VarDeclaration*) statement);
         break;
+    }
+}
+
+void Printer::print_if(If* stmt) {
+    print_indentation();
+
+    out << "if ";
+    print_expression(stmt->get_condition());
+    out << ":\n";
+    indent();
+    print_statement(stmt->get_true_statements());
+    dedent();
+
+    if (stmt->get_false_statements()) {
+        print_statement(stmt->get_false_statements());
     }
 }
 
