@@ -5,11 +5,11 @@
 #include "ast/expression_list.h"
 
 namespace haard {
-    class ThisExpression : public Expression {
+    class This : public Expression {
         public:
-            ThisExpression(Token& token);
-            ThisExpression();
-            ~ThisExpression();
+            This(Token& token);
+            This();
+            ~This();
 
         public:
             Expression* clone();

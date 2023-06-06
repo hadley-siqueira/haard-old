@@ -54,10 +54,10 @@ namespace haard {
             void build_identifier(Identifier* id, bool lvalue=false);
             void build_identifier_lvalue(Identifier* id);
             void build_identifier_rvalue(Identifier* id);
-            void build_this(ThisExpression* expr);
+            void build_this(This* expr);
 
             void build_pre_inc(UnOp* un);
-            void build_cast(CastExpression* cast);
+            void build_cast(Cast* cast);
 
             void build_call(BinOp* bin);
             void build_call_arguments(IRCall* call, ExpressionList* args, IRValue *this_ptr=nullptr);

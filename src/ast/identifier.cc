@@ -4,39 +4,39 @@
 using namespace haard;
 
 Identifier::Identifier() {
-    kind = EXPR_ID;
-    symbol = nullptr;
+    set_kind(EXPR_ID);
+    set_symbol(nullptr);
     overloaded_index = 0;
     template_header = nullptr;
 }
 
 Identifier::Identifier(Token& token) {
-    kind = EXPR_ID;
-    line = token.get_line();
-    column = token.get_column();
-    name = token.get_lexeme();
-    symbol = nullptr;
+    set_kind(EXPR_ID);
+    set_line(token.get_line());
+    set_column(token.get_column());
+    set_name(token.get_lexeme());
+    set_symbol(nullptr);
     overloaded_index = 0;
     template_header = nullptr;
 }
 
 Identifier::Identifier(Token& scope, Token& name) {
-    kind = EXPR_ID;
-    line = name.get_line();
-    column = name.get_column();
-    this->name = name.get_lexeme();
+    set_kind(EXPR_ID);
+    set_line(name.get_line());
+    set_column(name.get_column());
+    set_name(name.get_lexeme());
+    set_symbol(nullptr);
     this->alias = scope.get_lexeme();
-    symbol = nullptr;
     overloaded_index = 0;
     template_header = nullptr;
 }
 
 Identifier::Identifier(std::string name) {
-    kind = EXPR_ID;
-    line = 0;
-    column = 0;
-    this->name = name;
-    symbol = nullptr;
+    set_kind(EXPR_ID);
+    set_line(0);
+    set_column(0);
+    set_name(name);
+    set_symbol(nullptr);
     overloaded_index = 0;
     template_header = nullptr;
 }

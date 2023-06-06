@@ -3,8 +3,8 @@
 using namespace haard;
 
 FunctionExpression::FunctionExpression(Function* function) {
-    this->kind = EXPR_FUNCTION;
-    this->function = function;
+    set_kind(EXPR_FUNCTION);
+    set_function(function);
 }
 
 FunctionExpression::~FunctionExpression() {
@@ -13,4 +13,8 @@ FunctionExpression::~FunctionExpression() {
 
 Function* FunctionExpression::get_function() {
     return function;
+}
+
+void FunctionExpression::set_function(Function* value) {
+    function = value;
 }

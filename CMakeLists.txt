@@ -55,11 +55,12 @@ set(AST_SRC
     src/ast/named_type.cc
     src/ast/expression.cc
     src/ast/identifier.cc
-    src/ast/unop.cc
     src/ast/literal.cc
     src/ast/expression_list.cc
-    src/ast/new_expression.cc
-    src/ast/this_expression.cc
+    src/ast/new.cc
+    src/ast/delete.cc
+    src/ast/delete_array.cc
+    src/ast/this.cc
     src/ast/function_expression.cc
     src/ast/statement.cc
     src/ast/while_statement.cc
@@ -69,7 +70,7 @@ set(AST_SRC
     src/ast/compound_statement.cc
     src/ast/expression_statement.cc
     src/ast/var_decl.cc
-    src/ast/cast_expression.cc
+    src/ast/cast.cc
     src/ast/string_builder.cc
     src/ast/binop.cc
     src/ast/binary_operator.cc

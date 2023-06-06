@@ -328,12 +328,12 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     BinOp* bin = (BinOp*) expression;
     UnOp* un = (UnOp*) expression;
     Literal* literal = (Literal*) expression;
-    CastExpression* cast = (CastExpression*) expression;
+    Cast* cast = (Cast*) expression;
     ExpressionList* exprlist = (ExpressionList*) expression;
 
     switch (kind) {
     case EXPR_THIS:
-        build_this((ThisExpression*) expression);
+        build_this((This*) expression);
         break;
 
     case EXPR_ID:
@@ -556,7 +556,7 @@ void IRBuilder::build_identifier_rvalue(Identifier* id) {
     }
 }
 
-void IRBuilder::build_this(ThisExpression* expr) {
+void IRBuilder::build_this(This* expr) {
     last_value = ctx->get_alloca_value("this");
 }
 
@@ -578,7 +578,7 @@ void IRBuilder::build_pre_inc(UnOp* un) {
     last_value = add->get_dst();
 }
 
-void IRBuilder::build_cast(CastExpression* cast) {
+void IRBuilder::build_cast(Cast* cast) {
     build_expression(cast->get_expression());
 }
 

@@ -661,7 +661,6 @@ namespace haard {
         EXPR_BITWISE_NOT,
         EXPR_UNARY_MINUS,
         EXPR_UNARY_PLUS,
-        EXPR_DOUBLE_DOLAR,
         EXPR_PRE_INCREMENT,
         EXPR_PRE_DECREMENT,
         EXPR_POS_INCREMENT,

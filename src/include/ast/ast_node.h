@@ -1,6 +1,8 @@
 #ifndef HAARD_AST_NODE_H
 #define HAARD_AST_NODE_H
 
+#include "token/token.h"
+
 namespace haard {
     class AstNode {
     public:
@@ -16,6 +18,8 @@ namespace haard {
 
         int get_column() const;
         void set_column(int value);
+
+        void set_from_token(Token& token);
 
     private:
         int kind;

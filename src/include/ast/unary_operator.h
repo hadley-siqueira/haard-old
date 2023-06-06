@@ -7,8 +7,7 @@
 namespace haard {
     class UnaryOperator : public Expression {
     public:
-        UnaryOperator(Expression* expression=nullptr);
-        UnaryOperator(Token& token, Expression* expression=nullptr);
+        UnaryOperator();
         ~UnaryOperator();
 
     public:

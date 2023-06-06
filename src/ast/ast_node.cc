@@ -34,3 +34,8 @@ int AstNode::get_column() const {
 void AstNode::set_column(int value) {
     column = value;
 }
+
+void AstNode::set_from_token(Token& token) {
+    set_line(token.get_line());
+    set_column(token.get_column());
+}

@@ -4,11 +4,11 @@
 #include "ast/expression.h"
 
 namespace haard {
-    class CastExpression : public Expression {
+    class Cast : public Expression {
         public:
-            CastExpression();
-            CastExpression(Expression* expr, Type* type);
-            ~CastExpression();
+            Cast();
+            Cast(Expression* expr, Type* type);
+            ~Cast();
 
         public:
             Type* get_cast_type();

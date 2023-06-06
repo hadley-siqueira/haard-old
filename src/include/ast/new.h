@@ -5,10 +5,10 @@
 #include "ast/expression_list.h"
 
 namespace haard {
-    class NewExpression : public Expression {
+    class New : public Expression {
     public:
-        NewExpression();
-        ~NewExpression();
+        New();
+        ~New();
 
     public:
         Type* get_new_type();

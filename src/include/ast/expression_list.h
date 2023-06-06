@@ -5,11 +5,11 @@
 #include "ast/expression.h"
 
 namespace haard {
-    class ExpressionList : public Expression {
+    class ExpressionList {
         public:
-            ExpressionList(int kind);
+            /*ExpressionList(int kind);
             ExpressionList(int kind, Expression* expression);
-            ExpressionList(int kind, std::vector<Expression*> exprs);
+            ExpressionList(int kind, std::vector<Expression*> exprs);*/
             ~ExpressionList();
 
         public:

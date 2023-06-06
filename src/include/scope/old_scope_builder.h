@@ -37,8 +37,8 @@ namespace haard {
 
             void build_identifier(Identifier* id);
 
-            void build_this(ThisExpression* expr);
-            void build_new(NewExpression* op);
+            void build_this(This* expr);
+            void build_new(New* op);
             void build_delete(UnOp* op);
 
             void build_call(BinOp* bin);
@@ -50,7 +50,7 @@ namespace haard {
             void build_index_access(BinOp* bin);
             void build_expression_in(BinOp* bin);
             void build_inclusive_range(BinOp* bin);
-            void build_cast_expression(CastExpression* expr);
+            void build_cast_expression(Cast* expr);
 
             void build_assignment(BinOp* bin);
 

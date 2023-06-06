@@ -23,15 +23,16 @@
 // Expressions
 #include "ast/expression.h"
 #include "ast/identifier.h"
-#include "ast/unop.h"
 #include "ast/binop.h"
 #include "ast/literal.h"
 #include "ast/expression_list.h"
 #include "ast/function_expression.h"
-#include "ast/new_expression.h"
-#include "ast/this_expression.h"
-#include "ast/cast_expression.h"
+#include "ast/new.h"
+#include "ast/this.h"
+#include "ast/cast.h"
 #include "ast/string_builder.h"
+#include "ast/delete.h"
+#include "ast/delete_array.h"
 
 // Binary operators
 #include "ast/binary_operator.h"

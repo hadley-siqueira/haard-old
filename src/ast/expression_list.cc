@@ -2,7 +2,7 @@
 #include "ast/expression_list.h"
 
 using namespace haard;
-
+/*
 ExpressionList::ExpressionList(int kind) {
     this->kind = kind;
 }
@@ -19,7 +19,7 @@ ExpressionList::ExpressionList(int kind, std::vector<Expression*> exprs) {
         add_expression(exprs[i]);
     }
 }
-
+*/
 ExpressionList::~ExpressionList() {
     for (int i = 0; i < expressions.size(); ++i) {
         delete expressions[i];

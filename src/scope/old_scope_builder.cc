@@ -263,11 +263,11 @@ void OldScopeBuilder::build_expression(Expression* expression) {
         break;
 
     case EXPR_THIS:
-        build_this((ThisExpression*) expression);
+        build_this((This*) expression);
         break;
 
     case EXPR_NEW:
-        build_new((NewExpression*) expression);
+        build_new((New*) expression);
         break;
 
     case EXPR_DELETE:
@@ -443,7 +443,7 @@ void OldScopeBuilder::build_expression(Expression* expression) {
         break;
 
     case EXPR_CAST:
-        build_cast_expression((CastExpression*) expression);
+        build_cast_expression((Cast*) expression);
         break;
 
     case EXPR_SIZEOF:
@@ -484,7 +484,7 @@ void OldScopeBuilder::build_identifier(Identifier* id) {
     }
 }
 
-void OldScopeBuilder::build_this(ThisExpression* expr) {
+void OldScopeBuilder::build_this(This* expr) {
     if (current_class == nullptr) {
         logger->error_and_exit("<red>error: </red>: using this outside class");
     }
@@ -492,7 +492,7 @@ void OldScopeBuilder::build_this(ThisExpression* expr) {
     expr->set_type(new IndirectionType(TYPE_POINTER, current_class->get_self_type()));
 }
 
-void OldScopeBuilder::build_new(NewExpression* op) {
+void OldScopeBuilder::build_new(New* op) {
     Type* type;
 
     link_type(op->get_new_type());
@@ -717,7 +717,7 @@ void OldScopeBuilder::build_inclusive_range(BinOp* bin) {
     bin->set_type(bin->get_left()->get_type());
 }
 
-void OldScopeBuilder::build_cast_expression(CastExpression* expr) {
+void OldScopeBuilder::build_cast_expression(Cast* expr) {
     build_expression(expr->get_expression());
     link_type(expr->get_cast_type());
     expr->set_type(expr->get_cast_type());

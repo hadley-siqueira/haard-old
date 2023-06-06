@@ -701,7 +701,8 @@ void Parser::parse_for_statement_init(ForStatement* stmt) {
             bin = (BinOp*) exprs[exprs.size() - 1];
             exprs.pop_back();
             exprs.push_back(bin->get_left());
-            bin->set_left(new ExpressionList(EXPR_TUPLE, exprs));
+            //bin->set_left(new ExpressionList(EXPR_TUPLE, exprs));
+            std::cout << __FILE__ << " " << __LINE__ << " fixme\n"; exit(0);
             stmt->set_condition(bin);
         } else { // for expr ; expr; expr
             for (int i = 0; i < exprs.size(); ++i) {
@@ -917,7 +918,7 @@ Expression* Parser::parse_cast_expression() {
     Expression* expr = parse_logical_or_expression();
 
     if (match(TK_AS)) {
-        expr = new CastExpression(expr, parse_type());
+        expr = new Cast(expr, parse_type());
     }
 
     return expr;
@@ -1202,9 +1203,6 @@ Expression* Parser::parse_unary_expression() {
         expect(TK_LEFT_PARENTHESIS);
         expr = new Sizeof(oper, parse_unary_expression());
         expect(TK_RIGHT_PARENTHESIS);
-    } else if (match(TK_DOUBLE_DOLAR)) {
-        oper = matched;
-        expr = new UnOp(EXPR_DOUBLE_DOLAR, oper, parse_unary_expression());
     } else if (lookahead(TK_NEW)) {
         expr = parse_new_expression();
     } else if (lookahead(TK_DELETE)) {
@@ -1293,7 +1291,7 @@ Expression* Parser::parse_anonymous_function() {
 }
 
 ExpressionList* Parser::parse_argument_list() {
-    ExpressionList* arguments = new ExpressionList(EXPR_ARGS);
+    ExpressionList* arguments = new ExpressionList();
 
     if (!lookahead(TK_RIGHT_PARENTHESIS)) {
         arguments->add_expression(parse_expression());
@@ -1334,7 +1332,7 @@ Expression* Parser::parse_primary_expression() {
     } else if (match(TK_NULL)) {
         expr = new Literal(EXPR_LITERAL_NULL, matched);
     } else if (match(TK_THIS)) {
-        expr = new ThisExpression(matched);
+        expr = new This(matched);
     } else if (lookahead(TK_ID)) {
         expr = parse_identifier_expression();
     } else if (lookahead(TK_SCOPE)) {
@@ -1477,8 +1475,8 @@ ExpressionList* Parser::parse_hash(Expression* key) {
     return hash;
 }
 
-NewExpression* Parser::parse_new_expression() {
-    NewExpression* expr = new NewExpression();
+New* Parser::parse_new_expression() {
+    New* expr = new New();
 
     expect(TK_NEW);
     expr->set_new_type(parse_type());
@@ -1493,18 +1491,18 @@ NewExpression* Parser::parse_new_expression() {
 
 Expression* Parser::parse_delete_expression() {
     Token oper;
-    int kind = EXPR_DELETE;
-    UnOp* expr = nullptr;
+    Expression* expr = nullptr;
 
     expect(TK_DELETE);
     oper = matched;
 
     if (match(TK_LEFT_SQUARE_BRACKET)) {
-        kind = EXPR_DELETE_ARRAY;
         expect(TK_RIGHT_SQUARE_BRACKET);
+        expr = new DeleteArray(oper, parse_expression());
+    } else {
+        expr = new Delete(oper, parse_expression());
     }
 
-    expr = new UnOp(kind, oper, parse_expression());
     return expr;
 }
 

@@ -4,18 +4,18 @@
 using namespace haard;
 
 Literal::Literal(int kind) {
-    this->kind = kind;
+    set_kind(kind);
 }
 
 Literal::Literal(int kind, Token& token) {
-    this->kind = kind;
+    set_kind(kind);
     lexeme = token.get_lexeme();
     line = token.get_line();
     column = token.get_column();
 }
 
 Literal::Literal(int kind, std::string str) {
-    this->kind = kind;
+    set_kind(kind);
     lexeme = str;
     line = 0;
     column = 0;
@@ -25,21 +25,11 @@ std::string Literal::get_lexeme() {
     return lexeme;
 }
 
-Expression* Literal::clone() {
-    Literal* other = new Literal(kind);
-
-    other->lexeme = lexeme;
-    other->line = line;
-    other->column = column;
-
-    return other;
-}
-
 uint64_t Literal::to_u64() {
     uint64_t res = 0;
     std::string value(lexeme);
 
-    switch (kind) {
+    switch (get_kind()) {
     case EXPR_LITERAL_BOOL:
         if (value == "true") {
             res = 1;
@@ -60,8 +50,3 @@ uint64_t Literal::to_u64() {
 
     return res;
 }
-
-std::string Literal::to_str() {
-    return lexeme;
-}
-

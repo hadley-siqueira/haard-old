@@ -482,7 +482,7 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_CAST:
-        print_cast((CastExpression*) expression);
+        print_cast((Cast*) expression);
         break;
 
     case EXPR_LOGICAL_OR:
@@ -702,7 +702,7 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_NEW:
-        print_new_expression((NewExpression*) expression);
+        print_new_expression((New*) expression);
         break;
     }
 }
@@ -788,7 +788,7 @@ void Printer::print_function_expression(FunctionExpression* function) {
     out << "}";
 }
 
-void Printer::print_new_expression(NewExpression* expr) {
+void Printer::print_new_expression(New* expr) {
     out << "new ";
     print_type(expr->get_new_type());
 
@@ -857,7 +857,7 @@ void Printer::print_bitwise_and_assignment(BitwiseAndAssignment* expr) {
     print_binary_operator("&=", expr);
 }
 
-void Printer::print_cast(CastExpression* expr) {
+void Printer::print_cast(Cast* expr) {
     print_expression(expr->get_expression());
     out << " as ";
     print_type(expr->get_cast_type());
@@ -1037,6 +1037,14 @@ void Printer::print_arrow(Arrow* expr) {
 
 void Printer::print_dot(Dot* expr) {
     out << expr->to_str();
+}
+
+void Printer::print_delete(Delete* expr) {
+    out << "delete " << expr->get_expression();
+}
+
+void Printer::print_delete_array(DeleteArray* expr) {
+    out << "delete[] " << expr->get_expression();
 }
 
 void Printer::print_array(Array* expr) {

@@ -12,6 +12,7 @@ namespace haard {
 
     public:
         Function* get_function();
+        void set_function(Function* value);
 
     private:
         Function* function;

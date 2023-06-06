@@ -38,7 +38,7 @@ namespace haard {
         void print_expression_list(std::string begin, std::string end, ExpressionList* tuple);
         void print_hash(ExpressionList* hash);
         void print_function_expression(FunctionExpression* function);
-        void print_new_expression(NewExpression* expr);
+        void print_new_expression(New* expr);
 
         void print_assignment(Assignment* expr);
         void print_special_assignment(SpecialAssignment* expr);
@@ -56,7 +56,7 @@ namespace haard {
         void print_bitwise_xor_assignment(BitwiseXorAssignment* expr);
         void print_bitwise_and_assignment(BitwiseAndAssignment* expr);
 
-        void print_cast(CastExpression* expr);
+        void print_cast(Cast* expr);
 
         void print_logical_or(LogicalOr* expr);
         void print_logical_or_oper(LogicalOrOper* expr);
@@ -112,6 +112,9 @@ namespace haard {
         void print_index(Index* expr);
         void print_arrow(Arrow* expr);
         void print_dot(Dot* expr);
+
+        void print_delete(Delete* expr);
+        void print_delete_array(DeleteArray* expr);
 
         void print_array(Array* expr);
         void print_list(List* expr);
