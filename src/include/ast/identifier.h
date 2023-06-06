@@ -17,13 +17,8 @@ namespace haard {
         ~Identifier();
 
     public:
-        int get_line();
-        int get_column();
         std::string& get_name();
         Symbol* get_symbol();
-
-        void set_line(int line);
-        void set_column(int column);
         void set_name(std::string name);
         void set_symbol(Symbol* symbol);
 
@@ -31,8 +26,6 @@ namespace haard {
         void set_overloaded_index(int idx);
 
         std::string get_unique_name();
-
-        Identifier* clone();
 
         bool is_local_variable();
         bool is_class_variable();
@@ -51,8 +44,6 @@ namespace haard {
         std::string to_str();
 
     private:
-        int line;
-        int column;
         std::string name;
         std::string alias;
         Symbol* symbol;

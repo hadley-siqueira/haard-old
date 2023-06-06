@@ -84,7 +84,8 @@ Symbol* NamedType::has_field(std::string name) {
 Type* NamedType::clone() {
     NamedType* other = new NamedType();
 
-    other->id = id->clone();
+    //other->id = id->clone();
+    DBG; exit(0);
     return other;
 }
 
