@@ -1012,7 +1012,9 @@ void Printer::print_pos_decrement(PosDecrement* expr) {
 }
 
 void Printer::print_parenthesis(Parenthesis* expr) {
-    out << "(" << expr->get_expression() << ")";
+    out << "(";
+    print_expression(expr->get_expression());
+    out << ")";
 }
 
 void Printer::print_sizeof(Sizeof* expr) {
@@ -1083,11 +1085,11 @@ void Printer::print_binary_operator(const char* oper, BinaryOperator* expr, bool
 
 void Printer::print_unary_operator(const char* oper, UnaryOperator* expr, bool after) {
     if (after) {
-        print_expression(expr);
+        print_expression(expr->get_expression());
         out << oper;
     } else {
         out << oper;
-        print_expression(expr);
+        print_expression(expr->get_expression());
     }
 }
 
