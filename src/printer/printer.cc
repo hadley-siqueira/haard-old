@@ -257,7 +257,7 @@ void Printer::print_statement(Statement* statement) {
         break;
 
     case STMT_ELSE:
-        print_branch_statement((BranchStatement*) statement);
+        print_else((Else*) statement);
         break;
 
     case STMT_RETURN:
@@ -316,6 +316,15 @@ void Printer::print_elif(Elif* stmt) {
     }
 }
 
+void Printer::print_else(Else* stmt) {
+    print_indentation();
+
+    out << "else:\n";
+    indent();
+    print_statement(stmt->get_statements());
+    dedent();
+}
+
 void Printer::print_while_statement(WhileStatement* statement) {
     print_indentation();
     out << "while ";
@@ -348,52 +357,6 @@ void Printer::print_for_statement(ForStatement* statement) {
     print_compound_statement(statement->get_statements());
     dedent();
     out << '\n';
-}
-
-void Printer::print_branch_statement(BranchStatement* statement) {
-    int kind;
-
-    kind = statement->get_kind();
-    print_indentation();
-
-    switch (kind) {
-    case STMT_IF:
-        out << "if ";
-        print_expression(statement->get_condition());
-        out << ":\n";
-        indent();
-        print_statement(statement->get_true_statements());
-        dedent();
-
-        if (statement->get_false_statements() != nullptr) {
-            print_statement(statement->get_false_statements());
-        }
-
-        break;
-
-    case STMT_ELIF:
-        out << "elif ";
-        print_expression(statement->get_condition());
-        out << ":\n";
-        indent();
-        print_statement(statement->get_true_statements());
-        dedent();
-
-        if (statement->get_false_statements() != nullptr) {
-            print_statement(statement->get_false_statements());
-        }
-
-        break;
-
-    case STMT_ELSE:
-        out << "else:\n";
-        indent();
-        print_statement(statement->get_true_statements());
-        dedent();
-
-        break;
-
-    }
 }
 
 void Printer::print_jump_statement(std::string op, JumpStatement* statement) {

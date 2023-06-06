@@ -776,17 +776,15 @@ Statement* Parser::parse_elif_statement() {
     return stmt;
 }
 
-BranchStatement* Parser::parse_else_statement() {
-    Token token;
-    CompoundStatement* statements;
-    BranchStatement* stmt = new BranchStatement(STMT_ELSE);
+Statement* Parser::parse_else_statement() {
+    Else* stmt = new Else();
 
     expect(TK_ELSE);
-    token = matched;
+    stmt->set_from_token(matched);
 
     expect(TK_COLON);
     indent();
-    stmt->set_true_statements(parse_compound_statement());
+    stmt->set_statements(parse_compound_statement());
     dedent();
 
     return stmt;
