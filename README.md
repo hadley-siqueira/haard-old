@@ -29,8 +29,8 @@ development and can't produce a 'hello, world' yet.
 6. There will be a binary named hdc in the build folder
 
 ```
-git clone https://github.com/hadley-siqueira/haard-compiler.git
-cd haard-compiler
+git clone https://github.com/hadley-siqueira/haard.git
+cd haard
 mkdir build
 cd build
 cmake ..
