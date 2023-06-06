@@ -296,11 +296,13 @@ void Printer::print_for_statement(ForStatement* statement) {
     out << "for ";
 
     if (statement->get_kind() == STMT_FOR) {
-        print_expression(statement->get_initialization());
+        //print_expression(statement->get_initialization());
+        DBG; exit(0);
         out << "; ";
         print_expression(statement->get_condition());
         out << "; ";
-        print_expression(statement->get_increment());
+        //print_expression(statement->get_increment());
+        DBG; exit(0);
     } else {
         print_expression(statement->get_condition());
     }
@@ -735,9 +737,9 @@ void Printer::print_hash(ExpressionList* hash) {
     BinOp* pair;
     int i;
 
-    if (hash->get_kind() == EXPR_HASH) {
+    /*if (hash->get_kind() == EXPR_HASH) {
         out << "{";
-    }
+    }*/ DBG; exit(0);
 
     for (i = 0; i < hash->expressions_count() - 1; ++i) {
         pair = (BinOp*) hash->get_expression(i);
@@ -752,9 +754,9 @@ void Printer::print_hash(ExpressionList* hash) {
     out << ": ";
     print_expression(pair->get_right());
 
-    if (hash->get_kind() == EXPR_HASH) {
+    /*if (hash->get_kind() == EXPR_HASH) {
         out << "}";
-    }
+    }*/ DBG; exit(0);
 }
 
 void Printer::print_function_expression(FunctionExpression* function) {
@@ -1010,27 +1012,41 @@ void Printer::print_pos_decrement(PosDecrement* expr) {
 }
 
 void Printer::print_parenthesis(Parenthesis* expr) {
-    out << expr->to_str();
+    out << "(" << expr->get_expression() << ")";
 }
 
 void Printer::print_sizeof(Sizeof* expr) {
-    out << expr->to_str();
+    out << "sizeof(" << expr->get_expression() << ")";
 }
 
 void Printer::print_call(Call* expr) {
-    out << expr->to_str();
+    print_expression(expr->get_object());
+
+    out << "(";
+
+    if (expr->get_arguments()) {
+        print_expression_list("", "", expr->get_arguments());
+    }
+
+    out << ")";
 }
 
 void Printer::print_index(Index* expr) {
-    out << expr->to_str();
+    out << expr->get_object() << "[";
+
+    if (expr->get_index()) {
+        print_expression(expr->get_index());
+    }
+
+    out << "]";
 }
 
 void Printer::print_arrow(Arrow* expr) {
-    out << expr->to_str();
+    print_binary_operator("->", expr, true);
 }
 
 void Printer::print_dot(Dot* expr) {
-    out << expr->to_str();
+    print_binary_operator(".", expr, true);
 }
 
 void Printer::print_delete(Delete* expr) {
@@ -1046,16 +1062,22 @@ void Printer::print_array(Array* expr) {
 }
 
 void Printer::print_list(List* expr) {
-    out << expr->to_str();
+    print_expression_list("[", "]", expr->get_expressions());
 }
 
 void Printer::print_tuple(Tuple* expr) {
-    out << expr->to_str();
+   print_expression_list("(", ")", expr->get_expressions());
 }
 
-void Printer::print_binary_operator(const char* oper, BinaryOperator* expr) {
+void Printer::print_binary_operator(const char* oper, BinaryOperator* expr, bool no_spaces) {
     print_expression(expr->get_left());
-    out << " " << oper << " ";
+
+    if (no_spaces) {
+        out << oper;
+    } else {
+        out << " " << oper << " ";
+    }
+
     print_expression(expr->get_right());
 }
 
@@ -1067,11 +1089,6 @@ void Printer::print_unary_operator(const char* oper, UnaryOperator* expr, bool a
         out << oper;
         print_expression(expr);
     }
-}
-
-Printer::print_unary_operator(const char* oper, UnaryOperator* expr) {
-    out << oper;
-    print_expression(expr);
 }
 
 void Printer::indent() {

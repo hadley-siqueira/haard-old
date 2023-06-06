@@ -8,8 +8,8 @@
 #include <dirent.h>
 #include "driver/driver.h"
 #include "printer/printer.h"
-#include "scope/old_scope_builder.h"
-#include "ir/ir_builder.h"
+//#include "scope/old_scope_builder.h"
+//#include "ir/ir_builder.h"
 #include "vm/irvm.h"
 #include "printer/ir_printer.h"
 #include "semantic/modules_scope_builder.h"
@@ -136,7 +136,7 @@ void Driver::semantic_analysis() {
 }
 
 void Driver::ir_generation() {
-    IRBuilder builder;
+    /*IRBuilder builder;
 
     builder.build(modules);
 
@@ -152,7 +152,7 @@ void Driver::ir_generation() {
     vm.execute_modules(modules);
     //vm.dump_memory(1024 * 2);
 
-    delete modules;
+    delete modules;*/
 }
 
 void Driver::parse_imports(Module* file) {

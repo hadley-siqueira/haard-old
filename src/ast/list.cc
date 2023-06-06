@@ -23,3 +23,11 @@ int List::expressions_count() {
 Expression* List::get_expression(int idx) {
     return expressions->get_expression(idx);
 }
+
+ExpressionList* List::get_expressions() const {
+    return expressions;
+}
+
+void List::set_expressions(ExpressionList* value) {
+    expressions = value;
+}

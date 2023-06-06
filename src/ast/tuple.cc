@@ -23,3 +23,11 @@ int Tuple::expressions_count() {
 Expression* Tuple::get_expression(int idx) {
     return expressions->get_expression(idx);
 }
+
+ExpressionList* Tuple::get_expressions() const {
+    return expressions;
+}
+
+void Tuple::set_expressions(ExpressionList* value) {
+    expressions = value;
+}

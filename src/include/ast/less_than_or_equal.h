@@ -2,35 +2,13 @@
 #define HAARD_AST_LESS_THAN_OR_EQUAL_H
 
 #include "token/token.h"
-#include "expression.h"
+#include "binary_operator.h"
 
 namespace haard {
-    class LessThanOrEqual : public Expression {
+    class LessThanOrEqual : public BinaryOperator {
     public:
         LessThanOrEqual(Expression* left=nullptr, Expression* right=nullptr);
         LessThanOrEqual(Token& token, Expression* left=nullptr, Expression* right=nullptr);
-        ~LessThanOrEqual();
-
-    public:
-        std::string to_str();
-
-        int get_line() const;
-        void set_line(int value);
-
-        int get_column() const;
-        void set_column(int value);
-
-        Expression* get_left() const;
-        void set_left(Expression* value);
-
-        Expression* get_right() const;
-        void set_right(Expression* value);
-
-    private:
-        int line;
-        int column;
-        Expression* left;
-        Expression* right;
     };
 }
 

@@ -9,7 +9,6 @@ namespace haard {
     public:
         Arrow(Expression* object=nullptr, Expression* field=nullptr);
         Arrow(Token& token, Expression* object=nullptr, Expression* field=nullptr);
-        ~Arrow();
 
     public:
         Expression* get_object() const;

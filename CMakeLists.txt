@@ -159,7 +159,7 @@ set(IR_SRC
 
 set(PRINTER_SRC
     src/printer/printer.cc
-    src/printer/ir_printer.cc
+    #src/printer/ir_printer.cc
 )
 
 set(DRIVER_SRC
@@ -169,7 +169,7 @@ set(DRIVER_SRC
 set(SCOPE_SRC
     src/scope/symbol.cc
     src/scope/scope.cc
-    src/scope/old_scope_builder.cc
+    #src/scope/old_scope_builder.cc
 )
 
 set(SEMANTIC_SRC
@@ -209,11 +209,11 @@ set(SOURCES
     ${SCANNER_SRC}
     ${PARSER_SRC}
     ${AST_SRC}
-    ${IR_SRC}
+    #${IR_SRC}
     ${PRINTER_SRC}
     ${SCOPE_SRC}
     ${SEMANTIC_SRC}
-    ${IRVM_SRC}
+    #${IRVM_SRC}
     ${DRIVER_SRC}
 )
 

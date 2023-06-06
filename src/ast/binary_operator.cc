@@ -2,6 +2,11 @@
 
 using namespace haard;
 
+BinaryOperator::BinaryOperator() {
+    set_left(nullptr);
+    set_right(nullptr);
+}
+
 BinaryOperator::~BinaryOperator() {
     delete left;
     delete right;
