@@ -3,7 +3,6 @@
 
 #include "ast/statement.h"
 #include "ast/expression.h"
-#include "scope/scope.h"
 
 namespace haard {
     class If : public Statement {

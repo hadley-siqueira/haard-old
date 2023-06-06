@@ -1,5 +1,5 @@
-#ifndef HAARD_LOG_MESSAGES_H
-#define HAARD_LOG_MESSAGES_H
+#ifndef HAARD_LOG_ACTIONS_H
+#define HAARD_LOG_ACTIONS_H
 
 #include <string>
 

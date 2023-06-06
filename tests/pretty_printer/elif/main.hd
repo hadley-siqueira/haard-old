@@ -1,0 +1,12 @@
+def main : void
+    a = 0
+
+    if a > 0:
+        if a > 1:
+            a = 0
+        elif a == 1:
+            a = 1
+
+        a = 3
+    elif a == 9:
+        a = 2

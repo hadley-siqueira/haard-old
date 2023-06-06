@@ -253,6 +253,9 @@ void Printer::print_statement(Statement* statement) {
         break;
 
     case STMT_ELIF:
+        print_elif((Elif*) statement);
+        break;
+
     case STMT_ELSE:
         print_branch_statement((BranchStatement*) statement);
         break;
@@ -287,6 +290,21 @@ void Printer::print_if(If* stmt) {
     print_indentation();
 
     out << "if ";
+    print_expression(stmt->get_condition());
+    out << ":\n";
+    indent();
+    print_statement(stmt->get_true_statements());
+    dedent();
+
+    if (stmt->get_false_statements()) {
+        print_statement(stmt->get_false_statements());
+    }
+}
+
+void Printer::print_elif(Elif* stmt) {
+    print_indentation();
+
+    out << "elif ";
     print_expression(stmt->get_condition());
     out << ":\n";
     indent();

@@ -13,7 +13,6 @@ namespace haard {
     class Parser {
     public:
         Parser();
-        Parser(Logger* logger);
 
     public:
         Module* read(std::string path, std::string relative_path);
@@ -55,7 +54,7 @@ namespace haard {
         void parse_for_statement_condition(ForStatement* stmt);
         void parse_for_statement_increment(ForStatement* stmt);
         Statement* parse_if_statement();
-        BranchStatement* parse_elif_statement();
+        Statement* parse_elif_statement();
         BranchStatement* parse_else_statement();
         JumpStatement* parse_jump_statement(int tkind, int skind);
         CompoundStatement* parse_compound_statement();
@@ -115,7 +114,6 @@ namespace haard {
         std::stack<int> indent_stack;
         std::vector<Annotation*> annotations;
         Token matched;
-        Logger* logger;
     };
 }
 

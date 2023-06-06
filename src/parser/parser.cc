@@ -2,17 +2,13 @@
 #include <sstream>
 #include "parser/parser.h"
 #include "log/messages.h"
+#include "log/actions.h"
+#include "log/info_messages.h"
 
 using namespace haard;
 
 Parser::Parser() {
     idx = 0;
-    this->logger = nullptr;
-}
-
-Parser::Parser(Logger* logger) {
-    idx = 0;
-    this->logger = logger;
 }
 
 Module* Parser::read(std::string path, std::string relative_path) {
@@ -20,7 +16,7 @@ Module* Parser::read(std::string path, std::string relative_path) {
     Module* module = nullptr;
 
     idx = 0;
-    this->path = path;
+    set_path(path);
     tokens = s.read(path);
     module = parse_module();
     module->set_path(path);
@@ -74,7 +70,7 @@ Module* Parser::parse_module() {
         } else if (match(TK_EOF)) {
             break;
         } else {
-            logger->error(error_message_unexpected_token(path, tokens[idx]));
+            log_error_and_exit(error_message_unexpected_token(path, tokens[idx]));
         }
     }
 
@@ -392,7 +388,7 @@ Function* Parser::parse_function() {
     type = parse_type();
 
     if (type == nullptr) {
-        logger->error(error_message_no_return_type(path, tokens[idx - 1]));
+        log_error(error_message_no_return_type(path, tokens[idx - 1]));
     } 
 
     function->set_return_type(type);
@@ -658,7 +654,7 @@ ForStatement* Parser::parse_for_statement() {
 
     if (next_token_same_line()) {
         DBG;
-        logger->error_and_exit("<red>error: </red>Unexpected tokens after colon. Expected them to be on a new line");
+        log_error_and_exit("<red>error: </red>Unexpected tokens after colon. Expected them to be on a new line");
     }
 
     stmt->set_statements(parse_compound_statement());
@@ -735,6 +731,7 @@ Statement* Parser::parse_if_statement() {
     If* stmt = new If();
 
     expect(TK_IF);
+    stmt->set_from_token(matched);
     stmt->set_condition(parse_expression());
 
     expect(TK_COLON);
@@ -751,15 +748,19 @@ Statement* Parser::parse_if_statement() {
     return stmt;
 }
 
-BranchStatement* Parser::parse_elif_statement() {
-    Token token;
-    Expression* expression;
-    CompoundStatement* statements;
-    BranchStatement* stmt = new BranchStatement(STMT_ELIF);
+Statement* Parser::parse_elif_statement() {
+    Expression* condition;
+    Elif* stmt = new Elif();
 
     expect(TK_ELIF);
-    token = matched;
-    stmt->set_condition(parse_expression());
+    stmt->set_from_token(matched);
+    condition = parse_expression();
+
+    if (condition == nullptr) {
+        std::cout << "elif no condition\n"; exit(0);
+    }
+
+    stmt->set_condition(condition);
 
     expect(TK_COLON);
     indent();
@@ -1547,7 +1548,7 @@ void Parser::expect(int kind) {
         return;
     }
 
-    logger->error(error_message_expected_token(path, kind, tokens[idx]));
+    log_error(error_message_expected_token(path, kind, tokens[idx]));
 }
 
 void Parser::expect_on_same_line(int kind) {
@@ -1555,7 +1556,7 @@ void Parser::expect_on_same_line(int kind) {
         return;
     }
 
-    logger->error(error_message_expected_token(path, kind, tokens[idx]));
+    log_error(error_message_expected_token(path, kind, tokens[idx]));
 }
 
 bool Parser::match(int kind) {
@@ -1665,20 +1666,10 @@ bool Parser::has_interpolation(std::string str) {
     return false;
 }
 
-Logger *Parser::get_logger() const
-{
-    return logger;
-}
-
-void Parser::set_logger(Logger *value)
-{
-    logger = value;
-}
-
 std::string Parser::get_path() const {
     return path;
 }
 
-void Parser::set_path(const std::string &value) {
+void Parser::set_path(const std::string& value) {
     path = value;
 }

@@ -1,5 +1,5 @@
-#ifndef HAARD_LOG_MESSAGES_H
-#define HAARD_LOG_MESSAGES_H
+#ifndef HAARD_LOG_ERROR_MESSAGES_H
+#define HAARD_LOG_ERROR_MESSAGES_H
 
 #include "defs.h"
 #include "log/log.h"
