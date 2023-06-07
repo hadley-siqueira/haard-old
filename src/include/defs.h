@@ -29,7 +29,8 @@ namespace haard {
     typedef enum LogKind {
         LOG_WARNING,
         LOG_INFO,
-        LOG_ERROR
+        LOG_ERROR,
+        LOG_INTERNAL
     } LogKind;
 
     typedef enum TokenKind {
