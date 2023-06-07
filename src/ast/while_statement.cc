@@ -11,7 +11,6 @@ WhileStatement::WhileStatement() {
 WhileStatement::~WhileStatement() {
     delete condition;
     delete statements;
-    delete scope;
 }
 
 Expression* WhileStatement::get_condition() {
@@ -28,8 +27,4 @@ void WhileStatement::set_condition(Expression* expression) {
 
 void WhileStatement::set_statements(CompoundStatement* statements) {
     this->statements = statements;
-}
-
-Scope* WhileStatement::get_scope() {
-    return scope;
 }

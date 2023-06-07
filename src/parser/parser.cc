@@ -629,10 +629,18 @@ Statement* Parser::parse_statement() {
 }
 
 WhileStatement* Parser::parse_while_statement() {
+    Expression* condition;
     WhileStatement* stmt = new WhileStatement();
 
     expect(TK_WHILE);
-    stmt->set_condition(parse_expression());
+    stmt->set_from_token(matched);
+    condition = parse_expression();
+
+    if (condition == nullptr) {
+        log_error_and_exit(error_expected_while_expression(path, stmt));
+    }
+
+    stmt->set_condition(condition);
     expect(TK_COLON);
     indent();
     stmt->set_statements(parse_compound_statement());

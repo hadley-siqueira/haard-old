@@ -27,4 +27,16 @@ namespace haard {
 
         return ss.str();
     }
+
+    std::string error_expected_while_expression(std::string path, WhileStatement* stmt) {
+        std::stringstream ss;
+        int line = stmt->get_line();
+        int column = stmt->get_column();
+        int count = 5;
+
+        ss << "<red>error</red>: while should have a condition expression\n";
+        ss << extract_line(path, line, column, count);
+
+        return ss.str();
+    }
 }

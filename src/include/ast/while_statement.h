@@ -19,12 +19,9 @@ namespace haard {
         void set_condition(Expression* expression);
         void set_statements(CompoundStatement* statements);
 
-        Scope* get_scope();
-
     private:
         Expression* condition;
         CompoundStatement* statements;
-        Scope* scope;
     };
 }
 

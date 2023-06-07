@@ -1,0 +1,5 @@
+def main : void
+    a = 0
+
+    while:
+        a = a + 1
