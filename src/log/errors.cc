@@ -11,7 +11,19 @@ namespace haard {
         int count = token.get_lexeme().size();
 
         ss << "<red>error</red>: unexpected token\n";
-        ss << foobar(path, line, column, count);
+        ss << extract_line(path, line, column, count);
+
+        return ss.str();
+    }
+
+    std::string error_expected_elif_expression(std::string path, Elif* stmt) {
+        std::stringstream ss;
+        int line = stmt->get_line();
+        int column = stmt->get_column();
+        int count = 4;
+
+        ss << "<red>error</red>: elif should have a condition expression\n";
+        ss << extract_line(path, line, column, count);
 
         return ss.str();
     }

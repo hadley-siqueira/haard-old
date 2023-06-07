@@ -8,7 +8,7 @@ namespace haard {
     std::string read_line(std::string path, int line);
     std::string colorify(std::string msg);
     std::string create_trailing(int line, int column, int count);
-    std::string foobar(std::string path, int line, int column, int count);
+    std::string extract_line(std::string path, int line, int column, int count);
 }
 
 #endif

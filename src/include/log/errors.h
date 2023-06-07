@@ -3,9 +3,11 @@
 
 #include <string>
 #include "token/token.h"
+#include "ast/ast.h"
 
 namespace haard {
     std::string error_unexpected_token(std::string path, Token& token);
+    std::string error_expected_elif_expression(std::string path, Elif* stmt);
 }
 
 #endif

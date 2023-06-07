@@ -757,7 +757,7 @@ Statement* Parser::parse_elif_statement() {
     condition = parse_expression();
 
     if (condition == nullptr) {
-        std::cout << "elif no condition\n"; exit(0);
+        log_error_and_exit(error_expected_elif_expression(path, stmt));
     }
 
     stmt->set_condition(condition);

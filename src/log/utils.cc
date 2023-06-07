@@ -103,7 +103,7 @@ namespace haard {
         return ss.str();
     }
 
-    std::string foobar(std::string path, int line, int column, int count) {
+    std::string extract_line(std::string path, int line, int column, int count) {
         std::stringstream ss;
 
         if (count < 1) count = 1;
