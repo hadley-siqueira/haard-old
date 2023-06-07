@@ -140,6 +140,7 @@ set(AST_SRC
     src/ast/array.cc
     src/ast/list.cc
     src/ast/hash.cc
+    src/ast/hash_pair.cc
     src/ast/tuple.cc
 )
 

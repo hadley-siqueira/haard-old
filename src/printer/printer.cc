@@ -694,8 +694,11 @@ void Printer::print_expression(Expression* expression) {
         break;
 
     case EXPR_HASH:
-    case EXPR_HASH_RAW:
-        print_hash(exprlist);
+        print_hash((Hash*) expression);
+        break;
+
+    case EXPR_HASH_PAIR:
+        print_hash_pair((HashPair*) expression);
         break;
 
     case EXPR_FUNCTION:
@@ -730,32 +733,6 @@ void Printer::print_expression_list(std::string begin, std::string end, Expressi
     }
 
     out << end;
-}
-
-void Printer::print_hash(ExpressionList* hash) {
-    BinOp* pair;
-    int i;
-
-    /*if (hash->get_kind() == EXPR_HASH) {
-        out << "{";
-    }*/ DBG; exit(0);
-
-    for (i = 0; i < hash->expressions_count() - 1; ++i) {
-        pair = (BinOp*) hash->get_expression(i);
-        print_expression(pair->get_left());
-        out << ": ";
-        print_expression(pair->get_right());
-        out << ", ";
-    }
-
-    pair = (BinOp*) hash->get_expression(i);
-    print_expression(pair->get_left());
-    out << ": ";
-    print_expression(pair->get_right());
-
-    /*if (hash->get_kind() == EXPR_HASH) {
-        out << "}";
-    }*/ DBG; exit(0);
 }
 
 void Printer::print_function_expression(FunctionExpression* function) {
@@ -1068,6 +1045,16 @@ void Printer::print_list(List* expr) {
 
 void Printer::print_tuple(Tuple* expr) {
    print_expression_list("(", ")", expr->get_expressions());
+}
+
+void Printer::print_hash(Hash* expr) {
+    print_expression_list("{", "}", expr->get_expressions());
+}
+
+void Printer::print_hash_pair(HashPair* expr) {
+    print_expression(expr->get_left());
+    out << ": ";
+    print_expression(expr->get_right());
 }
 
 void Printer::print_binary_operator(const char* oper, BinaryOperator* expr, bool no_spaces) {

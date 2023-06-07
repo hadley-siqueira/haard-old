@@ -86,6 +86,7 @@
 #include "ast/array.h"
 #include "ast/list.h"
 #include "ast/hash.h"
+#include "ast/hash_pair.h"
 #include "ast/tuple.h"
 
 // Unary operators

@@ -1441,9 +1441,7 @@ Expression* Parser::parse_array_or_hash() {
         expr = parse_expression();
 
         if (expr->get_kind() == EXPR_ID && lookahead(TK_COLON)) {
-            list = parse_hash(expr);
-            //list->set_kind(EXPR_HASH);
-            DBG;
+            expr = parse_hash(expr);
         } else {
             array = new Array();
             array->add_expression(expr);
@@ -1462,18 +1460,19 @@ Expression* Parser::parse_array_or_hash() {
     return expr;
 }
 
-ExpressionList* Parser::parse_hash(Expression* key) {
+Hash* Parser::parse_hash(Expression* key) {
     Expression* expr = nullptr;
-    ExpressionList* hash = new ExpressionList();
+    Hash* hash = new Hash();
 
     expect(TK_COLON);
-    expr = new BinOp(EXPR_HASH_PAIR, key, parse_expression());
+    expr = new HashPair(key, parse_expression());
+
     hash->add_expression(expr);
 
     while (match(TK_COMMA)) {
         key = parse_identifier_expression();
         expect(TK_COLON);
-        expr = new BinOp(EXPR_HASH_PAIR, key, parse_expression());
+        expr = new HashPair(key, parse_expression());
         hash->add_expression(expr);
     }
 

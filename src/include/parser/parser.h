@@ -89,7 +89,7 @@ namespace haard {
         Identifier* parse_identifier_expression();
         Expression* parse_anonymous_function();
         ExpressionList* parse_argument_list();
-        ExpressionList* parse_hash(Expression* key);
+        Hash* parse_hash(Expression* key);
         New* parse_new_expression();
         Expression* parse_delete_expression();
 

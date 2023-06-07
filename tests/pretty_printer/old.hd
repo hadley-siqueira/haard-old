@@ -97,12 +97,13 @@ def main : int
     v <<= 2
     v >>>= 2
     
+    v = {method: :post, msg: 'hello'}
+    post('/url', {to: 'controller#action', path: 'foobar'})
 #   assignment operators
 #    my_call(|a| {
 #        return a + 1
 #    })
 
-#   v = {method: :post, msg: 'hello'}
 #   v = {"method": "post"}
 #   v = new Class[2]
 #   v = new Class<int>(2)

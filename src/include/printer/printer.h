@@ -40,7 +40,7 @@ namespace haard {
         void print_identifier(Identifier* id);
         void print_literal(Literal* literal);
         void print_expression_list(std::string begin, std::string end, ExpressionList* tuple);
-        void print_hash(ExpressionList* hash);
+
         void print_function_expression(FunctionExpression* function);
         void print_new_expression(New* expr);
 
@@ -123,6 +123,8 @@ namespace haard {
         void print_array(Array* expr);
         void print_list(List* expr);
         void print_tuple(Tuple* expr);
+        void print_hash(Hash* expr);
+        void print_hash_pair(HashPair* expr);
 
     private:
         void print_binary_operator(const char* oper, BinaryOperator* expr, bool no_spaces=false);
