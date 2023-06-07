@@ -236,7 +236,7 @@ void Printer::print_statement(Statement* statement) {
         break;
 
     case STMT_WHILE:
-        print_while_statement((WhileStatement*) statement);
+        print_while_statement((While*) statement);
         break;
 
     case STMT_FOR:
@@ -325,7 +325,7 @@ void Printer::print_else(Else* stmt) {
     dedent();
 }
 
-void Printer::print_while_statement(WhileStatement* statement) {
+void Printer::print_while_statement(While* statement) {
     print_indentation();
     out << "while ";
     print_expression(statement->get_condition());

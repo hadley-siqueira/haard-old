@@ -48,7 +48,7 @@ namespace haard {
         TypeList* parse_template_list();
         TypeList* parse_template_list_header();
         Statement* parse_statement();
-        WhileStatement* parse_while_statement();
+        While* parse_while_statement();
         ForStatement* parse_for_statement();
         void parse_for_statement_init(ForStatement* stmt);
         void parse_for_statement_condition(ForStatement* stmt);

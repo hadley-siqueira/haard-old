@@ -4,13 +4,12 @@
 #include "ast/statement.h"
 #include "ast/compound_statement.h"
 #include "ast/expression.h"
-#include "scope/scope.h"
 
 namespace haard {
-    class WhileStatement : public Statement {
+    class While : public Statement {
     public:
-        WhileStatement();
-        ~WhileStatement();
+        While();
+        ~While();
 
     public:
         Expression* get_condition();

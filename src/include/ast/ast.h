@@ -107,7 +107,7 @@
 
 // Statements
 #include "ast/statement.h"
-#include "ast/while_statement.h"
+#include "ast/while.h"
 #include "ast/for_statement.h"
 #include "ast/if.h"
 #include "ast/elif.h"

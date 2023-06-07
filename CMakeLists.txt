@@ -63,7 +63,7 @@ set(AST_SRC
     src/ast/this.cc
     src/ast/function_expression.cc
     src/ast/statement.cc
-    src/ast/while_statement.cc
+    src/ast/while.cc
     src/ast/for_statement.cc
     src/ast/if.cc
     src/ast/elif.cc
