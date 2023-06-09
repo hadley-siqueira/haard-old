@@ -1,0 +1,5 @@
+def main : void
+    ptr = 0
+    delete ptr
+    delete[] ptr
+

@@ -111,5 +111,3 @@ def main : int
 #   v = new int*[100]
 #   delete v
 #   delete[] v
-#   v += 2
-#   v -= 2 ...

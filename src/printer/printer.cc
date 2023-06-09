@@ -705,6 +705,14 @@ void Printer::print_expression(Expression* expression) {
         print_function_expression((FunctionExpression*) expression);
         break;
 
+    case EXPR_DELETE:
+        print_delete((Delete*) expression);
+        break;
+
+    case EXPR_DELETE_ARRAY:
+        print_delete_array((DeleteArray*) expression);
+        break;
+
     case EXPR_NEW:
         print_new_expression((New*) expression);
         break;
@@ -1028,11 +1036,13 @@ void Printer::print_dot(Dot* expr) {
 }
 
 void Printer::print_delete(Delete* expr) {
-    out << "delete " << expr->get_expression();
+    out << "delete ";
+    print_expression(expr->get_expression());
 }
 
 void Printer::print_delete_array(DeleteArray* expr) {
-    out << "delete[] " << expr->get_expression();
+    out << "delete[] ";
+    print_expression(expr->get_expression());
 }
 
 void Printer::print_array(Array* expr) {
