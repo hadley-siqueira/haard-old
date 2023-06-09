@@ -140,5 +140,9 @@ std::string Identifier::to_str() {
 
     ss << name;
 
+    if (template_header) {
+        ss << template_header->to_str();
+    }
+
     return ss.str();
 }

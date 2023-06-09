@@ -99,15 +99,15 @@ def main : int
     
     v = {method: :post, msg: 'hello'}
     post('/url', {to: 'controller#action', path: 'foobar'})
+    delete v
+    delete[] v
 #   assignment operators
 #    my_call(|a| {
 #        return a + 1
 #    })
 
-#   v = {"method": "post"}
-#   v = new Class[2]
-#   v = new Class<int>(2)
-#   v = new Hash<str, int>(2)
-#   v = new int*[100]
-#   delete v
-#   delete[] v
+    v = new Class[2]
+    v = new Class<int>(2)
+    v = new Hash<str, int>(2)
+    v = new int*[100]
+    v = new Player(100, 200)
