@@ -101,10 +101,14 @@ def main : int
     post('/url', {to: 'controller#action', path: 'foobar'})
     delete v
     delete[] v
-#   assignment operators
-#    my_call(|a| {
-#        return a + 1
-#    })
+
+    my_call(|a| {
+        return a + 1
+    })
+
+    array.each(|e| {
+        return e + 1
+    }).join('a')
 
     v = new Class[2]
     v = new Class<int>(2)

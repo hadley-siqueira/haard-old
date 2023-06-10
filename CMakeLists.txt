@@ -177,6 +177,8 @@ set(SCOPE_SRC
 )
 
 set(SEMANTIC_SRC
+    src/semantic/semantic_pass.cc
+    src/semantic/semantic_first_pass.cc
     src/semantic/scope_builder.cc
     src/semantic/scope_builder_context.cc
     src/semantic/modules_scope_builder.cc
