@@ -10,6 +10,7 @@ namespace haard {
     class TypeDescriptorLink : public ScopeBuilder {
     public:
         TypeDescriptorLink(ScopeBuilderContext* context=nullptr);
+        TypeDescriptorLink(Scope* scope);
 
     public:
         void link_type(Type* type);
@@ -19,8 +20,10 @@ namespace haard {
         void link_function_type(FunctionType* type);
         void link_array_type(ArrayListType* type);
         void link_tuple_type(TupleType* type);
-
         void link_type_list(TypeList* types);
+
+    private:
+        Scope* scope;
     };
 }
 

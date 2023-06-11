@@ -7,6 +7,10 @@ TypeDescriptorLink::TypeDescriptorLink(ScopeBuilderContext* context) {
     set_context(context);
 }
 
+TypeDescriptorLink::TypeDescriptorLink(Scope* scope) {
+    this->scope = scope;
+}
+
 void TypeDescriptorLink::link_type(Type* type) {
     if (type == nullptr) {
         return;

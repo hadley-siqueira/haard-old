@@ -13,6 +13,7 @@
 #include "vm/irvm.h"
 #include "printer/ir_printer.h"
 #include "semantic/modules_scope_builder.h"
+#include "semantic/semantic_driver.h"
 #include "log/actions.h"
 
 using namespace haard;
@@ -130,9 +131,12 @@ void Driver::parse_modules() {
 }
 
 void Driver::semantic_analysis() {
-    ModulesScopeBuilder builder;
+    SemanticDriver driver;
 
-    builder.build_modules(modules);
+    driver.build_modules(modules);
+    /*ModulesScopeBuilder builder;
+
+    builder.build_modules(modules);*/
 }
 
 void Driver::ir_generation() {
