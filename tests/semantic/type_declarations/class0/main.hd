@@ -1,0 +1,8 @@
+class Player:
+    x : int
+    y : int
+
+
+class Player:
+    x : int
+    y : int

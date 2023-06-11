@@ -1,6 +1,7 @@
 #include <iostream>
 #include "semantic/semantic_first_pass.h"
 #include "log/actions.h"
+#include "log/infos.h"
 
 using namespace haard;
 
@@ -33,16 +34,19 @@ void SemanticFirstPass::connect_sibling_scopes(Module* module) {
 void SemanticFirstPass::define_types(Module* module) {
     CompoundTypeDescriptor* decl;
 
+    enter_scope(module->get_scope());
+
     for (int i = 0; i < module->classes_count(); ++i) {
         decl = module->get_class(i);
         define_type(decl, SYM_CLASS, "class");
     }
+
+    leave_scope();
 }
 
 void SemanticFirstPass::define_type(CompoundTypeDescriptor* decl, int kind, std::string msg) {
     NamedType* self_type = new NamedType();
     std::string qname = decl->get_name();
-
 
     define_template_header(decl);
 
@@ -52,8 +56,10 @@ void SemanticFirstPass::define_type(CompoundTypeDescriptor* decl, int kind, std:
         log_error_and_exit(name + " already defined");
     } else {
         get_scope()->define_type(kind, name, decl);
-        //log_info(info_message_define_type(decl, msg));
-        DBG; exit(0);
+
+        if (logging_info()) {
+            log_info(info_define_type(decl, msg));
+        }
     }
 
     self_type->set_name(qname);

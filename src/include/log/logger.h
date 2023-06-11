@@ -18,7 +18,11 @@ namespace haard {
         void error(std::string msg);
         void error_and_exit(std::string msg);
         void print();
+        void log_all();
         bool has_error();
+
+    public:
+        bool logging_info();
 
     private:
         std::vector<Log*> logs;

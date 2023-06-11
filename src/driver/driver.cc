@@ -97,6 +97,7 @@ void Driver::set_flags(int argc, char* argv[]) {
         } else if (strcmp(argv[i], "-h") == 0) {
             help_flag = true;
         } else if (strcmp(argv[i], "--show-logs") == 0) {
+            log_all();
             show_logs_flag = true;
         } else if (strcmp(argv[i], "--show-ir") == 0) {
             show_ir_flag = true;

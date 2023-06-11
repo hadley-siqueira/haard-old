@@ -23,4 +23,17 @@ namespace haard {
     bool log_has_error() {
         return logger.has_error();
     }
+
+    void log_internal(std::string msg) {
+        logger.internal(msg);
+    }
+
+    void log_all()     {
+        logger.log_all();
+    }
+
+    bool logging_info()     {
+        return logger.logging_info();
+    }
+
 }

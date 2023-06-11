@@ -44,7 +44,7 @@ void TypeDescriptorLink::link_type(Type* type) {
 
 void TypeDescriptorLink::link_named_type(NamedType* type) {
     std::string name = type->get_name();
-    Scope* scope = get_scope();
+    Scope* scope = this->scope;//get_scope();
     Symbol* sym = scope->resolve(name);
 
     if (!sym) {

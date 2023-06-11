@@ -31,8 +31,16 @@ void Logger::print() {
     }
 }
 
+void Logger::log_all() {
+    error_flag = false;
+    info_flag = true;
+    warn_flag = true;
+    internal_flag = true;
+}
+
 void Logger::info(std::string msg) {
     if (info_flag) {
+        msg = "<blue>info</blue>: " + msg;
         logs.push_back(new Log(LOG_INFO, msg));
     }
 }
@@ -45,6 +53,7 @@ void Logger::internal(std::string msg) {
 
 void Logger::error(std::string msg) {
     error_flag = true;
+    msg = "<red>error</red>: " + msg;
     logs.push_back(new Log(LOG_ERROR, msg));
 }
 
@@ -57,4 +66,8 @@ void Logger::error_and_exit(std::string msg) {
 
 bool Logger::has_error() {
     return error_flag;
+}
+
+bool Logger::logging_info() {
+    return info_flag;
 }
