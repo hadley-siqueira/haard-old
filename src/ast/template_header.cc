@@ -5,6 +5,7 @@ using namespace haard;
 
 TemplateHeader::TemplateHeader() {
     types = new TypeList();
+    template_flag = false;
 }
 
 TemplateHeader::~TemplateHeader() {
@@ -49,4 +50,12 @@ std::string TemplateHeader::get_qualified_name() {
     ss << ">";
 
     return ss.str();
+}
+
+bool TemplateHeader::is_template() {
+    return template_flag;
+}
+
+void TemplateHeader::set_template_flag(bool value) {
+    template_flag = value;
 }

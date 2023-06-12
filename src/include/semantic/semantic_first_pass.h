@@ -12,12 +12,20 @@ namespace haard {
 
         void build_imports(Module* module);
         void build_classes(Module* module);
+        void build_structs(Module* module);
+        void build_functions(Module* module);
 
         void build_import(Import* import);
         void build_class(Class* decl);
+        void build_struct(Struct* decl);
+
+        void build_function(Function* function);
+        void build_parameters(Function* function);
+        void build_parameter(Variable* param, int idx);
+        void build_function_self_type(Function* function);
 
     private:
-        void define_template_header(CompoundTypeDescriptor* decl);
+        void build_template_header(TemplateHeader* templates);
 
     };
 }

@@ -72,7 +72,7 @@ namespace haard {
         void set_overloaded_index(int idx);
         int get_overloaded_index();
 
-        void set_template_header(TemplateHeader* header);
+        void set_template_header(TemplateHeader* header, bool is_template=false);
         TemplateHeader* get_template_header();
 
         std::vector<Annotation*> get_annotations() const;

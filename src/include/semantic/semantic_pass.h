@@ -18,8 +18,12 @@ namespace haard {
         Scope* get_scope() const;
         void set_scope(Scope* value);
 
+        Function* get_function() const;
+        void set_function(Function* value);
+
     private:
         Scope* scope;
+        Function* function;
     };
 }
 

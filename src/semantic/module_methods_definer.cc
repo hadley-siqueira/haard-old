@@ -1,5 +1,4 @@
 #include "semantic/module_methods_definer.h"
-#include "semantic/function_declaration_scope_builder.h"
 
 using namespace haard;
 
@@ -57,7 +56,7 @@ void ModuleMethodsDefiner::define_compound_methods(CompoundTypeDescriptor* decl)
 }
 
 void ModuleMethodsDefiner::define_method(Function* method) {
-    FunctionDeclarationScopeBuilder builder(get_context());
+    /*FunctionDeclarationScopeBuilder builder(get_context());
 
-    builder.define_function(method);
+    builder.define_function(method);*/
 }

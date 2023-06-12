@@ -120,8 +120,7 @@ Class* Parser::parse_class() {
     klass->set_from_token(matched);
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        klass->set_template_header(parse_template_header());
-        klass->set_template(true);
+        klass->set_template_header(parse_template_header(), true);
     }
 
     if (match(TK_LEFT_PARENTHESIS)) {
@@ -171,8 +170,7 @@ Struct *Parser::parse_struct() {
     data->set_from_token(matched);
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        data->set_template_header(parse_template_header());
-        data->set_template(true);
+        data->set_template_header(parse_template_header(), true);
     }
 
     expect(TK_COLON);
@@ -218,8 +216,7 @@ Enum* Parser::parse_enum() {
     data->set_from_token(matched);
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        data->set_template_header(parse_template_header());
-        data->set_template(true);
+        data->set_template_header(parse_template_header(), true);
     }
 
     if (match(TK_LEFT_PARENTHESIS)) {
@@ -270,8 +267,7 @@ Union* Parser::parse_union() {
     data->set_from_token(matched);
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        data->set_template_header(parse_template_header());
-        data->set_template(true);
+        data->set_template_header(parse_template_header(), true);
     }
 
     expect(TK_COLON);
@@ -378,8 +374,7 @@ Function* Parser::parse_function() {
     function->set_from_token(matched);
 
     if (lookahead(TK_BEGIN_TEMPLATE)) {
-        function->set_template_header(parse_template_header());
-        function->set_template(true);
+        function->set_template_header(parse_template_header(), true);
     }
 
     expect(TK_COLON);

@@ -7,6 +7,7 @@
 
 namespace haard {
     std::string info_define_class(Class* decl);
+    std::string info_define_function(Function* function);
 }
 
 #endif

@@ -6,6 +6,7 @@ using namespace haard;
 
 SemanticPass::SemanticPass() {
     scope = nullptr;
+    function = nullptr;
 }
 
 void SemanticPass::enter_scope(Scope* scope) {
@@ -29,4 +30,12 @@ Scope* SemanticPass::get_scope() const {
 
 void SemanticPass::set_scope(Scope* value) {
     scope = value;
+}
+
+Function* SemanticPass::get_function() const {
+    return function;
+}
+
+void SemanticPass::set_function(Function* value) {
+    function = value;
 }

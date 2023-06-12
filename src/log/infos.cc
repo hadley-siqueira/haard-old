@@ -11,7 +11,20 @@ namespace haard {
         int count = decl->get_name().size();
         std::string path = decl->get_module()->get_path();
 
-        ss << "declaring class <white>" << decl->get_name() << "</white>\n";
+        ss << "declaring class <white>" << decl->get_qualified_name() << "</white>\n";
+        ss << extract_line(path, line, column, count);
+
+        return ss.str();
+    }
+
+    std::string info_define_function(Function* function) {
+        std::stringstream ss;
+        int line = function->get_line();
+        int column = function->get_column();
+        int count = function->get_name().size();
+        std::string path = function->get_module()->get_path();
+
+        ss << "declaring function <white>" << function->get_qualified_name() << "</white>\n";
         ss << extract_line(path, line, column, count);
 
         return ss.str();

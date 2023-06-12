@@ -20,8 +20,12 @@ namespace haard {
         std::string to_str();
         std::string get_qualified_name();
 
+        bool is_template();
+        void set_template_flag(bool value);
+
     private:
         TypeList* types;
+        bool template_flag;
     };
 }
 

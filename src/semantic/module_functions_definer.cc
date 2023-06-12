@@ -1,5 +1,4 @@
 #include "semantic/module_functions_definer.h"
-#include "semantic/function_declaration_scope_builder.h"
 
 using namespace haard;
 
@@ -16,7 +15,7 @@ void ModuleFunctionsDefiner::define_functions() {
 }
 
 void ModuleFunctionsDefiner::define_function(Function* function) {
-    FunctionDeclarationScopeBuilder builder(get_context());
+    /*FunctionDeclarationScopeBuilder builder(get_context());
 
-    builder.define_function(function);
+    builder.define_function(function);*/
 }

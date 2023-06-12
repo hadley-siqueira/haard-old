@@ -50,7 +50,7 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
     if (!sym) {
         std::string msg;
 
-        msg = "<red>error:</red> type <white>'" + name + "'</white> not in scope.\n";
+        msg = "type <white>'" + name + "'</white> not in scope.\n";
         msg += "Current scope is:\n";
         msg += scope->debug();
         log_error_and_exit(msg);

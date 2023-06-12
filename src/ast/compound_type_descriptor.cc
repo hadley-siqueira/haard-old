@@ -192,8 +192,9 @@ CompoundTypeDescriptor* CompoundTypeDescriptor::get_super_descriptor() {
     return super;
 }
 
-void CompoundTypeDescriptor::set_template_header(TemplateHeader* value) {
+void CompoundTypeDescriptor::set_template_header(TemplateHeader* value, bool is_template) {
     template_header = value;
+    template_header->set_template_flag(is_template);
 }
 
 int CompoundTypeDescriptor::get_begin() const {

@@ -261,8 +261,9 @@ int Function::get_overloaded_index() {
     return overloaded_index;
 }
 
-void Function::set_template_header(TemplateHeader* header) {
+void Function::set_template_header(TemplateHeader* header, bool is_template) {
     template_header = header;
+    template_header->set_template_flag(is_template);
 }
 
 TemplateHeader* Function::get_template_header() {

@@ -71,7 +71,7 @@ namespace haard {
         void set_from_token(Token& token);
 
         TemplateHeader* get_template_header() const;
-        void set_template_header(TemplateHeader* value);
+        void set_template_header(TemplateHeader* value, bool is_template=false);
 
         void set_scope(Scope *value);
 
