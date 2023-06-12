@@ -1,8 +1,5 @@
-import foo
+import main
 
 class Player:
     x : int
     y : int
-
-class Game:
-    x : int

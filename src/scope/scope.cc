@@ -35,7 +35,8 @@ void Scope::set_super(Scope* symtab) {
     super = symtab;
 }
 
-Symbol *Scope::define_class(std::string& name, Class* klass) {
+Symbol *Scope::define_class(Class* klass) {
+    std::string name = klass->get_qualified_name();
     Symbol* sym = new Symbol(SYM_CLASS, name, klass);
     symbols[name] = sym;
 

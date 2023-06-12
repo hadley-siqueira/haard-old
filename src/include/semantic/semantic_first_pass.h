@@ -10,11 +10,13 @@ namespace haard {
         void build_modules(Modules* modules);
         void build_module(Module* module);
 
+        void build_imports(Module* module);
+        void build_classes(Module* module);
+
+        void build_import(Import* import);
+        void build_class(Class* decl);
+
     private:
-        void set_qualified_scope(Module* module);
-        void connect_sibling_scopes(Module* module);
-        void define_types(Module* module);
-        void define_type(CompoundTypeDescriptor* decl, int kind, std::string msg);
         void define_template_header(CompoundTypeDescriptor* decl);
 
     };

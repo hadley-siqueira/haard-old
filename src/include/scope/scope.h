@@ -22,7 +22,7 @@ namespace haard {
             void set_parent(Scope* symtab);
             void set_super(Scope* symtab);
 
-            Symbol* define_class(std::string& name, Class* klass);
+            Symbol* define_class(Class* klass);
             Symbol* define_struct(std::string& name, Struct* obj);
             Symbol* define_enum(std::string& name, Enum* obj);
             Symbol* define_union(std::string& name, Union* obj);

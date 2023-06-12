@@ -27,7 +27,7 @@ Logger::~Logger() {
 
 void Logger::print() {
     for (int i = 0; i < logs.size(); ++i) {
-        std::cout << colorify(logs[i]->to_str()) << '\n';
+        std::cerr << colorify(logs[i]->to_str()) << '\n';
     }
 }
 

@@ -6,7 +6,7 @@
 #include "ast/ast.h"
 
 namespace haard {
-    std::string info_define_type(CompoundTypeDescriptor* decl, std::string msg);
+    std::string info_define_class(Class* decl);
 }
 
 #endif

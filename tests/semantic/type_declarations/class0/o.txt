@@ -1,0 +1,13 @@
+{
+    <main.Player:class>,
+}
+
+{
+    <main.Game:class>,
+    <main.Player:class>,
+}
+
+{
+    <foo.Player:class>,
+}
+
