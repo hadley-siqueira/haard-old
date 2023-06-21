@@ -1,0 +1,43 @@
+class Player:
+    x : int
+    y : int
+
+class Node<T>:
+    value : T
+    next  : Node<T>*
+    prev  : Node<T>*
+
+class Node<T, K>:
+    v1   : T
+    v2   : K
+    next : Node<T, K>*
+    prev : Node<T, K>*
+
+# class Node<K>:
+#     value : T
+#     next  : Node<T>*
+#     prev  : Node<T>*
+
+
+def foo<A, B> : void
+    @a : A
+    @b : B
+    @c : int
+    @d : int**
+    @e : A**
+
+    return
+
+def foo<A, B> : void
+    @a : A
+    @b : B
+
+    return
+
+def foo<A, B> : void
+    @a : B
+    @b : A
+
+    return
+
+# v = Node<int>()

@@ -111,7 +111,7 @@ namespace haard {
         ss << "  > " << path << ':' << line << ':' << column << '\n';
         ss << "  " << line << " |";
         ss << read_line(path, line) << "\n";
-        ss << create_trailing(line, column, count);
+        ss << create_trailing(line, column, count) << '\n';
 
         return ss.str();
     }

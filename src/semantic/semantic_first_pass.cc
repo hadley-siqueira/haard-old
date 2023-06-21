@@ -50,9 +50,6 @@ void SemanticFirstPass::build_import(Import* import) {
 }
 
 void SemanticFirstPass::build_class(Class* decl) {
-    NamedType* self_type = new NamedType();
-    std::string qname = decl->get_name();
-
     enter_scope(decl->get_scope());
     build_template_header(decl->get_template_header());
     leave_scope();
@@ -68,9 +65,6 @@ void SemanticFirstPass::build_class(Class* decl) {
             log_info(info_define_class(decl));
         }
     }
-
-    self_type->set_name(name);
-    link_type(self_type);
 }
 
 void SemanticFirstPass::build_struct(Struct* decl) {
@@ -83,7 +77,7 @@ void SemanticFirstPass::build_function(Function* function) {
 
     build_template_header(function->get_template_header());
     build_parameters(function);
-    build_function_self_type(function);
+    //build_function_self_type(function);
 
     leave_scope();
 

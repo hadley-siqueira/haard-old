@@ -10,13 +10,28 @@ class Game:
 class Node<T>:
     elem : T
 
+class Hash<T, K>:
+    key : T
+    elem : K
+
 def sum : int
     @a : int
     @b : int
 
     return a + b
 
-def make_node<T> : Node<T>
-    @elem : T
+def foo : Player
+    @a : int
+    @b : Game
 
     return 0
+
+def make_node<T> : Node<T>
+    @elem : T
+    @next : Node<T>
+
+    return 0
+
+#def make_node : Node<int>
+#    @elem : int
+#    @next : Node<int>

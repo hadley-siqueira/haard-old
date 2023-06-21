@@ -297,10 +297,7 @@ std::string Scope::debug() {
 
     for (auto it = symbols.begin(); it != symbols.end(); ++it) {
         sym = it->second;
-
-        for (int i = 0; i < sym->overloaded_count(); ++i) {
-            ss << "    " << sym->to_str(i) << ",\n";
-        }
+        ss << "    " << sym->to_str() << ",\n";
     }
 
     ss << "}\n";

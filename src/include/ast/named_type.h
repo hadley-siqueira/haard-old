@@ -33,8 +33,6 @@ namespace haard {
 
             std::string to_str();
 
-            Type* clone();
-
             void set_template_header(TemplateHeader *header);
             TemplateHeader* get_template_header();
 

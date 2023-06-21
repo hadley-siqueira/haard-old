@@ -81,14 +81,6 @@ Symbol* NamedType::has_field(std::string name) {
     return sym;
 }
 
-Type* NamedType::clone() {
-    NamedType* other = new NamedType();
-
-    //other->id = id->clone();
-    DBG; exit(0);
-    return other;
-}
-
 void NamedType::set_template_header(TemplateHeader* header) {
     id->set_template_header(header);
 }

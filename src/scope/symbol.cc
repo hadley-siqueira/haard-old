@@ -8,12 +8,13 @@ using namespace haard;
 
 Symbol::Symbol() {
     name = nullptr;
+    descriptor = nullptr;
 }
 
 Symbol::Symbol(int kind, std::string name, void* descriptor) {
     this->kind = kind;
     this->name = name;
-    descriptors.push_back(descriptor);
+    this->descriptor = descriptor;
 }
 
 int Symbol::get_kind() {
@@ -24,50 +25,8 @@ std::string Symbol::get_name() {
     return name;
 }
 
-void* Symbol::get_descriptor(int idx) {
-    if (idx < descriptors.size()) {
-        return descriptors[idx];
-    }
-
-    return nullptr;
-}
-
-std::vector<void*> Symbol::get_descriptors(TypeList* templates) {
-    Class* klass;
-    Function* f;
-    std::vector<void*> res;
-
-    int count = templates->types_count();
-
-    for (int i = 0; i < descriptors.size(); ++i) {
-        switch (kind) {
-        case SYM_CLASS:
-            klass = (Class*) descriptors[i];
-
-            if (klass->is_template()) {
-                if (klass->get_template_header()->types_count() == count) {
-                    res.push_back(klass);
-                }
-            }
-
-            break;
-
-        case SYM_FUNCTION:
-        case SYM_METHOD:
-            f = (Function*) descriptors[i];
-
-            if (f->is_template()) {
-                if (f->get_template_header()->types_count() == count) {
-                    res.push_back(f);
-                }
-            }
-
-        default:
-            break;
-        }
-    }
-
-    return res;
+void* Symbol::get_descriptor() {
+    return descriptor;
 }
 
 void Symbol::set_kind(int kind) {
@@ -78,14 +37,10 @@ void Symbol::set_name(std::string name) {
     this->name = name;
 }
 
-void Symbol::add_descriptor(void* descriptor) {
-    descriptors.push_back(descriptor);
-}
-
-Type* Symbol::get_type(int idx) {
-    Variable* var = (Variable*) descriptors[idx];
-    Class* klass = (Class*) descriptors[idx];
-    Function* func = (Function*) descriptors[idx];
+Type* Symbol::get_type() {
+    Variable* var = (Variable*) descriptor;
+    Class* klass = (Class*) descriptor;
+    Function* func = (Function*) descriptor;
 
     switch (kind) {
     case SYM_CLASS:
@@ -106,9 +61,9 @@ Type* Symbol::get_type(int idx) {
     return nullptr;
 }
 
-std::string Symbol::to_str(int idx) {
+std::string Symbol::to_str() {
     std::stringstream ss;
-    NamedType* named = (NamedType*) descriptors[idx];
+    NamedType* named = (NamedType*) descriptor;
 
     ss << "<" << name << ":";
 
@@ -137,7 +92,7 @@ std::string Symbol::to_str(int idx) {
 
     case SYM_METHOD:
         ss << "method(";
-        ss << get_type(idx)->to_str();
+        ss << get_type()->to_str();
         ss << ")";
         break;
 
@@ -174,20 +129,14 @@ std::string Symbol::to_str(int idx) {
     return ss.str();
 }
 
-std::string Symbol::get_qualified_name(int idx) {
+std::string Symbol::get_qualified_name() {
     std::stringstream ss;
 
-    // FIXME
-    if (descriptors.size() == 0) {
-        std::cout << __FILE__ << ' ' << __LINE__ << "Error: descriptor empty\n";
-        exit(0);
-    }
-
-    Class* klass = (Class*) descriptors[idx];
-    Function* func = (Function*) descriptors[idx];
-    Variable* var = (Variable*) descriptors[idx];
-    NamedType* type = (NamedType*) descriptors[idx];
-    CompoundTypeDescriptor* type_decl = (CompoundTypeDescriptor*) descriptors[idx];
+    Class* klass = (Class*) descriptor;
+    Function* func = (Function*) descriptor;
+    Variable* var = (Variable*) descriptor;
+    NamedType* type = (NamedType*) descriptor;
+    CompoundTypeDescriptor* type_decl = (CompoundTypeDescriptor*) descriptor;
 
     switch (kind) {
     case SYM_CLASS:
@@ -216,58 +165,8 @@ std::string Symbol::get_qualified_name(int idx) {
     return ss.str();
 }
 
-int Symbol::overloaded_count() {
-    return descriptors.size();
-}
-
-int Symbol::get_overloaded(TypeList* types) {
-    Function* f;
-    FunctionType* ft;
-    int i;
-    bool found = false;
-
-    // try
-    for (i = 0; i < overloaded_count(); ++i) {
-        f = (Function*) get_descriptor(i);
-        ft = (FunctionType*) f->get_self_type();
-
-        if (ft->check_arguments_type(types)) {
-            found = true;
-            break;
-        }
-    }
-
-    if (!found) {
-        for (i = 0; i < overloaded_count(); ++i) {
-            f = (Function*) get_descriptor(i);
-            ft = (FunctionType*) f->get_self_type();
-
-            if (ft->check_arguments_type_with_conversion(types)) {
-                found = true;
-                break;
-            }
-        }
-    }
-
-    if (found) {
-        return i;
-    }
-
-    return -1;
-}
-
-int Symbol::get_overloaded(void* ptr) {
-    for (int i = 0; i < overloaded_count(); ++i) {
-        if (ptr == get_descriptor(i)) {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
 Scope* Symbol::get_descriptor_scope(int idx) {
-    Class* klass = (Class*) descriptors[idx];
+    Class* klass = (Class*) descriptor;
 
     switch (kind) {
     case SYM_CLASS:
@@ -291,10 +190,10 @@ void Symbol::add_template(TypeList* types) {
     templates.push_back(types);
 }
 
-int Symbol::get_size_in_bytes(int idx) {
-    Class* klass = (Class*) descriptors[idx];
-    Variable* var = (Variable*) descriptors[idx];
-    NamedType* tt = (NamedType*) descriptors[idx];
+int Symbol::get_size_in_bytes() {
+    Class* klass = (Class*) descriptor;
+    Variable* var = (Variable*) descriptor;
+    NamedType* tt = (NamedType*) descriptor;
 
     switch (kind) {
     case SYM_CLASS:
@@ -313,11 +212,11 @@ int Symbol::get_size_in_bytes(int idx) {
     return 1;
 }
 
-int Symbol::get_alignment(int idx) {
-    Class* klass = (Class*) descriptors[idx];
-    Function* func = (Function*) descriptors[idx];
-    Variable* var = (Variable*) descriptors[idx];
-    NamedType* tt = (NamedType*) descriptors[idx];
+int Symbol::get_alignment() {
+    Class* klass = (Class*) descriptor;
+    Function* func = (Function*) descriptor;
+    Variable* var = (Variable*) descriptor;
+    NamedType* tt = (NamedType*) descriptor;
 
     switch (kind) {
     case SYM_CLASS:

@@ -6,7 +6,6 @@ using namespace haard;
 Identifier::Identifier() {
     set_kind(EXPR_ID);
     set_symbol(nullptr);
-    overloaded_index = 0;
     template_header = nullptr;
 }
 
@@ -16,7 +15,6 @@ Identifier::Identifier(Token& token) {
     set_column(token.get_column());
     set_name(token.get_lexeme());
     set_symbol(nullptr);
-    overloaded_index = 0;
     template_header = nullptr;
 }
 
@@ -27,7 +25,6 @@ Identifier::Identifier(Token& scope, Token& name) {
     set_name(name.get_lexeme());
     set_symbol(nullptr);
     this->alias = scope.get_lexeme();
-    overloaded_index = 0;
     template_header = nullptr;
 }
 
@@ -37,7 +34,6 @@ Identifier::Identifier(std::string name) {
     set_column(0);
     set_name(name);
     set_symbol(nullptr);
-    overloaded_index = 0;
     template_header = nullptr;
 }
 
@@ -63,18 +59,6 @@ void Identifier::set_symbol(Symbol* symbol) {
     if (symbol) {
         set_type(symbol->get_type());
     }
-}
-
-int Identifier::get_overloaded_index() {
-    return overloaded_index;
-}
-
-void Identifier::set_overloaded_index(int idx) {
-    overloaded_index = idx;
-}
-
-std::string Identifier::get_unique_name() {
-    return symbol->get_qualified_name(overloaded_index);
 }
 
 bool Identifier::is_local_variable() {
@@ -121,10 +105,6 @@ void Identifier::set_template_header(TemplateHeader *value) {
 
 bool Identifier::has_template() {
     return template_header != nullptr;
-}
-
-void* Identifier::get_descriptor() {
-    return symbol->get_descriptor(overloaded_index);
 }
 
 std::string Identifier::to_str() {

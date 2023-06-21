@@ -22,11 +22,6 @@ namespace haard {
         void set_name(std::string name);
         void set_symbol(Symbol* symbol);
 
-        int get_overloaded_index();
-        void set_overloaded_index(int idx);
-
-        std::string get_unique_name();
-
         bool is_local_variable();
         bool is_class_variable();
 
@@ -39,7 +34,6 @@ namespace haard {
         void set_template_header(TemplateHeader* value);
 
         bool has_template();
-        void* get_descriptor();
 
         std::string to_str();
 
