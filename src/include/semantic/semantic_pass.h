@@ -21,9 +21,14 @@ namespace haard {
         Function* get_function() const;
         void set_function(Function* value);
 
+        void reset_local_var_counter();
+        int next_local_var_counter();
+
     private:
         Scope* scope;
         Function* function;
+
+        int var_counter;
     };
 }
 

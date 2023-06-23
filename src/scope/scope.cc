@@ -92,6 +92,13 @@ Symbol *Scope::define_parameter(std::string name, Variable* obj) {
     return sym;
 }
 
+Symbol *Scope::define_local_variable(Variable* obj) {
+    Symbol* sym = new Symbol(SYM_VARIABLE, obj->get_name(), obj);
+    symbols[obj->get_name()] = sym;
+
+    return sym;
+}
+
 Symbol* Scope::define(Class* klass) {
     Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
     symbols[klass->get_name()] = sym;

@@ -10,6 +10,7 @@ namespace haard {
 
     private:
         void first_pass(Modules* modules);
+        void second_pass(Modules* modules);
     };
 }
 

@@ -180,26 +180,7 @@ set(SEMANTIC_SRC
     src/semantic/semantic_driver.cc
     src/semantic/semantic_pass.cc
     src/semantic/semantic_first_pass.cc
-    src/semantic/scope_builder.cc
-    src/semantic/scope_builder_context.cc
-    src/semantic/modules_scope_builder.cc
-    src/semantic/module_scope_builder.cc
-    src/semantic/module_types_definer.cc
-    src/semantic/module_methods_definer.cc
-    src/semantic/module_functions_definer.cc
-    src/semantic/module_functions_builder.cc
-    src/semantic/function_scope_builder.cc
-    src/semantic/type_descriptor_linker.cc
-    src/semantic/statement_scope_builder.cc
-    src/semantic/compound_statement_scope_builder.cc
-    src/semantic/expression_statement_scope_builder.cc
-    src/semantic/expression_scope_builder.cc
-    src/semantic/identifier_scope_builder.cc
-    src/semantic/assignment_scope_builder.cc
-    src/semantic/equal_scope_builder.cc
-    src/semantic/not_equal_scope_builder.cc
-    src/semantic/plus_scope_builder.cc
-    src/semantic/minus_scope_builder.cc
+    src/semantic/semantic_second_pass.cc
 )
 
 set(IRVM_SRC

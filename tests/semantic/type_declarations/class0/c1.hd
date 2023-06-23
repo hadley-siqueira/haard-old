@@ -1,0 +1,13 @@
+class Player:
+    x : int
+
+class Hash<T, K>:
+    key   : T
+    value : K
+
+def main : void
+    i = 0
+    a = i
+    b = a
+    p = Hash<int, int>
+    
