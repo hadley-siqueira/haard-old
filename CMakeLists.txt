@@ -181,6 +181,7 @@ set(SEMANTIC_SRC
     src/semantic/semantic_pass.cc
     src/semantic/semantic_first_pass.cc
     src/semantic/semantic_second_pass.cc
+    src/semantic/type_descriptor_linker.cc
 )
 
 set(IRVM_SRC

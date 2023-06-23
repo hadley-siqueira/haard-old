@@ -3,8 +3,8 @@
 
 using namespace haard;
 
-TypeDescriptorLink::TypeDescriptorLink(ScopeBuilderContext* context) {
-    set_context(context);
+TypeDescriptorLink::TypeDescriptorLink() {
+
 }
 
 TypeDescriptorLink::TypeDescriptorLink(Scope* scope) {

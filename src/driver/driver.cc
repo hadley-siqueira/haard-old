@@ -12,7 +12,6 @@
 //#include "ir/ir_builder.h"
 #include "vm/irvm.h"
 #include "printer/ir_printer.h"
-#include "semantic/modules_scope_builder.h"
 #include "semantic/semantic_driver.h"
 #include "log/actions.h"
 

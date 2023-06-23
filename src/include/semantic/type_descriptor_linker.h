@@ -4,12 +4,11 @@
 #include "ast/ast.h"
 #include "ast/module.h"
 #include "log/logger.h"
-#include "semantic/scope_builder.h"
 
 namespace haard {
-    class TypeDescriptorLink : public ScopeBuilder {
+    class TypeDescriptorLink {
     public:
-        TypeDescriptorLink(ScopeBuilderContext* context=nullptr);
+        TypeDescriptorLink();
         TypeDescriptorLink(Scope* scope);
 
     public:
