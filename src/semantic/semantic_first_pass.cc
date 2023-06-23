@@ -54,7 +54,7 @@ void SemanticFirstPass::build_class(Class* decl) {
     build_template_header(decl->get_template_header());
     leave_scope();
 
-    std::string name = decl->get_qualified_name();
+    std::string name = decl->get_name();
 
     if (get_scope()->resolve_local(name)) {
         log_error_and_exit(name + " already defined");
@@ -72,25 +72,38 @@ void SemanticFirstPass::build_struct(Struct* decl) {
 }
 
 void SemanticFirstPass::build_function(Function* function) {
+    Symbol* sym;
     set_function(function);
     enter_scope(function->get_scope());
 
     build_template_header(function->get_template_header());
     build_parameters(function);
-    //build_function_self_type(function);
 
     leave_scope();
 
-    std::string name = function->get_qualified_name();
+    std::string name = function->get_name();
 
-    if (get_scope()->resolve_local(name)) {
-        log_error_and_exit(name + " already defined");
-    } else {
-        get_scope()->define_function(name, function);
+    sym = get_scope()->resolve_local(name);
 
-        if (logging_info()) {
-            log_info(info_define_function(function));
+    if (sym) {
+        for (int i = 0; i < sym->descriptors_count(); ++i) {
+            SymbolDescriptor* desc = sym->get_descriptor(i);
+
+            if (desc->get_kind() == SYM_FUNCTION) {
+                Function* other = (Function*) desc->get_descriptor();
+
+                // if (other->equals(function)
+                if (false) {
+                    log_error_and_exit(name + " already defined");
+                }
+            }
         }
+    }
+
+    get_scope()->define_function(function);
+
+    if (logging_info()) {
+        log_info(info_define_function(function));
     }
 
     set_function(nullptr);

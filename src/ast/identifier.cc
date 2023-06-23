@@ -6,6 +6,7 @@ using namespace haard;
 Identifier::Identifier() {
     set_kind(EXPR_ID);
     set_symbol(nullptr);
+    set_symbol_index(0);
     template_header = nullptr;
 }
 
@@ -15,6 +16,7 @@ Identifier::Identifier(Token& token) {
     set_column(token.get_column());
     set_name(token.get_lexeme());
     set_symbol(nullptr);
+    set_symbol_index(0);
     template_header = nullptr;
 }
 
@@ -24,6 +26,7 @@ Identifier::Identifier(Token& scope, Token& name) {
     set_column(name.get_column());
     set_name(name.get_lexeme());
     set_symbol(nullptr);
+    set_symbol_index(0);
     this->alias = scope.get_lexeme();
     template_header = nullptr;
 }
@@ -33,6 +36,7 @@ Identifier::Identifier(std::string name) {
     set_line(0);
     set_column(0);
     set_name(name);
+    set_symbol_index(0);
     set_symbol(nullptr);
     template_header = nullptr;
 }
@@ -125,4 +129,14 @@ std::string Identifier::to_str() {
     }
 
     return ss.str();
+}
+
+int Identifier::get_symbol_index() const
+{
+    return symbol_index;
+}
+
+void Identifier::set_symbol_index(int value)
+{
+    symbol_index = value;
 }

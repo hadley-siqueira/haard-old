@@ -172,6 +172,7 @@ set(DRIVER_SRC
 
 set(SCOPE_SRC
     src/scope/symbol.cc
+    src/scope/symbol_descriptor.cc
     src/scope/scope.cc
     #src/scope/old_scope_builder.cc
 )

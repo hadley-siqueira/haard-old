@@ -77,12 +77,20 @@ void SemanticSecondPass::build_expression(Expression* expr) {
     kind = expr->get_kind();
 
     switch (kind) {
+    case EXPR_ASSIGNMENT:
+        build_assignment((Assignment*) expr);
+        break;
+
+    case EXPR_CALL:
+        build_call((Call*) expr);
+        break;
+
     case EXPR_ID:
         build_identifier((Identifier*) expr);
         break;
 
-    case EXPR_ASSIGNMENT:
-        build_assignment((Assignment*) expr);
+    case EXPR_LITERAL_INTEGER:
+        build_literal_integer((Literal*) expr);
         break;
 
     default:
@@ -95,6 +103,26 @@ void SemanticSecondPass::build_assignment(Assignment* expr) {
 
     if (is_new_variable(expr)) {
         create_variable(expr);
+    }
+}
+
+void SemanticSecondPass::build_call(Call* expr) {
+    Expression* obj = expr->get_object();
+    int kind = obj->get_kind();
+
+    build_expression_list(expr->get_arguments());
+
+    // foo()
+    if (kind == EXPR_ID) {
+
+    }
+}
+
+void SemanticSecondPass::build_expression_list(ExpressionList* list) {
+    if (list) {
+        for (int i = 0; i < list->expressions_count(); ++i) {
+            build_expression(list->get_expression(i));
+        }
     }
 }
 
@@ -137,6 +165,14 @@ void SemanticSecondPass::build_identifier(Identifier* expr) {
               << get_scope()->debug();
 
     expr->set_symbol(sym);
+}
+
+void SemanticSecondPass::build_literal_integer(Literal* expr) {
+    expr->set_type(new Type(TYPE_INT));
+}
+
+void SemanticSecondPass::build_literal_float(Literal* expr) {
+    expr->set_type(new Type(TYPE_FLOAT));
 }
 
 bool SemanticSecondPass::is_new_variable(Assignment* expr) {

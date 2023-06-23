@@ -20,7 +20,13 @@ namespace haard {
 
         void build_assignment(Assignment* expr);
 
+        void build_call(Call* expr);
+        void build_expression_list(ExpressionList* list);
+
         void build_identifier(Identifier* expr);
+        void build_literal_integer(Literal* expr);
+        void build_literal_float(Literal* expr);
+
 
     private:
         bool is_new_variable(Assignment* expr);

@@ -37,11 +37,14 @@ namespace haard {
 
         std::string to_str();
 
+        int get_symbol_index() const;
+        void set_symbol_index(int value);
+
     private:
         std::string name;
         std::string alias;
         Symbol* symbol;
-        int overloaded_index;
+        int symbol_index;
         TemplateHeader* template_header;
             
     };

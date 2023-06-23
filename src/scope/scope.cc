@@ -35,114 +35,76 @@ void Scope::set_super(Scope* symtab) {
     super = symtab;
 }
 
-Symbol *Scope::define_class(Class* klass) {
-    std::string name = klass->get_qualified_name();
-    Symbol* sym = new Symbol(SYM_CLASS, name, klass);
-    symbols[name] = sym;
+Symbol* Scope::define_class(Class* klass) {
+    Symbol* sym;
+    std::string name = klass->get_name();
+
+    if (symbols.count(name) == 0) {
+        sym = new Symbol(name);
+        symbols[name] = sym;
+    } else {
+        sym = symbols[name];
+    }
+
+    SymbolDescriptor* desc = new SymbolDescriptor(SYM_CLASS, klass);
+    sym->add_descriptor(desc);
 
     return sym;
 }
 
 Symbol* Scope::define_struct(std::string& name, Struct* obj) {
-    Symbol* sym = new Symbol(SYM_STRUCT, name, obj);
+    Symbol* sym;// = new Symbol(SYM_STRUCT, name, obj);
     symbols[name] = sym;
 
     return sym;
 }
 
 Symbol* Scope::define_enum(std::string& name, Enum* obj) {
-    Symbol* sym = new Symbol(SYM_ENUM, name, obj);
+    Symbol* sym;// = new Symbol(SYM_ENUM, name, obj);
     symbols[name] = sym;
 
     return sym;
 }
 
 Symbol* Scope::define_union(std::string& name, Union* obj) {
-    Symbol* sym = new Symbol(SYM_UNION, name, obj);
+    Symbol* sym;// = new Symbol(SYM_UNION, name, obj);
     symbols[name] = sym;
 
     return sym;
 }
 
 Symbol* Scope::define_type(int kind, std::string& name, CompoundTypeDescriptor* obj) {
-    Symbol* sym = new Symbol(kind, name, obj);
+    Symbol* sym;// = new Symbol(kind, name, obj);
     symbols[name] = sym;
 
     return sym;
 }
 
-Symbol* Scope::define_function(std::string& name, Function* obj) {
-    Symbol* sym = new Symbol(SYM_FUNCTION, name, obj);
+Symbol* Scope::define_function(Function* obj) {
+    std::string name = obj->get_name();
+    Symbol* sym;// = new Symbol(SYM_FUNCTION, name, obj);
     symbols[name] = sym;
 
     return sym;
 }
 
 Symbol* Scope::define_template(std::string name, int value) {
-    Symbol* sym = new Symbol(SYM_TEMPLATE, name, (void*) value);
+    Symbol* sym;// = new Symbol(SYM_TEMPLATE, name, (void*) value);
     symbols[name] = sym;
 
     return sym;
 }
 
 Symbol *Scope::define_parameter(std::string name, Variable* obj) {
-    Symbol* sym = new Symbol(SYM_PARAMETER, name, obj);
+    Symbol* sym;// = new Symbol(SYM_PARAMETER, name, obj);
     symbols[name] = sym;
 
     return sym;
 }
 
 Symbol *Scope::define_local_variable(Variable* obj) {
-    Symbol* sym = new Symbol(SYM_VARIABLE, obj->get_name(), obj);
+    Symbol* sym;// = new Symbol(SYM_VARIABLE, obj->get_name(), obj);
     symbols[obj->get_name()] = sym;
-
-    return sym;
-}
-
-Symbol* Scope::define(Class* klass) {
-    Symbol* sym = new Symbol(SYM_CLASS, klass->get_name(), klass);
-    symbols[klass->get_name()] = sym;
-
-    return sym;
-}
-
-Symbol* Scope::define(Function* func) {
-    Symbol* sym;
-
-    if (func->is_method()) {
-        sym = new Symbol(SYM_METHOD, func->get_name(), func);
-    } else {
-        sym = new Symbol(SYM_FUNCTION, func->get_name(), func);
-    }
-
-    symbols[func->get_name()] = sym;
-
-    return sym;
-}
-
-Symbol* Scope::define(int kind, Variable* var) {
-    Symbol* sym = new Symbol(kind, var->get_name(), var);
-    symbols[var->get_name()] = sym;
-
-    return sym;
-}
-
-Symbol* Scope::define(Variable* var) {
-    Symbol* sym = nullptr;
-
-    if (var->get_kind() == VAR_LOCAL) {
-        sym = new Symbol(SYM_VARIABLE, var->get_name(), var);
-    } else if (var->get_kind() == VAR_PARAM) {
-        sym = new Symbol(SYM_PARAMETER, var->get_name(), var);
-    } else if (var->get_kind() == VAR_FIELD) {
-        sym = new Symbol(SYM_CLASS_VARIABLE, var->get_name(), var);
-    } else {
-        std::cout << __FILE__ << ' ' << __LINE__ << std::endl;
-        exit(0);
-    }
-
-    symbols[var->get_name()] = sym;
-
 
     return sym;
 }

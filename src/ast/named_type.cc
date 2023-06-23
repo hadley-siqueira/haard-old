@@ -98,7 +98,7 @@ int NamedType::get_alignment() {
 }
 
 Scope* NamedType::get_scope() {
-    return id->get_symbol()->get_descriptor_scope();
+    return id->get_symbol()->get_descriptor_scope(id->get_symbol_index());
 }
 
 bool NamedType::is_class() {
