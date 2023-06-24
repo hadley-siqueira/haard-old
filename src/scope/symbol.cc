@@ -26,8 +26,8 @@ Symbol::~Symbol() {
     }
 }
 
-int Symbol::get_kind() {
-    return kind;
+int Symbol::get_kind(int idx) {
+    return descriptors[idx]->get_kind();
 }
 
 std::string Symbol::get_name() {

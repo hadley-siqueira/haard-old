@@ -1,3 +1,4 @@
+#include <iostream>
 #include "semantic/type_descriptor_linker.h"
 #include "log/actions.h"
 
@@ -44,9 +45,9 @@ void TypeDescriptorLink::link_type(Type* type) {
 
 void TypeDescriptorLink::link_named_type(NamedType* type) {
     std::string name = type->get_name();
-    Scope* scope = this->scope;//get_scope();
+    Scope* scope = this->scope;
     Symbol* sym = scope->resolve(name);
-
+std::cout << "@" << type->get_name() << '\n' << scope->debug() << '\n';
     if (!sym) {
         std::string msg;
 
@@ -71,7 +72,7 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
         break;
 
     default:
-        log_error_and_exit("error: named type not in scope but is another entity");
+        log_error_and_exit("named type not in scope but is another entity " + name);
         break;
     }
 }

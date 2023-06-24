@@ -19,7 +19,7 @@ namespace haard {
         ~Symbol();
 
     public:
-        int get_kind();
+        int get_kind(int idx=0);
         std::string get_name();
         std::string to_str(int idx=0);
 

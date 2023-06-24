@@ -1,0 +1,50 @@
+class Foo:
+    x : int
+
+class Bar:
+    z : int
+
+class Baz<T>:
+    z : int
+
+class Baz:
+    z : int
+
+class Baz<A, B, C>:
+    z : int
+
+class Baz<T, K>:
+    z : int
+
+# test redefinition of template
+# class Zaz<T, T>:
+#    z : int
+
+class Hash<Key, Value>:
+    key   : Key
+    value : Value
+
+def sum : int
+    @a : int
+    @b : int
+
+    return a + b
+
+def sum : int
+    @a : int
+    @b : int
+    @c : int
+
+    return a + b
+
+def sum : int
+    @a : Foo
+    @b : Foo
+
+    return a + b
+
+def sum : int
+    @a : Foo
+    @b : Foo
+
+    return a + b

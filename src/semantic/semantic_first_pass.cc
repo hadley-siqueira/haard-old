@@ -50,20 +50,42 @@ void SemanticFirstPass::build_import(Import* import) {
 }
 
 void SemanticFirstPass::build_class(Class* decl) {
+    Symbol* sym;
+
     enter_scope(decl->get_scope());
     build_template_header(decl->get_template_header());
     leave_scope();
 
     std::string name = decl->get_name();
+    sym = get_scope()->resolve_local(name);
 
-    if (get_scope()->resolve_local(name)) {
-        log_error_and_exit(name + " already defined");
-    } else {
-        get_scope()->define_class(decl);
+    if (sym) {
+        for (int i = 0; i < sym->descriptors_count(); ++i) {
+            SymbolDescriptor* desc = sym->get_descriptor(i);
 
-        if (logging_info()) {
-            log_info(info_define_class(decl));
+            if (desc->get_kind() != SYM_CLASS) {
+                log_error_and_exit("defined as another entity");
+            } else {
+                Class* other = (Class*) desc->get_descriptor();
+
+                if (other->get_template_header() && decl->get_template_header()) {
+                    int c1 = other->get_template_header()->types_count();
+                    int c2 = decl->get_template_header()->types_count();
+
+                    if (c1 == c2) {
+                        log_error_and_exit("same number of templates");
+                    }
+                } else if (!other->get_template_header() && !decl->get_template_header()) {
+                    log_error_and_exit("class already defined");
+                }
+            }
         }
+    }
+
+    get_scope()->define_class(decl);
+
+    if (logging_info()) {
+        log_info(info_define_class(decl));
     }
 }
 
@@ -76,7 +98,7 @@ void SemanticFirstPass::build_function(Function* function) {
     set_function(function);
     enter_scope(function->get_scope());
 
-    build_template_header(function->get_template_header());
+    //build_template_header(function->get_template_header());
     build_parameters(function);
 
     leave_scope();
@@ -91,6 +113,24 @@ void SemanticFirstPass::build_function(Function* function) {
 
             if (desc->get_kind() == SYM_FUNCTION) {
                 Function* other = (Function*) desc->get_descriptor();
+
+                if (other->parameters_count() == function->parameters_count()) {
+                    int count = function->parameters_count();
+                    bool equal_types = true;
+
+                    for (int i = 0; i < count; ++i) {
+                        Type* t1 = function->get_parameter(i)->get_type();
+                        Type* t2 = other->get_parameter(i)->get_type();
+
+                        if (!t1->equal(t2)) {
+                            equal_types = false;
+                        }
+                    }
+
+                    if (equal_types) {
+                        log_error_and_exit("function already defined with same param types");
+                    }
+                }
 
                 // if (other->equals(function)
                 if (false) {
@@ -121,9 +161,9 @@ void SemanticFirstPass::build_parameter(Variable* param, int idx) {
     param->set_uid(idx);
 
     if (!sym) {
-        get_scope()->define_parameter(name, param);
+        get_scope()->define_parameter(param);
     } else if (sym->get_kind() != SYM_PARAMETER) {
-        get_scope()->define_parameter(name, param);
+        get_scope()->define_parameter(param);
     } else {
         std::string msg = "parameter '" + name + "' already defined. Line " + get_function()->get_name();
         msg += param->get_line();
@@ -169,7 +209,12 @@ void SemanticFirstPass::build_template_header(TemplateHeader* templates) {
         for (int i = 0; i < templates->types_count(); ++i) {
             NamedType* named = (NamedType*) templates->get_type(i);
             std::string name = named->get_name();
-            get_scope()->define_template(name, i);
+
+            if (get_scope()->resolve_local(name)) {
+                log_error_and_exit("template already defined");
+            }
+
+            get_scope()->define_template(named);
             link_type(named);
         }
     } else {

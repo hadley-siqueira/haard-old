@@ -81,37 +81,42 @@ Symbol* Scope::define_type(int kind, std::string& name, CompoundTypeDescriptor* 
 }
 
 Symbol* Scope::define_function(Function* obj) {
+    Symbol* sym;
     std::string name = obj->get_name();
-    Symbol* sym;// = new Symbol(SYM_FUNCTION, name, obj);
-    symbols[name] = sym;
+
+    if (symbols.count(name) == 0) {
+        sym = new Symbol(name);
+        symbols[name] = sym;
+    } else {
+        sym = symbols[name];
+    }
+
+    SymbolDescriptor* desc = new SymbolDescriptor(SYM_FUNCTION, obj);
+    sym->add_descriptor(desc);
 
     return sym;
 }
 
-Symbol* Scope::define_template(std::string name, int value) {
-    Symbol* sym;// = new Symbol(SYM_TEMPLATE, name, (void*) value);
-    symbols[name] = sym;
+Symbol* Scope::define_template(NamedType* type) {
+    Symbol* sym = new Symbol(type->get_name());
+    symbols[type->get_name()] = sym;
 
+    sym->add_descriptor(new SymbolDescriptor(SYM_TEMPLATE, nullptr));
     return sym;
 }
 
-Symbol *Scope::define_parameter(std::string name, Variable* obj) {
-    Symbol* sym;// = new Symbol(SYM_PARAMETER, name, obj);
+Symbol* Scope::define_parameter(Variable* param) {
+    std::string name = param->get_name();
+    Symbol* sym = new Symbol(name);
     symbols[name] = sym;
 
+    sym->add_descriptor(new SymbolDescriptor(SYM_PARAMETER, param));
     return sym;
 }
 
 Symbol *Scope::define_local_variable(Variable* obj) {
     Symbol* sym;// = new Symbol(SYM_VARIABLE, obj->get_name(), obj);
     symbols[obj->get_name()] = sym;
-
-    return sym;
-}
-
-Symbol* Scope::define_template(std::string name) {
-    Symbol* sym = new Symbol(SYM_TEMPLATE, name, nullptr);
-    symbols[name] = sym;
 
     return sym;
 }

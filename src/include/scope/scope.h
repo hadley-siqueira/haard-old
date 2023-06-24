@@ -28,11 +28,9 @@ namespace haard {
             Symbol* define_union(std::string& name, Union* obj);
             Symbol* define_type(int kind, std::string& name, CompoundTypeDescriptor* obj);
             Symbol* define_function(Function* obj);
-            Symbol* define_template(std::string name, int value);
-            Symbol* define_parameter(std::string name, Variable* obj);
+            Symbol* define_template(NamedType* type);
+            Symbol* define_parameter(Variable* param);
             Symbol* define_local_variable(Variable* obj);
-
-            Symbol* define_template(std::string name);
 
             bool has_parent();
             bool has_siblings();
