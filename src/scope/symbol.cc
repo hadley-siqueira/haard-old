@@ -14,8 +14,7 @@ Symbol::Symbol(std::string name) {
     this->name = name;
 }
 
-Symbol::Symbol(int kind, std::string name, SymbolDescriptor* descriptor) {
-    this->kind = kind;
+Symbol::Symbol(std::string name, SymbolDescriptor* descriptor) {
     this->name = name;
     add_descriptor(descriptor);
 }
@@ -26,20 +25,12 @@ Symbol::~Symbol() {
     }
 }
 
-int Symbol::get_kind(int idx) {
-    return descriptors[idx]->get_kind();
-}
-
 std::string Symbol::get_name() {
     return name;
 }
 
 SymbolDescriptor* Symbol::get_descriptor(int idx) {
     return descriptors[idx];
-}
-
-void Symbol::set_kind(int kind) {
-    this->kind = kind;
 }
 
 void Symbol::set_name(std::string name) {
@@ -50,11 +41,16 @@ Type* Symbol::get_type(int idx) {
     return descriptors[idx]->get_type();
 }
 
-std::string Symbol::to_str(int idx) {
+std::string Symbol::to_str() {
     std::stringstream ss;
 
-    ss << name << ": " << get_descriptor(idx)->to_str();
+    ss << name << ": {\n";
 
+    for (int i = 0; i < descriptors_count(); ++i) {
+        ss << "    " << get_descriptor(i)->to_str();
+    }
+
+    ss << "}\n";
     return ss.str();
 }
 
@@ -68,6 +64,7 @@ Scope* Symbol::get_descriptor_scope(int idx) {
 
 void Symbol::add_descriptor(SymbolDescriptor* descriptor) {
     descriptors.push_back(descriptor);
+    descriptor->set_symbol(this);
 }
 
 int Symbol::descriptors_count() {

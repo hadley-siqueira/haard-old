@@ -35,9 +35,8 @@ void Scope::set_super(Scope* symtab) {
     super = symtab;
 }
 
-Symbol* Scope::define_class(Class* klass) {
+SymbolDescriptor* Scope::define(int kind, std::string name, void* obj) {
     Symbol* sym;
-    std::string name = klass->get_name();
 
     if (symbols.count(name) == 0) {
         sym = new Symbol(name);
@@ -46,79 +45,42 @@ Symbol* Scope::define_class(Class* klass) {
         sym = symbols[name];
     }
 
-    SymbolDescriptor* desc = new SymbolDescriptor(SYM_CLASS, klass);
+    SymbolDescriptor* desc = new SymbolDescriptor(kind, obj);
     sym->add_descriptor(desc);
 
-    return sym;
+    return desc;
 }
 
-Symbol* Scope::define_struct(std::string& name, Struct* obj) {
-    Symbol* sym;// = new Symbol(SYM_STRUCT, name, obj);
-    symbols[name] = sym;
-
-    return sym;
+SymbolDescriptor* Scope::define_class(Class* klass) {
+    return define(SYM_CLASS, klass->get_name(), klass);
 }
 
-Symbol* Scope::define_enum(std::string& name, Enum* obj) {
-    Symbol* sym;// = new Symbol(SYM_ENUM, name, obj);
-    symbols[name] = sym;
-
-    return sym;
+SymbolDescriptor* Scope::define_struct(Struct* obj) {
+    return define(SYM_STRUCT, obj->get_name(), obj);
 }
 
-Symbol* Scope::define_union(std::string& name, Union* obj) {
-    Symbol* sym;// = new Symbol(SYM_UNION, name, obj);
-    symbols[name] = sym;
-
-    return sym;
+SymbolDescriptor* Scope::define_enum(Enum* obj) {
+    return define(SYM_ENUM, obj->get_name(), obj);
 }
 
-Symbol* Scope::define_type(int kind, std::string& name, CompoundTypeDescriptor* obj) {
-    Symbol* sym;// = new Symbol(kind, name, obj);
-    symbols[name] = sym;
-
-    return sym;
+SymbolDescriptor* Scope::define_union(std::string& name, Union* obj) {
+    return define(SYM_UNION, obj->get_name(), obj);
 }
 
-Symbol* Scope::define_function(Function* obj) {
-    Symbol* sym;
-    std::string name = obj->get_name();
-
-    if (symbols.count(name) == 0) {
-        sym = new Symbol(name);
-        symbols[name] = sym;
-    } else {
-        sym = symbols[name];
-    }
-
-    SymbolDescriptor* desc = new SymbolDescriptor(SYM_FUNCTION, obj);
-    sym->add_descriptor(desc);
-
-    return sym;
+SymbolDescriptor* Scope::define_function(Function* obj) {
+    return define(SYM_FUNCTION, obj->get_name(), obj);
 }
 
-Symbol* Scope::define_template(NamedType* type) {
-    Symbol* sym = new Symbol(type->get_name());
-    symbols[type->get_name()] = sym;
-
-    sym->add_descriptor(new SymbolDescriptor(SYM_TEMPLATE, nullptr));
-    return sym;
+SymbolDescriptor* Scope::define_template(NamedType* type) {
+    return define(SYM_TEMPLATE, type->get_name(), type);
 }
 
-Symbol* Scope::define_parameter(Variable* param) {
-    std::string name = param->get_name();
-    Symbol* sym = new Symbol(name);
-    symbols[name] = sym;
-
-    sym->add_descriptor(new SymbolDescriptor(SYM_PARAMETER, param));
-    return sym;
+SymbolDescriptor* Scope::define_parameter(Variable* param) {
+    return define(SYM_PARAMETER, param->get_name(), param);
 }
 
-Symbol *Scope::define_local_variable(Variable* obj) {
-    Symbol* sym;// = new Symbol(SYM_VARIABLE, obj->get_name(), obj);
-    symbols[obj->get_name()] = sym;
-
-    return sym;
+SymbolDescriptor* Scope::define_local_variable(Variable* obj) {
+    return define(SYM_VARIABLE, obj->get_name(), obj);
 }
 
 bool Scope::has_parent() {
@@ -141,76 +103,8 @@ int Scope::siblings_count() {
     return siblings.size();
 }
 
-Symbol* Scope::local_has(std::string name) {
-    if (symbols.count(name) > 0) {
-        return symbols[name];
-    }
-
-    return nullptr;
-}
-
-Symbol* Scope::has_field(std::string name) {
-    if (symbols.count(name) > 0) {
-        return symbols[name];
-    }
-
-    if (has_super()) {
-        return super->has_field(name);
-    }
-
-    return nullptr;
-}
-
-Symbol* Scope::has(std::string name) {
-    Symbol* sym = nullptr;
-
-    if (symbols.count(name) > 0) {
-        return symbols[name];
-    }
-
-    sym = has_field(name);
-
-    if (sym) {
-        return sym;
-    }
-
-    if (has_parent()) {
-        return parent->has(name);
-    }
-
-    if (has_siblings()) {
-        for (int i = 0; i < siblings_count(); ++i) {
-            sym = siblings[i]->local_has(name);
-
-            if (sym != nullptr) {
-                return sym;
-            }
-        }
-    }
-
-    return sym;
-}
-
-Symbol* Scope::has_class(std::string name) {
-    Symbol* sym = nullptr;
-
-    if (symbols.count(name) > 0) {
-        sym = symbols[name];
-
-        if (sym->get_kind() == SYM_CLASS) {
-            return sym;
-        }
-    }
-
-    if (has_parent()) {
-        return parent->has_class(name);
-    }
-
-    return nullptr;
-}
-
 std::vector<Variable*> Scope::get_variables_to_be_deleted() {
-    Variable* var;
+/*    Variable* var;
     Type* type;
     int kind;
     std::vector<Variable*> vars;
@@ -227,7 +121,7 @@ std::vector<Variable*> Scope::get_variables_to_be_deleted() {
 
             if (type->get_kind() == TYPE_NAMED) {
                 NamedType* named = (NamedType*) type;
-                kind = named->get_symbol()->get_kind();
+                kind = named->get_symbol_descriptor()->get_kind();
 
                 if (kind == SYM_CLASS) {
                     vars.push_back(var);
@@ -239,7 +133,7 @@ std::vector<Variable*> Scope::get_variables_to_be_deleted() {
         }
     }
 
-    return vars;
+    return vars;*/
 }
 
 void Scope::add_deletable(Expression* expr) {
@@ -328,18 +222,16 @@ Symbol* Scope::resolve_field(const std::string& name) {
     }
 
     if (has_super()) {
-        return super->has_field(name);
+        return super->resolve_field(name);
     }
 
     return nullptr;
 }
 
-std::string Scope::get_qualified() const
-{
+std::string Scope::get_qualified() const {
     return qualified;
 }
 
-void Scope::set_qualified(const std::string &value)
-{
+void Scope::set_qualified(const std::string& value) {
     qualified = value;
 }

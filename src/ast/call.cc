@@ -37,3 +37,11 @@ ExpressionList* Call::get_arguments() const {
 void Call::set_arguments(ExpressionList* value) {
     arguments = value;
 }
+
+Function* Call::get_function() const {
+    return function;
+}
+
+void Call::set_function(Function* value) {
+    function = value;
+}

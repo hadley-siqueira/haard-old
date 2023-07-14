@@ -22,14 +22,14 @@ namespace haard {
 
     public:
         Variable* get_variable(int idx);
-        NamedType* get_self_type();
+
         int get_size_in_bytes();
         std::string get_qualified_name();
         std::string get_original();
 
         void set_from_token(Token& token);
         void set_uid(int uid);
-        void set_self_type(NamedType* type);
+
 
         void add_variable(Variable* var);
         void calculate_variables_offset();

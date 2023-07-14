@@ -55,6 +55,9 @@ namespace haard {
         Type* get_super_type() const;
         void set_super_type(Type* value);
 
+        NamedType* get_self_type();
+        void set_self_type(NamedType* type);
+
         Scope* get_scope() const;
         std::string get_full_filepath();
         std::string get_relative_filepath();

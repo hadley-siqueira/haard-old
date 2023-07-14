@@ -18,9 +18,9 @@ namespace haard {
 
     public:
         std::string& get_name();
-        Symbol* get_symbol();
+        SymbolDescriptor* get_symbol_descriptor();
         void set_name(std::string name);
-        void set_symbol(Symbol* symbol);
+        void set_symbol_descriptor(SymbolDescriptor* value);
 
         bool is_local_variable();
         bool is_class_variable();
@@ -43,7 +43,7 @@ namespace haard {
     private:
         std::string name;
         std::string alias;
-        Symbol* symbol;
+        SymbolDescriptor* symbol_descriptor;
         int symbol_index;
         TemplateHeader* template_header;
             

@@ -15,19 +15,17 @@ namespace haard {
     public:
         Symbol();
         Symbol(std::string name);
-        Symbol(int kind, std::string name, SymbolDescriptor* descriptor);
+        Symbol(std::string name, SymbolDescriptor* descriptor);
         ~Symbol();
 
     public:
-        int get_kind(int idx=0);
         std::string get_name();
-        std::string to_str(int idx=0);
+        std::string to_str();
 
         Type* get_type(int idx=0);
         int get_size_in_bytes(int idx=0);
         int get_alignment(int idx=0);
 
-        void set_kind(int kind);
         void set_name(std::string name);
 
         std::string get_qualified_name(int idx=0);
@@ -39,7 +37,6 @@ namespace haard {
         int descriptors_count();
 
     private:
-        int kind;
         std::string name;
         std::vector<SymbolDescriptor*> descriptors;
     };

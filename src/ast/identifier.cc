@@ -5,7 +5,7 @@ using namespace haard;
 
 Identifier::Identifier() {
     set_kind(EXPR_ID);
-    set_symbol(nullptr);
+    set_symbol_descriptor(nullptr);
     set_symbol_index(0);
     template_header = nullptr;
 }
@@ -15,7 +15,7 @@ Identifier::Identifier(Token& token) {
     set_line(token.get_line());
     set_column(token.get_column());
     set_name(token.get_lexeme());
-    set_symbol(nullptr);
+    set_symbol_descriptor(nullptr);
     set_symbol_index(0);
     template_header = nullptr;
 }
@@ -25,7 +25,7 @@ Identifier::Identifier(Token& scope, Token& name) {
     set_line(name.get_line());
     set_column(name.get_column());
     set_name(name.get_lexeme());
-    set_symbol(nullptr);
+    set_symbol_descriptor(nullptr);
     set_symbol_index(0);
     this->alias = scope.get_lexeme();
     template_header = nullptr;
@@ -37,7 +37,7 @@ Identifier::Identifier(std::string name) {
     set_column(0);
     set_name(name);
     set_symbol_index(0);
-    set_symbol(nullptr);
+    set_symbol_descriptor(nullptr);
     template_header = nullptr;
 }
 
@@ -49,37 +49,37 @@ std::string& Identifier::get_name() {
     return name;
 }
 
-Symbol* Identifier::get_symbol() {
-    return symbol;
+SymbolDescriptor* Identifier::get_symbol_descriptor() {
+    return symbol_descriptor;
 }
 
 void Identifier::set_name(std::string lexeme) {
     this->name = lexeme;
 }
 
-void Identifier::set_symbol(Symbol* symbol) {
-    this->symbol = symbol;
+void Identifier::set_symbol_descriptor(SymbolDescriptor* value) {
+    this->symbol_descriptor = value;
 
-    if (symbol) {
-        set_type(symbol->get_type());
+    if (symbol_descriptor) {
+        set_type(symbol_descriptor->get_type());
     }
 }
 
 bool Identifier::is_local_variable() {
-    if (symbol == nullptr) {
+    if (symbol_descriptor == nullptr) {
         return false;
     }
 
-    int kind = symbol->get_kind();
+    int kind = symbol_descriptor->get_kind();
     return kind == SYM_VARIABLE || kind == SYM_PARAMETER;
 }
 
 bool Identifier::is_class_variable() {
-    if (symbol == nullptr) {
+    if (symbol_descriptor == nullptr) {
         return false;
     }
 
-    int kind = symbol->get_kind();
+    int kind = symbol_descriptor->get_kind();
     return kind == SYM_CLASS_VARIABLE;
 }
 

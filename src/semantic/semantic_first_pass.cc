@@ -83,6 +83,7 @@ void SemanticFirstPass::build_class(Class* decl) {
     }
 
     get_scope()->define_class(decl);
+    build_self_type(decl);
 
     if (logging_info()) {
         log_info(info_define_class(decl));
@@ -98,7 +99,7 @@ void SemanticFirstPass::build_function(Function* function) {
     set_function(function);
     enter_scope(function->get_scope());
 
-    //build_template_header(function->get_template_header());
+    build_template_header(function->get_template_header());
     build_parameters(function);
 
     leave_scope();
@@ -160,18 +161,21 @@ void SemanticFirstPass::build_parameter(Variable* param, int idx) {
     Symbol* sym = get_scope()->resolve_local(name);
     param->set_uid(idx);
 
-    if (!sym) {
-        get_scope()->define_parameter(param);
-    } else if (sym->get_kind() != SYM_PARAMETER) {
-        get_scope()->define_parameter(param);
-    } else {
-        std::string msg = "parameter '" + name + "' already defined. Line " + get_function()->get_name();
-        msg += param->get_line();
-        log_info(get_scope()->debug());
-        log_info(get_scope()->get_parent()->debug());
-        log_error_and_exit(msg);
+    if (sym) {
+        for (int i = 0; i < sym->descriptors_count(); ++i) {
+            SymbolDescriptor* desc = sym->get_descriptor(i);
+
+            if (desc->get_kind() == SYM_PARAMETER) {
+                std::string msg = "parameter '" + name + "' already defined. Line " + get_function()->get_name();
+                msg += param->get_line();
+                log_info(get_scope()->debug());
+                log_info(get_scope()->get_parent()->debug());
+                log_error_and_exit(msg);
+            }
+        }
     }
 
+    get_scope()->define_parameter(param);
     link_type(param->get_type());
 }
 
@@ -222,4 +226,12 @@ void SemanticFirstPass::build_template_header(TemplateHeader* templates) {
             link_type(templates->get_type(i));
         }
     }
+}
+
+void SemanticFirstPass::build_self_type(CompoundTypeDescriptor* desc) {
+    NamedType* named = new NamedType();
+    named->set_name(desc->get_name());
+
+    link_type(named);
+    desc->set_self_type(named);
 }

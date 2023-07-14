@@ -123,7 +123,6 @@ std::string SymbolDescriptor::to_str() {
 std::string SymbolDescriptor::get_qualified_name() {
     std::stringstream ss;
 
-    Class* klass = (Class*) descriptor;
     Function* func = (Function*) descriptor;
     Variable* var = (Variable*) descriptor;
     NamedType* type = (NamedType*) descriptor;
@@ -149,7 +148,7 @@ std::string SymbolDescriptor::get_qualified_name() {
         break;
 
     case SYM_TEMPLATE:
-        ss << "%" << ((long long) get_descriptor());
+        ss << type->get_name();
         break;
     }
 
@@ -211,4 +210,12 @@ Scope* SymbolDescriptor::get_descriptor_scope() {
     }
 
     return nullptr;
+}
+
+Symbol* SymbolDescriptor::get_symbol() const {
+    return symbol;
+}
+
+void SymbolDescriptor::set_symbol(Symbol* value) {
+    symbol = value;
 }

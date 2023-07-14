@@ -5,6 +5,7 @@
 
 namespace haard {
     class Type;
+    class Symbol;
 
     class SymbolDescriptor {
     public:
@@ -27,9 +28,13 @@ namespace haard {
 
         Scope* get_descriptor_scope();
 
+        Symbol* get_symbol() const;
+        void set_symbol(Symbol* value);
+
     private:
         int kind;
         void* descriptor;
+        Symbol* symbol;
     };
 }
 

@@ -21,6 +21,9 @@ namespace haard {
         void build_assignment(Assignment* expr);
 
         void build_call(Call* expr);
+        void build_function_call(Call* expr);
+        void build_constructor_call(Call* expr);
+
         void build_expression_list(ExpressionList* list);
 
         void build_identifier(Identifier* expr);
@@ -30,6 +33,8 @@ namespace haard {
 
     private:
         bool is_new_variable(Assignment* expr);
+        bool is_function_call(Call* expr);
+        bool is_constructor_call(Call* expr);
         void create_variable(Assignment* expr);
 
     };

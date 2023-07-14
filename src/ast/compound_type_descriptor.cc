@@ -170,6 +170,14 @@ void CompoundTypeDescriptor::set_super_type(Type* value) {
     super_type = value;
 }
 
+NamedType* CompoundTypeDescriptor::get_self_type() {
+    return self_type;
+}
+
+void CompoundTypeDescriptor::set_self_type(NamedType* type) {
+    self_type = type;
+}
+
 Module* CompoundTypeDescriptor::get_module() const {
     return module;
 }
@@ -186,7 +194,7 @@ CompoundTypeDescriptor* CompoundTypeDescriptor::get_super_descriptor() {
     CompoundTypeDescriptor* super = nullptr;
 
     if (get_super_type()) {
-        super = (CompoundTypeDescriptor*) ((NamedType*) super_type)->get_symbol()->get_descriptor();
+        super = (CompoundTypeDescriptor*) ((NamedType*) super_type)->get_symbol_descriptor()->get_descriptor();
     }
 
     return super;

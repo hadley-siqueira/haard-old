@@ -22,26 +22,21 @@ namespace haard {
             void set_parent(Scope* symtab);
             void set_super(Scope* symtab);
 
-            Symbol* define_class(Class* klass);
-            Symbol* define_struct(std::string& name, Struct* obj);
-            Symbol* define_enum(std::string& name, Enum* obj);
-            Symbol* define_union(std::string& name, Union* obj);
-            Symbol* define_type(int kind, std::string& name, CompoundTypeDescriptor* obj);
-            Symbol* define_function(Function* obj);
-            Symbol* define_template(NamedType* type);
-            Symbol* define_parameter(Variable* param);
-            Symbol* define_local_variable(Variable* obj);
+            SymbolDescriptor* define(int kind, std::string name, void* obj);
+            SymbolDescriptor* define_class(Class* klass);
+            SymbolDescriptor* define_struct(Struct* obj);
+            SymbolDescriptor* define_enum(Enum* obj);
+            SymbolDescriptor* define_union(std::string& name, Union* obj);
+            SymbolDescriptor* define_function(Function* obj);
+            SymbolDescriptor* define_template(NamedType* type);
+            SymbolDescriptor* define_parameter(Variable* param);
+            SymbolDescriptor* define_local_variable(Variable* obj);
 
             bool has_parent();
             bool has_siblings();
             bool has_super();
             void add_sibling(Scope* scope);
             int siblings_count();
-
-            Symbol* has(std::string name);
-            Symbol* has_field(std::string name);
-            Symbol* local_has(std::string name);
-            Symbol* has_class(std::string name);
 
             std::vector<Variable*> get_variables_to_be_deleted();
             void add_deletable(Expression* expr);

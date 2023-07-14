@@ -6,6 +6,8 @@
 #include "expression_list.h"
 
 namespace haard {
+    class Function;
+
     class Call : public Expression {
     public:
         Call(Expression* object=nullptr, ExpressionList* arguments=nullptr);
@@ -19,8 +21,12 @@ namespace haard {
         ExpressionList* get_arguments() const;
         void set_arguments(ExpressionList* value);
 
+        Function* get_function() const;
+        void set_function(Function *value);
+
     private:
         Expression* object;
+        Function* function;
         ExpressionList* arguments;
     };
 }

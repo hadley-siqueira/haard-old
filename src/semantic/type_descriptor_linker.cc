@@ -40,6 +40,7 @@ void TypeDescriptorLink::link_type(Type* type) {
 
     case TYPE_TUPLE:
         link_tuple_type((TupleType*) type);
+        break;
     }
 }
 
@@ -47,7 +48,7 @@ void TypeDescriptorLink::link_named_type(NamedType* type) {
     std::string name = type->get_name();
     Scope* scope = this->scope;
     Symbol* sym = scope->resolve(name);
-std::cout << "@" << type->get_name() << '\n' << scope->debug() << '\n';
+
     if (!sym) {
         std::string msg;
 
@@ -57,18 +58,19 @@ std::cout << "@" << type->get_name() << '\n' << scope->debug() << '\n';
         log_error_and_exit(msg);
     }
 
-    int kind = sym->get_kind();
+    SymbolDescriptor* desc = sym->get_descriptor(0);
+    int kind = desc->get_kind();
 
     switch (kind) {
     case SYM_CLASS:
     case SYM_STRUCT:
     case SYM_UNION:
     case SYM_ENUM:
-        type->set_symbol(sym);
+        type->set_symbol_descriptor(desc);
         break;
 
     case SYM_TEMPLATE:
-        type->set_symbol(sym);
+        type->set_symbol_descriptor(desc);
         break;
 
     default:

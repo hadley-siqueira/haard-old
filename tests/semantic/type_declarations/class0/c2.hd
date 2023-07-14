@@ -4,6 +4,14 @@ class Foo:
 class Bar:
     z : int
 
+    def init : void
+        return 0
+
+    def init : void
+        @a : int
+
+        return 0
+
 class Baz<T>:
     z : int
 
@@ -43,8 +51,20 @@ def sum : int
 
     return a + b
 
-def sum : int
-    @a : Foo
-    @b : Foo
+# def sum : int
+#     @a : Foo
+#     @b : Foo
+# 
+#     return a + b
 
+def sum<T> : T
+    @a : T
+    @b : T
+
+    i = 0
+    c = i
+    d = sum(2, 3, 47)
+    e = sum(2, 3)
+    p = Bar()
+    pp = Bar(2)
     return a + b

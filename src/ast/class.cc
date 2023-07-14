@@ -27,18 +27,10 @@ Variable* Class::get_variable(int idx) {
     return nullptr;
 }
 
-NamedType* Class::get_self_type() {
-    return self_type;
-}
-
 void Class::set_from_token(Token& token) {
     set_name(token.get_lexeme());
     set_line(token.get_line());
     set_column(token.get_column());
-}
-
-void Class::set_self_type(NamedType* type) {
-    self_type = type;
 }
 
 void Class::add_variable(Variable* var) {
