@@ -18,6 +18,20 @@ void SemanticSecondPass::build_module(Module* module) {
         build_function(module->get_function(i));
     }
 
+    for (int i = 0; i < module->classes_count(); ++i) {
+        build_class(module->get_class(i));
+    }
+
+    leave_scope();
+}
+
+void SemanticSecondPass::build_class(Class* klass) {
+    enter_scope(klass->get_scope());
+
+    for (int i = 0; i < klass->methods_count(); ++i) {
+        build_method(klass->get_method(i));
+    }
+
     leave_scope();
 }
 
@@ -34,6 +48,10 @@ void SemanticSecondPass::build_function(Function* function) {
 
     leave_scope();
     set_function(nullptr);
+}
+
+void SemanticSecondPass::build_method(Function* method) {
+    build_function(method);
 }
 
 void SemanticSecondPass::build_statement(Statement* stmt) {
@@ -111,6 +129,8 @@ void SemanticSecondPass::build_call(Call* expr) {
 
     if (is_function_call(expr)) {
         build_function_call(expr);
+    } else if (is_method_call(expr)) {
+        build_method_call(expr);
     } else if (is_constructor_call(expr)) {
         build_constructor_call(expr);
     }
@@ -153,6 +173,46 @@ void SemanticSecondPass::build_function_call(Call* expr) {
         log_info("function: " + best->get_qualified_name());
     } else {
         log_error_and_exit("second pass: couldn't resolve function call " + id->get_name());
+    }
+}
+
+void SemanticSecondPass::build_method_call(Call* expr) {
+    bool found = false;
+    Function* best = nullptr;
+    Identifier* id = (Identifier*) expr->get_object();
+    Function* f = nullptr;
+
+    Symbol* sym = get_scope()->resolve(id->get_name());
+
+    for (int i = 0; i < sym->descriptors_count(); ++i) {
+        SymbolDescriptor* desc = sym->get_descriptor(i);
+        f = (Function*) desc->get_descriptor();
+
+        if (f->parameters_count() == expr->get_arguments()->expressions_count()) {
+            bool flag = true;
+
+            for (int j = 0; j < expr->get_arguments()->expressions_count(); ++j) {
+                Type* t1 = expr->get_arguments()->get_expression(j)->get_type();
+                Type* t2 = f->get_parameter(j)->get_type();
+
+                if (!t1->equal(t2)) {
+                    flag = false;
+                }
+            }
+
+            if (flag) {
+                found = true;
+                best = f;
+            }
+        }
+    }
+
+    if (found) {
+        expr->set_function(best);
+        expr->set_type(best->get_return_type());
+        log_info("function: " + best->get_qualified_name());
+    } else {
+        log_error_and_exit("second pass: couldn't resolve method call " + id->get_name());
     }
 }
 
@@ -259,12 +319,40 @@ bool SemanticSecondPass::is_function_call(Call* expr) {
         Identifier* id = (Identifier*) expr->get_object();
 
         Symbol* sym = get_scope()->resolve(id->get_name());
+
+        if (sym == nullptr) {
+            log_info(get_scope()->debug());
+            log_error_and_exit(id->get_name() + " not in scope");
+        }
+
         SymbolDescriptor* desc = sym->get_descriptor(0);
         return desc->get_kind() == SYM_FUNCTION;
     }
 
     return false;
 }
+
+bool SemanticSecondPass::is_method_call(Call* expr) {
+    Expression* obj = expr->get_object();
+    int kind = obj->get_kind();
+
+    if (kind == EXPR_ID) {
+        Identifier* id = (Identifier*) expr->get_object();
+
+        Symbol* sym = get_scope()->resolve(id->get_name());
+
+        if (sym == nullptr) {
+            log_info(get_scope()->debug());
+            log_error_and_exit(id->get_name() + " not in scope");
+        }
+
+        SymbolDescriptor* desc = sym->get_descriptor(0);
+        return desc->get_kind() == SYM_METHOD;
+    }
+
+    return false;
+}
+
 
 bool SemanticSecondPass::is_constructor_call(Call* expr) {
     Expression* obj = expr->get_object();

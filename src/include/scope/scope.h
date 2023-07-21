@@ -28,6 +28,7 @@ namespace haard {
             SymbolDescriptor* define_enum(Enum* obj);
             SymbolDescriptor* define_union(std::string& name, Union* obj);
             SymbolDescriptor* define_function(Function* obj);
+            SymbolDescriptor* define_method(Function* obj);
             SymbolDescriptor* define_template(NamedType* type);
             SymbolDescriptor* define_parameter(Variable* param);
             SymbolDescriptor* define_local_variable(Variable* obj);

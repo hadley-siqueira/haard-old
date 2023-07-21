@@ -71,6 +71,10 @@ SymbolDescriptor* Scope::define_function(Function* obj) {
     return define(SYM_FUNCTION, obj->get_name(), obj);
 }
 
+SymbolDescriptor *Scope::define_method(Function* obj) {
+    return define(SYM_METHOD, obj->get_name(), obj);
+}
+
 SymbolDescriptor* Scope::define_template(NamedType* type) {
     return define(SYM_TEMPLATE, type->get_name(), type);
 }

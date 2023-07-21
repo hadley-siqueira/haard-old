@@ -10,7 +10,10 @@ namespace haard {
         void build_modules(Modules* modules);
         void build_module(Module* module);
 
+        void build_class(Class* klass);
+
         void build_function(Function* function);
+        void build_method(Function* method);
 
         void build_statement(Statement* stmt);
         void build_compound_statement(CompoundStatement* stmt);
@@ -22,6 +25,7 @@ namespace haard {
 
         void build_call(Call* expr);
         void build_function_call(Call* expr);
+        void build_method_call(Call* expr);
         void build_constructor_call(Call* expr);
 
         void build_expression_list(ExpressionList* list);
@@ -34,6 +38,7 @@ namespace haard {
     private:
         bool is_new_variable(Assignment* expr);
         bool is_function_call(Call* expr);
+        bool is_method_call(Call* expr);
         bool is_constructor_call(Call* expr);
         void create_variable(Assignment* expr);
 

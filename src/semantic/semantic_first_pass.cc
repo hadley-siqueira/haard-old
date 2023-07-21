@@ -15,6 +15,7 @@ void SemanticFirstPass::build_module(Module* module) {
     enter_scope(module->get_scope());
 
     module->get_scope()->set_qualified(module->get_relative_path() + ".");
+    build_imports(module);
     build_classes(module);
     build_functions(module);
 
@@ -43,6 +44,16 @@ void SemanticFirstPass::build_functions(Module* module) {
     for (int i = 0; i < module->functions_count(); ++i) {
         build_function(module->get_function(i));
     }
+}
+
+void SemanticFirstPass::build_methods(CompoundTypeDescriptor* decl) {
+    enter_scope(decl->get_scope());
+
+    for (int i = 0; i < decl->methods_count(); ++i) {
+        build_method(decl->get_method(i));
+    }
+
+    leave_scope();
 }
 
 void SemanticFirstPass::build_import(Import* import) {
@@ -88,6 +99,8 @@ void SemanticFirstPass::build_class(Class* decl) {
     if (logging_info()) {
         log_info(info_define_class(decl));
     }
+
+    build_methods(decl);
 }
 
 void SemanticFirstPass::build_struct(Struct* decl) {
@@ -145,6 +158,62 @@ void SemanticFirstPass::build_function(Function* function) {
 
     if (logging_info()) {
         log_info(info_define_function(function));
+    }
+
+    set_function(nullptr);
+}
+
+void SemanticFirstPass::build_method(Function* method) {
+    Symbol* sym;
+    set_function(method);
+    enter_scope(method->get_scope());
+
+    build_template_header(method->get_template_header());
+    build_parameters(method);
+
+    leave_scope();
+
+    std::string name = method->get_name();
+
+    sym = get_scope()->resolve_local(name);
+
+    if (sym) {
+        for (int i = 0; i < sym->descriptors_count(); ++i) {
+            SymbolDescriptor* desc = sym->get_descriptor(i);
+
+            if (desc->get_kind() == SYM_METHOD) {
+                Function* other = (Function*) desc->get_descriptor();
+
+                if (other->parameters_count() == method->parameters_count()) {
+                    int count = method->parameters_count();
+                    bool equal_types = true;
+
+                    for (int i = 0; i < count; ++i) {
+                        Type* t1 = method->get_parameter(i)->get_type();
+                        Type* t2 = other->get_parameter(i)->get_type();
+
+                        if (!t1->equal(t2)) {
+                            equal_types = false;
+                        }
+                    }
+
+                    if (equal_types) {
+                        log_error_and_exit("method already defined with same param types");
+                    }
+                }
+
+                // if (other->equals(function)
+                if (false) {
+                    log_error_and_exit(name + " already defined");
+                }
+            }
+        }
+    }
+
+    get_scope()->define_method(method);
+
+    if (logging_info()) {
+        log_info(info_define_method(method));
     }
 
     set_function(nullptr);

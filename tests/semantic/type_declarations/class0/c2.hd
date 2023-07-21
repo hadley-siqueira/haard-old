@@ -1,3 +1,5 @@
+import c3
+
 class Foo:
     x : int
 
@@ -67,4 +69,6 @@ def sum<T> : T
     e = sum(2, 3)
     p = Bar()
     pp = Bar(2)
+    py = foobar(2, 3)
+    pair = Pair(0, 0)
     return a + b

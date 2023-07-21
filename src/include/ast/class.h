@@ -30,7 +30,6 @@ namespace haard {
         void set_from_token(Token& token);
         void set_uid(int uid);
 
-
         void add_variable(Variable* var);
         void calculate_variables_offset();
 

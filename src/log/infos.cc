@@ -29,4 +29,17 @@ namespace haard {
 
         return ss.str();
     }
+
+    std::string info_define_method(Function* method) {
+        std::stringstream ss;
+        int line = method->get_line();
+        int column = method->get_column();
+        int count = method->get_name().size();
+        std::string path = method->get_module()->get_path();
+
+        ss << "declaring method <white>" << method->get_qualified_name() << "</white>\n";
+        ss << extract_line(path, line, column, count);
+
+        return ss.str();
+    }
 }
