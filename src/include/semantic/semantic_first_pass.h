@@ -29,6 +29,8 @@ namespace haard {
     private:
         void build_template_header(TemplateHeader* templates);
         void build_self_type(CompoundTypeDescriptor* desc);
+        void add_default_constructor(CompoundTypeDescriptor* decl);
+        void add_default_destructor(CompoundTypeDescriptor* decl);
 
     };
 }

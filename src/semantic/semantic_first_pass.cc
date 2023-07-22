@@ -2,6 +2,7 @@
 #include "semantic/semantic_first_pass.h"
 #include "log/actions.h"
 #include "log/infos.h"
+#include "parser/parser.h"
 
 using namespace haard;
 
@@ -52,6 +53,9 @@ void SemanticFirstPass::build_methods(CompoundTypeDescriptor* decl) {
     for (int i = 0; i < decl->methods_count(); ++i) {
         build_method(decl->get_method(i));
     }
+
+    add_default_constructor(decl);
+    add_default_destructor(decl);
 
     leave_scope();
 }
@@ -303,4 +307,43 @@ void SemanticFirstPass::build_self_type(CompoundTypeDescriptor* desc) {
 
     link_type(named);
     desc->set_self_type(named);
+}
+
+void SemanticFirstPass::add_default_constructor(CompoundTypeDescriptor* decl) {
+    Function* f;
+    Symbol* sym = get_scope()->resolve_field("init");
+
+    if (sym != nullptr) {
+        for (int i = 0; i < sym->descriptors_count(); ++i) {
+            SymbolDescriptor* desc = sym->get_descriptor(i);
+            f = (Function*) desc->get_descriptor();
+
+            if (f->parameters_count() == 0) {
+                return;
+            }
+        }
+    }
+
+    log_info("Creating default constructor for " + decl->get_name());
+    std::string cons = "def init : void\n    return\n\n";
+    Parser p;
+    f = p.read_function_from_string(cons);
+
+    decl->add_method(f);
+}
+
+void SemanticFirstPass::add_default_destructor(CompoundTypeDescriptor* decl) {
+    Function* f;
+    Symbol* sym = get_scope()->resolve_field("destroy");
+
+    if (sym != nullptr) {
+        return;
+    }
+
+    log_info("Creating default destructor for " + decl->get_name());
+    std::string cons = "def destroy : void\n    return\n\n";
+    Parser p;
+    f = p.read_function_from_string(cons);
+
+    decl->add_method(f);
 }
