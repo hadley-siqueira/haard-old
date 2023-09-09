@@ -2,6 +2,7 @@
 #define HDC_DEFS_H
 
 #include <map>
+#include <string>
 
 #define NORMAL  "\033[0m"
 #define BLACK   "\033[30m"
