@@ -1,0 +1,5 @@
+# Check if variable a is created
+
+def main : int
+    a = 'a'
+    return 0

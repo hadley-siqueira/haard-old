@@ -103,12 +103,36 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_call((Call*) expr);
         break;
 
+    case EXPR_ADDRESS_OF:
+        build_address_of((AddressOf*) expr);
+        break;
+
+    case EXPR_DEREFERENCE:
+        build_dereference((Dereference*) expr);
+        break;
+
     case EXPR_ID:
         build_identifier((Identifier*) expr);
         break;
 
+    case EXPR_LITERAL_BOOL:
+        build_literal_bool((Literal*) expr);
+        break;
+
+    case EXPR_LITERAL_CHAR:
+        build_literal_char((Literal*) expr);
+        break;
+
     case EXPR_LITERAL_INTEGER:
         build_literal_integer((Literal*) expr);
+        break;
+
+    case EXPR_LITERAL_FLOAT:
+        build_literal_float((Literal*) expr);
+        break;
+
+    case EXPR_LITERAL_DOUBLE:
+        build_literal_double((Literal*) expr);
         break;
 
     default:
@@ -271,6 +295,24 @@ void SemanticSecondPass::build_expression_list(ExpressionList* list) {
     }
 }
 
+void SemanticSecondPass::build_address_of(AddressOf* expr) {
+    build_expression(expr->get_expression());
+    expr->set_type(new IndirectionType(TYPE_POINTER, expr->get_expression()->get_type()));
+}
+
+void SemanticSecondPass::build_dereference(Dereference* expr) {
+    build_expression(expr->get_expression());
+
+    Type* t = expr->get_expression()->get_type();
+
+    if (t->get_kind() != TYPE_POINTER) {
+        log_error_and_exit("semantic_second_pass: invalid dereference");
+    }
+
+    IndirectionType* pointer_type = (IndirectionType*) t;
+    expr->set_type(pointer_type->get_subtype());
+}
+
 void SemanticSecondPass::build_identifier(Identifier* expr) {
     Symbol* sym = nullptr;
 
@@ -287,12 +329,24 @@ void SemanticSecondPass::build_identifier(Identifier* expr) {
     }
 }
 
+void SemanticSecondPass::build_literal_bool(Literal* expr) {
+    expr->set_type(new Type(TYPE_BOOL));
+}
+
+void SemanticSecondPass::build_literal_char(Literal* expr) {
+    expr->set_type(new Type(TYPE_CHAR));
+}
+
 void SemanticSecondPass::build_literal_integer(Literal* expr) {
     expr->set_type(new Type(TYPE_INT));
 }
 
 void SemanticSecondPass::build_literal_float(Literal* expr) {
     expr->set_type(new Type(TYPE_FLOAT));
+}
+
+void SemanticSecondPass::build_literal_double(Literal* expr) {
+    expr->set_type(new Type(TYPE_DOUBLE));
 }
 
 bool SemanticSecondPass::is_new_variable(Assignment* expr) {

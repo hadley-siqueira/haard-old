@@ -30,9 +30,15 @@ namespace haard {
 
         void build_expression_list(ExpressionList* list);
 
+        void build_address_of(AddressOf* expr);
+        void build_dereference(Dereference* expr);
+
         void build_identifier(Identifier* expr);
+        void build_literal_bool(Literal* expr);
+        void build_literal_char(Literal* expr);
         void build_literal_integer(Literal* expr);
         void build_literal_float(Literal* expr);
+        void build_literal_double(Literal* expr);
 
 
     private:

@@ -1,0 +1,6 @@
+def main : int
+    a = 0
+    p = &a
+    p2 = &p
+    p3 = *p2
+    return 0

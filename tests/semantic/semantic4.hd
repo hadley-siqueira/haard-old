@@ -1,0 +1,16 @@
+def sum : int
+    @a : int
+    @b : int
+
+    return a + b
+
+def sum2 : float
+    @a : int
+    @b : int
+
+    return a + b
+
+def main : int
+    a = sum(2, 3)
+    b = sum2(2, 3)
+    return 0

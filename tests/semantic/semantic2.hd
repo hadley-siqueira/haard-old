@@ -1,0 +1,6 @@
+# Check if variables a and b are created
+
+def main : int
+    a = true
+    b = false
+    return 0
