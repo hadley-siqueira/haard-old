@@ -1,9 +1,0 @@
-def main : int
-    @a : int
-
-    a = a + 1
-
-    if a == 0:
-        a = 1
-    elif:
-        a = 2

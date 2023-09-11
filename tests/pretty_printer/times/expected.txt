@@ -1,3 +1,0 @@
-def main : void
-    a = 2 * 3 * 4
-

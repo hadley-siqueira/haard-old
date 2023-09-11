@@ -1,2 +1,0 @@
-Enter a number: 21
-Enter another number: 987

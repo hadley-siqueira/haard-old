@@ -1,4 +1,0 @@
-def main : void
-    # user writes an hash
-    for i = 0; i < 2: ++i:
-        pass

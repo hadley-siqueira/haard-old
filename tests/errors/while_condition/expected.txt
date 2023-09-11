@@ -1,6 +1,0 @@
-starting parsing...
-Parsing: while_condition/main.hd
-[31merror[0m: while should have a condition expression
-  > while_condition/main.hd:4:5
-  4 |    while:
-    |    [31m^^^^^[0m    

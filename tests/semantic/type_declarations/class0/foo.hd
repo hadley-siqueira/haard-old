@@ -1,5 +1,0 @@
-import main
-
-class Player:
-    x : int
-    y : int
