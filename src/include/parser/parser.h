@@ -38,7 +38,7 @@ namespace haard {
         Field* parse_enum_field();
 
         TemplateHeader* parse_template_header();
-        Variable* parse_class_variable();
+        Field* parse_class_variable();
         Function* parse_function();
         void parse_parameters(Function* function);
         Type* parse_type();

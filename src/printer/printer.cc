@@ -65,10 +65,10 @@ void Printer::print_class(Class* klass) {
     out << "class " << klass->get_name() << ":\n";
     indent();
 
-    if (klass->variables_count() > 0) {
-        for (int i = 0; i < klass->variables_count(); ++i) {
+    if (klass->fields_count() > 0) {
+        for (int i = 0; i < klass->fields_count(); ++i) {
             print_indentation();
-            var = klass->get_variable(i);
+            var = klass->get_field(i);
             out << var->get_name() << " : ";
             print_type(var->get_type());
             out << '\n';        

@@ -3,7 +3,6 @@
 using namespace haard;
 
 Field::Field() {
-    type = nullptr;
     initial_value = nullptr;
 }
 
@@ -17,10 +16,4 @@ Expression *Field::get_initial_value() const {
 
 void Field::set_initial_value(Expression* value) {
     initial_value = value;
-}
-
-void Field::set_from_token(Token& token) {
-    line = token.get_line();
-    column = token.get_column();
-    name = token.get_lexeme();
 }

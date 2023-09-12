@@ -21,19 +21,12 @@ namespace haard {
         ~Class();
 
     public:
-        Variable* get_variable(int idx);
-
         int get_size_in_bytes();
         std::string get_qualified_name();
         std::string get_original();
 
         void set_from_token(Token& token);
-        void set_uid(int uid);
-
-        void add_variable(Variable* var);
         void calculate_variables_offset();
-
-        int variables_count();
 
         Function* get_constructor(int idx);
 
@@ -51,7 +44,6 @@ namespace haard {
     private:
         int remaining_pad;
         bool is_virtual_flag;
-        std::vector<Variable*> variables;
     };
 }
 

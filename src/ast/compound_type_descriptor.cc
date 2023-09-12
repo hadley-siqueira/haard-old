@@ -108,6 +108,10 @@ int CompoundTypeDescriptor::constructors_count() {
     return constructors.size();
 }
 
+int CompoundTypeDescriptor::fields_count() {
+    return fields.size();
+}
+
 void CompoundTypeDescriptor::add_field(Field* field) {
     fields.push_back(field);
 }
@@ -140,6 +144,14 @@ std::string CompoundTypeDescriptor::get_full_filepath() {
 
 std::string CompoundTypeDescriptor::get_relative_filepath() {
     return module->get_relative_path();
+}
+
+Field* CompoundTypeDescriptor::get_field(int idx) {
+    if (idx < fields_count()) {
+        return fields[idx];
+    }
+
+    return nullptr;
 }
 
 Function* CompoundTypeDescriptor::get_method(int idx) {

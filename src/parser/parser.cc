@@ -135,7 +135,7 @@ Class* Parser::parse_class() {
         if (lookahead(TK_DEF)) {
             klass->add_method(parse_function());
         } else if (lookahead(TK_ID)) {
-            klass->add_variable(parse_class_variable());
+            klass->add_field(parse_class_variable());
         } else if (lookahead(TK_AT)) {
             parse_annotation();
         } else if (match(TK_PASS)) {
@@ -343,8 +343,8 @@ TemplateHeader* Parser::parse_template_header() {
     return header;
 }
 
-Variable* Parser::parse_class_variable() {
-    Variable* var = new Variable();
+Field* Parser::parse_class_variable() {
+    Field* var = new Field();
 
     expect(TK_ID);
     var->set_from_token(matched);

@@ -47,6 +47,17 @@ void SemanticFirstPass::build_functions(Module* module) {
     }
 }
 
+void SemanticFirstPass::build_fields(CompoundTypeDescriptor* decl) {
+    enter_scope(decl->get_scope());
+
+    for (int i = 0; i < decl->fields_count(); ++i) {
+        std::cout << "def " << decl->get_field(i)->get_name() << '\n';
+        get_scope()->define_field(decl->get_field(i));
+    }
+
+    leave_scope();
+}
+
 void SemanticFirstPass::build_methods(CompoundTypeDescriptor* decl) {
     enter_scope(decl->get_scope());
 
@@ -104,6 +115,7 @@ void SemanticFirstPass::build_class(Class* decl) {
         log_info(info_define_class(decl));
     }
 
+    build_fields(decl);
     build_methods(decl);
 }
 

@@ -62,6 +62,7 @@ namespace haard {
         std::string get_full_filepath();
         std::string get_relative_filepath();
 
+        Field* get_field(int idx);
         Function* get_method(int idx);
 
         Function* get_destructor();
@@ -82,6 +83,7 @@ namespace haard {
 
         int methods_count();
         int constructors_count();
+        int fields_count();
 
         void add_field(Field* field);
         void add_method(Function* method);

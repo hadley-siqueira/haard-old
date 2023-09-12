@@ -1,0 +1,8 @@
+class Pair:
+    x : int
+    y : int
+
+def main : int
+    p = Pair()
+    a = p.x
+    return 0

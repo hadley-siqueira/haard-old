@@ -14,6 +14,8 @@ namespace haard {
         void build_classes(Module* module);
         void build_structs(Module* module);
         void build_functions(Module* module);
+
+        void build_fields(CompoundTypeDescriptor* decl);
         void build_methods(CompoundTypeDescriptor* decl);
 
         void build_import(Import* import);

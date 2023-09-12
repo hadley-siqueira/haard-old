@@ -111,6 +111,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_dereference((Dereference*) expr);
         break;
 
+    case EXPR_DOT:
+        build_dot((Dot*) expr);
+        break;
+
     case EXPR_ID:
         build_identifier((Identifier*) expr);
         break;
@@ -311,6 +315,43 @@ void SemanticSecondPass::build_dereference(Dereference* expr) {
 
     IndirectionType* pointer_type = (IndirectionType*) t;
     expr->set_type(pointer_type->get_subtype());
+}
+
+void SemanticSecondPass::build_dot(Dot* expr) {
+    build_expression(expr->get_left());
+
+    Identifier* id = (Identifier*) expr->get_right();
+    Type* type = expr->get_left()->get_type();
+
+    if (type->get_kind() == TYPE_NAMED) {
+        Scope* scope = type->get_scope();
+
+        if (scope) {
+            Symbol* sym = scope->resolve_field(id->get_name());
+            std::cout << scope->debug() << '\n';
+
+            if (sym) {
+                if (sym->get_type()) {
+                    if (sym->get_type()->get_kind() == TYPE_INT) {
+
+                    } else {
+                        std::cout << "NOOO2\n";
+                        exit(0);
+                    }
+                } else {
+                    std::cout << "NOOO\n" << sym->get_name() << '\n';
+                    exit(0);
+                }
+                expr->set_type(sym->get_type());
+            } else {
+                log_error_and_exit("semantic_second_pass: invalid member access 0");
+            }
+        } else {
+            log_error_and_exit("semantic_second_pass: invalid member access 1");
+        }
+    } else {
+        log_error_and_exit("semantic_second_pass: invalid member access 2");
+    }
 }
 
 void SemanticSecondPass::build_identifier(Identifier* expr) {

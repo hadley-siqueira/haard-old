@@ -7,21 +7,16 @@
 
 namespace haard {
     class Field : public Variable {
-        public:
-            Field();
-            virtual ~Field();
+    public:
+        Field();
+        virtual ~Field();
 
-        public:
-            Expression* get_initial_value() const;
-            void set_initial_value(Expression* value);
-            void set_from_token(Token& token);
+    public:
+        Expression* get_initial_value() const;
+        void set_initial_value(Expression* value);
 
     private:
-            int line;
-            int column;
-            std::string name;
-            Type* type;
-            Expression* initial_value;
+        Expression* initial_value;
     };
 }
 

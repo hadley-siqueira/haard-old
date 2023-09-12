@@ -14,17 +14,7 @@ Class::Class() {
 }
 
 Class::~Class() {
-    for (int i = 0; i < variables.size(); ++i) {
-        delete variables[i];
-    }
-}
 
-Variable* Class::get_variable(int idx) {
-    if (idx < variables_count()) {
-        return variables[idx];
-    }
-
-    return nullptr;
 }
 
 void Class::set_from_token(Token& token) {
@@ -33,12 +23,7 @@ void Class::set_from_token(Token& token) {
     set_column(token.get_column());
 }
 
-void Class::add_variable(Variable* var) {
-    variables.push_back(var);
-    var->set_kind(VAR_FIELD);
-}
-
-void Class::calculate_variables_offset() {
+void Class::calculate_variables_offset() {/*
     int size = 0;
     int offset = 0;
     int align = 0;
@@ -86,11 +71,7 @@ void Class::calculate_variables_offset() {
     }
 
     size_in_bytes = offset;
-    alignment = max_align;
-}
-
-int Class::variables_count() {
-    return variables.size();
+    alignment = max_align;*/
 }
 
 Function* Class::get_constructor(int idx) {
