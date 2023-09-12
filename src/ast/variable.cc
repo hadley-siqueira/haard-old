@@ -141,3 +141,11 @@ void Variable::set_offset(int value)
 {
     offset = value;
 }
+
+Expression* Variable::get_initial_value() const {
+    return initial_value;
+}
+
+void Variable::set_initial_value(Expression* value) {
+    initial_value = value;
+}

@@ -37,7 +37,6 @@ set(AST_SRC
     src/ast/annotation.cc
     src/ast/import.cc
     src/ast/compound_type_descriptor.cc
-    src/ast/field.cc
     src/ast/class.cc
     src/ast/struct.cc
     src/ast/union.cc

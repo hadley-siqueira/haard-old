@@ -7,7 +7,7 @@
 #include "ast/identifier.h"
 #include "ast/template_header.h"
 #include "ast/function.h"
-#include "ast/field.h"
+#include "ast/variable.h"
 #include "ast/annotation.h"
 #include "ast/named_type.h"
 
@@ -62,7 +62,7 @@ namespace haard {
         std::string get_full_filepath();
         std::string get_relative_filepath();
 
-        Field* get_field(int idx);
+        Variable* get_field(int idx);
         Function* get_method(int idx);
 
         Function* get_destructor();
@@ -85,7 +85,7 @@ namespace haard {
         int constructors_count();
         int fields_count();
 
-        void add_field(Field* field);
+        void add_field(Variable *field);
         void add_method(Function* method);
 
     protected:
@@ -105,7 +105,7 @@ namespace haard {
         Type* super_type;
         Module* module;
         Scope* scope;
-        std::vector<Field*> fields;
+        std::vector<Variable*> fields;
         std::vector<Function*> methods;
         std::vector<Function*> constructors;
         Function* destructor;

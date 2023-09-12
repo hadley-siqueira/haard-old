@@ -112,7 +112,7 @@ int CompoundTypeDescriptor::fields_count() {
     return fields.size();
 }
 
-void CompoundTypeDescriptor::add_field(Field* field) {
+void CompoundTypeDescriptor::add_field(Variable* field) {
     fields.push_back(field);
 }
 
@@ -146,7 +146,7 @@ std::string CompoundTypeDescriptor::get_relative_filepath() {
     return module->get_relative_path();
 }
 
-Field* CompoundTypeDescriptor::get_field(int idx) {
+Variable* CompoundTypeDescriptor::get_field(int idx) {
     if (idx < fields_count()) {
         return fields[idx];
     }

@@ -34,11 +34,11 @@ namespace haard {
         Enum* parse_enum();
         Union* parse_union();
 
-        Field* parse_field();
-        Field* parse_enum_field();
+        Variable* parse_field();
+        Variable* parse_enum_field();
 
         TemplateHeader* parse_template_header();
-        Field* parse_class_variable();
+        Variable* parse_class_variable();
         Function* parse_function();
         void parse_parameters(Function* function);
         Type* parse_type();

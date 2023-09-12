@@ -87,7 +87,7 @@ SymbolDescriptor* Scope::define_local_variable(Variable* obj) {
     return define(SYM_VARIABLE, obj->get_name(), obj);
 }
 
-SymbolDescriptor* Scope::define_field(Field* obj) {
+SymbolDescriptor* Scope::define_field(Variable* obj) {
     return define(SYM_CLASS_VARIABLE, obj->get_name(), obj);
 }
 

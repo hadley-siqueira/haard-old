@@ -32,7 +32,7 @@ namespace haard {
             SymbolDescriptor* define_template(NamedType* type);
             SymbolDescriptor* define_parameter(Variable* param);
             SymbolDescriptor* define_local_variable(Variable* obj);
-            SymbolDescriptor* define_field(Field* obj);
+            SymbolDescriptor* define_field(Variable *obj);
 
             bool has_parent();
             bool has_siblings();

@@ -40,6 +40,9 @@ namespace haard {
         int get_offset() const;
         void set_offset(int value);
 
+        Expression* get_initial_value() const;
+        void set_initial_value(Expression* value);
+
     private:
         int uid;
         int line;
@@ -49,6 +52,7 @@ namespace haard {
         int kind;
         std::string name;
         Type* type;
+        Expression* initial_value;
     };
 }
 

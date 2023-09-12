@@ -34,7 +34,6 @@ void SymbolDescriptor::set_descriptor(void* value) {
 
 Type* SymbolDescriptor::get_type() {
     Variable* var = (Variable*) descriptor;
-    Field* field = (Field*) descriptor;
     Class* klass = (Class*) descriptor;
     Function* func = (Function*) descriptor;
 
@@ -50,10 +49,8 @@ Type* SymbolDescriptor::get_type() {
 
     case SYM_PARAMETER:
     case SYM_VARIABLE:
-        return var->get_type();
-
     case SYM_CLASS_VARIABLE:
-        return field->get_type();
+        return var->get_type();
     }
 
     return nullptr;
@@ -138,7 +135,6 @@ std::string SymbolDescriptor::get_qualified_name() {
 
     Function* func = (Function*) descriptor;
     Variable* var = (Variable*) descriptor;
-    Field* field = (Field*) descriptor;
     NamedType* type = (NamedType*) descriptor;
     CompoundTypeDescriptor* type_decl = (CompoundTypeDescriptor*) descriptor;
 
@@ -157,11 +153,8 @@ std::string SymbolDescriptor::get_qualified_name() {
 
     case SYM_PARAMETER:
     case SYM_VARIABLE:
-        ss << var->get_unique_name();
-        break;
-
     case SYM_CLASS_VARIABLE:
-        ss << field->get_unique_name();
+        ss << var->get_unique_name();
         break;
 
     case SYM_TEMPLATE:

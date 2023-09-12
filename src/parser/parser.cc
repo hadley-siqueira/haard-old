@@ -296,8 +296,8 @@ Union* Parser::parse_union() {
     return data;
 }
 
-Field *Parser::parse_field() {
-    Field* field = new Field();
+Variable* Parser::parse_field() {
+    Variable* field = new Variable();
 
     expect(TK_ID);
     field->set_from_token(matched);
@@ -312,8 +312,8 @@ Field *Parser::parse_field() {
     return field;
 }
 
-Field* Parser::parse_enum_field() {
-    Field* field = new Field();
+Variable* Parser::parse_enum_field() {
+    Variable* field = new Variable();
 
     expect(TK_ID);
     field->set_from_token(matched);
@@ -343,8 +343,8 @@ TemplateHeader* Parser::parse_template_header() {
     return header;
 }
 
-Field* Parser::parse_class_variable() {
-    Field* var = new Field();
+Variable* Parser::parse_class_variable() {
+    Variable* var = new Variable();
 
     expect(TK_ID);
     var->set_from_token(matched);
