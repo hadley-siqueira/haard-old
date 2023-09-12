@@ -23,6 +23,8 @@ namespace haard {
 
         void build_assignment(Assignment* expr);
 
+        void build_plus(Plus* expr);
+
         void build_call(Call* expr);
         void build_function_call(Call* expr);
         void build_method_call(Call* expr);

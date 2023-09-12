@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "defs.h"
 #include "ast/ast.h"
 #include "printer/printer.h"
@@ -32,6 +34,7 @@ void SymbolDescriptor::set_descriptor(void* value) {
 
 Type* SymbolDescriptor::get_type() {
     Variable* var = (Variable*) descriptor;
+    Field* field = (Field*) descriptor;
     Class* klass = (Class*) descriptor;
     Function* func = (Function*) descriptor;
 
@@ -47,8 +50,10 @@ Type* SymbolDescriptor::get_type() {
 
     case SYM_PARAMETER:
     case SYM_VARIABLE:
-    case SYM_CLASS_VARIABLE:
         return var->get_type();
+
+    case SYM_CLASS_VARIABLE:
+        return field->get_type();
     }
 
     return nullptr;
@@ -112,7 +117,15 @@ std::string SymbolDescriptor::to_str() {
         break;
 
     case SYM_CLASS_VARIABLE:
-        ss << "cvar";
+        ss << "cvar(";
+
+        if (get_type()) {
+            Printer p;
+            p.print_type(get_type());
+            ss << p.to_str();
+        }
+
+        ss << ")";
         break;
     }
 
@@ -125,6 +138,7 @@ std::string SymbolDescriptor::get_qualified_name() {
 
     Function* func = (Function*) descriptor;
     Variable* var = (Variable*) descriptor;
+    Field* field = (Field*) descriptor;
     NamedType* type = (NamedType*) descriptor;
     CompoundTypeDescriptor* type_decl = (CompoundTypeDescriptor*) descriptor;
 
@@ -143,8 +157,11 @@ std::string SymbolDescriptor::get_qualified_name() {
 
     case SYM_PARAMETER:
     case SYM_VARIABLE:
-    case SYM_CLASS_VARIABLE:
         ss << var->get_unique_name();
+        break;
+
+    case SYM_CLASS_VARIABLE:
+        ss << field->get_unique_name();
         break;
 
     case SYM_TEMPLATE:

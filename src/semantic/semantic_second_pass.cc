@@ -99,6 +99,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_assignment((Assignment*) expr);
         break;
 
+    case EXPR_PLUS:
+        build_plus((Plus*) expr);
+        break;
+
     case EXPR_CALL:
         build_call((Call*) expr);
         break;
@@ -150,6 +154,13 @@ void SemanticSecondPass::build_assignment(Assignment* expr) {
     if (is_new_variable(expr)) {
         create_variable(expr);
     }
+}
+
+void SemanticSecondPass::build_plus(Plus* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    expr->set_type(expr->get_left()->get_type());
 }
 
 void SemanticSecondPass::build_call(Call* expr) {
@@ -328,21 +339,14 @@ void SemanticSecondPass::build_dot(Dot* expr) {
 
         if (scope) {
             Symbol* sym = scope->resolve_field(id->get_name());
-            std::cout << scope->debug() << '\n';
 
             if (sym) {
                 if (sym->get_type()) {
-                    if (sym->get_type()->get_kind() == TYPE_INT) {
-
-                    } else {
-                        std::cout << "NOOO2\n";
-                        exit(0);
-                    }
+                    expr->set_type(sym->get_type());
                 } else {
                     std::cout << "NOOO\n" << sym->get_name() << '\n';
                     exit(0);
                 }
-                expr->set_type(sym->get_type());
             } else {
                 log_error_and_exit("semantic_second_pass: invalid member access 0");
             }

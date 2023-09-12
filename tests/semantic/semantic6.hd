@@ -1,8 +1,8 @@
 class Pair:
-    x : int
+    x : double
     y : int
 
 def main : int
     p = Pair()
-    a = p.x
+    a = p.x + p.x
     return 0

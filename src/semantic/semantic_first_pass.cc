@@ -51,8 +51,8 @@ void SemanticFirstPass::build_fields(CompoundTypeDescriptor* decl) {
     enter_scope(decl->get_scope());
 
     for (int i = 0; i < decl->fields_count(); ++i) {
-        std::cout << "def " << decl->get_field(i)->get_name() << '\n';
         get_scope()->define_field(decl->get_field(i));
+        link_type(decl->get_field(i)->get_type());
     }
 
     leave_scope();
