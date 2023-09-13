@@ -10,7 +10,13 @@ def sum : double
 
     return 0.0
 
-class Pair:
+class Base:
+    z : int
+
+    def m1 : int
+        return 0
+
+class Pair(Base):
     x : int
     y : int
 
@@ -21,6 +27,7 @@ class Pair:
 
     def test : void
         r = reset()
+        g = m1()
 
 def main : int
     a = sum(2, 3)

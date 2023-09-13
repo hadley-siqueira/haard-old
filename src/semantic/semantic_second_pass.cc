@@ -510,6 +510,10 @@ void SemanticSecondPass::build_simple_call(Call* expr) {
         log_error_and_exit("second pass: no match signature");
     }
 
+    set_call_type(expr, sym, idx);
+}
+
+void SemanticSecondPass::set_call_type(Call *expr, Symbol *sym, int idx) {
     Function* function = (Function*) sym->get_descriptor(idx)->get_descriptor();
     expr->set_function(function);
     expr->set_type(function->get_return_type());

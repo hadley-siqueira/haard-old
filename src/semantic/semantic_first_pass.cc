@@ -80,6 +80,11 @@ void SemanticFirstPass::build_class(Class* decl) {
 
     enter_scope(decl->get_scope());
     build_template_header(decl->get_template_header());
+    if (decl->get_super_type()) {
+        Type* t = decl->get_super_type();
+        link_type(t);
+        decl->get_scope()->set_super(t->get_scope());
+    }
     leave_scope();
 
     std::string name = decl->get_name();

@@ -43,7 +43,6 @@ namespace haard {
         void build_literal_float(Literal* expr);
         void build_literal_double(Literal* expr);
 
-
     private:
         bool is_new_variable(Assignment* expr);
         bool is_simple_call(Call* expr);
@@ -53,6 +52,7 @@ namespace haard {
         int find_best_match(Symbol* sym, ExpressionList* args);
         bool compare_match(SymbolDescriptor* desc, ExpressionList* args);
         void build_simple_call(Call* expr);
+        void set_call_type(Call* expr, Symbol* sym, int idx);
 
     };
 }
