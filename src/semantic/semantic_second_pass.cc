@@ -166,8 +166,8 @@ void SemanticSecondPass::build_plus(Plus* expr) {
 void SemanticSecondPass::build_call(Call* expr) {
     build_expression_list(expr->get_arguments());
 
-    if (is_function_call(expr)) {
-        build_function_call(expr);
+    if (is_simple_call(expr)) {
+        build_simple_call(expr);
     } else if (is_method_call(expr)) {
         build_method_call(expr);
     } else if (is_constructor_call(expr)) {
@@ -410,7 +410,11 @@ bool SemanticSecondPass::is_new_variable(Assignment* expr) {
     return sym == nullptr;
 }
 
-bool SemanticSecondPass::is_function_call(Call* expr) {
+bool SemanticSecondPass::is_simple_call(Call* expr) {
+    return expr->get_object()->get_kind() == EXPR_ID;
+}
+
+bool SemanticSecondPass::is_method_call(Call* expr) {
     Expression* obj = expr->get_object();
     int kind = obj->get_kind();
 
@@ -425,20 +429,17 @@ bool SemanticSecondPass::is_function_call(Call* expr) {
         }
 
         SymbolDescriptor* desc = sym->get_descriptor(0);
-        return desc->get_kind() == SYM_FUNCTION;
-    }
+        return desc->get_kind() == SYM_METHOD;
+    } else if (kind == EXPR_DOT) {
+        Dot* member = (Dot*) obj;
 
-    return false;
-}
+        build_expression(member->get_left());
 
-bool SemanticSecondPass::is_method_call(Call* expr) {
-    Expression* obj = expr->get_object();
-    int kind = obj->get_kind();
+        Identifier* id = (Identifier*) member->get_right();
+        Type* type = member->get_left()->get_type();
+        Scope* scope = type->get_scope();
 
-    if (kind == EXPR_ID) {
-        Identifier* id = (Identifier*) expr->get_object();
-
-        Symbol* sym = get_scope()->resolve(id->get_name());
+        Symbol* sym = scope->resolve_field(id->get_name());
 
         if (sym == nullptr) {
             log_info(get_scope()->debug());
@@ -488,4 +489,61 @@ void SemanticSecondPass::create_variable(Assignment* expr) {
     ss << "creating local variable <white>" + id->get_name() + ":";
     ss << var->get_type()->to_str() + "</white>";
     log_info(ss.str());
+}
+// foo
+// method() -> inside the class
+// Class() -> call constructor
+
+void SemanticSecondPass::build_simple_call(Call* expr) {
+    Identifier* id = (Identifier*) expr->get_object();
+    ExpressionList* args = expr->get_arguments();
+
+    Symbol* sym = get_scope()->resolve(id->get_name());
+
+    if (sym == nullptr) {
+        log_error_and_exit("second pass: not in scope " + id->get_name());
+    }
+
+    int idx = find_best_match(sym, args);
+
+    if (idx < 0) {
+        log_error_and_exit("second pass: no match signature");
+    }
+
+    Function* function = (Function*) sym->get_descriptor(idx)->get_descriptor();
+    expr->set_function(function);
+    expr->set_type(function->get_return_type());
+}
+
+int SemanticSecondPass::find_best_match(Symbol* sym, ExpressionList* args) {
+    for (int i = 0; i < sym->descriptors_count(); ++i) {
+        if (compare_match(sym->get_descriptor(i), args)) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+bool SemanticSecondPass::compare_match(SymbolDescriptor* desc, ExpressionList* args) {
+    Function* function = (Function*) desc->get_descriptor();
+
+    if (function->parameters_count() < args->expressions_count()) {
+        return false;
+    }
+
+    for (int i = 0; i < args->expressions_count(); ++i) {
+        Type* param_type = function->get_parameter(i)->get_type();
+        Type* arg_type = args->get_expression(i)->get_type();
+
+        if (!param_type->equal(arg_type)) {
+            return false;
+        }
+    }
+
+    if (function->parameters_count() > args->expressions_count()) {
+        // TODO: need to handle default parameters?
+    }
+
+    return true;
 }

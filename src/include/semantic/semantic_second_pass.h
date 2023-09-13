@@ -46,10 +46,13 @@ namespace haard {
 
     private:
         bool is_new_variable(Assignment* expr);
-        bool is_function_call(Call* expr);
+        bool is_simple_call(Call* expr);
         bool is_method_call(Call* expr);
         bool is_constructor_call(Call* expr);
         void create_variable(Assignment* expr);
+        int find_best_match(Symbol* sym, ExpressionList* args);
+        bool compare_match(SymbolDescriptor* desc, ExpressionList* args);
+        void build_simple_call(Call* expr);
 
     };
 }

@@ -1,0 +1,28 @@
+def sum : int
+    @a : int
+    @b : int
+
+    return 0
+
+def sum : double
+    @a : double
+    @b : double
+
+    return 0.0
+
+class Pair:
+    x : int
+    y : int
+
+    def reset : int
+        x = 0
+        y = 0
+        return 0
+
+    def test : void
+        r = reset()
+
+def main : int
+    a = sum(2, 3)
+    b = sum(2.0, 3.0)
+    return 0

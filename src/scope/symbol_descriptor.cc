@@ -58,7 +58,6 @@ Type* SymbolDescriptor::get_type() {
 
 std::string SymbolDescriptor::to_str() {
     std::stringstream ss;
-    NamedType* named = (NamedType*) descriptor;
 
     switch (kind) {
     case SYM_CLASS:

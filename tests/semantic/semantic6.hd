@@ -2,7 +2,11 @@ class Pair:
     x : double
     y : int
 
+    def get_y : int
+        return y
+
 def main : int
     p = Pair()
     a = p.x + p.x
+    b = p.get_y()
     return 0
