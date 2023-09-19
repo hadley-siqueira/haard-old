@@ -154,6 +154,8 @@ void SemanticSecondPass::build_assignment(Assignment* expr) {
     if (is_new_variable(expr)) {
         create_variable(expr);
     }
+
+    expr->set_type(expr->get_right()->get_type());
 }
 
 void SemanticSecondPass::build_plus(Plus* expr) {
@@ -172,46 +174,6 @@ void SemanticSecondPass::build_call(Call* expr) {
         build_method_call(expr);
     } else if (is_constructor_call(expr)) {
         build_constructor_call(expr);
-    }
-}
-
-void SemanticSecondPass::build_function_call(Call* expr) {
-    bool found = false;
-    Function* best = nullptr;
-    Identifier* id = (Identifier*) expr->get_object();
-    Function* f = nullptr;
-
-    Symbol* sym = get_scope()->resolve(id->get_name());
-
-    for (int i = 0; i < sym->descriptors_count(); ++i) {
-        SymbolDescriptor* desc = sym->get_descriptor(i);
-        f = (Function*) desc->get_descriptor();
-
-        if (f->parameters_count() == expr->get_arguments()->expressions_count()) {
-            bool flag = true;
-
-            for (int j = 0; j < expr->get_arguments()->expressions_count(); ++j) {
-                Type* t1 = expr->get_arguments()->get_expression(j)->get_type();
-                Type* t2 = f->get_parameter(j)->get_type();
-
-                if (!t1->equal(t2)) {
-                    flag = false;
-                }
-            }
-
-            if (flag) {
-                found = true;
-                best = f;
-            }
-        }
-    }
-
-    if (found) {
-        expr->set_function(best);
-        expr->set_type(best->get_return_type());
-        log_info("function: " + best->get_qualified_name());
-    } else {
-        log_error_and_exit("second pass: couldn't resolve function call " + id->get_name());
     }
 }
 
@@ -489,6 +451,7 @@ void SemanticSecondPass::create_variable(Assignment* expr) {
     ss << "creating local variable <white>" + id->get_name() + ":";
     ss << var->get_type()->to_str() + "</white>";
     log_info(ss.str());
+    expr->set_initial_value(true);
 }
 // foo
 // method() -> inside the class

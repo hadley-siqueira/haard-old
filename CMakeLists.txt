@@ -162,6 +162,7 @@ set(IR_SRC
 
 set(PRINTER_SRC
     src/printer/printer.cc
+    src/printer/cpp_printer.cc
     #src/printer/ir_printer.cc
 )
 

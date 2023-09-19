@@ -1,0 +1,14 @@
+def sum : int
+    @a : int
+    @b : int
+
+    c = a + b
+    c = a + b
+
+    return a + b
+
+def main : int
+    @argc : int
+    @argv : char**
+
+    return 0
