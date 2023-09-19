@@ -35,7 +35,6 @@ namespace haard {
         Scope* get_scope();
         std::string get_qualified_name();
         std::string get_original();
-        std::string get_cpp_name();
 
         void set_line(int line);
         void set_column(int column);

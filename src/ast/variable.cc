@@ -116,29 +116,11 @@ std::string Variable::get_unique_name() {
     return ss.str();
 }
 
-Variable* Variable::clone() {
-    Variable* other = new Variable();
-
-    other->uid = uid;
-    other->line = line;
-    other->column = column;
-    other->constant = constant;
-    other->name = name;
-
-    if (type) {
-        other->type = type->clone();
-    }
-
-    return other;
-}
-
-int Variable::get_offset() const
-{
+int Variable::get_offset() const {
     return offset;
 }
 
-void Variable::set_offset(int value)
-{
+void Variable::set_offset(int value) {
     offset = value;
 }
 

@@ -228,38 +228,3 @@ Symbol* SymbolDescriptor::get_symbol() const {
 void SymbolDescriptor::set_symbol(Symbol* value) {
     symbol = value;
 }
-
-std::string SymbolDescriptor::get_cpp_name() {
-    std::stringstream ss;
-
-    Function* func = (Function*) descriptor;
-    Variable* var = (Variable*) descriptor;
-    NamedType* type = (NamedType*) descriptor;
-    CompoundTypeDescriptor* type_decl = (CompoundTypeDescriptor*) descriptor;
-
-    switch (kind) {
-    case SYM_CLASS:
-    case SYM_ENUM:
-    case SYM_STRUCT:
-    case SYM_UNION:
-        ss << type_decl->get_qualified_name();
-        break;
-
-    case SYM_FUNCTION:
-    case SYM_METHOD:
-        ss << func->get_cpp_name();
-        break;
-
-    case SYM_PARAMETER:
-    case SYM_VARIABLE:
-    case SYM_CLASS_VARIABLE:
-        ss << var->get_unique_name();
-        break;
-
-    case SYM_TEMPLATE:
-        ss << type->get_name();
-        break;
-    }
-
-    return ss.str();
-}

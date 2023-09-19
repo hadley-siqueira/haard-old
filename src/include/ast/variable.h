@@ -35,8 +35,6 @@ namespace haard {
         int get_kind();
         std::string get_unique_name();
 
-        Variable* clone();
-
         int get_offset() const;
         void set_offset(int value);
 

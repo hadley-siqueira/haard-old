@@ -43,6 +43,7 @@ namespace haard {
 
     private:
         int remaining_pad;
+        int uid;
         bool is_virtual_flag;
     };
 }

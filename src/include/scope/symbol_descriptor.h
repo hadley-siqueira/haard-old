@@ -31,8 +31,6 @@ namespace haard {
         Symbol* get_symbol() const;
         void set_symbol(Symbol* value);
 
-        std::string get_cpp_name();
-
     private:
         int kind;
         void* descriptor;

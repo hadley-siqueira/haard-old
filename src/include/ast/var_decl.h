@@ -7,20 +7,19 @@
 
 namespace haard {
     class VarDeclaration : public Statement {
-        public:
-            VarDeclaration();
-            ~VarDeclaration();
+    public:
+        VarDeclaration();
+        ~VarDeclaration();
 
-            Variable* get_variable();
-            Expression* get_expression();
+        Variable* get_variable();
+        Expression* get_expression();
 
-            void set_variable(Variable* var);
-            void set_expression(Expression* expr);
-            Statement* clone();
+        void set_variable(Variable* var);
+        void set_expression(Expression* expr);
 
-        private:
-            Variable* var;
-            Expression* expr;
+    private:
+        Variable* var;
+        Expression* expr;
     };
 }
 

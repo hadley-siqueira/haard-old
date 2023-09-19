@@ -53,6 +53,8 @@ void SemanticFirstPass::build_fields(CompoundTypeDescriptor* decl) {
     for (int i = 0; i < decl->fields_count(); ++i) {
         get_scope()->define_field(decl->get_field(i));
         link_type(decl->get_field(i)->get_type());
+        decl->get_field(i)->set_uid(i);
+        decl->get_field(i)->set_kind(VAR_FIELD);
     }
 
     leave_scope();
@@ -135,6 +137,7 @@ void SemanticFirstPass::build_function(Function* function) {
 
     build_template_header(function->get_template_header());
     build_parameters(function);
+    link_type(function->get_return_type());
 
     leave_scope();
 

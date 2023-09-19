@@ -8,7 +8,6 @@
 #include <dirent.h>
 #include "driver/driver.h"
 #include "printer/printer.h"
-#include "printer/cpp_printer.h"
 //#include "scope/old_scope_builder.h"
 //#include "ir/ir_builder.h"
 #include "vm/irvm.h"
@@ -29,7 +28,6 @@ Driver::Driver() {
     help_flag = false;
     show_logs_flag = false;
     show_ir_flag = false;
-    generate_cpp_flag = false;
 }
 
 Driver::~Driver() {
@@ -54,10 +52,6 @@ void Driver::run() {
     semantic_analysis();
     check_for_errors();
     log_info("ending semantic analysis...");
-
-    if (generate_cpp_flag) {
-        generate_cpp();
-    }
 
     log_info("starting ir generation...");
    // ir_generation();
@@ -106,8 +100,6 @@ void Driver::set_flags(int argc, char* argv[]) {
             show_logs_flag = true;
         } else if (strcmp(argv[i], "--show-ir") == 0) {
             show_ir_flag = true;
-        } else if (strcmp(argv[i], "--cpp") == 0) {
-            generate_cpp_flag = true;
         }
     }
 }
@@ -222,14 +214,6 @@ Module* Driver::parse_file(std::string path) {
 
 void Driver::print_modules() {
     Printer printer;
-
-    printer.print_modules(modules);
-    std::cout << printer.to_str();
-    exit(0);
-}
-
-void Driver::generate_cpp() {
-    CppPrinter printer;
 
     printer.print_modules(modules);
     std::cout << printer.to_str();

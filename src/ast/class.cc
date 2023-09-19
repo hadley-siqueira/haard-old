@@ -8,9 +8,12 @@
 
 using namespace haard;
 
+int class_counter = 0;
+
 Class::Class() {
     is_virtual_flag = false;
     set_kind(DECL_CLASS);
+    uid = class_counter++;
 }
 
 Class::~Class() {

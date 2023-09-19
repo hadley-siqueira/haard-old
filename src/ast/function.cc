@@ -128,13 +128,6 @@ std::string Function::get_original() {
     return buffer;
 }
 
-std::string Function::get_cpp_name() {
-    std::stringstream ss;
-
-    ss << "f" << get_uid() << "_" << get_name();
-    return ss.str();
-}
-
 void Function::set_line(int line) {
     this->line = line;
 }
