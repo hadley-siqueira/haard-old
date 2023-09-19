@@ -1,9 +1,13 @@
+import t1
+
 def sum : int
     @a : int
     @b : int
 
     c = a + b
     c = a + b
+    v = 0 + 1
+    k = 0.1
 
     return a + b
 

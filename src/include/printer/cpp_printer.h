@@ -14,7 +14,6 @@ namespace haard {
         std::string to_str();
         void print_modules(Modules* modules);
         void print_module(Module* module);
-        void print_import(Import* import);
         void print_class(Class* klass);
         void print_function(Function* function);
         void print_type(Type* type);
@@ -135,11 +134,13 @@ namespace haard {
         void print_indentation();
         void print_headers();
         void print_main_function();
-        void print_function_uid(Function* function);
 
     private:
         int indent_c;
-        std::stringstream out;
+        std::stringstream* out;
+        std::stringstream headers;
+        std::stringstream function_signatures;
+        std::stringstream body;
         int function_counter;
         Function* main_function;
         std::map<Function*, int> functions_map;

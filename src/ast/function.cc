@@ -5,6 +5,8 @@
 
 using namespace haard;
 
+int uid_counter = 0;
+
 Function::Function() {
     return_type = nullptr;
     statements = nullptr;
@@ -16,6 +18,7 @@ Function::Function() {
     constructor_flag = false;
     destructor_flag = false;
     template_flag = false;
+    uid = uid_counter++;
 }
 
 Function::~Function() {
@@ -123,6 +126,13 @@ std::string Function::get_original() {
 
     file.close();
     return buffer;
+}
+
+std::string Function::get_cpp_name() {
+    std::stringstream ss;
+
+    ss << "f" << get_uid() << "_" << get_name();
+    return ss.str();
 }
 
 void Function::set_line(int line) {

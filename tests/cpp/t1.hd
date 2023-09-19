@@ -1,0 +1,9 @@
+def print : void
+    @a : int
+
+    syscall(a)
+
+def syscall : u64
+    @value : int
+
+    return 0

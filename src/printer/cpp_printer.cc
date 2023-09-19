@@ -10,10 +10,16 @@ CppPrinter::CppPrinter() {
 }
  
 std::string CppPrinter::to_str() {
-    return out.str();
+    std::stringstream final;
+
+    final << headers.str();
+    final << function_signatures.str() << '\n';
+    final << out->str();
+    return final.str();
 }
 
 void CppPrinter::print_modules(Modules* modules) {
+    out = &body;
     print_headers();
 
     for (int i = 0; i < modules->modules_count(); ++i) {
@@ -24,41 +30,14 @@ void CppPrinter::print_modules(Modules* modules) {
 }
 
 void CppPrinter::print_module(Module* module) {
-    if (module->import_count() > 0) {
-        for (int i = 0; i < module->import_count(); ++i) {
-            print_import(module->get_import(i));
-            out << '\n';
-        }
-
-        out << '\n';
-    }
-
     for (int i = 0; i < module->functions_count(); ++i) {
         print_function(module->get_function(i));
-        out << '\n';
+        *out << '\n';
     }
 
     for (int i = 0;i < module->classes_count(); ++i) {
         print_class(module->get_class(i));
-        out << '\n';
-    }
-}
-            
-void CppPrinter::print_import(Import* import) {
-    int i;
-
-    out << "import ";
-
-    if (import->path_count() > 0) {
-        for (i = 0; i < import->path_count() - 1; ++i) {
-            out << import->get_path(i) << '.';
-        }
-
-        out << import->get_path(i);
-    }
-
-    if (import->has_alias()) {
-        out << " as " << import->get_alias();
+        *out << '\n';
     }
 }
 
@@ -67,28 +46,28 @@ void CppPrinter::print_class(Class* klass) {
 
     print_indentation();
 
-    out << "class " << klass->get_name() << ":\n";
+    *out << "class " << klass->get_name() << ":\n";
     indent();
 
     if (klass->fields_count() > 0) {
         for (int i = 0; i < klass->fields_count(); ++i) {
             print_indentation();
             var = klass->get_field(i);
-            out << var->get_name() << " : ";
+            *out << var->get_name() << " : ";
             print_type(var->get_type());
-            out << '\n';        
+            *out << '\n';
         }
 
-        out << '\n';
+        *out << '\n';
     }
 
     if (klass->methods_count() > 0) {
         for (int i = 0; i < klass->methods_count(); ++i) {
             print_function(klass->get_method(i));
-            out << '\n';
+            *out << '\n';
         }
 
-        out << '\n';
+        *out << '\n';
     }
 
     dedent();
@@ -97,6 +76,11 @@ void CppPrinter::print_class(Class* klass) {
 void CppPrinter::print_function(Function* function) {
     if (functions_map.count(function) == 0) {
         functions_map[function] = function_counter++;
+        auto old = out;
+        out = &function_signatures;
+        print_function_signature(function);
+        *out << ";\n";
+        out = old;
     } else {
         return;
     }
@@ -108,10 +92,10 @@ void CppPrinter::print_function(Function* function) {
     }
 
     print_function_signature(function);
-    out << " {\n";
+    *out << " {\n";
 
     if (function->get_template_header()) {
-        out << function->get_template_header()->to_str();
+        *out << function->get_template_header()->to_str();
     }
 
     indent();
@@ -119,7 +103,7 @@ void CppPrinter::print_function(Function* function) {
     print_compound_statement(function->get_statements());
 
     dedent();
-    out << "}\n";
+    *out << "}\n";
 }
 
 void CppPrinter::print_type(Type* type) {
@@ -155,33 +139,33 @@ void CppPrinter::print_type(Type* type) {
     case TYPE_DOUBLE:
     case TYPE_STR:
     case TYPE_NAMED:
-        out << type->to_str();
+        *out << type->to_str();
         break;
 
     case TYPE_ARRAY:
         print_type(al->get_subtype());
 
-        out << "[";
+        *out << "[";
 
         if (al->get_expression() != nullptr) {
             print_expression(al->get_expression());
         }
 
-        out << "]";
+        *out << "]";
         break;
 
     case TYPE_LIST:
-        out << "[";
+        *out << "[";
         print_type(al->get_subtype());
-        out << "]";
+        *out << "]";
         break;
 
     case TYPE_HASH:
-        out << "{";
+        *out << "{";
         print_type(hs->get_key_type());
-        out << " : ";
+        *out << " : ";
         print_type(hs->get_value_type());
-        out << "}";
+        *out << "}";
         break;
 
     case TYPE_FUNCTION:
@@ -194,18 +178,18 @@ void CppPrinter::print_type(Type* type) {
 
     case TYPE_POINTER:
         print_type(pr->get_subtype());
-        out << "*";
+        *out << "*";
         break;
 
     case TYPE_REFERENCE:
         print_type(pr->get_subtype());
-        out << "&";
+        *out << "&";
         break;
 
     case TYPE_PARENTHESIS:
-        out << "(";
+        *out << "(";
         print_type(pr->get_subtype());
-        out << ")";
+        *out << ")";
 
     default:
         break;
@@ -217,7 +201,7 @@ void CppPrinter::print_type_list(std::string oper, TypeList* tlist) {
 
     for (i = 0; i < tlist->types_count() - 1; ++i) {
         print_type(tlist->get_type(i));
-        out << oper;
+        *out << oper;
     }
 
     print_type(tlist->get_type(i));
@@ -285,9 +269,9 @@ void CppPrinter::print_statement(Statement* statement) {
 void CppPrinter::print_if(If* stmt) {
     print_indentation();
 
-    out << "if ";
+    *out << "if ";
     print_expression(stmt->get_condition());
-    out << ":\n";
+    *out << ":\n";
     indent();
     print_statement(stmt->get_true_statements());
     dedent();
@@ -300,9 +284,9 @@ void CppPrinter::print_if(If* stmt) {
 void CppPrinter::print_elif(Elif* stmt) {
     print_indentation();
 
-    out << "elif ";
+    *out << "elif ";
     print_expression(stmt->get_condition());
-    out << ":\n";
+    *out << ":\n";
     indent();
     print_statement(stmt->get_true_statements());
     dedent();
@@ -315,7 +299,7 @@ void CppPrinter::print_elif(Elif* stmt) {
 void CppPrinter::print_else(Else* stmt) {
     print_indentation();
 
-    out << "else:\n";
+    *out << "else:\n";
     indent();
     print_statement(stmt->get_statements());
     dedent();
@@ -323,48 +307,48 @@ void CppPrinter::print_else(Else* stmt) {
 
 void CppPrinter::print_while_statement(While* statement) {
     print_indentation();
-    out << "while ";
+    *out << "while ";
     print_expression(statement->get_condition());
-    out << ":\n";
+    *out << ":\n";
     indent();
     print_compound_statement(statement->get_statements());
     dedent();
-    out << '\n';
+    *out << '\n';
 }
 
 void CppPrinter::print_for_statement(ForStatement* statement) {
     print_indentation();
-    out << "for ";
+    *out << "for ";
 
     if (statement->get_kind() == STMT_FOR) {
         //print_expression(statement->get_initialization());
         DBG; exit(0);
-        out << "; ";
+        *out << "; ";
         print_expression(statement->get_condition());
-        out << "; ";
+        *out << "; ";
         //print_expression(statement->get_increment());
         DBG; exit(0);
     } else {
         print_expression(statement->get_condition());
     }
 
-    out << ":\n";
+    *out << ":\n";
     indent();
     print_compound_statement(statement->get_statements());
     dedent();
-    out << '\n';
+    *out << '\n';
 }
 
 void CppPrinter::print_jump_statement(std::string op, JumpStatement* statement) {
     print_indentation();
-    out << op;
+    *out << op;
 
     if (statement->get_expression() != nullptr) {
-        out << ' ';
+        *out << ' ';
         print_expression(statement->get_expression());
     }
 
-    out << ";\n";
+    *out << ";\n";
 }
 
 void CppPrinter::print_compound_statement(CompoundStatement* statement) {
@@ -376,7 +360,7 @@ void CppPrinter::print_compound_statement(CompoundStatement* statement) {
 void CppPrinter::print_expression_statement(ExpressionStatement* statement) {
     print_indentation();
     print_expression(statement->get_expression());
-    out << ";\n";
+    *out << ";\n";
 }
 
 void CppPrinter::print_variable_declaration(VarDeclaration* decl) {
@@ -384,20 +368,20 @@ void CppPrinter::print_variable_declaration(VarDeclaration* decl) {
 
     var = decl->get_variable();
     print_indentation();
-    out << "var ";
-    out << var->get_name();
+    *out << "var ";
+    *out << var->get_name();
 
     if (var->get_type() != nullptr) {
-        out << " : ";
+        *out << " : ";
         print_type(var->get_type());
     }
 
     if (decl->get_expression() != nullptr) {
-        out << " = ";
+        *out << " = ";
         print_expression(decl->get_expression());
     }
 
-    out << '\n';
+    *out << '\n';
 }
 
 // You may wonder why so much boilerplate code. After all, most cases
@@ -669,7 +653,7 @@ void CppPrinter::print_expression(Expression* expression) {
         break;
 
     case EXPR_LITERAL_NULL:
-        out << "null";
+        *out << "null";
         break;
 
     case EXPR_ARRAY:
@@ -716,56 +700,60 @@ void CppPrinter::print_expression(Expression* expression) {
 }
 
 void CppPrinter::print_identifier(Identifier* id) {
-    out << id->to_str();
+    if (id->get_symbol_descriptor() == nullptr) {
+        *out << id->get_name();
+    } else {
+        *out << id->get_symbol_descriptor()->get_cpp_name();
+    }
 }
 
 void CppPrinter::print_literal(Literal* literal) {
-    out << literal->get_lexeme();
+    *out << literal->get_lexeme();
 }
 
 void CppPrinter::print_expression_list(std::string begin, std::string end, ExpressionList* exprs) {
     int i;
-    out << begin;
+    *out << begin;
 
     if (exprs->expressions_count() > 0) {
         for (i = 0; i < exprs->expressions_count() - 1; ++i) {
             print_expression(exprs->get_expression(i));
-            out << ", ";
+            *out << ", ";
         }
 
         print_expression(exprs->get_expression(i));
     }
 
-    out << end;
+    *out << end;
 }
 
 void CppPrinter::print_function_expression(FunctionExpression* function) {
     int i;
     Function* f = function->get_function();
 
-    out << "|";
+    *out << "|";
 
     if (f->parameters_count() > 0) {
         for (i = 0; i < f->parameters_count() - 1; ++i) {
-            out << f->get_parameter(i)->get_name();
-            out << ", ";
+            *out << f->get_parameter(i)->get_name();
+            *out << ", ";
         }
 
-        out << f->get_parameter(i)->get_name();
+        *out << f->get_parameter(i)->get_name();
     }
 
-    out << "| {\n";
+    *out << "| {\n";
 
     indent();
     print_compound_statement(f->get_statements());
     dedent();
 
     print_indentation();
-    out << "}";
+    *out << "}";
 }
 
 void CppPrinter::print_new_expression(New* expr) {
-    out << "new ";
+    *out << "new ";
     print_type(expr->get_new_type());
 
     if (expr->has_arguments()) {
@@ -776,7 +764,7 @@ void CppPrinter::print_new_expression(New* expr) {
 void CppPrinter::print_assignment(Assignment* expr) {
     if (expr->get_initial_value()) {
         print_type(expr->get_type());
-        out << " ";
+        *out << " ";
     }
 
     print_binary_operator("=", expr);
@@ -840,7 +828,7 @@ void CppPrinter::print_bitwise_and_assignment(BitwiseAndAssignment* expr) {
 
 void CppPrinter::print_cast(Cast* expr) {
     print_expression(expr->get_expression());
-    out << " as ";
+    *out << " as ";
     print_type(expr->get_cast_type());
 }
 
@@ -997,35 +985,35 @@ void CppPrinter::print_pos_decrement(PosDecrement* expr) {
 }
 
 void CppPrinter::print_parenthesis(Parenthesis* expr) {
-    out << "(";
+    *out << "(";
     print_expression(expr->get_expression());
-    out << ")";
+    *out << ")";
 }
 
 void CppPrinter::print_sizeof(Sizeof* expr) {
-    out << "sizeof(" << expr->get_expression() << ")";
+    *out << "sizeof(" << expr->get_expression() << ")";
 }
 
 void CppPrinter::print_call(Call* expr) {
     print_expression(expr->get_object());
 
-    out << "(";
+    *out << "(";
 
     if (expr->get_arguments()) {
         print_expression_list("", "", expr->get_arguments());
     }
 
-    out << ")";
+    *out << ")";
 }
 
 void CppPrinter::print_index(Index* expr) {
-    out << expr->get_object() << "[";
+    *out << expr->get_object() << "[";
 
     if (expr->get_index()) {
         print_expression(expr->get_index());
     }
 
-    out << "]";
+    *out << "]";
 }
 
 void CppPrinter::print_arrow(Arrow* expr) {
@@ -1037,12 +1025,12 @@ void CppPrinter::print_dot(Dot* expr) {
 }
 
 void CppPrinter::print_delete(Delete* expr) {
-    out << "delete ";
+    *out << "delete ";
     print_expression(expr->get_expression());
 }
 
 void CppPrinter::print_delete_array(DeleteArray* expr) {
-    out << "delete[] ";
+    *out << "delete[] ";
     print_expression(expr->get_expression());
 }
 
@@ -1064,7 +1052,7 @@ void CppPrinter::print_hash(Hash* expr) {
 
 void CppPrinter::print_hash_pair(HashPair* expr) {
     print_expression(expr->get_left());
-    out << ": ";
+    *out << ": ";
     print_expression(expr->get_right());
 }
 
@@ -1072,9 +1060,9 @@ void CppPrinter::print_binary_operator(const char* oper, BinaryOperator* expr, b
     print_expression(expr->get_left());
 
     if (no_spaces) {
-        out << oper;
+        *out << oper;
     } else {
-        out << " " << oper << " ";
+        *out << " " << oper << " ";
     }
 
     print_expression(expr->get_right());
@@ -1083,18 +1071,18 @@ void CppPrinter::print_binary_operator(const char* oper, BinaryOperator* expr, b
 void CppPrinter::print_unary_operator(const char* oper, UnaryOperator* expr, bool after) {
     if (after) {
         print_expression(expr->get_expression());
-        out << oper;
+        *out << oper;
     } else {
-        out << oper;
+        *out << oper;
         print_expression(expr->get_expression());
     }
 }
 
 void CppPrinter::print_function_signature(Function* function) {
     print_type(function->get_return_type());
-    out << " ";
-    print_function_uid(function);
-    out << "(";
+    *out << " ";
+    *out << function->get_cpp_name();
+    *out << "(";
 
     if (function->parameters_count() > 0) {
         Variable* param;
@@ -1103,15 +1091,15 @@ void CppPrinter::print_function_signature(Function* function) {
         for (i = 0; i < function->parameters_count() - 1; ++i) {
             param = function->get_parameter(i);
             print_type(param->get_type());
-            out << " " << param->get_name() << ", ";
+            *out << " " << param->get_name() << ", ";
         }
 
         param = function->get_parameter(i);
         print_type(param->get_type());
-        out << " " << param->get_name();
+        *out << " " << param->get_name();
     }
 
-    out << ")";
+    *out << ")";
 }
 
 void CppPrinter::indent() {
@@ -1124,32 +1112,33 @@ void CppPrinter::dedent() {
 
 void CppPrinter::print_indentation() {
     for (int i = 0; i < indent_c; ++i) {
-        out << "    ";
+        *out << "    ";
     }
 }
 
 void CppPrinter::print_headers() {
-    out << "#include <iostream>\n";
-    out << "#include <vector>\n";
-    out << "#include <sstream>\n";
-    out << "#include <fstream>\n";
-    out << "\n";
+    auto old = out;
+    out = &headers;
+    *out << "#include <iostream>\n";
+    *out << "#include <vector>\n";
+    *out << "#include <sstream>\n";
+    *out << "#include <fstream>\n";
+    *out << "\n";
+    *out << "typedef uin64_t u64;\n";
+    *out << "\n";
+    out = old;
 }
 
 void CppPrinter::print_main_function() {
-    out << "int main(int argc, char** argv) {\n";
+    *out << "int main(int argc, char** argv) {\n";
 
     if (main_function) {
-        out << "    ";
-        print_function_uid(main_function);
-        out << "(argc, argv);\n";
+        *out << "    ";
+        *out << main_function->get_cpp_name();
+        *out << "(argc, argv);\n";
     } else {
-        out << "    return 0;\n";
+        *out << "    return 0;\n";
     }
 
-    out << "}\n";
-}
-
-void CppPrinter::print_function_uid(Function* function) {
-    out << "f" << functions_map[function] << "_" << function->get_name();
+    *out << "}\n";
 }

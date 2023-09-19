@@ -155,7 +155,8 @@ void SemanticSecondPass::build_assignment(Assignment* expr) {
         create_variable(expr);
     }
 
-    expr->set_type(expr->get_right()->get_type());
+    build_expression(expr->get_left());
+    expr->set_type(expr->get_left()->get_type());
 }
 
 void SemanticSecondPass::build_plus(Plus* expr) {
@@ -443,7 +444,7 @@ void SemanticSecondPass::create_variable(Assignment* expr) {
     var->set_type(expr->get_right()->get_type());
     var->set_kind(VAR_LOCAL);
     var->set_uid(next_local_var_counter());
-    get_scope()->define_local_variable(var);
+    auto sym = get_scope()->define_local_variable(var);
     get_function()->add_variable(var);
 
     std::stringstream ss;
@@ -452,6 +453,8 @@ void SemanticSecondPass::create_variable(Assignment* expr) {
     ss << var->get_type()->to_str() + "</white>";
     log_info(ss.str());
     expr->set_initial_value(true);
+
+    id->set_symbol_descriptor(sym);
 }
 // foo
 // method() -> inside the class
