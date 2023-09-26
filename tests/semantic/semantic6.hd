@@ -7,6 +7,6 @@ class Pair:
 
 def main : int
     p = Pair()
-    a = p.x + p.x
-    b = p.get_y()
+    a = p.x + p.y
+#    b = p.get_y()
     return 0

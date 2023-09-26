@@ -134,7 +134,7 @@ void CompoundTypeDescriptor::add_method(Function* method) {
     method->get_scope()->set_parent(get_scope());
 }
 
-Scope *CompoundTypeDescriptor::get_scope() const {
+Scope* CompoundTypeDescriptor::get_scope() const {
     return scope;
 }
 

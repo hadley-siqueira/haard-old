@@ -350,6 +350,7 @@ void SemanticFirstPass::add_default_constructor(CompoundTypeDescriptor* decl) {
     f = p.read_function_from_string(cons);
 
     decl->add_method(f);
+    build_method(f);
 }
 
 void SemanticFirstPass::add_default_destructor(CompoundTypeDescriptor* decl) {
@@ -366,4 +367,5 @@ void SemanticFirstPass::add_default_destructor(CompoundTypeDescriptor* decl) {
     f = p.read_function_from_string(cons);
 
     decl->add_method(f);
+    build_method(f);
 }

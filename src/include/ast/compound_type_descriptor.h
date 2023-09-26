@@ -85,7 +85,7 @@ namespace haard {
         int constructors_count();
         int fields_count();
 
-        void add_field(Variable *field);
+        void add_field(Variable* field);
         void add_method(Function* method);
 
     protected:

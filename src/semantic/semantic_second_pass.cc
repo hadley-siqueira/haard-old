@@ -470,6 +470,19 @@ void SemanticSecondPass::build_simple_call(Call* expr) {
         log_error_and_exit("second pass: not in scope " + id->get_name());
     }
 
+    if (sym->get_descriptor(0)->get_kind() == SYM_CLASS) {
+        Scope* s = sym->get_descriptor(0)->get_descriptor_scope();
+        sym = s->resolve_field("init");
+
+        if (sym) {
+            std::cout << "found\n";
+        } else {
+            std::cout << "not found\n";
+        }
+        //std::cout << s->debug() << '\n';
+        //exit(0);
+    }
+
     int idx = find_best_match(sym, args);
 
     if (idx < 0) {
@@ -479,10 +492,16 @@ void SemanticSecondPass::build_simple_call(Call* expr) {
     set_call_type(expr, sym, idx);
 }
 
-void SemanticSecondPass::set_call_type(Call *expr, Symbol *sym, int idx) {
+void SemanticSecondPass::set_call_type(Call* expr, Symbol* sym, int idx) {
     Function* function = (Function*) sym->get_descriptor(idx)->get_descriptor();
     expr->set_function(function);
-    expr->set_type(function->get_return_type());
+
+    if (function->is_constructor()) {
+        CompoundTypeDescriptor* decl = function->get_compound();
+        expr->set_type(decl->get_self_type());
+    } else {
+        expr->set_type(function->get_return_type());
+    }
 }
 
 int SemanticSecondPass::find_best_match(Symbol* sym, ExpressionList* args) {
