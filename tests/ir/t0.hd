@@ -1,0 +1,22 @@
+def syscall : void
+    @n : int
+    @v : int
+
+    return
+
+def print : void
+    @v : int
+
+    syscall(0, v)
+
+def main : int
+    a = 7
+    a = a + 1
+    print(a)
+
+    i = 0
+    while i < 10:
+        i = i + 1
+        print(i)
+
+    return 0

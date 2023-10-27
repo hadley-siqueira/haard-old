@@ -49,7 +49,7 @@ namespace haard {
 
             void build_expression(Expression* expression, bool lvalue=false);
 
-            void build_scope(BinOp* bin, bool lvalue=false);
+            void build_scope(BinaryOperator* bin, bool lvalue=false);
 
             void build_identifier(Identifier* id, bool lvalue=false);
             void build_identifier_lvalue(Identifier* id);
@@ -62,44 +62,43 @@ namespace haard {
             void build_call(Call* bin);
             void build_call_arguments(IRCall* call, ExpressionList* args, IRValue *this_ptr=nullptr);
             void build_function_call(Call* bin, IRCall* call);
-            void build_method_call(BinOp* bin, IRCall* call);
+            void build_method_call(BinaryOperator* bin, IRCall* call);
 
-            void build_index_access(BinOp* bin, bool lvalue=false);
-            void build_member_access(BinOp* bin, bool lvalue=false);
+            void build_index_access(BinaryOperator* bin, bool lvalue=false);
+            void build_member_access(BinaryOperator* bin, bool lvalue=false);
 
-            void build_assignment(BinOp* bin, bool lvalue=false);
-            void build_constructor_assignment(BinOp* bin);
+            void build_assignment(BinaryOperator* bin, bool lvalue=false);
+            void build_constructor_assignment(BinaryOperator* bin);
 
-            void build_logical_or(BinOp* bin);
-            void build_logical_and(BinOp* bin);
+            void build_logical_or(BinaryOperator* bin);
+            void build_logical_and(BinaryOperator* bin);
 
-            void build_equal(BinOp* bin);
-            void build_not_equal(BinOp* bin);
+            void build_equal(BinaryOperator* bin);
+            void build_not_equal(BinaryOperator* bin);
 
             void build_less_than(LessThan* bin);
-            void build_greater_than(BinOp* bin);
-            void build_less_than_or_equal(BinOp* bin);
-            void build_greater_than_or_equal(BinOp* bin);
+            void build_greater_than(BinaryOperator* bin);
+            void build_less_than_or_equal(BinaryOperator* bin);
+            void build_greater_than_or_equal(BinaryOperator* bin);
 
-            void build_plus(BinOp* bin);
-            void build_minus(BinOp* bin);
+            void build_plus(BinaryOperator* bin);
+            void build_minus(BinaryOperator* bin);
 
-            void build_times(BinOp* bin);
-            void build_division(BinOp* bin);
-            void build_modulo(BinOp* bin);
+            void build_times(BinaryOperator* bin);
+            void build_division(BinaryOperator* bin);
+            void build_modulo(BinaryOperator* bin);
 
-            void build_bitwise_or(BinOp* bin);
-            void build_bitwise_xor(BinOp* bin);
-            void build_bitwise_and(BinOp* bin);
+            void build_bitwise_or(BinaryOperator* bin);
+            void build_bitwise_xor(BinaryOperator* bin);
+            void build_bitwise_and(BinaryOperator* bin);
 
-            void build_sll(BinOp* bin);
-            void build_srl(BinOp* bin);
-            void build_sra(BinOp* bin);
+            void build_sll(BinaryOperator* bin);
+            void build_srl(BinaryOperator* bin);
+            void build_sra(BinaryOperator* bin);
 
             void build_address_of(AddressOf* op);
             void build_dereference(Dereference* op, bool lvalue=false);
 
-            void build_binop(BinOp* bin, int kind);
             void build_binop(BinaryOperator* bin, int kind);
 
             void build_literal(Literal* literal, int kind);
@@ -113,8 +112,8 @@ namespace haard {
 
         private:
             bool is_function_call(Call* bin);
-            bool is_method_call(BinOp* bin);
-            bool is_constructor_call(BinOp* bin);
+            bool is_method_call(BinaryOperator* bin);
+            bool is_constructor_call(BinaryOperator* bin);
 
         public:
             void set_logger(Logger* logger);

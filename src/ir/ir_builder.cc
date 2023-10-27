@@ -325,7 +325,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     }
 
     int kind = expression->get_kind();
-    BinOp* bin = (BinOp*) expression;
+    BinaryOperator* bin = (BinaryOperator*) expression;
     Literal* literal = (Literal*) expression;
     Cast* cast = (Cast*) expression;
     ExpressionList* exprlist = (ExpressionList*) expression;
@@ -495,7 +495,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
     }
 }
 
-void IRBuilder::build_scope(BinOp* bin, bool lvalue) {
+void IRBuilder::build_scope(BinaryOperator* bin, bool lvalue) {
     Identifier* id = (Identifier*) bin->get_right();
 
     build_identifier(id, lvalue);
@@ -604,7 +604,7 @@ void IRBuilder::build_call(Call* bin) {
 
         build_expression(bin->get_left(), true);
         this_ptr = last_value;
-        BinOp* dot = (BinOp*) bin->get_left();
+        BinaryOperator* dot = (BinaryOperator*) bin->get_left();
 
         Identifier* id = (Identifier*) dot->get_right();
         Function* f = (Function*) id->get_symbol_descriptor()->get_descriptor();
@@ -655,7 +655,7 @@ void IRBuilder::build_function_call(Call* bin, IRCall* call) {
     ctx->add_instruction(call);
 }
 
-void IRBuilder::build_method_call(BinOp* bin, IRCall* call) {
+void IRBuilder::build_method_call(BinaryOperator* bin, IRCall* call) {
     Identifier* id = (Identifier*) bin->get_left();
     Function* f = (Function*) id->get_symbol_descriptor()->get_descriptor();
     std::string name = f->get_qualified_name();
@@ -667,7 +667,7 @@ void IRBuilder::build_method_call(BinOp* bin, IRCall* call) {
     ctx->add_instruction(call);
 }
 
-void IRBuilder::build_index_access(BinOp* bin, bool lvalue) {
+void IRBuilder::build_index_access(BinaryOperator* bin, bool lvalue) {
     std::stringstream ss;
     int size_in_bytes;
     IRValue* size;
@@ -707,7 +707,7 @@ void IRBuilder::build_index_access(BinOp* bin, bool lvalue) {
     }
 }
 
-void IRBuilder::build_member_access(BinOp* bin, bool lvalue) {
+void IRBuilder::build_member_access(BinaryOperator* bin, bool lvalue) {
     Identifier* id;
     Variable* var;
 
@@ -748,7 +748,7 @@ void IRBuilder::build_member_access(BinOp* bin, bool lvalue) {
     }
 }
 
-void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
+void IRBuilder::build_assignment(BinaryOperator* bin, bool lvalue) {
     IRMemory* store;
     IRValue* left;
     IRValue* right;
@@ -775,19 +775,19 @@ void IRBuilder::build_assignment(BinOp* bin, bool lvalue) {
     }
 }
 
-void IRBuilder::build_constructor_assignment(BinOp* bin) {
+void IRBuilder::build_constructor_assignment(BinaryOperator* bin) {
     IRValue* this_ptr;
     std::string name;
     Function* f;
-    BinOp* constructor;
+    BinaryOperator* constructor;
     IRCall* call = new IRCall();
 
     build_expression(bin->get_left(), true);
     this_ptr = last_value;
 
-    constructor = (BinOp*) bin->get_right();
-    int idx = constructor->get_overloaded_index();
-    f = (Function*) constructor->get_constructor_call()->get_descriptor(idx);
+    constructor = (BinaryOperator*) bin->get_right();
+    int idx = 0;//constructor->get_overloaded_index();
+    f = nullptr;//(Function*) constructor->get_constructor_call()->get_descriptor(idx);
     name = f->get_qualified_name();
 
     call->set_name(name);
@@ -796,7 +796,7 @@ void IRBuilder::build_constructor_assignment(BinOp* bin) {
     ctx->add_instruction(call);
 }
 
-void IRBuilder::build_logical_or(BinOp* bin) {
+void IRBuilder::build_logical_or(BinaryOperator* bin) {
     IRLabel* tb = ctx->new_label();
     IRLabel* af = ctx->new_label();
     IRValue* true_label = ctx->new_label_value(tb->get_label());
@@ -825,7 +825,7 @@ void IRBuilder::build_logical_or(BinOp* bin) {
     last_value = ctx->new_load(size, alloca_addr)->get_dst();
 }
 
-void IRBuilder::build_logical_and(BinOp* bin) {
+void IRBuilder::build_logical_and(BinaryOperator* bin) {
     IRLabel* fb = ctx->new_label();
     IRLabel* af = ctx->new_label();
     IRValue* false_label = ctx->new_label_value(fb->get_label());
@@ -852,11 +852,11 @@ void IRBuilder::build_logical_and(BinOp* bin) {
     last_value = ctx->new_load(size, alloca_addr)->get_dst();
 }
 
-void IRBuilder::build_equal(BinOp* bin) {
+void IRBuilder::build_equal(BinaryOperator* bin) {
     build_binop(bin, IR_EQ);
 }
 
-void IRBuilder::build_not_equal(BinOp* bin) {
+void IRBuilder::build_not_equal(BinaryOperator* bin) {
     build_binop(bin, IR_NE);
 }
 
@@ -871,7 +871,7 @@ void IRBuilder::build_less_than(LessThan* bin) {
     }
 }
 
-void IRBuilder::build_greater_than(BinOp* bin) {
+void IRBuilder::build_greater_than(BinaryOperator* bin) {
     bool f1 = bin->get_left()->get_type()->is_signed();
     bool f2 = bin->get_right()->get_type()->is_signed();
 
@@ -882,7 +882,7 @@ void IRBuilder::build_greater_than(BinOp* bin) {
     }
 }
 
-void IRBuilder::build_less_than_or_equal(BinOp* bin) {
+void IRBuilder::build_less_than_or_equal(BinaryOperator* bin) {
     bool f1 = bin->get_left()->get_type()->is_signed();
     bool f2 = bin->get_right()->get_type()->is_signed();
 
@@ -893,7 +893,7 @@ void IRBuilder::build_less_than_or_equal(BinOp* bin) {
     }
 }
 
-void IRBuilder::build_greater_than_or_equal(BinOp* bin) {
+void IRBuilder::build_greater_than_or_equal(BinaryOperator* bin) {
     bool f1 = bin->get_left()->get_type()->is_signed();
     bool f2 = bin->get_right()->get_type()->is_signed();
 
@@ -904,47 +904,47 @@ void IRBuilder::build_greater_than_or_equal(BinOp* bin) {
     }
 }
 
-void IRBuilder::build_plus(BinOp* bin) {
+void IRBuilder::build_plus(BinaryOperator* bin) {
     build_binop(bin, IR_ADD);
 }
 
-void IRBuilder::build_minus(BinOp* bin) {
+void IRBuilder::build_minus(BinaryOperator* bin) {
     build_binop(bin, IR_SUB);
 }
 
-void IRBuilder::build_times(BinOp* bin) {
+void IRBuilder::build_times(BinaryOperator* bin) {
     build_binop(bin, IR_MUL);
 }
 
-void IRBuilder::build_division(BinOp* bin) {
+void IRBuilder::build_division(BinaryOperator* bin) {
     build_binop(bin, IR_DIV);
 }
 
-void IRBuilder::build_modulo(BinOp* bin) {
+void IRBuilder::build_modulo(BinaryOperator* bin) {
     build_binop(bin, IR_REM);
 }
 
-void IRBuilder::build_bitwise_or(BinOp* bin) {
+void IRBuilder::build_bitwise_or(BinaryOperator* bin) {
     build_binop(bin, IR_BITWISE_OR);
 }
 
-void IRBuilder::build_bitwise_xor(BinOp* bin) {
+void IRBuilder::build_bitwise_xor(BinaryOperator* bin) {
     build_binop(bin, IR_BITWISE_XOR);
 }
 
-void IRBuilder::build_bitwise_and(BinOp* bin) {
+void IRBuilder::build_bitwise_and(BinaryOperator* bin) {
     build_binop(bin, IR_BITWISE_AND);
 }
 
-void IRBuilder::build_sll(BinOp* bin) {
+void IRBuilder::build_sll(BinaryOperator* bin) {
     build_binop(bin, IR_SLL);
 }
 
-void IRBuilder::build_srl(BinOp* bin) {
+void IRBuilder::build_srl(BinaryOperator* bin) {
     build_binop(bin, IR_SRL);
 }
 
-void IRBuilder::build_sra(BinOp* bin) {
+void IRBuilder::build_sra(BinaryOperator* bin) {
     if (bin->get_left()->get_type()->is_signed()) {
         build_binop(bin, IR_SRA);
     } else {
@@ -969,23 +969,6 @@ void IRBuilder::build_dereference(Dereference *op, bool lvalue) {
         load = ctx->new_load(size, last_value);
         last_value = load->get_dst();
     }
-}
-
-void IRBuilder::build_binop(BinOp* bin, int kind) {
-    IR* ir;
-    IRValue* left;
-    IRValue* right;
-    IRValue* dst;
-
-    build_expression(bin->get_left());
-    left = last_value;
-
-    build_expression(bin->get_right());
-    right = last_value;
-
-    dst = ctx->new_temporary();
-    ir = ctx->new_bin(kind, dst, left, right);
-    last_value = dst;
 }
 
 void IRBuilder::build_binop(BinaryOperator* bin, int kind) {
@@ -1062,7 +1045,7 @@ bool IRBuilder::is_function_call(Call* bin) {
     return false;
 }
 
-bool IRBuilder::is_method_call(BinOp* bin) {
+bool IRBuilder::is_method_call(BinaryOperator* bin) {
     Identifier* id;
 
     if (bin->get_left()->get_kind() == EXPR_ID) {
@@ -1073,7 +1056,7 @@ bool IRBuilder::is_method_call(BinOp* bin) {
     return false;
 }
 
-bool IRBuilder::is_constructor_call(BinOp* bin) {
+bool IRBuilder::is_constructor_call(BinaryOperator* bin) {
     Identifier* id;
     Type* type;
     Symbol* sym;

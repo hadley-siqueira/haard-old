@@ -6,26 +6,25 @@ using namespace haard;
 
 IRCppPrinter::IRCppPrinter() {
     indent_c = 0;
-    out = &functions;
     function_counter = 0;
 }
 
 std::string IRCppPrinter::get_output() {
-    return (*out).str();
+    std::stringstream output;
+
+    output << headers.str();
+    output << functions.str();
+
+    return output.str();
 }
 
 void IRCppPrinter::print_modules(IRModules* modules) {
-    *out << "#include <iostream>\n";
-    *out << "#include <cstdint>\n";
-    *out << "\n";
-    *out << "typedef int32_t i32;\n";
-    *out << "typedef uint64_t u64;\n";
-
-    for (int i = 0; i < modules->strings_count(); ++i) {
+    print_headers();
+    /*for (int i = 0; i < modules->strings_count(); ++i) {
         *out << "%str" << i << " = " << modules->get_string(i) << "\n";
     }
 
-    *out << '\n';
+    *out << '\n';*/
 
     for (int i = 0; i < modules->modules_count(); ++i) {
         print_module(modules->get_module(i));
@@ -43,6 +42,7 @@ void IRCppPrinter::print_module(IRModule* module) {
 void IRCppPrinter::print_function(IRFunction* function) {
     int i;
     bool is_syscall = false;
+    out = &functions;
 
     if (function->get_name().find("syscall") != std::string::npos) {
         is_syscall = true;
@@ -71,29 +71,25 @@ void IRCppPrinter::print_function(IRFunction* function) {
     }
 
     dedent();
-    *out << "}\n";
+    *out << "}\n\n";
 }
 
 void IRCppPrinter::print_function_body(IRFunction* function) {
     IRContext* ctx = function->get_context();
 
+    print_function_temporaries(function);
     int i;
-
-    *out << "u64 ";
-    for (i = 0; i < function->temp_count() - 1; ++i) {
-        IRValue* tmp = function->get_temp(i);
-
-        if (is_not_parameter(function, tmp)) {
-            *out << function->get_temp(i)->to_cpp() << ",\n";
-        }
-    }
-
-    *out << function->get_temp(i)->to_cpp() << ";\n";
 
     for (int i = 0; i < ctx->instructions_count(); ++i) {
         print_indentation();
+        auto inst = ctx->get_instruction(i);
         print_instruction(ctx->get_instruction(i));
-        *out << ";\n";
+
+        if (inst->get_kind() != IR_LABEL) {
+            *out << ";";
+        }
+
+        *out << "\n";
     }
 }
 
@@ -172,7 +168,6 @@ void IRCppPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_LI:
-        add_temp(un->get_dst());
         *out << un->get_dst()->to_cpp() << " = ";
         *out << un->get_src()->to_cpp();
         break;
@@ -183,7 +178,6 @@ void IRCppPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_LOAD32:
-        add_temp(mem->get_dst());
         *out << mem->get_dst()->to_cpp() << " = *((i32*) ";
         *out << mem->get_src()->to_cpp() << ")";
         break;
@@ -228,8 +222,6 @@ void IRCppPrinter::print_instruction(IR* ir) {
         *out << "char t" << alloca->get_dst()->to_cpp() << "[";
         *out << alloca->get_size() << "];\n";
         print_indentation();
-
-        add_temp(alloca->get_dst());
         *out << alloca->get_dst()->to_cpp() << " = (u64) ";
         *out << "&t" << alloca->get_dst()->to_cpp();
         break;
@@ -304,13 +296,21 @@ std::string IRCppPrinter::get_function_name(std::string name) {
 }
 
 void IRCppPrinter::print_binop(const char* oper, IRBin* bin) {
-    add_temp(bin->get_dst());
     *out << bin->get_dst()->to_cpp() << " = ";
     *out << bin->get_src1()->to_cpp() << " " << oper << " ";
     *out << bin->get_src2()->to_cpp();
 }
 
+void IRCppPrinter::print_headers() {
+    headers << "#include <iostream>\n";
+    headers << "#include <cstdint>\n";
+    headers << "\n";
+    headers << "typedef int32_t i32;\n";
+    headers << "typedef uint64_t u64;\n";
+}
+
 void IRCppPrinter::print_main_function() {
+    out = &functions;
     *out << "\nint main() {\n";
 
     if (main_function) {
@@ -328,8 +328,23 @@ void IRCppPrinter::print_syscall_body() {
             "    }\n";
 }
 
-void IRCppPrinter::add_temp(IRValue* value) {
-    temps.push_back(value);
+void IRCppPrinter::print_function_temporaries(IRFunction* function) {
+    int i;
+
+    if (function->temp_count() == 0) {
+        return;
+    }
+
+    *out << "    u64 ";
+    for (i = 0; i < function->temp_count() - 1; ++i) {
+        IRValue* tmp = function->get_temp(i);
+
+        if (is_not_parameter(function, tmp)) {
+            *out << function->get_temp(i)->to_cpp() << ", ";
+        }
+    }
+
+    *out << function->get_temp(i)->to_cpp() << ";\n";
 }
 
 bool IRCppPrinter::is_not_parameter(IRFunction *function, IRValue *value) {
