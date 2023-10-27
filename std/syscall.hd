@@ -1,0 +1,5 @@
+def syscall : u64
+    @a : int
+    @b : int
+
+    return 0

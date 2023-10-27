@@ -8,6 +8,7 @@
 #include "ast/module.h"
 #include "parser/parser.h"
 #include "log/logger.h"
+#include "ir/ir_modules.h"
 
 namespace haard {
     class Driver {
@@ -32,7 +33,9 @@ namespace haard {
             void print_information();
             Module* parse_file(std::string path);
             void print_modules();
+
             void generate_cpp();
+            void show_ir();
 
             std::string build_import_path(Import* import);
             bool file_exists(std::string path);
@@ -53,6 +56,7 @@ namespace haard {
             std::string output_name;
             std::vector<std::string> search_path;
             Modules* modules;
+            IRModules* ir_modules;
 
             bool pretty_flag;
             bool info_flag;

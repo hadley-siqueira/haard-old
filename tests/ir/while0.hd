@@ -1,0 +1,16 @@
+import std.io
+
+def sum : int
+    @a : int
+    @b : int
+
+    return 0
+
+def main : int
+    i = 0
+
+    while i < 10:
+        print(i)
+        i = i + 1
+
+    return 0

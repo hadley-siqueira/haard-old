@@ -1,8 +1,8 @@
-def syscall : void
+def syscall : u64
     @n : int
     @v : int
 
-    return
+    return 0
 
 def print : void
     @v : int

@@ -26,6 +26,7 @@ void IRCppPrinter::print_modules(IRModules* modules) {
 
     *out << '\n';*/
 
+    generate_functions_id(modules);
     for (int i = 0; i < modules->modules_count(); ++i) {
         print_module(modules->get_module(i));
     }
@@ -42,6 +43,7 @@ void IRCppPrinter::print_module(IRModule* module) {
 void IRCppPrinter::print_function(IRFunction* function) {
     int i;
     bool is_syscall = false;
+    std::string signature;
     out = &functions;
 
     if (function->get_name().find("syscall") != std::string::npos) {
@@ -50,18 +52,10 @@ void IRCppPrinter::print_function(IRFunction* function) {
         main_function = function;
     }
 
-    *out << "// " << function->get_name() << "\n";
-    *out << "u64 " << get_function_name(function) << "(";
+    signature = generate_function_signature(function);
+    headers << signature << ";\n";
+    *out << signature << " {\n";
 
-    if (function->parameters_count() > 0) {
-        for (i = 0; i < function->parameters_count() - 1; ++i) {
-            *out << "u64 " << function->get_parameter(i)->to_cpp() << ", ";
-        }
-
-        *out << "u64 " << function->get_parameter(i)->to_cpp();
-    }
-
-    *out << ") {\n";
     indent();
 
     if (is_syscall) {
@@ -280,11 +274,6 @@ void IRCppPrinter::print_instruction(IR* ir) {
 std::string IRCppPrinter::get_function_name(IRFunction* function) {
     std::stringstream r;
 
-    if (fmap.count(function->get_name()) == 0) {
-        fmap[function->get_name()] = function_counter;
-        ++function_counter;
-    }
-
     r << "f" << fmap[function->get_name()];
     return r.str();
 }
@@ -355,6 +344,37 @@ bool IRCppPrinter::is_not_parameter(IRFunction *function, IRValue *value) {
     }
 
     return true;
+}
+
+void IRCppPrinter::generate_functions_id(IRModules* modules) {
+    for (int i = 0; i < modules->modules_count(); ++i) {
+        IRModule* module = modules->get_module(i);
+
+        for (int j = 0; j < module->functions_count(); ++j) {
+            IRFunction* function = module->get_function(j);
+            fmap[function->get_name()] = function_counter++;
+        }
+    }
+}
+
+std::string IRCppPrinter::generate_function_signature(IRFunction* function) {
+    int i;
+    std::stringstream ss;
+
+    ss << "// " << function->get_name() << "\n";
+    ss << "u64 " << get_function_name(function) << "(";
+
+    if (function->parameters_count() > 0) {
+        for (i = 0; i < function->parameters_count() - 1; ++i) {
+            ss << "u64 " << function->get_parameter(i)->to_cpp() << ", ";
+        }
+
+        ss << "u64 " << function->get_parameter(i)->to_cpp();
+    }
+
+    ss << ")";
+
+    return ss.str();
 }
 
 void IRCppPrinter::indent() {

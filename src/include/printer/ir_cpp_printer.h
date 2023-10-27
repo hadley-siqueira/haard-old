@@ -29,6 +29,8 @@ namespace haard {
             void print_syscall_body();
             void print_function_temporaries(IRFunction* function);
             bool is_not_parameter(IRFunction* function, IRValue* value);
+            void generate_functions_id(IRModules* modules);
+            std::string generate_function_signature(IRFunction* function);
 
         private:
             void indent();

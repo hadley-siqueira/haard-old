@@ -55,12 +55,12 @@ void Driver::run() {
     check_for_errors();
     log_info("ending semantic analysis...");
 
-    if (cpp_flag) {
-        generate_cpp();
-    }
-
     log_info("starting ir generation...");
+
     ir_generation();
+    generate_cpp();
+    show_ir();
+
     check_for_errors();
     log_info("ir generation done...");
 
@@ -152,16 +152,7 @@ void Driver::ir_generation() {
 
     builder.build(modules);
 
-    auto modules = builder.get_modules();
-
-    if (show_ir_flag) {
-        IRPrinter p;
-        IRCppPrinter cp;
-        p.print_modules(modules);
-        cp.print_modules(modules);
-        std::cout << p.get_output() << std::endl;
-        std::cout << cp.get_output() << std::endl;
-    }
+    ir_modules = builder.get_modules();
 /*
     IrVM vm;
     vm.execute_modules(modules);
@@ -232,6 +223,23 @@ void Driver::print_modules() {
 }
 
 void Driver::generate_cpp() {
+    if (!cpp_flag) return;
+
+    IRCppPrinter cp;
+    std::ofstream file("out.cc");
+    cp.print_modules(ir_modules);
+
+    file << cp.get_output() << std::endl;
+    file.close();
+}
+
+void Driver::show_ir() {
+    if (!show_ir_flag) return;
+
+    IRPrinter p;
+
+    p.print_modules(ir_modules);
+    std::cout << p.get_output() << std::endl;
 
 }
 
