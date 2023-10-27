@@ -623,9 +623,9 @@ Statement* Parser::parse_statement() {
     return stmt;
 }
 
-While* Parser::parse_while_statement() {
+WhileStatement* Parser::parse_while_statement() {
     Expression* condition;
-    While* stmt = new While();
+    WhileStatement* stmt = new WhileStatement();
 
     expect(TK_WHILE);
     stmt->set_from_token(matched);

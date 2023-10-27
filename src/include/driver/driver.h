@@ -59,6 +59,7 @@ namespace haard {
             bool help_flag;
             bool show_logs_flag;
             bool show_ir_flag;
+            bool cpp_flag;
     };
 }
 

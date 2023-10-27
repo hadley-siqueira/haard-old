@@ -2,29 +2,29 @@
 
 using namespace haard;
 
-While::While() {
+WhileStatement::WhileStatement() {
     set_kind(STMT_WHILE);
     set_condition(nullptr);
     set_statements(nullptr);
 }
 
-While::~While() {
+WhileStatement::~WhileStatement() {
     delete condition;
     delete statements;
 }
 
-Expression* While::get_condition() {
+Expression* WhileStatement::get_condition() {
     return condition;
 }
 
-CompoundStatement* While::get_statements() {
+CompoundStatement* WhileStatement::get_statements() {
     return statements;
 }
 
-void While::set_condition(Expression* expression) {
+void WhileStatement::set_condition(Expression* expression) {
     this->condition = expression;
 }
 
-void While::set_statements(CompoundStatement* statements) {
+void WhileStatement::set_statements(CompoundStatement* statements) {
     this->statements = statements;
 }

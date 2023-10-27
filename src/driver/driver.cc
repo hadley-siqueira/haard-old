@@ -9,9 +9,10 @@
 #include "driver/driver.h"
 #include "printer/printer.h"
 //#include "scope/old_scope_builder.h"
-//#include "ir/ir_builder.h"
+#include "ir/ir_builder.h"
 #include "vm/irvm.h"
 #include "printer/ir_printer.h"
+#include "printer/ir_cpp_printer.h"
 #include "semantic/semantic_driver.h"
 #include "log/actions.h"
 
@@ -28,6 +29,7 @@ Driver::Driver() {
     help_flag = false;
     show_logs_flag = false;
     show_ir_flag = false;
+    cpp_flag = false;
 }
 
 Driver::~Driver() {
@@ -53,8 +55,12 @@ void Driver::run() {
     check_for_errors();
     log_info("ending semantic analysis...");
 
+    if (cpp_flag) {
+        generate_cpp();
+    }
+
     log_info("starting ir generation...");
-   // ir_generation();
+    ir_generation();
     check_for_errors();
     log_info("ir generation done...");
 
@@ -100,6 +106,8 @@ void Driver::set_flags(int argc, char* argv[]) {
             show_logs_flag = true;
         } else if (strcmp(argv[i], "--show-ir") == 0) {
             show_ir_flag = true;
+        } else if (strcmp(argv[i], "--cpp") == 0) {
+            cpp_flag = true;
         }
     }
 }
@@ -140,7 +148,7 @@ void Driver::semantic_analysis() {
 }
 
 void Driver::ir_generation() {
-    /*IRBuilder builder;
+    IRBuilder builder;
 
     builder.build(modules);
 
@@ -148,10 +156,13 @@ void Driver::ir_generation() {
 
     if (show_ir_flag) {
         IRPrinter p;
+        IRCppPrinter cp;
         p.print_modules(modules);
+        cp.print_modules(modules);
         std::cout << p.get_output() << std::endl;
+        std::cout << cp.get_output() << std::endl;
     }
-
+/*
     IrVM vm;
     vm.execute_modules(modules);
     //vm.dump_memory(1024 * 2);
@@ -218,6 +229,10 @@ void Driver::print_modules() {
     printer.print_modules(modules);
     std::cout << printer.to_str();
     exit(0);
+}
+
+void Driver::generate_cpp() {
+
 }
 
 std::string Driver::build_import_path(Import* import) {

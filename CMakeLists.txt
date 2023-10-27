@@ -162,7 +162,8 @@ set(IR_SRC
 
 set(PRINTER_SRC
     src/printer/printer.cc
-    #src/printer/ir_printer.cc
+    src/printer/ir_printer.cc
+    src/printer/ir_cpp_printer.cc
 )
 
 set(DRIVER_SRC
@@ -197,7 +198,7 @@ set(SOURCES
     ${SCANNER_SRC}
     ${PARSER_SRC}
     ${AST_SRC}
-    #${IR_SRC}
+    ${IR_SRC}
     ${PRINTER_SRC}
     ${SCOPE_SRC}
     ${SEMANTIC_SRC}

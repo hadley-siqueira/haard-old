@@ -200,7 +200,7 @@ void IRBuilder::build_jump_statement(JumpStatement* statement) {
 
 }
 
-void IRBuilder::build_while_statement(WhileStatement* statement) {
+void IRBuilder::build_while_statement(WhileStatement *statement) {
     IRValue* cond;
     IRLabel* begin = ctx->new_label();
     IRLabel* after = ctx->new_label();
@@ -326,7 +326,6 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
 
     int kind = expression->get_kind();
     BinOp* bin = (BinOp*) expression;
-    UnOp* un = (UnOp*) expression;
     Literal* literal = (Literal*) expression;
     Cast* cast = (Cast*) expression;
     ExpressionList* exprlist = (ExpressionList*) expression;
@@ -341,7 +340,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         break;
 
     case EXPR_PRE_INCREMENT:
-        build_pre_inc(un);
+        build_pre_inc((PreIncrement*) expression);
         break;
 
     case EXPR_CALL:
@@ -443,11 +442,11 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         break;
 
     case EXPR_ADDRESS_OF:
-        build_address_of(un);
+        build_address_of((AddressOf*) expression);
         break;
 
     case EXPR_DEREFERENCE:
-        build_dereference(un, lvalue);
+        build_dereference((Dereference*) expression, lvalue);
         break;
 
     case EXPR_LITERAL_BOOL:
@@ -487,11 +486,11 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         break;
 
     case EXPR_PARENTHESIS:
-        build_expression(un->get_expression(), lvalue);
+        build_expression(((Parenthesis*) expression)->get_expression(), lvalue);
         break;
 
     case EXPR_SIZEOF:
-        build_sizeof(un);
+        build_sizeof((Sizeof*) expression);
         break;
     }
 }
@@ -515,16 +514,16 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
     Type* type;
     int size;
     int align;
-    int kind;
+    //int kind;
 
-    kind = id->get_symbol()->get_kind();
+    //kind = id->get_symbol_descriptor()->get_kind();
 
     if (id->is_local_variable()) {
         type = id->get_type();
         size = type->get_size_in_bytes();
         align = type->get_alignment();
 
-        std::string name = id->get_unique_name();
+        std::string name = id->get_name();
 
         if (ctx->has_alloca(name)) {
             last_value = ctx->get_alloca_value(name);
@@ -534,7 +533,7 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
         }
     } else if (id->is_class_variable()) {
         IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
-        Variable* var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+        Variable* var = (Variable*) id->get_symbol_descriptor()->get_descriptor();
         IRValue* offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
         IRValue* add = ctx->new_binary(IR_ADD, this_ptr, offset)->get_dst();
         last_value = add;
@@ -560,7 +559,7 @@ void IRBuilder::build_this(This* expr) {
     last_value = ctx->get_alloca_value("this");
 }
 
-void IRBuilder::build_pre_inc(UnOp* un) {
+void IRBuilder::build_pre_inc(PreIncrement* un) {
     int size;
     IRValue* addr;
     IRValue* cst;
@@ -607,7 +606,7 @@ void IRBuilder::build_call(BinOp* bin) {
         BinOp* dot = (BinOp*) bin->get_left();
 
         Identifier* id = (Identifier*) dot->get_right();
-        Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+        Function* f = (Function*) id->get_symbol_descriptor()->get_descriptor();
         std::string name = f->get_qualified_name();
 
         call->set_name(name);
@@ -646,7 +645,7 @@ void IRBuilder::build_function_call(BinOp* bin, IRCall* call) {
         id = (Identifier*) bin->get_left();
     }
 
-    Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+    Function* f = (Function*) id->get_symbol_descriptor()->get_descriptor();
     std::string name = f->get_qualified_name();
 
     call->set_name(name);
@@ -657,7 +656,7 @@ void IRBuilder::build_function_call(BinOp* bin, IRCall* call) {
 
 void IRBuilder::build_method_call(BinOp* bin, IRCall* call) {
     Identifier* id = (Identifier*) bin->get_left();
-    Function* f = (Function*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+    Function* f = (Function*) id->get_symbol_descriptor()->get_descriptor();
     std::string name = f->get_qualified_name();
 
     call->set_name(name);
@@ -721,20 +720,20 @@ void IRBuilder::build_member_access(BinOp* bin, bool lvalue) {
     }
 
     if (lvalue) {
-        if (id->get_symbol()->get_kind() == SYM_CLASS_VARIABLE) {
+        if (id->get_symbol_descriptor()->get_kind() == SYM_CLASS_VARIABLE) {
             IRValue* base = last_value;
             IRValue* offset;
 
-            var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+            var = (Variable*) id->get_symbol_descriptor()->get_descriptor();;
             offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
             last_value = ctx->new_binary(IR_ADD, base, offset)->get_dst();
         }
     } else {
-        if (id->get_symbol()->get_kind() == SYM_CLASS_VARIABLE) {
+        if (id->get_symbol_descriptor()->get_kind() == SYM_CLASS_VARIABLE) {
             IRValue* base = last_value;
             IRValue* offset;
 
-            var = (Variable*) id->get_symbol()->get_descriptor(id->get_overloaded_index());
+            var = (Variable*) id->get_symbol_descriptor()->get_descriptor();;
             offset = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, var->get_offset())->get_dst();
             last_value = ctx->new_binary(IR_ADD, base, offset)->get_dst();
 
@@ -952,11 +951,11 @@ void IRBuilder::build_sra(BinOp* bin) {
     }
 }
 
-void IRBuilder::build_address_of(UnOp* op) {
+void IRBuilder::build_address_of(AddressOf* op) {
     build_expression(op->get_expression(), true);
 }
 
-void IRBuilder::build_dereference(UnOp* op, bool lvalue) {
+void IRBuilder::build_dereference(Dereference *op, bool lvalue) {
     IRMemory* load;
     Type* type;
     int size;
@@ -1022,7 +1021,7 @@ void IRBuilder::build_string_builder(StringBuilder* sb) {
     }
 }
 
-void IRBuilder::build_sizeof(UnOp* un) {
+void IRBuilder::build_sizeof(Sizeof* un) {
     Type* type = un->get_expression()->get_type();
 
     last_value = ctx->new_load_immediate(IR_VALUE_LITERAL_INTEGER, type->get_size_in_bytes())->get_dst();
@@ -1039,7 +1038,7 @@ bool IRBuilder::is_function_call(BinOp* bin) {
 
     if (bin->get_left()->get_kind() == EXPR_ID) {
         id = (Identifier*) bin->get_left();
-        return id->get_symbol()->get_kind() == SYM_FUNCTION;
+        return id->get_symbol_descriptor()->get_kind() == SYM_FUNCTION;
     }
 
     return false;
@@ -1050,7 +1049,7 @@ bool IRBuilder::is_method_call(BinOp* bin) {
 
     if (bin->get_left()->get_kind() == EXPR_ID) {
         id = (Identifier*) bin->get_left();
-        return id->get_symbol()->get_kind() == SYM_METHOD;
+        return id->get_symbol_descriptor()->get_kind() == SYM_METHOD;
     }
 
     return false;
@@ -1064,9 +1063,9 @@ bool IRBuilder::is_constructor_call(BinOp* bin) {
     if (bin->get_left()->get_kind() == EXPR_ID) {
         id = (Identifier*) bin->get_left();
         type = id->get_type();
-        sym = id->get_symbol();
+        sym = nullptr;
 
-        return type->get_kind() == TYPE_NAMED && sym->get_kind() == SYM_CLASS;
+        return type->get_kind() == TYPE_NAMED; //&& sym->get_kind() == SYM_CLASS;
     }
 
     return false;

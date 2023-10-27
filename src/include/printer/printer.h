@@ -27,7 +27,7 @@ namespace haard {
         void print_elif(Elif* stmt);
         void print_else(Else* stmt);
 
-        void print_while_statement(While* statement);
+        void print_while_statement(WhileStatement* statement);
         void print_for_statement(ForStatement* statement);
         void print_branch_statement(BranchStatement* statement);
         void print_jump_statement(std::string op, JumpStatement* statement);

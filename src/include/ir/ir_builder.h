@@ -56,7 +56,7 @@ namespace haard {
             void build_identifier_rvalue(Identifier* id);
             void build_this(This* expr);
 
-            void build_pre_inc(UnOp* un);
+            void build_pre_inc(PreIncrement* un);
             void build_cast(Cast* cast);
 
             void build_call(BinOp* bin);
@@ -96,8 +96,8 @@ namespace haard {
             void build_srl(BinOp* bin);
             void build_sra(BinOp* bin);
 
-            void build_address_of(UnOp* op);
-            void build_dereference(UnOp* op, bool lvalue=false);
+            void build_address_of(AddressOf* op);
+            void build_dereference(Dereference* op, bool lvalue=false);
 
             void build_binop(BinOp* bin, int kind);
 
@@ -106,7 +106,7 @@ namespace haard {
             void build_literal_string(Literal* literal);
             void build_string_builder(StringBuilder* sb);
 
-            void build_sizeof(UnOp* un);
+            void build_sizeof(Sizeof* un);
 
             void generate_deletables(Scope* scope);
 

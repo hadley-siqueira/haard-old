@@ -6,10 +6,10 @@
 #include "ast/expression.h"
 
 namespace haard {
-    class While : public Statement {
+    class WhileStatement : public Statement {
     public:
-        While();
-        ~While();
+        WhileStatement();
+        ~WhileStatement();
 
     public:
         Expression* get_condition();
