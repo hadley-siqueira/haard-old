@@ -62,6 +62,10 @@ void SemanticSecondPass::build_statement(Statement* stmt) {
         build_compound_statement((CompoundStatement*) stmt);
         break;
 
+    case STMT_WHILE:
+        build_while_statement((WhileStatement*) stmt);
+        break;
+
     case STMT_EXPRESSION:
         build_expression_statement((ExpressionStatement*) stmt);
         break;
@@ -77,6 +81,15 @@ void SemanticSecondPass::build_compound_statement(CompoundStatement* stmt) {
     for (int i = 0; i < stmt->statements_count(); ++i) {
         build_statement(stmt->get_statement(i));
     }
+
+    leave_scope();
+}
+
+void SemanticSecondPass::build_while_statement(WhileStatement* stmt) {
+    enter_scope(stmt->get_scope());
+
+    build_expression(stmt->get_condition());
+    build_statement(stmt->get_statements());
 
     leave_scope();
 }
@@ -97,6 +110,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
     switch (kind) {
     case EXPR_ASSIGNMENT:
         build_assignment((Assignment*) expr);
+        break;
+
+    case EXPR_LESS_THAN:
+        build_less_than((LessThan*) expr);
         break;
 
     case EXPR_PLUS:
@@ -157,6 +174,13 @@ void SemanticSecondPass::build_assignment(Assignment* expr) {
 
     build_expression(expr->get_left());
     expr->set_type(expr->get_left()->get_type());
+}
+
+void SemanticSecondPass::build_less_than(LessThan* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    expr->set_type(new Type(TYPE_BOOL));
 }
 
 void SemanticSecondPass::build_plus(Plus* expr) {
@@ -490,6 +514,7 @@ void SemanticSecondPass::build_simple_call(Call* expr) {
     }
 
     set_call_type(expr, sym, idx);
+    id->set_symbol_descriptor(sym->get_descriptor(idx));
 }
 
 void SemanticSecondPass::set_call_type(Call* expr, Symbol* sym, int idx) {

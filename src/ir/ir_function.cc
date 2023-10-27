@@ -39,3 +39,11 @@ IRValue* IRFunction::get_parameter(int idx) {
 void IRFunction::add_parameter(IRValue* param) {
     params.push_back(param);
 }
+
+int IRFunction::temp_count() {
+    return ctx->temp_count();
+}
+
+IRValue* IRFunction::get_temp(int idx) {
+    return ctx->get_temp(idx);
+}

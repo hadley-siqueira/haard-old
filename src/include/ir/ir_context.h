@@ -46,6 +46,9 @@ namespace haard {
             int instructions_count();
             IR* get_instruction(int i);
 
+            int temp_count();
+            IRValue* get_temp(int idx);
+
             void set_alloca_value(std::string name, IRValue* value);
             IRValue* get_alloca_value(std::string name);
             bool has_alloca(std::string name);
@@ -58,6 +61,7 @@ namespace haard {
             std::map<std::string, IRValue*> values;
             std::map<std::string, IRValue*> alloca_map;
             std::vector<IR*> instructions;
+            std::vector<IRValue*> temps;
             std::vector<IRAlloca*> allocas;
     };
 }

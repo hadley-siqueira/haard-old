@@ -20,9 +20,14 @@ namespace haard {
             void print_function_body(IRFunction* function);
             void print_instruction(IR* ir);
             std::string get_function_name(IRFunction* function);
+            std::string get_function_name(std::string name);
 
         private:
             void print_binop(const char* oper, IRBin* bin);
+            void print_main_function();
+            void print_syscall_body();
+            void add_temp(IRValue* value);
+            bool is_not_parameter(IRFunction* function, IRValue* value);
 
         private:
             void indent();
@@ -32,6 +37,7 @@ namespace haard {
         private:
             int indent_c;
             std::stringstream* out;
+            std::vector<IRValue*> temps;
             std::stringstream functions;
             IRFunction* main_function;
             std::map<std::string, int> fmap;

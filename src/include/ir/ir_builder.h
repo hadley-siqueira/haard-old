@@ -59,9 +59,9 @@ namespace haard {
             void build_pre_inc(PreIncrement* un);
             void build_cast(Cast* cast);
 
-            void build_call(BinOp* bin);
+            void build_call(Call* bin);
             void build_call_arguments(IRCall* call, ExpressionList* args, IRValue *this_ptr=nullptr);
-            void build_function_call(BinOp* bin, IRCall* call);
+            void build_function_call(Call* bin, IRCall* call);
             void build_method_call(BinOp* bin, IRCall* call);
 
             void build_index_access(BinOp* bin, bool lvalue=false);
@@ -76,7 +76,7 @@ namespace haard {
             void build_equal(BinOp* bin);
             void build_not_equal(BinOp* bin);
 
-            void build_less_than(BinOp* bin);
+            void build_less_than(LessThan* bin);
             void build_greater_than(BinOp* bin);
             void build_less_than_or_equal(BinOp* bin);
             void build_greater_than_or_equal(BinOp* bin);
@@ -100,6 +100,7 @@ namespace haard {
             void build_dereference(Dereference* op, bool lvalue=false);
 
             void build_binop(BinOp* bin, int kind);
+            void build_binop(BinaryOperator* bin, int kind);
 
             void build_literal(Literal* literal, int kind);
             void build_literal_integer(Literal* literal);
@@ -111,7 +112,7 @@ namespace haard {
             void generate_deletables(Scope* scope);
 
         private:
-            bool is_function_call(BinOp* bin);
+            bool is_function_call(Call* bin);
             bool is_method_call(BinOp* bin);
             bool is_constructor_call(BinOp* bin);
 

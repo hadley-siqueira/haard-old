@@ -344,7 +344,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         break;
 
     case EXPR_CALL:
-        build_call(bin);
+        build_call((Call*) expression);
         break;
 
     case EXPR_INDEX:
@@ -382,7 +382,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         break;
 
     case EXPR_LESS_THAN:
-        build_less_than(bin);
+        build_less_than((LessThan*) expression);
         break;
 
     case EXPR_GREATER_THAN:
@@ -523,7 +523,8 @@ void IRBuilder::build_identifier_lvalue(Identifier* id) {
         size = type->get_size_in_bytes();
         align = type->get_alignment();
 
-        std::string name = id->get_name();
+        Variable* var = (Variable*) id->get_symbol_descriptor()->get_descriptor();
+        std::string name = var->get_unique_name();
 
         if (ctx->has_alloca(name)) {
             last_value = ctx->get_alloca_value(name);
@@ -581,7 +582,7 @@ void IRBuilder::build_cast(Cast* cast) {
     build_expression(cast->get_expression());
 }
 
-void IRBuilder::build_call(BinOp* bin) {
+void IRBuilder::build_call(Call* bin) {
     IRCall* call = new IRCall();
 
     /* refactor:
@@ -594,7 +595,7 @@ void IRBuilder::build_call(BinOp* bin) {
 
     if (is_function_call(bin)) {
         build_function_call(bin, call);
-    } else if (is_method_call(bin)) {
+    }/* else if (is_method_call(bin)) {
         build_method_call(bin, call);
     } else if (is_constructor_call(bin)) {
         //DBG; exit(0);
@@ -613,7 +614,7 @@ void IRBuilder::build_call(BinOp* bin) {
 
         build_call_arguments(call, (ExpressionList*) bin->get_right(), this_ptr);
         ctx->add_instruction(call);
-    }
+    }*/
 
     if (bin->get_type()->get_kind() != TYPE_VOID) {
         call->set_dst(ctx->new_temporary());
@@ -638,11 +639,11 @@ void IRBuilder::build_call_arguments(IRCall* call, ExpressionList* args, IRValue
     }
 }
 
-void IRBuilder::build_function_call(BinOp* bin, IRCall* call) {
+void IRBuilder::build_function_call(Call* bin, IRCall* call) {
     Identifier* id;
 
-    if (bin->get_left()->get_kind() == EXPR_ID) {
-        id = (Identifier*) bin->get_left();
+    if (bin->get_object()->get_kind() == EXPR_ID) {
+        id = (Identifier*) bin->get_object();
     }
 
     Function* f = (Function*) id->get_symbol_descriptor()->get_descriptor();
@@ -650,7 +651,7 @@ void IRBuilder::build_function_call(BinOp* bin, IRCall* call) {
 
     call->set_name(name);
 
-    build_call_arguments(call, (ExpressionList*) bin->get_right());
+    build_call_arguments(call, (ExpressionList*) bin->get_arguments());
     ctx->add_instruction(call);
 }
 
@@ -859,7 +860,7 @@ void IRBuilder::build_not_equal(BinOp* bin) {
     build_binop(bin, IR_NE);
 }
 
-void IRBuilder::build_less_than(BinOp* bin) {
+void IRBuilder::build_less_than(LessThan* bin) {
     bool f1 = bin->get_left()->get_type()->is_signed();
     bool f2 = bin->get_right()->get_type()->is_signed();
 
@@ -987,6 +988,23 @@ void IRBuilder::build_binop(BinOp* bin, int kind) {
     last_value = dst;
 }
 
+void IRBuilder::build_binop(BinaryOperator* bin, int kind) {
+    IR* ir;
+    IRValue* left;
+    IRValue* right;
+    IRValue* dst;
+
+    build_expression(bin->get_left());
+    left = last_value;
+
+    build_expression(bin->get_right());
+    right = last_value;
+
+    dst = ctx->new_temporary();
+    ir = ctx->new_bin(kind, dst, left, right);
+    last_value = dst;
+}
+
 void IRBuilder::build_literal(Literal* literal, int kind) {
     IRUnary* li;
 
@@ -1033,11 +1051,11 @@ void IRBuilder::generate_deletables(Scope* scope) {
     }
 }
 
-bool IRBuilder::is_function_call(BinOp* bin) {
+bool IRBuilder::is_function_call(Call* bin) {
     Identifier* id;
 
-    if (bin->get_left()->get_kind() == EXPR_ID) {
-        id = (Identifier*) bin->get_left();
+    if (bin->get_object()->get_kind() == EXPR_ID) {
+        id = (Identifier*) bin->get_object();
         return id->get_symbol_descriptor()->get_kind() == SYM_FUNCTION;
     }
 

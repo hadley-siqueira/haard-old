@@ -31,7 +31,7 @@ void IRCppPrinter::print_modules(IRModules* modules) {
         print_module(modules->get_module(i));
     }
 
-    *out << "int main() {\n    return 0;\n}\n";
+    print_main_function();
 }
 
 void IRCppPrinter::print_module(IRModule* module) {
@@ -42,27 +42,53 @@ void IRCppPrinter::print_module(IRModule* module) {
 
 void IRCppPrinter::print_function(IRFunction* function) {
     int i;
+    bool is_syscall = false;
+
+    if (function->get_name().find("syscall") != std::string::npos) {
+        is_syscall = true;
+    } else if (function->get_name().find("main") != std::string::npos) {
+        main_function = function;
+    }
 
     *out << "// " << function->get_name() << "\n";
     *out << "u64 " << get_function_name(function) << "(";
 
     if (function->parameters_count() > 0) {
         for (i = 0; i < function->parameters_count() - 1; ++i) {
-            *out << function->get_parameter(i)->to_str() << ", ";
+            *out << "u64 " << function->get_parameter(i)->to_cpp() << ", ";
         }
 
-        *out << function->get_parameter(i)->to_str();
+        *out << "u64 " << function->get_parameter(i)->to_cpp();
     }
 
     *out << ") {\n";
     indent();
-    print_function_body(function);
+
+    if (is_syscall) {
+        print_syscall_body();
+    } else {
+        print_function_body(function);
+    }
+
     dedent();
     *out << "}\n";
 }
 
 void IRCppPrinter::print_function_body(IRFunction* function) {
     IRContext* ctx = function->get_context();
+
+    int i;
+
+    *out << "u64 ";
+    for (i = 0; i < function->temp_count() - 1; ++i) {
+        IRValue* tmp = function->get_temp(i);
+
+        if (is_not_parameter(function, tmp)) {
+            *out << function->get_temp(i)->to_cpp() << ",\n";
+        }
+    }
+
+    *out << function->get_temp(i)->to_cpp() << ";\n";
 
     for (int i = 0; i < ctx->instructions_count(); ++i) {
         print_indentation();
@@ -146,7 +172,8 @@ void IRCppPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_LI:
-        *out << "u64 " << un->get_dst()->to_cpp() << " = ";
+        add_temp(un->get_dst());
+        *out << un->get_dst()->to_cpp() << " = ";
         *out << un->get_src()->to_cpp();
         break;
 
@@ -156,7 +183,8 @@ void IRCppPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_LOAD32:
-        *out << "u64 " << mem->get_dst()->to_cpp() << " = *((i32*) ";
+        add_temp(mem->get_dst());
+        *out << mem->get_dst()->to_cpp() << " = *((i32*) ";
         *out << mem->get_src()->to_cpp() << ")";
         break;
 
@@ -201,7 +229,8 @@ void IRCppPrinter::print_instruction(IR* ir) {
         *out << alloca->get_size() << "];\n";
         print_indentation();
 
-        *out << "u64 " << alloca->get_dst()->to_cpp() << " = (u64) ";
+        add_temp(alloca->get_dst());
+        *out << alloca->get_dst()->to_cpp() << " = (u64) ";
         *out << "&t" << alloca->get_dst()->to_cpp();
         break;
 
@@ -219,23 +248,23 @@ void IRCppPrinter::print_instruction(IR* ir) {
             *out << call->get_dst()->to_cpp() << " = ";
         }
 
-        *out << "call " << call->get_name() << "(";
+        *out << get_function_name(call->get_name()) << "(";
 
         if (call->arguments_count() > 0) {
             int i;
 
             for (i = 0; i < call->arguments_count() - 1; ++i) {
-                *out << call->get_argument(i)->to_str() << ", ";
+                *out << call->get_argument(i)->to_cpp() << ", ";
             }
 
-            *out << call->get_argument(i)->to_str();
+            *out << call->get_argument(i)->to_cpp();
         }
 
         *out << ")";
         break;
 
     case IR_BZ:
-        *out << "bz " << branch->get_src1()->to_str() << ", " << branch->get_label()->to_str();
+        *out << "if (" << branch->get_src1()->to_cpp() << " == 0) goto " << branch->get_label()->to_str();
         break;
 
     case IR_BNZ:
@@ -268,10 +297,49 @@ std::string IRCppPrinter::get_function_name(IRFunction* function) {
     return r.str();
 }
 
+std::string IRCppPrinter::get_function_name(std::string name) {
+    std::stringstream r;
+    r << "f" << fmap[name];
+    return r.str();
+}
+
 void IRCppPrinter::print_binop(const char* oper, IRBin* bin) {
-    *out << "u64 " << bin->get_dst()->to_cpp() << " = ";
+    add_temp(bin->get_dst());
+    *out << bin->get_dst()->to_cpp() << " = ";
     *out << bin->get_src1()->to_cpp() << " " << oper << " ";
     *out << bin->get_src2()->to_cpp();
+}
+
+void IRCppPrinter::print_main_function() {
+    *out << "\nint main() {\n";
+
+    if (main_function) {
+        *out << "    " << get_function_name(main_function) << "();\n";
+    }
+
+    *out << "    return 0;\n}\n";
+}
+
+void IRCppPrinter::print_syscall_body() {
+    *out << "    switch (t0) {\n"
+            "    case 0:\n"
+            "        std::cout << t2 << std::endl;\n"
+            "        break;\n"
+            "    }\n";
+}
+
+void IRCppPrinter::add_temp(IRValue* value) {
+    temps.push_back(value);
+}
+
+bool IRCppPrinter::is_not_parameter(IRFunction *function, IRValue *value) {
+    for (int i = 0; i < function->parameters_count(); ++i) {
+        if (function->get_parameter(i) == value) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void IRCppPrinter::indent() {

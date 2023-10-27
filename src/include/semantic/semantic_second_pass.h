@@ -17,12 +17,14 @@ namespace haard {
 
         void build_statement(Statement* stmt);
         void build_compound_statement(CompoundStatement* stmt);
+        void build_while_statement(WhileStatement* stmt);
         void build_expression_statement(ExpressionStatement* stmt);
 
         void build_expression(Expression* expr);
 
         void build_assignment(Assignment* expr);
 
+        void build_less_than(LessThan* expr);
         void build_plus(Plus* expr);
 
         void build_call(Call* expr);

@@ -149,6 +149,7 @@ IRValue* IRContext::new_temporary() {
     IRValue* v = new IRValue(IR_VALUE_TEMP, tmp_counter++);
     
     values[v->to_str()] = v;
+    temps.push_back(v);
     return v;
 }
 
@@ -193,6 +194,14 @@ IR *IRContext::get_instruction(int i) {
     }
 
     return nullptr;
+}
+
+int IRContext::temp_count() {
+    return temps.size();
+}
+
+IRValue *IRContext::get_temp(int idx) {
+    return temps[idx];
 }
 
 void IRContext::set_alloca_value(std::string name, IRValue* value) {
