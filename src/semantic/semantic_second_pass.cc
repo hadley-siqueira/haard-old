@@ -112,6 +112,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_assignment((Assignment*) expr);
         break;
 
+    case EXPR_NOT_EQUAL:
+        build_not_equal((NotEqual*) expr);
+        break;
+
     case EXPR_LESS_THAN:
         build_less_than((LessThan*) expr);
         break;
@@ -160,6 +164,14 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_literal_double((Literal*) expr);
         break;
 
+    case EXPR_LITERAL_STRING:
+        build_literal_string((Literal*) expr);
+        break;
+
+    case EXPR_CAST:
+        build_cast((Cast*) expr);
+        break;
+
     default:
         break;
     }
@@ -174,6 +186,13 @@ void SemanticSecondPass::build_assignment(Assignment* expr) {
 
     build_expression(expr->get_left());
     expr->set_type(expr->get_left()->get_type());
+}
+
+void SemanticSecondPass::build_not_equal(NotEqual* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    expr->set_type(new Type(TYPE_BOOL));
 }
 
 void SemanticSecondPass::build_less_than(LessThan* expr) {
@@ -345,6 +364,12 @@ void SemanticSecondPass::build_dot(Dot* expr) {
     }
 }
 
+void SemanticSecondPass::build_cast(Cast* expr) {
+    build_expression(expr->get_expression());
+    expr->set_type(expr->get_cast_type());
+    link_type(expr->get_type());
+}
+
 void SemanticSecondPass::build_identifier(Identifier* expr) {
     Symbol* sym = nullptr;
 
@@ -379,6 +404,12 @@ void SemanticSecondPass::build_literal_float(Literal* expr) {
 
 void SemanticSecondPass::build_literal_double(Literal* expr) {
     expr->set_type(new Type(TYPE_DOUBLE));
+}
+
+void SemanticSecondPass::build_literal_string(Literal* expr) {
+    Type* t = new Type(TYPE_CHAR);
+    t = new IndirectionType(TYPE_POINTER, t);
+    expr->set_type(t);
 }
 
 bool SemanticSecondPass::is_new_variable(Assignment* expr) {

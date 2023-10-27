@@ -4,3 +4,27 @@ def print : void
     @n : int
 
     syscall(0, n)
+
+def print : void
+    @c : char
+
+    syscall(1, c as int)
+
+def print : void
+    @s : char*
+
+    while *s != '\0':
+        print(*s)
+        s = s + 1
+
+def println : void
+    @c : char
+
+    print(c)
+    print('\n')
+
+def println : void
+    @s : char*
+
+    print(s)
+    print('\n')

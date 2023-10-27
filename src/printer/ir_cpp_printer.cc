@@ -167,8 +167,8 @@ void IRCppPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_LOAD64:
-        *out << mem->get_dst()->to_cpp() << " = ld ";
-        *out << mem->get_src()->to_cpp();
+        *out << mem->get_dst()->to_cpp() << " = *((i64*) ";
+        *out << mem->get_src()->to_cpp() << ")";
         break;
 
     case IR_LOAD32:
@@ -177,17 +177,17 @@ void IRCppPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_LOAD16:
-        *out << mem->get_dst()->to_cpp() << " = lh ";
-        *out << mem->get_src()->to_cpp();
+        *out << mem->get_dst()->to_cpp() << " = *((i16*) ";
+        *out << mem->get_src()->to_cpp() << ")";
         break;
 
     case IR_LOAD8:
-        *out << mem->get_dst()->to_cpp() << " = lb ";
-        *out << mem->get_src()->to_cpp();
+        *out << mem->get_dst()->to_cpp() << " = *((i8*) ";
+        *out << mem->get_src()->to_cpp() << ")";
         break;
 
     case IR_STORE64:
-        *out << "sd " << mem->get_dst()->to_cpp() << ", ";
+        *out << "*((i64*) " << mem->get_dst()->to_cpp() << ") = ";
         *out << mem->get_src()->to_cpp();
         break;
 
@@ -197,12 +197,12 @@ void IRCppPrinter::print_instruction(IR* ir) {
         break;
 
     case IR_STORE16:
-        *out << "sh " << mem->get_dst()->to_cpp() << ", ";
+        *out << "*((i16*) " << mem->get_dst()->to_cpp() << ") = ";
         *out << mem->get_src()->to_cpp();
         break;
 
     case IR_STORE8:
-        *out << "sb " << mem->get_dst()->to_cpp() << ", ";
+        *out << "*((i8*) " << mem->get_dst()->to_cpp() << ") = ";
         *out << mem->get_src()->to_cpp();
         break;
 
@@ -293,9 +293,18 @@ void IRCppPrinter::print_binop(const char* oper, IRBin* bin) {
 void IRCppPrinter::print_headers() {
     headers << "#include <iostream>\n";
     headers << "#include <cstdint>\n";
-    headers << "\n";
+    headers << "\n\n";
+
+    headers << "typedef int8_t i8;\n";
+    headers << "typedef int16_t i16;\n";
     headers << "typedef int32_t i32;\n";
+    headers << "typedef int64_t i64;\n";
+
+    headers << "typedef uint8_t u8;\n";
+    headers << "typedef uint16_t u16;\n";
+    headers << "typedef uint32_t u32;\n";
     headers << "typedef uint64_t u64;\n";
+    headers << "\n\n";
 }
 
 void IRCppPrinter::print_main_function() {
@@ -312,7 +321,10 @@ void IRCppPrinter::print_main_function() {
 void IRCppPrinter::print_syscall_body() {
     *out << "    switch (t0) {\n"
             "    case 0:\n"
-            "        std::cout << t2 << std::endl;\n"
+            "        std::cout << t2;\n"
+            "        break;\n"
+            "    case 1:\n"
+            "        std::cout << (char) t2;\n"
             "        break;\n"
             "    }\n";
 }

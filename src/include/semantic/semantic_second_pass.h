@@ -24,7 +24,9 @@ namespace haard {
 
         void build_assignment(Assignment* expr);
 
+        void build_not_equal(NotEqual* expr);
         void build_less_than(LessThan* expr);
+
         void build_plus(Plus* expr);
 
         void build_call(Call* expr);
@@ -36,6 +38,7 @@ namespace haard {
         void build_address_of(AddressOf* expr);
         void build_dereference(Dereference* expr);
         void build_dot(Dot* expr);
+        void build_cast(Cast* expr);
 
         void build_identifier(Identifier* expr);
         void build_literal_bool(Literal* expr);
@@ -43,6 +46,7 @@ namespace haard {
         void build_literal_integer(Literal* expr);
         void build_literal_float(Literal* expr);
         void build_literal_double(Literal* expr);
+        void build_literal_string(Literal* expr);
 
     private:
         bool is_new_variable(Assignment* expr);

@@ -374,11 +374,11 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         break;
 
     case EXPR_EQUAL:
-        build_equal(bin);
+        build_equal((Equal*) expression);
         break;
 
     case EXPR_NOT_EQUAL:
-        build_not_equal(bin);
+        build_not_equal((NotEqual*) expression);
         break;
 
     case EXPR_LESS_THAN:
@@ -386,15 +386,15 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         break;
 
     case EXPR_GREATER_THAN:
-        build_greater_than(bin);
+        build_greater_than((GreaterThan*) expression);
         break;
 
     case EXPR_LESS_THAN_OR_EQUAL:
-        build_less_than_or_equal(bin);
+        build_less_than_or_equal((LessThanOrEqual*) expression);
         break;
 
     case EXPR_GREATER_THAN_OR_EQUAL:
-        build_greater_than_or_equal(bin);
+        build_greater_than_or_equal((GreaterThanOrEqual*) expression);
         break;
 
     case EXPR_PLUS:
