@@ -12,6 +12,7 @@ namespace haard {
 
         void build_imports(Module* module);
         void build_classes(Module* module);
+        void build_struct(Module* module);
         void build_structs(Module* module);
         void build_functions(Module* module);
 
@@ -33,7 +34,6 @@ namespace haard {
         void build_self_type(CompoundTypeDescriptor* desc);
         void add_default_constructor(CompoundTypeDescriptor* decl);
         void add_default_destructor(CompoundTypeDescriptor* decl);
-
     };
 }
 

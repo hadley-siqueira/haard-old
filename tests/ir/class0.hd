@@ -1,0 +1,36 @@
+import std.io
+
+class Pixel:
+    r : int
+    g : int
+    b : int
+
+    def hello : void
+        println("from pixel")
+
+class Pair:
+    x : int
+    y : int
+    p : Pixel
+
+    def init : void
+        x = 0
+        y = 0
+        println("from init")
+
+    def foo : void
+        println("from foo")
+        init()
+
+class Vector(Pair):
+    z : int
+    w : int
+    k : int
+
+def main : void
+    var v : Pair
+    var p : Pixel
+    v.init()
+    v.foo()
+    p.hello()
+    return

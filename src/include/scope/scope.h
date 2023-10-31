@@ -26,7 +26,7 @@ namespace haard {
             SymbolDescriptor* define_class(Class* klass);
             SymbolDescriptor* define_struct(Struct* obj);
             SymbolDescriptor* define_enum(Enum* obj);
-            SymbolDescriptor* define_union(std::string& name, Union* obj);
+            SymbolDescriptor* define_union(Union* obj);
             SymbolDescriptor* define_function(Function* obj);
             SymbolDescriptor* define_method(Function* obj);
             SymbolDescriptor* define_template(NamedType* type);

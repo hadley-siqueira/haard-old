@@ -1,0 +1,6 @@
+struct Pair:
+    x : int
+    y : int
+
+def main : void
+    i = 0

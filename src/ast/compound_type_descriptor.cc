@@ -12,6 +12,7 @@ CompoundTypeDescriptor::CompoundTypeDescriptor() {
     super_type = nullptr;
     destructor = nullptr;
     scope = new Scope();
+    size_in_bytes = -1;
 }
 
 CompoundTypeDescriptor::~CompoundTypeDescriptor() {
@@ -27,31 +28,15 @@ CompoundTypeDescriptor::~CompoundTypeDescriptor() {
     delete template_header;
 }
 
-int CompoundTypeDescriptor::get_kind() const {
-    return kind;
-}
-
-int CompoundTypeDescriptor::get_line() const {
-    return line;
-}
-
-int CompoundTypeDescriptor::get_column() const {
-    return column;
-}
-
 std::vector<Annotation*> CompoundTypeDescriptor::get_annotations() const {
     return annotations;
-}
-
-std::string CompoundTypeDescriptor::get_name() const {
-    return name;
 }
 
 std::string CompoundTypeDescriptor::get_qualified_name() {
     int i;
     std::stringstream ss;
 
-    ss << module->get_relative_path() << "." << name;
+    ss << get_module()->get_relative_path() << "." << get_name();
 
     if (template_header) {
         ss << template_header->get_qualified_name();
@@ -72,28 +57,12 @@ void CompoundTypeDescriptor::set_alignment(int value) {
     alignment = value;
 }
 
-void CompoundTypeDescriptor::set_kind(int value) {
-    kind = value;
-}
-
-void CompoundTypeDescriptor::set_line(int value) {
-    line = value;
-}
-
-void CompoundTypeDescriptor::set_column(int value) {
-    column = value;
-}
-
 void CompoundTypeDescriptor::set_template(bool value) {
     template_flag = value;
 }
 
 void CompoundTypeDescriptor::set_annotations(const std::vector<Annotation*>& value) {
     annotations = value;
-}
-
-void CompoundTypeDescriptor::set_name(const std::string &value) {
-    name = value;
 }
 
 bool CompoundTypeDescriptor::is_template() {
@@ -131,6 +100,7 @@ void CompoundTypeDescriptor::add_method(Function* method) {
 
     method->set_method();
     method->set_compound(this);
+    method->set_module(this->get_module());
     method->get_scope()->set_parent(get_scope());
 }
 
@@ -139,11 +109,11 @@ Scope* CompoundTypeDescriptor::get_scope() const {
 }
 
 std::string CompoundTypeDescriptor::get_full_filepath() {
-    return module->get_path();
+    return get_module()->get_path();
 }
 
 std::string CompoundTypeDescriptor::get_relative_filepath() {
-    return module->get_relative_path();
+    return get_module()->get_relative_path();
 }
 
 Variable* CompoundTypeDescriptor::get_field(int idx) {
@@ -188,14 +158,6 @@ NamedType* CompoundTypeDescriptor::get_self_type() {
 
 void CompoundTypeDescriptor::set_self_type(NamedType* type) {
     self_type = type;
-}
-
-Module* CompoundTypeDescriptor::get_module() const {
-    return module;
-}
-
-void CompoundTypeDescriptor::set_module(Module* value) {
-    module = value;
 }
 
 TemplateHeader* CompoundTypeDescriptor::get_template_header() const {

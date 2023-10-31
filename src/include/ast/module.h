@@ -10,6 +10,7 @@
 #include "ast/union.h"
 #include "ast/function.h"
 #include "ast/compound_type_descriptor.h"
+#include "ast/declaration.h"
 
 namespace haard {
     class Import;
@@ -29,6 +30,7 @@ namespace haard {
         Struct* get_struct(int idx);
         Enum* get_enum(int idx);
         Union* get_union(int idx);
+        Declaration* get_declaration(int idx);
         Scope* get_scope();
 
         void set_path(std::string path);
@@ -40,6 +42,7 @@ namespace haard {
         void add_union(Union* obj);
 
         int import_count();
+        int declarations_count();
         int functions_count();
         int classes_count();
         int structs_count();
@@ -58,6 +61,7 @@ namespace haard {
         std::vector<Struct*> structs;
         std::vector<Enum*> enums;
         std::vector<Union*> unions;
+        std::vector<Declaration*> declarations;
         Scope* scope;
     };
 }

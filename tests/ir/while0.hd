@@ -4,10 +4,12 @@ def sum : int
     @a : int
     @b : int
 
-    return 0
+    return a + b
 
 def main : int
     i = 0
+
+    print(sum(2, 3))
 
     while i < 10:
         print(i)

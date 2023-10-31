@@ -360,7 +360,7 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         break;
 
     case EXPR_ASSIGNMENT:
-        build_assignment(bin, lvalue);
+        build_assignment((Assignment*) expression, lvalue);
         break;
 
     case EXPR_LOGICAL_OR:
@@ -595,16 +595,16 @@ void IRBuilder::build_call(Call* bin) {
 
     if (is_function_call(bin)) {
         build_function_call(bin, call);
-    }/* else if (is_method_call(bin)) {
+    } else if (is_method_call(bin)) {
         build_method_call(bin, call);
     } else if (is_constructor_call(bin)) {
-        //DBG; exit(0);
-    } else if (bin->get_left()->get_kind() == EXPR_DOT) {
+        DBG; exit(0);
+    } else if (bin->get_object()->get_kind() == EXPR_DOT) {
         IRValue* this_ptr;
 
-        build_expression(bin->get_left(), true);
+        build_expression(bin->get_object(), true);
         this_ptr = last_value;
-        BinaryOperator* dot = (BinaryOperator*) bin->get_left();
+        BinaryOperator* dot = (BinaryOperator*) bin->get_object();
 
         Identifier* id = (Identifier*) dot->get_right();
         Function* f = (Function*) id->get_symbol_descriptor()->get_descriptor();
@@ -612,9 +612,11 @@ void IRBuilder::build_call(Call* bin) {
 
         call->set_name(name);
 
-        build_call_arguments(call, (ExpressionList*) bin->get_right(), this_ptr);
+        build_call_arguments(call, (ExpressionList*) bin->get_arguments(), this_ptr);
         ctx->add_instruction(call);
-    }*/
+    } else {
+        DBG; exit(0);
+    }
 
     if (bin->get_type()->get_kind() != TYPE_VOID) {
         call->set_dst(ctx->new_temporary());
@@ -655,15 +657,15 @@ void IRBuilder::build_function_call(Call* bin, IRCall* call) {
     ctx->add_instruction(call);
 }
 
-void IRBuilder::build_method_call(BinaryOperator* bin, IRCall* call) {
-    Identifier* id = (Identifier*) bin->get_left();
+void IRBuilder::build_method_call(Call* bin, IRCall* call) {
+    Identifier* id = (Identifier*) bin->get_object();
     Function* f = (Function*) id->get_symbol_descriptor()->get_descriptor();
     std::string name = f->get_qualified_name();
 
     call->set_name(name);
     IRValue* this_ptr = ctx->new_load(ARCH_WORD_SIZE, ctx->get_alloca_value("this"))->get_dst();
 
-    build_call_arguments(call, (ExpressionList*) bin->get_right(), this_ptr);
+    build_call_arguments(call, (ExpressionList*) bin->get_arguments(), this_ptr);
     ctx->add_instruction(call);
 }
 
@@ -748,8 +750,7 @@ void IRBuilder::build_member_access(BinaryOperator* bin, bool lvalue) {
     }
 }
 
-void IRBuilder::build_assignment(BinaryOperator* bin, bool lvalue) {
-    IRMemory* store;
+void IRBuilder::build_assignment(Assignment* bin, bool lvalue) {
     IRValue* left;
     IRValue* right;
     Type* type;
@@ -764,10 +765,14 @@ void IRBuilder::build_assignment(BinaryOperator* bin, bool lvalue) {
     type = bin->get_left()->get_type();
     size = type->get_size_in_bytes();
 
+    if (bin->get_initial_value()) {
+
+    }
+
     // FIXME
     // on complex types, should call memcpy instead of a simple store
     if (type->get_kind() != TYPE_NAMED) {
-        store = ctx->new_store(size, left, right);
+        ctx->new_store(size, left, right);
         last_value = left;
     } else {
         ctx->new_memcpy(left, right, size);
@@ -1045,24 +1050,24 @@ bool IRBuilder::is_function_call(Call* bin) {
     return false;
 }
 
-bool IRBuilder::is_method_call(BinaryOperator* bin) {
+bool IRBuilder::is_method_call(Call* bin) {
     Identifier* id;
 
-    if (bin->get_left()->get_kind() == EXPR_ID) {
-        id = (Identifier*) bin->get_left();
+    if (bin->get_object()->get_kind() == EXPR_ID) {
+        id = (Identifier*) bin->get_object();
         return id->get_symbol_descriptor()->get_kind() == SYM_METHOD;
     }
 
     return false;
 }
 
-bool IRBuilder::is_constructor_call(BinaryOperator* bin) {
+bool IRBuilder::is_constructor_call(Call* bin) {
     Identifier* id;
     Type* type;
     Symbol* sym;
 
-    if (bin->get_left()->get_kind() == EXPR_ID) {
-        id = (Identifier*) bin->get_left();
+    if (bin->get_object()->get_kind() == EXPR_ID) {
+        id = (Identifier*) bin->get_object();
         type = id->get_type();
         sym = nullptr;
 

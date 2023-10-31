@@ -7,6 +7,18 @@
 using namespace haard;
 
 void SemanticFirstPass::build_modules(Modules* modules) {
+    // One of the steps of semantic analysis is to to verify if something
+    // is declared twice.
+
+    // The first step is to declare stuff. It only populates the symbol table
+    // without checking for redefinition.
+    //build_modules_declarations(modules);
+
+    // Now we need to check user types and functions. Some of them may have templates
+    // which need to be linked to their descriptors
+    //link_modules_template_types(modules);
+    //link_modules_super_types(modules);
+
     for (int i = 0; i < modules->modules_count(); ++i) {
         build_module(modules->get_module(i));
     }
@@ -51,6 +63,12 @@ void SemanticFirstPass::build_fields(CompoundTypeDescriptor* decl) {
     enter_scope(decl->get_scope());
 
     for (int i = 0; i < decl->fields_count(); ++i) {
+        Variable* field = decl->get_field(i);
+
+        if (get_scope()->resolve_field(field->get_name())) {
+            log_error_and_exit("field already declared!");
+        }
+
         get_scope()->define_field(decl->get_field(i));
         link_type(decl->get_field(i)->get_type());
         decl->get_field(i)->set_uid(i);
@@ -82,11 +100,13 @@ void SemanticFirstPass::build_class(Class* decl) {
 
     enter_scope(decl->get_scope());
     build_template_header(decl->get_template_header());
+
     if (decl->get_super_type()) {
         Type* t = decl->get_super_type();
         link_type(t);
         decl->get_scope()->set_super(t->get_scope());
     }
+
     leave_scope();
 
     std::string name = decl->get_name();
@@ -127,7 +147,19 @@ void SemanticFirstPass::build_class(Class* decl) {
 }
 
 void SemanticFirstPass::build_struct(Struct* decl) {
+    Symbol* sym;
+    std::string name = decl->get_name();
+    sym = get_scope()->resolve_local(name);
 
+    if (sym) {
+        for (int i = 0; i < sym->descriptors_count(); ++i) {
+            SymbolDescriptor* desc = sym->get_descriptor(i);
+
+            if (desc->get_kind()) {
+
+            }
+        }
+    }
 }
 
 void SemanticFirstPass::build_function(Function* function) {
@@ -331,7 +363,7 @@ void SemanticFirstPass::build_self_type(CompoundTypeDescriptor* desc) {
 
 void SemanticFirstPass::add_default_constructor(CompoundTypeDescriptor* decl) {
     Function* f;
-    Symbol* sym = get_scope()->resolve_field("init");
+    Symbol* sym = get_scope()->resolve_local("init");
 
     if (sym != nullptr) {
         for (int i = 0; i < sym->descriptors_count(); ++i) {
@@ -355,7 +387,7 @@ void SemanticFirstPass::add_default_constructor(CompoundTypeDescriptor* decl) {
 
 void SemanticFirstPass::add_default_destructor(CompoundTypeDescriptor* decl) {
     Function* f;
-    Symbol* sym = get_scope()->resolve_field("destroy");
+    Symbol* sym = get_scope()->resolve_local("destroy");
 
     if (sym != nullptr) {
         return;

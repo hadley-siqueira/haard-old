@@ -574,6 +574,16 @@ namespace haard {
         {"@@@unknown", TK_UNKNOWN},
     };
 
+    typedef enum DeclKind {
+        DECL_FUNCTION,
+        DECL_METHOD,
+        DECL_CLASS,
+        DECL_ENUM,
+        DECL_UNION,
+        DECL_STRUCT,
+        DECL_VAR
+    } DeclKind;
+
     typedef enum TypeKind {
         TYPE_U8,
         TYPE_U16,
@@ -721,14 +731,6 @@ namespace haard {
         VAR_PARAM,
         VAR_FIELD
     } VariableKind;
-
-    typedef enum TypeDeclarationKind {
-        DECL_CLASS,
-        DECL_ENUM,
-        DECL_UNION,
-        DECL_DATA,
-        DECL_STRUCT
-    } TypeDeclarationKind;
 
     typedef enum SymbolKind {
         SYM_CLASS,

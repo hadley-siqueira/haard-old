@@ -35,6 +35,7 @@ namespace haard {
             virtual bool is_signed();
             virtual bool is_class();
             virtual bool is_integer_scalar();
+            virtual bool is_user_type();
 
         protected:
             int kind;

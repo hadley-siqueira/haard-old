@@ -11,6 +11,7 @@
 #include "ast/compound_statement.h"
 #include "ast/annotation.h"
 #include "ast/compound_type_descriptor.h"
+#include "ast/declaration.h"
 
 namespace haard {
     class Scope;
@@ -18,15 +19,12 @@ namespace haard {
     class Module;
     class CompoundTypeDescriptor;
 
-    class Function {
+    class Function : public Declaration {
     public:
         Function();
         ~Function();
 
     public:
-        int get_line();
-        int get_column();
-        std::string get_name();
         std::string get_type_signature();
         Variable* get_parameter(int idx);
         Variable* get_variable(int idx);
@@ -36,9 +34,6 @@ namespace haard {
         std::string get_qualified_name();
         std::string get_original();
 
-        void set_line(int line);
-        void set_column(int column);
-        void set_name(std::string name);
         void set_from_token(Token& token);
         void set_return_type(Type* type);
         void set_statements(CompoundStatement* statements);
@@ -65,9 +60,6 @@ namespace haard {
         bool is_virtual();
 
         bool same_signature(Function* other);
-
-        void set_module(Module* module);
-        Module* get_module();
 
         void set_overloaded_index(int idx);
         int get_overloaded_index();
@@ -97,8 +89,6 @@ namespace haard {
 
     private:
         int uid;
-        int line;
-        int column;
         int overloaded_index;
         int begin;
         int end;
@@ -107,14 +97,12 @@ namespace haard {
         bool destructor_flag;
         bool virtual_flag;
         bool template_flag;
-        std::string name;
         Type* return_type;
         FunctionType* self_type;
         TemplateHeader* template_header;
         CompoundStatement* statements;
         Function* parent_method;
         Scope* scope;
-        Module* module;
         CompoundTypeDescriptor* compound;
         std::vector<Variable*> parameters;
         std::vector<Variable*> variables;

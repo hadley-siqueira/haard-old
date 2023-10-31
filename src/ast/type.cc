@@ -364,3 +364,7 @@ bool Type::is_integer_scalar() {
 
     return false;
 }
+
+bool Type::is_user_type() {
+    return kind == TYPE_NAMED;
+}

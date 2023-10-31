@@ -10,28 +10,20 @@
 #include "ast/variable.h"
 #include "ast/annotation.h"
 #include "ast/named_type.h"
+#include "ast/declaration.h"
 
 namespace haard {
     class Scope;
     class Module;
     class Function;
 
-    class CompoundTypeDescriptor {
+    class CompoundTypeDescriptor : public Declaration {
     public:
         CompoundTypeDescriptor();
         virtual ~CompoundTypeDescriptor();
 
     public:
-        int get_kind() const;
-        void set_kind(int value);
-
-        int get_line() const;
-        void set_line(int value);
-
-        int get_column() const;
-        void set_column(int value);
-
-        int get_size_in_bytes();
+        virtual int get_size_in_bytes();
 
         int get_alignment();
         void set_alignment(int value);
@@ -42,13 +34,9 @@ namespace haard {
         int get_end() const;
         void set_end(int value);
 
-        Module* get_module() const;
-        void set_module(Module* value);
-
         std::vector<Annotation*> get_annotations() const;
         void set_annotations(const std::vector<Annotation*>& value);
 
-        std::string get_name() const;
         std::string get_qualified_name();
 
         CompoundTypeDescriptor* get_super_descriptor();
@@ -70,8 +58,6 @@ namespace haard {
 
         void set_template(bool value);
 
-        void set_name(const std::string& value);
-
         void set_from_token(Token& token);
 
         TemplateHeader* get_template_header() const;
@@ -89,21 +75,15 @@ namespace haard {
         void add_method(Function* method);
 
     protected:
-        int kind;
-        int line;
-        int column;
         int begin;
         int end;
         int size_in_bytes;
         int alignment;
 
         bool template_flag;
-
-        std::string name;
         TemplateHeader* template_header;
         NamedType* self_type;
         Type* super_type;
-        Module* module;
         Scope* scope;
         std::vector<Variable*> fields;
         std::vector<Function*> methods;

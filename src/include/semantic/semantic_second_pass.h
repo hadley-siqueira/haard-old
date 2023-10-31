@@ -18,6 +18,8 @@ namespace haard {
         void build_statement(Statement* stmt);
         void build_compound_statement(CompoundStatement* stmt);
         void build_while_statement(WhileStatement* stmt);
+        void build_return_statement(JumpStatement* stmt);
+        void build_var_declaration_statement(VarDeclaration* stmt);
         void build_expression_statement(ExpressionStatement* stmt);
 
         void build_expression(Expression* expr);
@@ -47,16 +49,18 @@ namespace haard {
         void build_literal_float(Literal* expr);
         void build_literal_double(Literal* expr);
         void build_literal_string(Literal* expr);
+        void build_string_builder(StringBuilder* expr);
 
     private:
         bool is_new_variable(Assignment* expr);
         bool is_simple_call(Call* expr);
-        bool is_method_call(Call* expr);
+        bool is_member_call(Call* expr);
         bool is_constructor_call(Call* expr);
         void create_variable(Assignment* expr);
         int find_best_match(Symbol* sym, ExpressionList* args);
         bool compare_match(SymbolDescriptor* desc, ExpressionList* args);
         void build_simple_call(Call* expr);
+        void build_member_call(Call* expr);
         void set_call_type(Call* expr, Symbol* sym, int idx);
 
     };

@@ -63,7 +63,7 @@ SymbolDescriptor* Scope::define_enum(Enum* obj) {
     return define(SYM_ENUM, obj->get_name(), obj);
 }
 
-SymbolDescriptor* Scope::define_union(std::string& name, Union* obj) {
+SymbolDescriptor* Scope::define_union(Union* obj) {
     return define(SYM_UNION, obj->get_name(), obj);
 }
 

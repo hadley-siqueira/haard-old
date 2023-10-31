@@ -8,6 +8,8 @@ using namespace haard;
 int uid_counter = 0;
 
 Function::Function() {
+    set_kind(DECL_FUNCTION);
+
     return_type = nullptr;
     statements = nullptr;
     scope = new Scope();
@@ -33,18 +35,6 @@ Function::~Function() {
     for (int i = 0; i < variables.size(); ++i) {
         delete variables[i];
     }
-}
-
-int Function::get_line() {
-    return line;
-}
-
-int Function::get_column() {
-    return column;
-}
-
-std::string Function::get_name() {
-    return name;
 }
 
 Variable* Function::get_parameter(int idx) {
@@ -80,9 +70,9 @@ std::string Function::get_qualified_name() {
     std::stringstream ss;
 
     if (is_method()) {
-        ss << compound->get_qualified_name() << "#" << name;
+        ss << compound->get_qualified_name() << "#" << get_name();
     } else {
-        ss << module->get_relative_path() << "." << name;
+        ss << get_module()->get_relative_path() << "." << get_name();
     }
 
     if (template_header) {
@@ -126,18 +116,6 @@ std::string Function::get_original() {
 
     file.close();
     return buffer;
-}
-
-void Function::set_line(int line) {
-    this->line = line;
-}
-
-void Function::set_column(int column) {
-    this->column = column;
-}
-
-void Function::set_name(std::string name) {
-    this->name = name;
 }
 
 void Function::set_return_type(Type* type) {
@@ -186,9 +164,9 @@ void Function::add_variable(Variable* var) {
 }
 
 void Function::set_from_token(Token& token) {
-    line = token.get_line();
-    column = token.get_column();
-    name = token.get_lexeme();
+    set_line(token.get_line());
+    set_column(token.get_column());
+    set_name(token.get_lexeme());
 }
 
 void Function::set_method(bool value) {
@@ -219,21 +197,9 @@ std::string Function::get_type_signature() {
     int i;
     std::stringstream ss;
 
-    ss << name;
+    ss << get_name();
     ss << " :: " << self_type->to_str();
     return ss.str();
-}
-
-void Function::set_module(Module* module) {
-    this->module = module;
-}
-
-Module* Function::get_module() {
-    if (is_method()) {
-        return compound->get_module();
-    }
-
-    return module;
 }
 
 bool Function::same_signature(Function* other) {
@@ -308,7 +274,7 @@ std::string Function::get_path() {
         return compound->get_full_filepath();
     }
 
-    return module->get_path();
+    return get_module()->get_path();
 }
 
 int Function::get_begin() const {

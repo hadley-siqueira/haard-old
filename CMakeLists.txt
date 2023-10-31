@@ -32,6 +32,7 @@ set(PARSER_SRC
 
 set(AST_SRC
     src/ast/ast_node.cc
+    src/ast/declaration.cc
     src/ast/modules.cc
     src/ast/module.cc
     src/ast/annotation.cc

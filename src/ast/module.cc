@@ -12,24 +12,8 @@ Module::~Module() {
         delete imports[i];
     }
 
-    for (int i = 0; i < functions_count(); ++i) {
-        delete functions[i];
-    }
-
-    for (int i = 0; i < classes_count(); ++i) {
-        delete classes[i];
-    }
-
-    for (int i = 0; i < structs_count(); ++i) {
-        delete structs[i];
-    }
-
-    for (int i = 0; i < enums_count(); ++i) {
-        delete enums[i];
-    }
-
-    for (int i = 0; i < unions_count(); ++i) {
-        delete unions[i];
+    for (int i = 0; i < declarations_count(); ++i) {
+        delete declarations[i];
     }
 
     delete scope;
@@ -101,6 +85,14 @@ Union* Module::get_union(int idx) {
     return nullptr;
 }
 
+Declaration *Module::get_declaration(int idx) {
+    if (idx < declarations_count()) {
+        return declarations[idx];
+    }
+
+    return nullptr;
+}
+
 Scope* Module::get_scope() {
     return scope;
 }
@@ -115,32 +107,41 @@ void Module::add_import(Import* import) {
             
 void Module::add_function(Function* function) {
     functions.push_back(function);
+    declarations.push_back(function);
     function->set_module(this);
     function->get_scope()->set_parent(get_scope());
 }
 
 void Module::add_class(Class* klass) {
     classes.push_back(klass);
+    declarations.push_back(klass);
     klass->set_module(this);
 }
 
 void Module::add_struct(Struct* obj) {
     structs.push_back(obj);
+    declarations.push_back(obj);
     obj->set_module(this);
 }
 
 void Module::add_enum(Enum* obj) {
     enums.push_back(obj);
+    declarations.push_back(obj);
     obj->set_module(this);
 }
 
 void Module::add_union(Union* obj) {
     unions.push_back(obj);
+    declarations.push_back(obj);
     obj->set_module(this);
 }
 
 int Module::import_count() {
     return imports.size();
+}
+
+int Module::declarations_count() {
+    return declarations.size();
 }
 
 int Module::functions_count() {

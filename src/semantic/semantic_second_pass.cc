@@ -28,6 +28,10 @@ void SemanticSecondPass::build_module(Module* module) {
 void SemanticSecondPass::build_class(Class* klass) {
     enter_scope(klass->get_scope());
 
+    if (klass->get_super_type()) {
+        link_type(klass->get_super_type());
+    }
+
     for (int i = 0; i < klass->methods_count(); ++i) {
         build_method(klass->get_method(i));
     }
@@ -70,6 +74,14 @@ void SemanticSecondPass::build_statement(Statement* stmt) {
         build_expression_statement((ExpressionStatement*) stmt);
         break;
 
+    case STMT_RETURN:
+        build_return_statement((JumpStatement*) stmt);
+        break;
+
+    case STMT_VAR_DECL:
+        build_var_declaration_statement((VarDeclaration*) stmt);
+        break;
+
     default:
         break;
     }
@@ -92,6 +104,31 @@ void SemanticSecondPass::build_while_statement(WhileStatement* stmt) {
     build_statement(stmt->get_statements());
 
     leave_scope();
+}
+
+void SemanticSecondPass::build_return_statement(JumpStatement* stmt) {
+    build_expression(stmt->get_expression());
+}
+
+void SemanticSecondPass::build_var_declaration_statement(VarDeclaration* stmt) {
+    Expression* expr = stmt->get_expression();
+
+    if (expr) {
+        build_expression(expr);
+    }
+
+    Variable* var = stmt->get_variable();
+    link_type(var->get_type());
+    var->set_kind(VAR_LOCAL);
+    var->set_uid(next_local_var_counter());
+    get_scope()->define_local_variable(var);
+    get_function()->add_variable(var);
+
+    std::stringstream ss;
+
+    ss << "creating local variable <white>" + var->get_name() + ":";
+    ss << var->get_type()->to_str() + "</white>";
+    log_info(ss.str());
 }
 
 void SemanticSecondPass::build_expression_statement(ExpressionStatement* stmt) {
@@ -168,6 +205,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_literal_string((Literal*) expr);
         break;
 
+    case EXPR_STRING_BUILDER:
+        build_string_builder((StringBuilder*) expr);
+        break;
+
     case EXPR_CAST:
         build_cast((Cast*) expr);
         break;
@@ -214,8 +255,8 @@ void SemanticSecondPass::build_call(Call* expr) {
 
     if (is_simple_call(expr)) {
         build_simple_call(expr);
-    } else if (is_method_call(expr)) {
-        build_method_call(expr);
+    } else if (is_member_call(expr)) {
+        build_member_call(expr);
     } else if (is_constructor_call(expr)) {
         build_constructor_call(expr);
     }
@@ -412,6 +453,10 @@ void SemanticSecondPass::build_literal_string(Literal* expr) {
     expr->set_type(t);
 }
 
+void SemanticSecondPass::build_string_builder(StringBuilder* expr) {
+
+}
+
 bool SemanticSecondPass::is_new_variable(Assignment* expr) {
     if (expr->get_left()->get_kind() != EXPR_ID) {
         return false;
@@ -432,45 +477,11 @@ bool SemanticSecondPass::is_simple_call(Call* expr) {
     return expr->get_object()->get_kind() == EXPR_ID;
 }
 
-bool SemanticSecondPass::is_method_call(Call* expr) {
-    Expression* obj = expr->get_object();
-    int kind = obj->get_kind();
+bool SemanticSecondPass::is_member_call(Call* expr) {
+    int kind = expr->get_object()->get_kind();
 
-    if (kind == EXPR_ID) {
-        Identifier* id = (Identifier*) expr->get_object();
-
-        Symbol* sym = get_scope()->resolve(id->get_name());
-
-        if (sym == nullptr) {
-            log_info(get_scope()->debug());
-            log_error_and_exit(id->get_name() + " not in scope");
-        }
-
-        SymbolDescriptor* desc = sym->get_descriptor(0);
-        return desc->get_kind() == SYM_METHOD;
-    } else if (kind == EXPR_DOT) {
-        Dot* member = (Dot*) obj;
-
-        build_expression(member->get_left());
-
-        Identifier* id = (Identifier*) member->get_right();
-        Type* type = member->get_left()->get_type();
-        Scope* scope = type->get_scope();
-
-        Symbol* sym = scope->resolve_field(id->get_name());
-
-        if (sym == nullptr) {
-            log_info(get_scope()->debug());
-            log_error_and_exit(id->get_name() + " not in scope");
-        }
-
-        SymbolDescriptor* desc = sym->get_descriptor(0);
-        return desc->get_kind() == SYM_METHOD;
-    }
-
-    return false;
+    return kind == EXPR_DOT || kind == EXPR_ARROW;
 }
-
 
 bool SemanticSecondPass::is_constructor_call(Call* expr) {
     Expression* obj = expr->get_object();
@@ -525,17 +536,56 @@ void SemanticSecondPass::build_simple_call(Call* expr) {
         log_error_and_exit("second pass: not in scope " + id->get_name());
     }
 
-    if (sym->get_descriptor(0)->get_kind() == SYM_CLASS) {
-        Scope* s = sym->get_descriptor(0)->get_descriptor_scope();
-        sym = s->resolve_field("init");
+    int idx = find_best_match(sym, args);
 
-        if (sym) {
-            std::cout << "found\n";
+    if (idx < 0) {
+        log_error_and_exit("second pass: no match signature");
+    }
+
+    set_call_type(expr, sym, idx);
+    id->set_symbol_descriptor(sym->get_descriptor(idx));
+}
+
+void SemanticSecondPass::build_member_call(Call* expr) {
+    Identifier* field = nullptr;
+    Expression* obj = nullptr;
+    Symbol* sym = nullptr;
+    ExpressionList* args = expr->get_arguments();
+    int kind = expr->get_object()->get_kind();
+
+    if (kind == EXPR_DOT) {
+        Dot* dot = (Dot*) expr->get_object();
+        obj = dot->get_object();
+        field = (Identifier*) dot->get_field();
+    } else if (kind == EXPR_ARROW) {
+        Arrow* arrow = (Arrow*) expr->get_object();
+        obj = arrow->get_object();
+        field = (Identifier*) arrow->get_field();
+    }
+
+    build_expression(obj);
+    Type* type = obj->get_type();
+
+    if (type->is_user_type()) {
+        Scope* scope = type->get_scope();
+
+        if (scope) {
+            sym = scope->resolve_field(field->get_name());
+
+            if (sym) {
+
+            } else {
+                log_error_and_exit("semantic_second_pass: invalid member access 00");
+            }
         } else {
-            std::cout << "not found\n";
+            log_error_and_exit("semantic_second_pass: invalid member access 11");
         }
-        //std::cout << s->debug() << '\n';
-        //exit(0);
+    } else {
+        log_error_and_exit("Invalid member access: not a named type");
+    }
+
+    if (sym == nullptr) {
+        log_error_and_exit("second pass: not in scope " + field->get_name());
     }
 
     int idx = find_best_match(sym, args);
@@ -545,7 +595,7 @@ void SemanticSecondPass::build_simple_call(Call* expr) {
     }
 
     set_call_type(expr, sym, idx);
-    id->set_symbol_descriptor(sym->get_descriptor(idx));
+    field->set_symbol_descriptor(sym->get_descriptor(idx));
 }
 
 void SemanticSecondPass::set_call_type(Call* expr, Symbol* sym, int idx) {

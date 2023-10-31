@@ -62,12 +62,12 @@ namespace haard {
             void build_call(Call* bin);
             void build_call_arguments(IRCall* call, ExpressionList* args, IRValue *this_ptr=nullptr);
             void build_function_call(Call* bin, IRCall* call);
-            void build_method_call(BinaryOperator* bin, IRCall* call);
+            void build_method_call(Call* bin, IRCall* call);
 
             void build_index_access(BinaryOperator* bin, bool lvalue=false);
             void build_member_access(BinaryOperator* bin, bool lvalue=false);
 
-            void build_assignment(BinaryOperator* bin, bool lvalue=false);
+            void build_assignment(Assignment* bin, bool lvalue=false);
             void build_constructor_assignment(BinaryOperator* bin);
 
             void build_logical_or(BinaryOperator* bin);
@@ -112,8 +112,8 @@ namespace haard {
 
         private:
             bool is_function_call(Call* bin);
-            bool is_method_call(BinaryOperator* bin);
-            bool is_constructor_call(BinaryOperator* bin);
+            bool is_method_call(Call* bin);
+            bool is_constructor_call(Call* bin);
 
         public:
             void set_logger(Logger* logger);
