@@ -33,6 +33,7 @@ namespace haard {
         void build_less_than(LessThan* expr);
 
         void build_plus(Plus* expr);
+        void build_times(Times * expr);
 
         void build_call(Call* expr);
         void build_method_call(Call* expr);
@@ -42,8 +43,10 @@ namespace haard {
 
         void build_address_of(AddressOf* expr);
         void build_dereference(Dereference* expr);
+        void build_index(Index* expr);
         void build_dot(Dot* expr);
         void build_cast(Cast* expr);
+        void build_parenthesis(Parenthesis* expr);
 
         void build_identifier(Identifier* expr);
         void build_literal_bool(Literal* expr);

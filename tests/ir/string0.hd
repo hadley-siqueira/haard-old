@@ -1,28 +1,75 @@
 import std.io
+import std.memory
 
 class String:
     size  : int
     count : int
-    chars : char*
+    buffer : char*
 
-    def append : void
-        @n : int
+    def init : void
+        size = 0
+        count = 10
+        buffer = malloc(count)
 
-        n = 0
+    def destroy : void
+        free(buffer)
 
     def append : void
         @c : char
 
-        flag = size == count
-        if flag:
-            size = 1
-        #    resize()
+        resize()
 
-        # chars[size] = c
+        *(buffer + size) = c
         size = size + 1
 
+    def append : void
+        @b : bool
+
+        if b:
+            append("true")
+        else:
+            append("false")
+
+
+    def append : void
+        @s : char*
+
+        while *s != '\0':
+            append(*s)
+            s = s + 1
+
     def resize : void
-        size = size + 10
+        var tmp : char*
+
+        if size == count:
+            count = count * 2
+            tmp = malloc(count)
+
+            i = 0
+            while i < size:
+                # *(tmp + i) = *(buffer + i)
+                tmp[i] = buffer[i]
+                i = i + 1
+
+            free(buffer)
+            buffer = tmp
 
 def main : int
+    var ms : String
+
+    ms.init()
+    ms.append('h')
+    ms.append('a')
+    println(ms.buffer)
+
+    i = 0
+
+    while i < 10:
+        ms.append('a' + i)
+        i = i + 1
+
+    ms.append("test an append")
+    ms.append(false)
+    println(ms.buffer)
+    ms.destroy()
     return 0

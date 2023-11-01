@@ -1,13 +1,10 @@
+import std.syscall
+
 def malloc : void*
-    @size : int
-
-    ptr = 0x30 as u64*
-    *ptr = size
-
-    return *ptr
+    @n : int
+    syscall(2, n)
 
 def free : void
-    @ptr : void*
+    @ptr : char*
 
-    m = 0x31 as void*
-    *m = ptr
+    syscall(3, ptr as int)

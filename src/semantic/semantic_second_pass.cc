@@ -194,6 +194,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_plus((Plus*) expr);
         break;
 
+    case EXPR_TIMES:
+        build_times((Times*) expr);
+        break;
+
     case EXPR_CALL:
         build_call((Call*) expr);
         break;
@@ -204,6 +208,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
 
     case EXPR_DEREFERENCE:
         build_dereference((Dereference*) expr);
+        break;
+
+    case EXPR_INDEX:
+        build_index((Index*) expr);
         break;
 
     case EXPR_DOT:
@@ -246,6 +254,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_cast((Cast*) expr);
         break;
 
+    case EXPR_PARENTHESIS:
+        build_parenthesis((Parenthesis*) expr);
+        break;
+
     default:
         break;
     }
@@ -284,6 +296,13 @@ void SemanticSecondPass::build_less_than(LessThan* expr) {
 }
 
 void SemanticSecondPass::build_plus(Plus* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    expr->set_type(expr->get_left()->get_type());
+}
+
+void SemanticSecondPass::build_times(Times* expr) {
     build_expression(expr->get_left());
     build_expression(expr->get_right());
 
@@ -415,6 +434,21 @@ void SemanticSecondPass::build_dereference(Dereference* expr) {
     expr->set_type(pointer_type->get_subtype());
 }
 
+void SemanticSecondPass::build_index(Index* expr) {
+    build_expression(expr->get_object());
+    build_expression(expr->get_index());
+
+    Type* type = expr->get_object()->get_type();
+
+    if (type->get_kind() == TYPE_POINTER) {
+        auto ptype = (IndirectionType*) type;
+        expr->set_type(ptype->get_subtype());
+    } else if (type->get_kind() == TYPE_ARRAY) {
+        auto atype = (ArrayListType*) type;
+        expr->set_type(atype->get_subtype());
+    }
+}
+
 void SemanticSecondPass::build_dot(Dot* expr) {
     build_expression(expr->get_left());
 
@@ -453,6 +487,12 @@ void SemanticSecondPass::build_dot(Dot* expr) {
 void SemanticSecondPass::build_cast(Cast* expr) {
     build_expression(expr->get_expression());
     expr->set_type(expr->get_cast_type());
+    link_type(expr->get_type());
+}
+
+void SemanticSecondPass::build_parenthesis(Parenthesis* expr) {
+    build_expression(expr->get_expression());
+    expr->set_type(expr->get_expression()->get_type());
     link_type(expr->get_type());
 }
 

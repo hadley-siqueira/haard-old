@@ -326,6 +326,13 @@ void IRCppPrinter::print_syscall_body() {
             "    case 1:\n"
             "        std::cout << (char) t2;\n"
             "        break;\n"
+            "    case 2:\n"
+            "        return malloc(t2);\n"
+            "        break;\n"
+            "    case 3:\n"
+            "        free((void*) t2);\n"
+            "        return 0;\n"
+            "        break;\n"
             "    }\n";
 }
 
