@@ -59,6 +59,8 @@ void SemanticSecondPass::build_method(Function* method) {
 }
 
 void SemanticSecondPass::build_statement(Statement* stmt) {
+    if (stmt == nullptr) return;
+
     int kind = stmt->get_kind();
 
     switch (kind) {
@@ -68,6 +70,14 @@ void SemanticSecondPass::build_statement(Statement* stmt) {
 
     case STMT_WHILE:
         build_while_statement((WhileStatement*) stmt);
+        break;
+
+    case STMT_IF:
+        build_if_statement((If*) stmt);
+        break;
+
+    case STMT_ELSE:
+        build_else_statement((Else*) stmt);
         break;
 
     case STMT_EXPRESSION:
@@ -101,6 +111,25 @@ void SemanticSecondPass::build_while_statement(WhileStatement* stmt) {
     enter_scope(stmt->get_scope());
 
     build_expression(stmt->get_condition());
+    build_statement(stmt->get_statements());
+
+    leave_scope();
+}
+
+void SemanticSecondPass::build_if_statement(If* stmt) {
+    enter_scope(stmt->get_scope());
+
+    build_expression(stmt->get_condition());
+    build_statement(stmt->get_true_statements());
+
+    leave_scope();
+
+    build_statement(stmt->get_false_statements());
+}
+
+void SemanticSecondPass::build_else_statement(Else* stmt) {
+    enter_scope(stmt->get_scope());
+
     build_statement(stmt->get_statements());
 
     leave_scope();
@@ -147,6 +176,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
     switch (kind) {
     case EXPR_ASSIGNMENT:
         build_assignment((Assignment*) expr);
+        break;
+
+    case EXPR_EQUAL:
+        build_equal((Equal*) expr);
         break;
 
     case EXPR_NOT_EQUAL:
@@ -227,6 +260,13 @@ void SemanticSecondPass::build_assignment(Assignment* expr) {
 
     build_expression(expr->get_left());
     expr->set_type(expr->get_left()->get_type());
+}
+
+void SemanticSecondPass::build_equal(Equal* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    expr->set_type(new Type(TYPE_BOOL));
 }
 
 void SemanticSecondPass::build_not_equal(NotEqual* expr) {

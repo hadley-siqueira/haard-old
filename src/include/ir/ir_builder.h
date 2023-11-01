@@ -43,8 +43,8 @@ namespace haard {
             void build_branch_statement(BranchStatement* statement);
             void build_variable_declaration(VarDeclaration* statement);
 
-            void build_if(BranchStatement* statement);
-            void build_else(BranchStatement* statement);
+            void build_if(If* statement);
+            void build_else(Else* statement);
             void build_return_statement(JumpStatement* statement);
 
             void build_expression(Expression* expression, bool lvalue=false);
@@ -73,7 +73,7 @@ namespace haard {
             void build_logical_or(BinaryOperator* bin);
             void build_logical_and(BinaryOperator* bin);
 
-            void build_equal(BinaryOperator* bin);
+            void build_equal(Equal* bin);
             void build_not_equal(BinaryOperator* bin);
 
             void build_less_than(LessThan* bin);

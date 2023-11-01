@@ -1,0 +1,28 @@
+import std.io
+
+class String:
+    size  : int
+    count : int
+    chars : char*
+
+    def append : void
+        @n : int
+
+        n = 0
+
+    def append : void
+        @c : char
+
+        flag = size == count
+        if flag:
+            size = 1
+        #    resize()
+
+        # chars[size] = c
+        size = size + 1
+
+    def resize : void
+        size = size + 10
+
+def main : int
+    return 0

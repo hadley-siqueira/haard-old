@@ -1,0 +1,11 @@
+import std.io
+
+def main : int
+    n = 0
+
+    if n == 1:
+        println("n == 0")
+    else:
+        println("n != 0")
+
+    return 0

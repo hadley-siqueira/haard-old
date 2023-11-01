@@ -151,11 +151,11 @@ void IRBuilder::build_statement(Statement* statement) {
 
     case STMT_IF:
     case STMT_ELIF:
-        build_if((BranchStatement*) statement);
+        build_if((If*) statement);
         break;
 
     case STMT_ELSE:
-        build_else((BranchStatement*) statement);
+        build_else((Else*) statement);
         break;
 
     case STMT_RETURN:
@@ -283,7 +283,7 @@ void IRBuilder::build_variable_declaration(VarDeclaration* statement) {
     alloca = ctx->new_alloca(name, size, align);
 }
 
-void IRBuilder::build_if(BranchStatement* statement) {
+void IRBuilder::build_if(If* statement) {
     IRValue* cond;
     IRLabel* fb = ctx->new_label();
     IRLabel* after = ctx->new_label();
@@ -305,8 +305,8 @@ void IRBuilder::build_if(BranchStatement* statement) {
     ctx->add_instruction(after);
 }
 
-void IRBuilder::build_else(BranchStatement* statement) {
-    build_statement(statement->get_true_statements());
+void IRBuilder::build_else(Else *statement) {
+    build_statement(statement->get_statements());
     generate_deletables(statement->get_scope());
 }
 
@@ -857,7 +857,7 @@ void IRBuilder::build_logical_and(BinaryOperator* bin) {
     last_value = ctx->new_load(size, alloca_addr)->get_dst();
 }
 
-void IRBuilder::build_equal(BinaryOperator* bin) {
+void IRBuilder::build_equal(Equal* bin) {
     build_binop(bin, IR_EQ);
 }
 
