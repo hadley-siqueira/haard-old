@@ -28,3 +28,9 @@ def println : void
 
     print(s)
     print('\n')
+
+def println : void
+    @n : int
+
+    print(n)
+    print('\n')

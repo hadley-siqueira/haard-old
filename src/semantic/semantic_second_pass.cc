@@ -381,6 +381,10 @@ void SemanticSecondPass::build_dot(Dot* expr) {
     Identifier* id = (Identifier*) expr->get_right();
     Type* type = expr->get_left()->get_type();
 
+    if (type->get_kind() == TYPE_POINTER) {
+        type = ((IndirectionType*) type)->get_subtype();
+    }
+
     if (type->get_kind() == TYPE_NAMED) {
         Scope* scope = type->get_scope();
 
@@ -390,6 +394,7 @@ void SemanticSecondPass::build_dot(Dot* expr) {
             if (sym) {
                 if (sym->get_type()) {
                     expr->set_type(sym->get_type());
+                    id->set_symbol_descriptor(sym->get_descriptor());
                 } else {
                     std::cout << "NOOO\n" << sym->get_name() << '\n';
                     exit(0);

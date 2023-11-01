@@ -22,6 +22,14 @@ class Pair:
         println("from foo")
         init()
 
+    def get_x : int
+        return x
+
+    def set_x : void
+        @nx : int
+
+        x = nx
+
 class Vector(Pair):
     z : int
     w : int
@@ -30,7 +38,13 @@ class Vector(Pair):
 def main : void
     var v : Pair
     var p : Pixel
+    ptr = &v
     v.init()
     v.foo()
     p.hello()
+    f = p.r
+    v.p.hello()
+    ptr.p.hello()
+    v.set_x(2)
+    println(v.get_x())
     return
