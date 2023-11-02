@@ -34,7 +34,18 @@ namespace haard {
         void build_less_than(LessThan* expr);
 
         void build_plus(Plus* expr);
-        void build_times(Times * expr);
+        void build_minus(Minus* expr);
+
+        void build_times(Times* expr);
+        void build_division(Division* expr);
+
+        void build_bitwise_or(BitwiseOr* expr);
+        void build_bitwise_xor(BitwiseXor* expr);
+        void build_bitwise_and(BitwiseAnd* expr);
+
+        void print_shift_left_logical(ShiftLeftLogical* expr);
+        void print_shift_right_logical(ShiftRightLogical* expr);
+        void print_shift_right_arithmetic(ShiftRightArithmetic* expr);
 
         void build_call(Call* expr);
         void build_method_call(Call* expr);
@@ -47,6 +58,11 @@ namespace haard {
         void build_index(Index* expr);
         void build_dot(Dot* expr);
         void build_cast(Cast* expr);
+
+        void build_pre_increment(PreIncrement* expr);
+        void build_pre_decrement(PreDecrement* expr);
+        void build_pos_increment(PosIncrement* expr);
+        void build_pos_decrement(PosDecrement* expr);
         void build_parenthesis(Parenthesis* expr);
 
         void build_identifier(Identifier* expr);
@@ -69,6 +85,8 @@ namespace haard {
         void build_simple_call(Call* expr);
         void build_member_call(Call* expr);
         void set_call_type(Call* expr, Symbol* sym, int idx);
+        void add_members_initialization(Function* function);
+        void add_parent_constructor_call(Function* function);
 
     };
 }

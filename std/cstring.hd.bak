@@ -1,5 +1,3 @@
-import std.memory
-
 def strlen : int
     @buffer : char*
 
@@ -21,7 +19,7 @@ def strcpy : void
         ++src
 
     *dest = '\0'
- 
+
 def strrev : void
     @buffer : char*
 
@@ -29,6 +27,8 @@ def strrev : void
     
     i = 0
     while i < len / 2:
+    #for i = 0; i < len / 2; ++i:
+    
         temp = *(buffer + i)
         *(buffer + i) = *(buffer + len - i - 1)
         *(buffer + len - i - 1) = temp
@@ -38,11 +38,9 @@ def strdup : char*
     @buffer : char*
 
     len = strlen(buffer)
-    copy = malloc(len + 1)
+    copy = new char[len + 1]
 
-    i = 0
-    while i < len + 1:
+    for i = 0; i < len + 1; ++i:
         copy[i] = buffer[i]
-        ++i
 
     return copy

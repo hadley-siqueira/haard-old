@@ -161,6 +161,30 @@ void IRCppPrinter::print_instruction(IR* ir) {
         print_binop("%", bin);
         break;
 
+    case IR_BITWISE_OR:
+        print_binop("|", bin);
+        break;
+
+    case IR_BITWISE_XOR:
+        print_binop("^", bin);
+        break;
+
+    case IR_BITWISE_AND:
+        print_binop("&", bin);
+        break;
+
+    case IR_SLL:
+        print_binop("<<", bin);
+        break;
+
+    case IR_SRL:
+        print_binop(">>", bin);
+        break;
+
+    case IR_SRA:
+        print_binop(">>", bin);
+        break;
+
     case IR_LI:
         *out << un->get_dst()->to_cpp() << " = ";
         *out << un->get_src()->to_cpp();

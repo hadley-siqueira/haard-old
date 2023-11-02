@@ -2,6 +2,7 @@
 #include "semantic/semantic_second_pass.h"
 #include "log/actions.h"
 #include "log/infos.h"
+#include "parser/parser.h"
 
 using namespace haard;
 
@@ -47,6 +48,10 @@ void SemanticSecondPass::build_function(Function* function) {
     set_function(function);
     reset_local_var_counter();
     enter_scope(function->get_scope());
+
+    if (function->is_constructor()) {
+        add_members_initialization(function);
+    }
 
     build_statement(function->get_statements());
 
@@ -209,8 +214,16 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_plus((Plus*) expr);
         break;
 
+    case EXPR_MINUS:
+        build_minus((Minus*) expr);
+        break;
+
     case EXPR_TIMES:
         build_times((Times*) expr);
+        break;
+
+    case EXPR_DIVISION:
+        build_division((Division*) expr);
         break;
 
     case EXPR_CALL:
@@ -269,6 +282,22 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_cast((Cast*) expr);
         break;
 
+    case EXPR_PRE_INCREMENT:
+        build_pre_increment((PreIncrement*) expr);
+        break;
+
+    case EXPR_PRE_DECREMENT:
+        build_pre_decrement((PreDecrement*) expr);
+        break;
+
+    case EXPR_POS_INCREMENT:
+        build_pos_increment((PosIncrement*) expr);
+        break;
+
+    case EXPR_POS_DECREMENT:
+        build_pos_decrement((PosDecrement*) expr);
+        break;
+
     case EXPR_PARENTHESIS:
         build_parenthesis((Parenthesis*) expr);
         break;
@@ -321,11 +350,94 @@ void SemanticSecondPass::build_plus(Plus* expr) {
     expr->set_type(etype);
 }
 
+void SemanticSecondPass::build_minus(Minus* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    Type* tleft = expr->get_left()->get_type();
+    Type* tright = expr->get_right()->get_type();
+    Type* etype = tleft->promote(tright);
+
+    expr->set_type(etype);
+}
+
 void SemanticSecondPass::build_times(Times* expr) {
     build_expression(expr->get_left());
     build_expression(expr->get_right());
 
-    expr->set_type(expr->get_left()->get_type());
+    Type* tleft = expr->get_left()->get_type();
+    Type* tright = expr->get_right()->get_type();
+    Type* etype = tleft->promote(tright);
+
+    expr->set_type(etype);
+}
+
+void SemanticSecondPass::build_division(Division* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    Type* tleft = expr->get_left()->get_type();
+    Type* tright = expr->get_right()->get_type();
+    Type* etype = tleft->promote(tright);
+
+    expr->set_type(etype);
+}
+
+void SemanticSecondPass::build_bitwise_or(BitwiseOr* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    Type* tleft = expr->get_left()->get_type();
+    Type* tright = expr->get_right()->get_type();
+    Type* etype = tleft->promote(tright);
+
+    expr->set_type(etype);
+}
+
+void SemanticSecondPass::build_bitwise_xor(BitwiseXor* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    Type* tleft = expr->get_left()->get_type();
+    Type* tright = expr->get_right()->get_type();
+    Type* etype = tleft->promote(tright);
+
+    expr->set_type(etype);
+}
+
+void SemanticSecondPass::build_bitwise_and(BitwiseAnd* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    Type* tleft = expr->get_left()->get_type();
+    Type* tright = expr->get_right()->get_type();
+    Type* etype = tleft->promote(tright);
+
+    expr->set_type(etype);
+}
+
+void SemanticSecondPass::print_shift_left_logical(ShiftLeftLogical* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    Type* tleft = expr->get_left()->get_type();
+    expr->set_type(tleft);
+}
+
+void SemanticSecondPass::print_shift_right_logical(ShiftRightLogical* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    Type* tleft = expr->get_left()->get_type();
+    expr->set_type(tleft);
+}
+
+void SemanticSecondPass::print_shift_right_arithmetic(ShiftRightArithmetic* expr) {
+    build_expression(expr->get_left());
+    build_expression(expr->get_right());
+
+    Type* tleft = expr->get_left()->get_type();
+    expr->set_type(tleft);
 }
 
 void SemanticSecondPass::build_call(Call* expr) {
@@ -506,6 +618,30 @@ void SemanticSecondPass::build_dot(Dot* expr) {
 void SemanticSecondPass::build_cast(Cast* expr) {
     build_expression(expr->get_expression());
     expr->set_type(expr->get_cast_type());
+    link_type(expr->get_type());
+}
+
+void SemanticSecondPass::build_pre_increment(PreIncrement* expr) {
+    build_expression(expr->get_expression());
+    expr->set_type(expr->get_expression()->get_type());
+    link_type(expr->get_type());
+}
+
+void SemanticSecondPass::build_pre_decrement(PreDecrement* expr) {
+    build_expression(expr->get_expression());
+    expr->set_type(expr->get_expression()->get_type());
+    link_type(expr->get_type());
+}
+
+void SemanticSecondPass::build_pos_increment(PosIncrement* expr) {
+    build_expression(expr->get_expression());
+    expr->set_type(expr->get_expression()->get_type());
+    link_type(expr->get_type());
+}
+
+void SemanticSecondPass::build_pos_decrement(PosDecrement* expr) {
+    build_expression(expr->get_expression());
+    expr->set_type(expr->get_expression()->get_type());
     link_type(expr->get_type());
 }
 
@@ -711,6 +847,50 @@ void SemanticSecondPass::set_call_type(Call* expr, Symbol* sym, int idx) {
         expr->set_type(decl->get_self_type());
     } else {
         expr->set_type(function->get_return_type());
+    }
+}
+
+void SemanticSecondPass::add_members_initialization(Function* function) {
+    Class* klass = (Class*) function->get_compound();
+    CompoundStatement* stmts;
+    Variable* var;
+    Type* type;
+
+    stmts = function->get_statements();
+
+    for (int i = 0; i < klass->fields_count(); ++i) {
+        var = klass->get_field(i);
+        type = var->get_type();
+
+        if (type->is_class()) {
+            std::string name = var->get_name();
+
+            Parser p;
+            std::string cmd = name + ".init()";
+            Expression* expr = p.read_expression_from_string(cmd);
+            ExpressionStatement* es = new ExpressionStatement(expr);
+            build_statement(es);
+            stmts->add_front(es);
+        }
+    }
+}
+
+void SemanticSecondPass::add_parent_constructor_call(Function* function) {
+    Class* klass = (Class*) function->get_compound();
+    Class* super;
+    CompoundStatement* stmts;
+
+    if (klass->get_super_type()) {
+        super = (Class*) klass->get_super_descriptor();
+        stmts = function->get_statements();
+        std::string name = super->get_name();
+
+        Parser p;
+        std::string cmd = "(this as " + name + "*).destroy()";
+        Expression* expr = p.read_expression_from_string(cmd);
+        ExpressionStatement* es = new ExpressionStatement(expr);
+        build_statement(es);
+        stmts->add_statement(es);
     }
 }
 

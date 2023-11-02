@@ -305,7 +305,7 @@ void IRBuilder::build_if(If* statement) {
     ctx->add_instruction(after);
 }
 
-void IRBuilder::build_elif(Elif *statement) {
+void IRBuilder::build_elif(Elif* statement) {
     IRValue* cond;
     IRLabel* fb = ctx->new_label();
     IRLabel* after = ctx->new_label();

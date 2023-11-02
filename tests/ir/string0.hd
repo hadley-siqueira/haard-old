@@ -1,10 +1,19 @@
 import std.io
 import std.memory
+import std.cstring
+
+class Pair:
+    x : int
+    y : int
+
+    def init : void
+        println("init from pair")
 
 class String:
     size  : int
     count : int
     buffer : char*
+    pair : Pair
 
     def init : void
         size = 0
@@ -72,4 +81,9 @@ def main : int
     ms.append(false)
     println(ms.buffer)
     ms.destroy()
+    print("len = ")
+    println(strlen("Hello, world!"))
+    cp = strdup("test")
+    println(cp)
+    free(cp)
     return 0

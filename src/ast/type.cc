@@ -368,3 +368,7 @@ bool Type::is_integer_scalar() {
 bool Type::is_user_type() {
     return kind == TYPE_NAMED;
 }
+
+bool Type::is_pointer() {
+    return kind == TYPE_POINTER;
+}
