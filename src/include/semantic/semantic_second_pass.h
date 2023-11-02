@@ -19,6 +19,7 @@ namespace haard {
         void build_compound_statement(CompoundStatement* stmt);
         void build_while_statement(WhileStatement* stmt);
         void build_if_statement(If* stmt);
+        void build_elif_statement(Elif* stmt);
         void build_else_statement(Else* stmt);
         void build_return_statement(JumpStatement* stmt);
         void build_var_declaration_statement(VarDeclaration* stmt);

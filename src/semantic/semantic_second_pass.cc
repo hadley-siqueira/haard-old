@@ -76,6 +76,10 @@ void SemanticSecondPass::build_statement(Statement* stmt) {
         build_if_statement((If*) stmt);
         break;
 
+    case STMT_ELIF:
+        build_elif_statement((Elif*) stmt);
+        break;
+
     case STMT_ELSE:
         build_else_statement((Else*) stmt);
         break;
@@ -117,6 +121,17 @@ void SemanticSecondPass::build_while_statement(WhileStatement* stmt) {
 }
 
 void SemanticSecondPass::build_if_statement(If* stmt) {
+    enter_scope(stmt->get_scope());
+
+    build_expression(stmt->get_condition());
+    build_statement(stmt->get_true_statements());
+
+    leave_scope();
+
+    build_statement(stmt->get_false_statements());
+}
+
+void SemanticSecondPass::build_elif_statement(Elif* stmt) {
     enter_scope(stmt->get_scope());
 
     build_expression(stmt->get_condition());
@@ -299,7 +314,11 @@ void SemanticSecondPass::build_plus(Plus* expr) {
     build_expression(expr->get_left());
     build_expression(expr->get_right());
 
-    expr->set_type(expr->get_left()->get_type());
+    Type* tleft = expr->get_left()->get_type();
+    Type* tright = expr->get_right()->get_type();
+    Type* etype = tleft->promote(tright);
+
+    expr->set_type(etype);
 }
 
 void SemanticSecondPass::build_times(Times* expr) {

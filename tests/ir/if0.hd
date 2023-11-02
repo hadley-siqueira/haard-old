@@ -1,11 +1,13 @@
 import std.io
 
 def main : int
-    n = 0
+    n = 2
 
     if n == 1:
-        println("n == 0")
+        println("n == 1")
+    elif n == 2:
+        println("n == 2")
     else:
-        println("n != 0")
+        println("n == 0")
 
     return 0

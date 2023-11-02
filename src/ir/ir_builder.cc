@@ -305,6 +305,28 @@ void IRBuilder::build_if(If* statement) {
     ctx->add_instruction(after);
 }
 
+void IRBuilder::build_elif(Elif *statement) {
+    IRValue* cond;
+    IRLabel* fb = ctx->new_label();
+    IRLabel* after = ctx->new_label();
+
+    IRValue* fb_label = ctx->new_label_value(fb->get_label());
+    IRValue* after_label = ctx->new_label_value(after->get_label());
+
+    build_expression(statement->get_condition());
+    cond = last_value;
+    ctx->new_branch(IR_BZ, cond, fb_label);
+
+    build_statement(statement->get_true_statements());
+
+    generate_deletables(statement->get_scope());
+    ctx->new_branch(IR_GOTO, after_label);
+
+    ctx->add_instruction(fb);
+    build_statement(statement->get_false_statements());
+    ctx->add_instruction(after);
+}
+
 void IRBuilder::build_else(Else *statement) {
     build_statement(statement->get_statements());
     generate_deletables(statement->get_scope());

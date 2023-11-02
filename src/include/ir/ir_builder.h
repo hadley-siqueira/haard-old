@@ -44,6 +44,7 @@ namespace haard {
             void build_variable_declaration(VarDeclaration* statement);
 
             void build_if(If* statement);
+            void build_elif(Elif* statement);
             void build_else(Else* statement);
             void build_return_statement(JumpStatement* statement);
 

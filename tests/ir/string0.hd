@@ -65,7 +65,7 @@ def main : int
     i = 0
 
     while i < 10:
-        ms.append('a' + i)
+        ms.append('a' + i as char)
         i = i + 1
 
     ms.append("test an append")

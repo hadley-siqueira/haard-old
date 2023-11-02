@@ -56,6 +56,17 @@ std::string IndirectionType::get_qualified_name() {
     return subtype->get_qualified_name() + "&";
 }
 
+Type* IndirectionType::promote(Type* other) {
+    int rank = other->rank();
+
+    // check if it is an int type or similar
+    if (rank <= 9 || equal(other)) {
+        return this;
+    }
+
+    return nullptr;
+}
+
 bool IndirectionType::is_integer_scalar() {
     return true;
 }
