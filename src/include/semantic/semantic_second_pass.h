@@ -66,6 +66,7 @@ namespace haard {
         void build_parenthesis(Parenthesis* expr);
 
         void build_identifier(Identifier* expr);
+        void build_this(This* expr);
         void build_literal_bool(Literal* expr);
         void build_literal_char(Literal* expr);
         void build_literal_integer(Literal* expr);

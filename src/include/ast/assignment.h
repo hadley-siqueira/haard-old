@@ -13,8 +13,12 @@ namespace haard {
         bool get_initial_value() const;
         void set_initial_value(bool value);
 
+        bool is_constructor_call();
+        void is_constructor_call(bool value);
+
     private:
         bool initial_value;
+        bool constructor_call;
     };
 }
 

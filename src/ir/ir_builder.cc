@@ -377,10 +377,6 @@ void IRBuilder::build_expression(Expression* expression, bool lvalue) {
         build_member_access(bin, lvalue);
         break;
 
-    case EXPR_CONSTRUCTOR_ASSIGNMENT:
-        build_constructor_assignment(bin);
-        break;
-
     case EXPR_ASSIGNMENT:
         build_assignment((Assignment*) expression, lvalue);
         break;
@@ -778,6 +774,11 @@ void IRBuilder::build_assignment(Assignment* bin, bool lvalue) {
     Type* type;
     int size;
 
+    if (bin->is_constructor_call()) {
+        build_constructor_assignment(bin);
+        return;
+    }
+
     build_expression(bin->get_right());
     right = last_value;
 
@@ -802,24 +803,24 @@ void IRBuilder::build_assignment(Assignment* bin, bool lvalue) {
     }
 }
 
-void IRBuilder::build_constructor_assignment(BinaryOperator* bin) {
+void IRBuilder::build_constructor_assignment(Assignment* bin) {
     IRValue* this_ptr;
     std::string name;
     Function* f;
-    BinaryOperator* constructor;
+    Call* constructor;
     IRCall* call = new IRCall();
 
     build_expression(bin->get_left(), true);
     this_ptr = last_value;
 
-    constructor = (BinaryOperator*) bin->get_right();
-    int idx = 0;//constructor->get_overloaded_index();
-    f = nullptr;//(Function*) constructor->get_constructor_call()->get_descriptor(idx);
+    constructor = (Call*) bin->get_right();
+    auto id = (Identifier*) constructor->get_object();
+    f = (Function*) id->get_symbol_descriptor()->get_descriptor();
     name = f->get_qualified_name();
 
     call->set_name(name);
 
-    build_call_arguments(call, (ExpressionList*) constructor->get_right(), this_ptr);
+    build_call_arguments(call, (ExpressionList*) constructor->get_arguments(), this_ptr);
     ctx->add_instruction(call);
 }
 

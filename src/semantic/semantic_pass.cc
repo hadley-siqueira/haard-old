@@ -48,3 +48,11 @@ void SemanticPass::reset_local_var_counter() {
 int SemanticPass::next_local_var_counter() {
     return var_counter++;
 }
+
+CompoundTypeDescriptor *SemanticPass::get_compound() const {
+    return compound;
+}
+
+void SemanticPass::set_compound(CompoundTypeDescriptor* newCompound) {
+    compound = newCompound;
+}

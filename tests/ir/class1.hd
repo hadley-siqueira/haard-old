@@ -10,5 +10,13 @@ class Pair:
 
         println("pair:init")
 
+
+class Pair3(Pair):
+    z : int
+
+    def init : void
+        println("pair3:init")
+
 def main : void
     p = Pair()
+    p3 = Pair3()

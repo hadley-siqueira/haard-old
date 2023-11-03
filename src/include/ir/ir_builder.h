@@ -69,7 +69,7 @@ namespace haard {
             void build_member_access(BinaryOperator* bin, bool lvalue=false);
 
             void build_assignment(Assignment* bin, bool lvalue=false);
-            void build_constructor_assignment(BinaryOperator* bin);
+            void build_constructor_assignment(Assignment* bin);
 
             void build_logical_or(BinaryOperator* bin);
             void build_logical_and(BinaryOperator* bin);

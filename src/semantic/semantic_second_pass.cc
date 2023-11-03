@@ -14,6 +14,7 @@ void SemanticSecondPass::build_modules(Modules* modules) {
 
 void SemanticSecondPass::build_module(Module* module) {
     enter_scope(module->get_scope());
+    set_compound(nullptr);
 
     for (int i = 0; i < module->functions_count(); ++i) {
         build_function(module->get_function(i));
@@ -28,6 +29,7 @@ void SemanticSecondPass::build_module(Module* module) {
 
 void SemanticSecondPass::build_class(Class* klass) {
     enter_scope(klass->get_scope());
+    set_compound(klass);
 
     if (klass->get_super_type()) {
         link_type(klass->get_super_type());
@@ -37,6 +39,7 @@ void SemanticSecondPass::build_class(Class* klass) {
         build_method(klass->get_method(i));
     }
 
+    set_compound(nullptr);
     leave_scope();
 }
 
@@ -51,6 +54,7 @@ void SemanticSecondPass::build_function(Function* function) {
 
     if (function->is_constructor()) {
         add_members_initialization(function);
+        add_parent_constructor_call(function);
     }
 
     build_statement(function->get_statements());
@@ -302,6 +306,10 @@ void SemanticSecondPass::build_expression(Expression* expr) {
         build_parenthesis((Parenthesis*) expr);
         break;
 
+    case EXPR_THIS:
+        build_this((This*) expr);
+        break;
+
     default:
         break;
     }
@@ -312,6 +320,10 @@ void SemanticSecondPass::build_assignment(Assignment* expr) {
 
     if (is_new_variable(expr)) {
         create_variable(expr);
+
+        if (expr->get_right()->get_type()->is_user_type()) {
+            expr->is_constructor_call(true);
+        }
     }
 
     build_expression(expr->get_left());
@@ -667,6 +679,14 @@ void SemanticSecondPass::build_identifier(Identifier* expr) {
     }
 }
 
+void SemanticSecondPass::build_this(This* expr) {
+    if (get_compound() == nullptr) {
+        log_error_and_exit("using this outside user type");
+    }
+
+    expr->set_type(new IndirectionType(TYPE_POINTER, get_compound()->get_self_type()));
+}
+
 void SemanticSecondPass::build_literal_bool(Literal* expr) {
     expr->set_type(new Type(TYPE_BOOL));
 }
@@ -806,6 +826,10 @@ void SemanticSecondPass::build_member_call(Call* expr) {
     build_expression(obj);
     Type* type = obj->get_type();
 
+    if (type->get_kind() == TYPE_POINTER) {
+        type = ((IndirectionType*) type)->get_subtype();
+    }
+
     if (type->is_user_type()) {
         Scope* scope = type->get_scope();
 
@@ -886,11 +910,11 @@ void SemanticSecondPass::add_parent_constructor_call(Function* function) {
         std::string name = super->get_name();
 
         Parser p;
-        std::string cmd = "(this as " + name + "*).destroy()";
+        std::string cmd = "(this as " + name + "*).init()";
         Expression* expr = p.read_expression_from_string(cmd);
         ExpressionStatement* es = new ExpressionStatement(expr);
         build_statement(es);
-        stmts->add_statement(es);
+        stmts->add_front(es);
     }
 }
 
