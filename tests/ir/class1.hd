@@ -1,0 +1,14 @@
+import std.io
+
+class Pair:
+    x : int
+    y : int
+
+    def init : void
+        x = 0
+        y = 0
+
+        println("pair:init")
+
+def main : void
+    p = Pair()

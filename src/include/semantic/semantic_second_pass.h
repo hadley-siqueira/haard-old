@@ -80,11 +80,11 @@ namespace haard {
         bool is_member_call(Call* expr);
         bool is_constructor_call(Call* expr);
         void create_variable(Assignment* expr);
-        int find_best_match(Symbol* sym, ExpressionList* args);
-        bool compare_match(SymbolDescriptor* desc, ExpressionList* args);
+        SymbolDescriptor* find_best_match(Symbol* sym, ExpressionList* args);
+        bool compare_match(Function *function, ExpressionList* args);
         void build_simple_call(Call* expr);
         void build_member_call(Call* expr);
-        void set_call_type(Call* expr, Symbol* sym, int idx);
+        void set_call_type(Call* expr, SymbolDescriptor *desc);
         void add_members_initialization(Function* function);
         void add_parent_constructor_call(Function* function);
 

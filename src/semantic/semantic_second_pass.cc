@@ -776,14 +776,14 @@ void SemanticSecondPass::build_simple_call(Call* expr) {
         log_error_and_exit("second pass: not in scope " + id->get_name());
     }
 
-    int idx = find_best_match(sym, args);
+    SymbolDescriptor* idx = find_best_match(sym, args);
 
-    if (idx < 0) {
+    if (idx == nullptr) {
         log_error_and_exit("second pass: no match signature");
     }
 
-    set_call_type(expr, sym, idx);
-    id->set_symbol_descriptor(sym->get_descriptor(idx));
+    set_call_type(expr, idx);
+    id->set_symbol_descriptor(idx);
 }
 
 void SemanticSecondPass::build_member_call(Call* expr) {
@@ -828,18 +828,18 @@ void SemanticSecondPass::build_member_call(Call* expr) {
         log_error_and_exit("second pass: not in scope " + field->get_name());
     }
 
-    int idx = find_best_match(sym, args);
+    SymbolDescriptor* idx = find_best_match(sym, args);
 
-    if (idx < 0) {
+    if (idx == nullptr) {
         log_error_and_exit("second pass: no match signature");
     }
 
-    set_call_type(expr, sym, idx);
-    field->set_symbol_descriptor(sym->get_descriptor(idx));
+    set_call_type(expr, idx);
+    field->set_symbol_descriptor(idx);
 }
 
-void SemanticSecondPass::set_call_type(Call* expr, Symbol* sym, int idx) {
-    Function* function = (Function*) sym->get_descriptor(idx)->get_descriptor();
+void SemanticSecondPass::set_call_type(Call* expr, SymbolDescriptor* desc) {
+    Function* function = (Function*) desc->get_descriptor();
     expr->set_function(function);
 
     if (function->is_constructor()) {
@@ -894,19 +894,40 @@ void SemanticSecondPass::add_parent_constructor_call(Function* function) {
     }
 }
 
-int SemanticSecondPass::find_best_match(Symbol* sym, ExpressionList* args) {
+SymbolDescriptor* SemanticSecondPass::find_best_match(Symbol* sym, ExpressionList* args) {
+    Function* function;
+
     for (int i = 0; i < sym->descriptors_count(); ++i) {
-        if (compare_match(sym->get_descriptor(i), args)) {
-            return i;
+        SymbolDescriptor* desc = sym->get_descriptor(i);
+        int kind = desc->get_kind();
+
+        if (kind == SYM_METHOD || kind == SYM_FUNCTION) {
+            function = (Function*) desc->get_descriptor();
+
+            if (compare_match(function, args)) {
+                return desc;
+            }
+        } else if (kind == SYM_CLASS) {
+            Class* klass = (Class*) desc->get_descriptor();
+
+            Symbol* ss = klass->get_scope()->resolve_field("init");
+
+            for (int j = 0; j < ss->descriptors_count(); ++j) {
+                desc = ss->get_descriptor(j);
+
+                function = (Function*) desc->get_descriptor();
+
+                if (compare_match(function, args)) {
+                    return desc;
+                }
+            }
         }
     }
 
-    return -1;
+    return nullptr;
 }
 
-bool SemanticSecondPass::compare_match(SymbolDescriptor* desc, ExpressionList* args) {
-    Function* function = (Function*) desc->get_descriptor();
-
+bool SemanticSecondPass::compare_match(Function* function, ExpressionList* args) {
     if (function->parameters_count() < args->expressions_count()) {
         return false;
     }
