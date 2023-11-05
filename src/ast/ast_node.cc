@@ -39,3 +39,19 @@ void AstNode::set_from_token(Token& token) {
     set_line(token.get_line());
     set_column(token.get_column());
 }
+
+int AstNode::get_begin() const {
+    return begin;
+}
+
+void AstNode::set_begin(int value) {
+    begin = value;
+}
+
+int AstNode::get_end() const {
+    return end;
+}
+
+void AstNode::set_end(int value) {
+    end = value;
+}

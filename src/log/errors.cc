@@ -39,4 +39,25 @@ namespace haard {
 
         return ss.str();
     }
+
+    std::string error_redefinition(Declaration* decl, Declaration* org) {
+        std::stringstream ss;
+        int line = decl->get_line();
+        int column = decl->get_column();
+        int count = decl->get_name().size();
+        std::string path = decl->get_module()->get_path();
+
+        ss << "<white>" << decl->get_name() << "</white> already declared\n";
+        ss << extract_line(path, line, column, count);
+
+        ss << "\nother occurence here:\n";
+
+        line = org->get_line();
+        column = org->get_column();
+        count = org->get_name().size();
+        path = org->get_module()->get_path();
+        ss << extract_line(path, line, column, count);
+
+        return ss.str();
+    }
 }

@@ -28,12 +28,6 @@ namespace haard {
         int get_alignment();
         void set_alignment(int value);
 
-        int get_begin() const;
-        void set_begin(int value);
-
-        int get_end() const;
-        void set_end(int value);
-
         std::vector<Annotation*> get_annotations() const;
         void set_annotations(const std::vector<Annotation*>& value);
 
@@ -60,9 +54,6 @@ namespace haard {
 
         void set_from_token(Token& token);
 
-        TemplateHeader* get_template_header() const;
-        void set_template_header(TemplateHeader* value, bool is_template=false);
-
         void set_scope(Scope *value);
 
         bool is_template();
@@ -75,13 +66,10 @@ namespace haard {
         void add_method(Function* method);
 
     protected:
-        int begin;
-        int end;
         int size_in_bytes;
         int alignment;
 
         bool template_flag;
-        TemplateHeader* template_header;
         NamedType* self_type;
         Type* super_type;
         Scope* scope;

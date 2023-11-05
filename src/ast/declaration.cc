@@ -1,37 +1,14 @@
 #include "ast/declaration.h"
+#include "defs.h"
 
 using namespace haard;
 
 Declaration::Declaration() {
-
+    template_header = nullptr;
 }
 
 Declaration::~Declaration() {
-
-}
-
-int Declaration::get_kind() const {
-    return kind;
-}
-
-void Declaration::set_kind(int newKind) {
-    kind = newKind;
-}
-
-int Declaration::get_line() const {
-    return line;
-}
-
-void Declaration::set_line(int newLine) {
-    line = newLine;
-}
-
-int Declaration::get_column() const {
-    return column;
-}
-
-void Declaration::set_column(int newColumn) {
-    column = newColumn;
+    delete template_header;
 }
 
 const std::string& Declaration::get_name() const {
@@ -48,4 +25,28 @@ Module* Declaration::get_module() const {
 
 void Declaration::set_module(Module* newModule) {
     module = newModule;
+}
+
+TemplateHeader* Declaration::get_template_header() {
+    return template_header;
+}
+
+void Declaration::set_template_header(TemplateHeader* header, bool is_template) {
+    template_header = header;
+    template_header->set_template_flag(is_template);
+}
+
+bool Declaration::is_type_declaration() {
+    int kind = get_kind();
+
+    return kind == DECL_CLASS
+        || kind == DECL_STRUCT
+        || kind == DECL_ENUM
+        || kind == DECL_UNION;
+}
+
+bool Declaration::is_function() {
+    int kind = get_kind();
+
+    return kind == DECL_FUNCTION || kind == DECL_METHOD;
 }

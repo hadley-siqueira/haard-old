@@ -7,7 +7,6 @@ using namespace haard;
 
 CompoundTypeDescriptor::CompoundTypeDescriptor() {
     self_type = nullptr;
-    template_header = nullptr;
     template_flag = false;
     super_type = nullptr;
     destructor = nullptr;
@@ -25,7 +24,6 @@ CompoundTypeDescriptor::~CompoundTypeDescriptor() {
     }
 
     delete scope;
-    delete template_header;
 }
 
 std::vector<Annotation*> CompoundTypeDescriptor::get_annotations() const {
@@ -38,8 +36,8 @@ std::string CompoundTypeDescriptor::get_qualified_name() {
 
     ss << get_module()->get_relative_path() << "." << get_name();
 
-    if (template_header) {
-        ss << template_header->get_qualified_name();
+    if (get_template_header()) {
+        ss << get_template_header()->get_qualified_name();
     }
 
     return ss.str();
@@ -160,10 +158,6 @@ void CompoundTypeDescriptor::set_self_type(NamedType* type) {
     self_type = type;
 }
 
-TemplateHeader* CompoundTypeDescriptor::get_template_header() const {
-    return template_header;
-}
-
 CompoundTypeDescriptor* CompoundTypeDescriptor::get_super_descriptor() {
     CompoundTypeDescriptor* super = nullptr;
 
@@ -172,27 +166,6 @@ CompoundTypeDescriptor* CompoundTypeDescriptor::get_super_descriptor() {
     }
 
     return super;
-}
-
-void CompoundTypeDescriptor::set_template_header(TemplateHeader* value, bool is_template) {
-    template_header = value;
-    template_header->set_template_flag(is_template);
-}
-
-int CompoundTypeDescriptor::get_begin() const {
-    return begin;
-}
-
-void CompoundTypeDescriptor::set_begin(int value) {
-    begin = value;
-}
-
-int CompoundTypeDescriptor::get_end() const {
-    return end;
-}
-
-void CompoundTypeDescriptor::set_end(int value) {
-    end = value;
 }
 
 void CompoundTypeDescriptor::set_from_token(Token& token) {

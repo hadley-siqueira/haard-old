@@ -128,17 +128,17 @@ std::string Class::get_qualified_name() {
 
     ss << get_module()->get_relative_path() << "." << get_name();
 
-    if (template_header && template_header->types_count() > 0) {
+    if (get_template_header() && get_template_header()->types_count() > 0) {
         ss << "<";
 
         if (is_template()) {
-            ss << template_header->types_count();
+            ss << get_template_header()->types_count();
         } else {
-            for (i = 0; i < template_header->types_count() - 1; ++i) {
-                ss << template_header->get_type(i)->get_qualified_name() << ", ";
+            for (i = 0; i < get_template_header()->types_count() - 1; ++i) {
+                ss << get_template_header()->get_type(i)->get_qualified_name() << ", ";
             }
 
-            ss << template_header->get_type(i)->get_qualified_name();
+            ss << get_template_header()->get_type(i)->get_qualified_name();
         }
 
         ss << ">";
@@ -155,10 +155,10 @@ std::string Class::get_original() {
 
     file.open(get_path());
 
-    file.seekg(begin);
-    counter = begin;
+    file.seekg(get_begin());
+    counter = get_begin();
 
-    while (counter < end && file.get(c)) {
+    while (counter < get_end() && file.get(c)) {
         buffer += c;
         ++counter;
     }

@@ -15,18 +15,15 @@ Function::Function() {
     scope = new Scope();
     method_flag = false;
     virtual_flag = false;
-    template_header = nullptr;
     self_type = nullptr;
     constructor_flag = false;
     destructor_flag = false;
-    template_flag = false;
     uid = uid_counter++;
 }
 
 Function::~Function() {
     delete statements;
     delete scope;
-    delete template_header;
     
     for (int i = 0; i < parameters.size(); ++i) {
         delete parameters[i];
@@ -75,8 +72,8 @@ std::string Function::get_qualified_name() {
         ss << get_module()->get_relative_path() << "." << get_name();
     }
 
-    if (template_header) {
-        ss << template_header->get_qualified_name();
+    if (get_template_header()) {
+        ss << get_template_header()->get_qualified_name();
     }
 
     ss << "(";
@@ -104,10 +101,10 @@ std::string Function::get_original() {
 
     file.open(get_path());
 
-    file.seekg(begin);
-    counter = begin;
+    file.seekg(get_begin());
+    counter = get_begin();
 
-    while (counter < end && file.get(c)) {
+    while (counter < get_end() && file.get(c)) {
         buffer += c;
         ++counter;
     }
@@ -128,10 +125,6 @@ void Function::set_statements(CompoundStatement* statements) {
 
 void Function::set_virtual(bool v) {
     virtual_flag = v;
-}
-
-void Function::set_template(bool v) {
-    template_flag = v;
 }
 
 int Function::get_uid() {
@@ -174,7 +167,11 @@ void Function::set_method(bool value) {
 }
 
 bool Function::is_template() {
-    return template_flag;
+    if (get_template_header()) {
+        return get_template_header()->is_template();
+    }
+
+    return false;
 }
 
 bool Function::is_method() {
@@ -200,43 +197,6 @@ std::string Function::get_type_signature() {
     ss << get_name();
     ss << " :: " << self_type->to_str();
     return ss.str();
-}
-
-bool Function::same_signature(Function* other) {
-    if (template_header && other->template_header) {
-        if (template_header->types_count() != other->template_header->types_count()) {
-            return false;
-        }
-    }
-
-    if (parameters_count() != other->parameters_count()) {
-        return false;
-    } else {
-        for (int i = 0; i < parameters_count(); ++i) {
-            if (!parameters[i]->get_type()->equal(other->parameters[i]->get_type())) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-void Function::set_overloaded_index(int idx) {
-    overloaded_index = idx;
-}
-
-int Function::get_overloaded_index() {
-    return overloaded_index;
-}
-
-void Function::set_template_header(TemplateHeader* header, bool is_template) {
-    template_header = header;
-    template_header->set_template_flag(is_template);
-}
-
-TemplateHeader* Function::get_template_header() {
-    return template_header;
 }
 
 std::vector<Annotation*> Function::get_annotations() const {
@@ -275,22 +235,6 @@ std::string Function::get_path() {
     }
 
     return get_module()->get_path();
-}
-
-int Function::get_begin() const {
-    return begin;
-}
-
-void Function::set_begin(int value) {
-    begin = value;
-}
-
-int Function::get_end() const {
-    return end;
-}
-
-void Function::set_end(int value) {
-    end = value;
 }
 
 CompoundTypeDescriptor* Function::get_compound() const {

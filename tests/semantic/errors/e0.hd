@@ -1,0 +1,42 @@
+struct Pair:
+    x : int
+    y : int
+
+struct Pair2:
+    x : int
+    y : int
+
+class Pair3:
+    x : int
+    y : int
+
+union Foo:
+    x : int
+    y : float
+
+enum Event:
+    None
+    Click : (int, int)
+    Move  : (int, int)
+
+# this force DeclKind to use long as representation
+enum DeclKind(long):
+    DECL_CLASS
+    DECL_STRUCT
+    DECL_UNION
+    DECL_ENUM
+
+enum Option<T>:
+    None
+    Some : T
+
+struct Option<T>:
+    y : int
+
+class Node<T>:
+    value : T
+    next  : T*
+    prev  : T*
+
+def main : void
+    pass

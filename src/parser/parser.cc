@@ -153,7 +153,7 @@ Class* Parser::parse_class() {
     return klass;
 }
 
-Struct *Parser::parse_struct() {
+Struct* Parser::parse_struct() {
     Struct* data = new Struct();
     int begin;
     int end;

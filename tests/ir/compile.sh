@@ -1,5 +1,5 @@
 echo "hdc"
-hdc --cpp class1.hd
+hdc --cpp struct0.hd
 
 echo "g++"
 g++ -fpermissive out.cc

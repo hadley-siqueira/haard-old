@@ -6,7 +6,7 @@
 #include "ast/ast.h"
 
 namespace haard {
-    std::string info_define_class(Class* decl);
+    std::string info_define_user_type(CompoundTypeDescriptor *decl);
     std::string info_define_function(Function* function);
     std::string info_define_method(Function* method);
 }

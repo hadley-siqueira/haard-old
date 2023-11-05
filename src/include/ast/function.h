@@ -59,14 +59,6 @@ namespace haard {
         bool is_destructor();
         bool is_virtual();
 
-        bool same_signature(Function* other);
-
-        void set_overloaded_index(int idx);
-        int get_overloaded_index();
-
-        void set_template_header(TemplateHeader* header, bool is_template=false);
-        TemplateHeader* get_template_header();
-
         std::vector<Annotation*> get_annotations() const;
         void set_annotations(const std::vector<Annotation*> &value);
 
@@ -78,28 +70,18 @@ namespace haard {
 
         std::string get_path();
 
-        int get_begin() const;
-        void set_begin(int value);
-
-        int get_end() const;
-        void set_end(int value);
-
         CompoundTypeDescriptor* get_compound() const;
         void set_compound(CompoundTypeDescriptor* value);
 
     private:
         int uid;
         int overloaded_index;
-        int begin;
-        int end;
         bool method_flag;
         bool constructor_flag;
         bool destructor_flag;
         bool virtual_flag;
-        bool template_flag;
         Type* return_type;
         FunctionType* self_type;
-        TemplateHeader* template_header;
         CompoundStatement* statements;
         Function* parent_method;
         Scope* scope;

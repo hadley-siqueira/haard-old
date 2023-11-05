@@ -2,6 +2,7 @@
 #include "semantic/semantic_first_pass.h"
 #include "log/actions.h"
 #include "log/infos.h"
+#include "log/errors.h"
 #include "parser/parser.h"
 
 using namespace haard;
@@ -29,7 +30,10 @@ void SemanticFirstPass::build_module(Module* module) {
 
     module->get_scope()->set_qualified(module->get_relative_path() + ".");
     build_imports(module);
-    build_classes(module);
+    define_user_types(module);
+    /*build_classes(module);
+    build_structs(module);
+    build_unions(module);*/
     build_functions(module);
 
     leave_scope();
@@ -50,6 +54,28 @@ void SemanticFirstPass::build_classes(Module* module) {
 void SemanticFirstPass::build_structs(Module* module) {
     for (int i = 0; i < module->structs_count(); ++i) {
         build_struct(module->get_struct(i));
+    }
+}
+
+void SemanticFirstPass::build_unions(Module* module) {
+
+}
+
+void SemanticFirstPass::define_user_types(Module* module) {
+    for (int i = 0; i < module->classes_count(); ++i) {
+        define_user_type(module->get_class(i));
+    }
+
+    for (int i = 0; i < module->structs_count(); ++i) {
+        define_user_type(module->get_struct(i));
+    }
+
+    for (int i = 0; i < module->enums_count(); ++i) {
+        define_user_type(module->get_enum(i));
+    }
+
+    for (int i = 0; i < module->unions_count(); ++i) {
+        define_user_type(module->get_union(i));
     }
 }
 
@@ -96,6 +122,9 @@ void SemanticFirstPass::build_import(Import* import) {
 }
 
 void SemanticFirstPass::build_class(Class* decl) {
+    define_user_type(decl);
+    return;
+
     Symbol* sym;
 
     enter_scope(decl->get_scope());
@@ -139,7 +168,7 @@ void SemanticFirstPass::build_class(Class* decl) {
     build_self_type(decl);
 
     if (logging_info()) {
-        log_info(info_define_class(decl));
+        log_info(info_define_user_type(decl));
     }
 
     build_fields(decl);
@@ -147,19 +176,7 @@ void SemanticFirstPass::build_class(Class* decl) {
 }
 
 void SemanticFirstPass::build_struct(Struct* decl) {
-    Symbol* sym;
-    std::string name = decl->get_name();
-    sym = get_scope()->resolve_local(name);
-
-    if (sym) {
-        for (int i = 0; i < sym->descriptors_count(); ++i) {
-            SymbolDescriptor* desc = sym->get_descriptor(i);
-
-            if (desc->get_kind()) {
-
-            }
-        }
-    }
+    define_user_type(decl);
 }
 
 void SemanticFirstPass::build_function(Function* function) {
@@ -400,4 +417,105 @@ void SemanticFirstPass::add_default_destructor(CompoundTypeDescriptor* decl) {
 
     decl->add_method(f);
     build_method(f);
+}
+
+void SemanticFirstPass::define_user_type(CompoundTypeDescriptor* decl) {
+    int kind = SYM_CLASS;
+    std::string name = decl->get_name();
+
+    enter_scope(decl->get_scope());
+    build_template_header(decl->get_template_header());
+    leave_scope();
+
+    switch (decl->get_kind()) {
+    case DECL_CLASS:
+        kind = SYM_CLASS;
+        break;
+
+    case DECL_ENUM:
+        kind = SYM_ENUM;
+        break;
+
+    case DECL_STRUCT:
+        kind = SYM_STRUCT;
+        break;
+
+    case DECL_UNION:
+        kind = SYM_UNION;
+        break;
+    }
+
+    Declaration* flag = check_for_redefinition(decl);
+
+    if (flag) {
+        log_error_and_exit(error_redefinition(decl, flag));
+    }
+
+    get_scope()->define(kind, name, decl);
+    build_self_type(decl);
+
+    if (logging_info()) {
+        log_info(info_define_user_type(decl));
+    }
+}
+
+Declaration* SemanticFirstPass::check_for_redefinition(Declaration* decl) {
+    SymbolDescriptor* desc;
+    Symbol* sym = get_scope()->resolve(decl->get_name());
+
+    if (sym == nullptr) {
+        return nullptr;
+    }
+
+    for (int i = 0; i < sym->descriptors_count(); ++i) {
+        desc = sym->get_descriptor(i);
+        Declaration* odecl = (Declaration*) desc->get_descriptor();
+
+        if (redefines(decl, odecl)) {
+            return odecl;
+        }
+    }
+
+    return nullptr;
+}
+
+bool SemanticFirstPass::redefines(Declaration* d1, Declaration* d2) {
+    if (d1->get_name() != d2->get_name()) {
+        return false;
+    }
+
+    if (d1->is_type_declaration() && d2->is_type_declaration()) {
+        if (d1->get_template_header() && d2->get_template_header()) {
+            int c1 = d1->get_template_header()->types_count();
+            int c2 = d2->get_template_header()->types_count();
+
+            if (c1 != c2) {
+                return false;
+            }
+        } else if (d1->get_template_header() || d2->get_template_header()) {
+            return false;
+        } else {
+            std::cout << d1->get_template_header() << ' ' << d2->get_template_header() << '\n';
+            std::cout << d1->get_name() << ' ' << d2->get_name() << '\n';
+            DBG; exit(0);
+        }
+    } else if (d1->is_function() && d2->is_function()) {
+        Function* f1 = (Function*) d1;
+        Function* f2 = (Function*) d2;
+
+        if (f1->parameters_count() != f2->parameters_count()) {
+            return false;
+        }
+
+        for (int i = 0; i < f1->parameters_count(); ++i) {
+            Type* t1 = f1->get_parameter(i)->get_type();
+            Type* t2 = f2->get_parameter(i)->get_type();
+
+            if (!t1->equal(t2)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }

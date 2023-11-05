@@ -21,9 +21,17 @@ namespace haard {
 
         void set_from_token(Token& token);
 
+        int get_begin() const;
+        void set_begin(int value);
+
+        int get_end() const;
+        void set_end(int value);
+
     private:
         int kind;
         int line;
+        int begin;
+        int end;
         int column;
     };
 }
