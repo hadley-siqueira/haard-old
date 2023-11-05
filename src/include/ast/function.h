@@ -32,7 +32,6 @@ namespace haard {
         CompoundStatement* get_statements();
         Scope* get_scope();
         std::string get_qualified_name();
-        std::string get_original();
 
         void set_from_token(Token& token);
         void set_return_type(Type* type);

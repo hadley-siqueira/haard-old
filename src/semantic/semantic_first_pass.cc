@@ -8,18 +8,6 @@
 using namespace haard;
 
 void SemanticFirstPass::build_modules(Modules* modules) {
-    // One of the steps of semantic analysis is to to verify if something
-    // is declared twice.
-
-    // The first step is to declare stuff. It only populates the symbol table
-    // without checking for redefinition.
-    //build_modules_declarations(modules);
-
-    // Now we need to check user types and functions. Some of them may have templates
-    // which need to be linked to their descriptors
-    //link_modules_template_types(modules);
-    //link_modules_super_types(modules);
-
     for (int i = 0; i < modules->modules_count(); ++i) {
         build_module(modules->get_module(i));
     }
@@ -31,9 +19,9 @@ void SemanticFirstPass::build_module(Module* module) {
     module->get_scope()->set_qualified(module->get_relative_path() + ".");
     build_imports(module);
     define_user_types(module);
-    /*build_classes(module);
+    build_classes(module);
     build_structs(module);
-    build_unions(module);*/
+    build_unions(module);
     build_functions(module);
 
     leave_scope();
@@ -122,13 +110,11 @@ void SemanticFirstPass::build_import(Import* import) {
 }
 
 void SemanticFirstPass::build_class(Class* decl) {
-    define_user_type(decl);
-    return;
-
-    Symbol* sym;
+    if (decl->is_template()) {
+        return;
+    }
 
     enter_scope(decl->get_scope());
-    build_template_header(decl->get_template_header());
 
     if (decl->get_super_type()) {
         Type* t = decl->get_super_type();
@@ -137,39 +123,6 @@ void SemanticFirstPass::build_class(Class* decl) {
     }
 
     leave_scope();
-
-    std::string name = decl->get_name();
-    sym = get_scope()->resolve_local(name);
-
-    if (sym) {
-        for (int i = 0; i < sym->descriptors_count(); ++i) {
-            SymbolDescriptor* desc = sym->get_descriptor(i);
-
-            if (desc->get_kind() != SYM_CLASS) {
-                log_error_and_exit("defined as another entity");
-            } else {
-                Class* other = (Class*) desc->get_descriptor();
-
-                if (other->get_template_header() && decl->get_template_header()) {
-                    int c1 = other->get_template_header()->types_count();
-                    int c2 = decl->get_template_header()->types_count();
-
-                    if (c1 == c2) {
-                        log_error_and_exit("same number of templates");
-                    }
-                } else if (!other->get_template_header() && !decl->get_template_header()) {
-                    log_error_and_exit("class already defined");
-                }
-            }
-        }
-    }
-
-    get_scope()->define_class(decl);
-    build_self_type(decl);
-
-    if (logging_info()) {
-        log_info(info_define_user_type(decl));
-    }
 
     build_fields(decl);
     build_methods(decl);

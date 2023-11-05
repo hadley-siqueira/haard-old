@@ -679,6 +679,14 @@ void SemanticSecondPass::build_identifier(Identifier* expr) {
     }
 }
 
+void SemanticSecondPass::build_template_header(TemplateHeader* theader) {
+    if (theader == nullptr) return;
+
+    for (int i = 0; i < theader->types_count(); ++i) {
+        link_type(theader->get_type(i));
+    }
+}
+
 void SemanticSecondPass::build_this(This* expr) {
     if (get_compound() == nullptr) {
         log_error_and_exit("using this outside user type");
@@ -791,12 +799,13 @@ void SemanticSecondPass::build_simple_call(Call* expr) {
     ExpressionList* args = expr->get_arguments();
 
     Symbol* sym = get_scope()->resolve(id->get_name());
+    build_template_header(id->get_template_header());
 
     if (sym == nullptr) {
         log_error_and_exit("second pass: not in scope " + id->get_name());
     }
 
-    SymbolDescriptor* idx = find_best_match(sym, args);
+    SymbolDescriptor* idx = find_best_match(sym, args, id->get_template_header());
 
     if (idx == nullptr) {
         log_error_and_exit("second pass: no match signature");
@@ -918,7 +927,7 @@ void SemanticSecondPass::add_parent_constructor_call(Function* function) {
     }
 }
 
-SymbolDescriptor* SemanticSecondPass::find_best_match(Symbol* sym, ExpressionList* args) {
+SymbolDescriptor* SemanticSecondPass::find_best_match(Symbol* sym, ExpressionList* args, TemplateHeader* templates) {
     Function* function;
 
     for (int i = 0; i < sym->descriptors_count(); ++i) {
@@ -933,6 +942,12 @@ SymbolDescriptor* SemanticSecondPass::find_best_match(Symbol* sym, ExpressionLis
             }
         } else if (kind == SYM_CLASS) {
             Class* klass = (Class*) desc->get_descriptor();
+
+            if (klass->is_template()) {
+                std::cout << klass->get_original();
+                std::cout << klass->get_with_templates(templates->get_types()) << '\n';
+                DBG; exit(0);
+            }
 
             Symbol* ss = klass->get_scope()->resolve_field("init");
 

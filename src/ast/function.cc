@@ -93,28 +93,6 @@ std::string Function::get_qualified_name() {
     return ss.str();
 }
 
-std::string Function::get_original() {
-    char c;
-    std::ifstream file;
-    std::string buffer;
-    int counter;
-
-    file.open(get_path());
-
-    file.seekg(get_begin());
-    counter = get_begin();
-
-    while (counter < get_end() && file.get(c)) {
-        buffer += c;
-        ++counter;
-    }
-
-    buffer += "\n";
-
-    file.close();
-    return buffer;
-}
-
 void Function::set_return_type(Type* type) {
     return_type = type;
 }

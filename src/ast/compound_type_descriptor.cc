@@ -7,7 +7,6 @@ using namespace haard;
 
 CompoundTypeDescriptor::CompoundTypeDescriptor() {
     self_type = nullptr;
-    template_flag = false;
     super_type = nullptr;
     destructor = nullptr;
     scope = new Scope();
@@ -55,16 +54,8 @@ void CompoundTypeDescriptor::set_alignment(int value) {
     alignment = value;
 }
 
-void CompoundTypeDescriptor::set_template(bool value) {
-    template_flag = value;
-}
-
 void CompoundTypeDescriptor::set_annotations(const std::vector<Annotation*>& value) {
     annotations = value;
-}
-
-bool CompoundTypeDescriptor::is_template() {
-    return template_flag;
 }
 
 int CompoundTypeDescriptor::methods_count() {

@@ -102,18 +102,6 @@ void Class::set_remaining_pad(int value) {
     remaining_pad = value;
 }
 
-bool Class::is_template() {
-    return template_flag;
-}
-
-void Class::set_template(bool value) {
-    template_flag = value;
-}
-
-std::string Class::get_path() {
-    return get_module()->get_path();
-}
-
 int Class::get_size_in_bytes() {
     if (size_in_bytes < 0) {
         calculate_variables_offset();
@@ -145,26 +133,4 @@ std::string Class::get_qualified_name() {
     }
 
     return ss.str();
-}
-
-std::string Class::get_original() {
-    char c;
-    std::ifstream file;
-    std::string buffer;
-    int counter;
-
-    file.open(get_path());
-
-    file.seekg(get_begin());
-    counter = get_begin();
-
-    while (counter < get_end() && file.get(c)) {
-        buffer += c;
-        ++counter;
-    }
-
-    buffer += "\n";
-
-    file.close();
-    return buffer;
 }

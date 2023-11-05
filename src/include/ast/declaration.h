@@ -25,6 +25,11 @@ namespace haard {
 
         bool is_type_declaration();
         bool is_function();
+        bool is_template();
+
+        std::string get_with_templates(TypeList* types);
+        std::string get_original();
+        std::string get_path();
 
     private:
         std::string name;

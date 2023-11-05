@@ -1,0 +1,4 @@
+class Vec3D:
+    x : int
+    y : int
+    z : int

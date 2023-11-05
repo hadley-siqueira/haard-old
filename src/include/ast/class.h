@@ -23,7 +23,6 @@ namespace haard {
     public:
         int get_size_in_bytes();
         std::string get_qualified_name();
-        std::string get_original();
 
         void set_from_token(Token& token);
         void calculate_variables_offset();
@@ -35,11 +34,6 @@ namespace haard {
 
         int get_remaining_pad() const;
         void set_remaining_pad(int value);
-
-        bool is_template();
-        void set_template(bool value);
-
-        std::string get_path();
 
     private:
         int remaining_pad;

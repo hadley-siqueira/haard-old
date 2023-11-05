@@ -66,6 +66,7 @@ namespace haard {
         void build_parenthesis(Parenthesis* expr);
 
         void build_identifier(Identifier* expr);
+        void build_template_header(TemplateHeader* theader);
         void build_this(This* expr);
         void build_literal_bool(Literal* expr);
         void build_literal_char(Literal* expr);
@@ -81,7 +82,7 @@ namespace haard {
         bool is_member_call(Call* expr);
         bool is_constructor_call(Call* expr);
         void create_variable(Assignment* expr);
-        SymbolDescriptor* find_best_match(Symbol* sym, ExpressionList* args);
+        SymbolDescriptor* find_best_match(Symbol* sym, ExpressionList* args, TemplateHeader* templates=nullptr);
         bool compare_match(Function *function, ExpressionList* args);
         void build_simple_call(Call* expr);
         void build_member_call(Call* expr);

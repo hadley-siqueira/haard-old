@@ -1,22 +1,20 @@
-def syscall : u64
-    @n : int
-    @v : int
+import std.io
+import t00 as t
 
-    return 0
+class Pair:
+    x : int
+    y : int
 
-def print : void
-    @v : int
+class Vector<T>:
+    elems : T*
+    count : int
+    esize : int
 
-    syscall(0, v)
+    def init : void
+        count = 10
+        esize = 0
 
-def main : int
-    a = 7
-    a = a + 1
-    print(a)
-
-    i = 0
-    while i < 10:
-        i = i + 1
-        print(i)
-
-    return 0
+def main : void
+    var p : t::Vec3D
+    v = 0
+    vv = Vector<Vec3D>()

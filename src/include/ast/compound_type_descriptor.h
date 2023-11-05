@@ -50,14 +50,9 @@ namespace haard {
         Function* get_destructor();
         void set_destructor(Function* value);
 
-        void set_template(bool value);
-
         void set_from_token(Token& token);
 
         void set_scope(Scope *value);
-
-        bool is_template();
-
         int methods_count();
         int constructors_count();
         int fields_count();
@@ -68,8 +63,6 @@ namespace haard {
     protected:
         int size_in_bytes;
         int alignment;
-
-        bool template_flag;
         NamedType* self_type;
         Type* super_type;
         Scope* scope;
