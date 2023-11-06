@@ -3,6 +3,7 @@
 #include "log/actions.h"
 #include "log/infos.h"
 #include "parser/parser.h"
+#include "semantic/semantic_first_pass.h"
 
 using namespace haard;
 
@@ -940,13 +941,32 @@ SymbolDescriptor* SemanticSecondPass::find_best_match(Symbol* sym, ExpressionLis
             if (compare_match(function, args)) {
                 return desc;
             }
-        } else if (kind == SYM_CLASS) {
-            Class* klass = (Class*) desc->get_descriptor();
+        } else if (kind == SYM_CLASS || kind == SYM_STRUCT || kind == SYM_ENUM || kind == SYM_UNION) {
+            CompoundTypeDescriptor* klass = (CompoundTypeDescriptor*) desc->get_descriptor();
 
             if (klass->is_template()) {
-                std::cout << klass->get_original();
-                std::cout << klass->get_with_templates(templates->get_types()) << '\n';
-                DBG; exit(0);
+                if (templates->types_count() == klass->get_template_header()->types_count()) {
+                    Declaration* decl = klass->get_templates(templates);
+
+                    if (decl == nullptr) {
+                        std::cout << klass->get_original();
+                        std::string nk = klass->get_with_templates(templates->get_types());
+
+                        Parser p;
+                        p.set_path(klass->get_path());
+                        auto nklass = p.read_class_from_string(nk);
+                        nklass->get_template_header()->set_template_flag(false);
+                        klass->add_instance(nklass);
+                        nklass->get_scope()->set_parent(klass->get_scope()->get_parent());
+
+                        SemanticFirstPass fp;
+                        fp.build_class(nklass);
+                        //build_class(nklass);
+                        DBG; exit(0);
+                    }
+                } else {
+                    std::cout << "found\n"; DBG; exit(0);
+                }
             }
 
             Symbol* ss = klass->get_scope()->resolve_field("init");

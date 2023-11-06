@@ -63,6 +63,41 @@ bool Declaration::is_template() {
     return false;
 }
 
+Declaration* Declaration::get_templates(TemplateHeader* types) {
+    if (types == nullptr && get_template_header() == nullptr) {
+        return this;
+    }
+
+    if (types == nullptr && get_template_header() != nullptr) {
+        return nullptr;
+    }
+
+    if (types != nullptr && get_template_header() == nullptr) {
+        return nullptr;
+    }
+
+    if (types->types_count() != get_template_header()->types_count()) {
+        return nullptr;
+    }
+
+    for (int i = 0; i < instances.size(); ++i) {
+        TemplateHeader* th = instances[i]->get_template_header();
+        bool found = true;
+
+        for (int i = 0; i < th->types_count(); ++i) {
+            if (!th->get_type(i)->equal(types->get_type(i))) {
+                found = false;
+            }
+        }
+
+        if (found) {
+            return instances[i];
+        }
+    }
+
+    return nullptr;
+}
+
 std::string Declaration::get_with_templates(TypeList* types) {
     std::string body = get_original();
     TypeList* ttypes = get_template_header()->get_types();
@@ -74,8 +109,7 @@ std::string Declaration::get_with_templates(TypeList* types) {
         body = std::regex_replace(body, pattern, to);
     }
 
-    std::cout << body << '\n';
-    DBG;exit(0);
+    return body;
 }
 
 std::string Declaration::get_original() {
@@ -102,4 +136,8 @@ std::string Declaration::get_original() {
 
 std::string Declaration::get_path() {
     return module->get_path();
+}
+
+void Declaration::add_instance(Declaration* decl) {
+    instances.push_back(decl);
 }

@@ -110,11 +110,12 @@ void SemanticFirstPass::build_import(Import* import) {
 }
 
 void SemanticFirstPass::build_class(Class* decl) {
+    enter_scope(decl->get_scope());
+
     if (decl->is_template()) {
+        leave_scope();
         return;
     }
-
-    enter_scope(decl->get_scope());
 
     if (decl->get_super_type()) {
         Type* t = decl->get_super_type();

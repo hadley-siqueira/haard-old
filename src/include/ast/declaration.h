@@ -2,6 +2,7 @@
 #define HAARD_AST_DECLARATION_H
 
 #include <string>
+#include <vector>
 #include "ast/ast_node.h"
 #include "ast/template_header.h"
 
@@ -27,14 +28,17 @@ namespace haard {
         bool is_function();
         bool is_template();
 
+        Declaration* get_templates(TemplateHeader* types);
         std::string get_with_templates(TypeList* types);
         std::string get_original();
         std::string get_path();
+        void add_instance(Declaration* decl);
 
     private:
         std::string name;
         TemplateHeader* template_header;
         Module* module;
+        std::vector<Declaration*> instances;
     };
 }
 #endif

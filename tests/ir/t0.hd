@@ -18,3 +18,4 @@ def main : void
     var p : t::Vec3D
     v = 0
     vv = Vector<Vec3D>()
+    vv.init()
