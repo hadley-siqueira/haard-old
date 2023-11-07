@@ -945,11 +945,10 @@ SymbolDescriptor* SemanticSecondPass::find_best_match(Symbol* sym, ExpressionLis
             CompoundTypeDescriptor* klass = (CompoundTypeDescriptor*) desc->get_descriptor();
 
             if (klass->is_template()) {
-                if (templates->types_count() == klass->get_template_header()->types_count()) {
+                /*if (templates->types_count() == klass->get_template_header()->types_count()) {
                     Declaration* decl = klass->get_templates(templates);
 
                     if (decl == nullptr) {
-                        std::cout << klass->get_original();
                         std::string nk = klass->get_with_templates(templates->get_types());
 
                         Parser p;
@@ -957,7 +956,9 @@ SymbolDescriptor* SemanticSecondPass::find_best_match(Symbol* sym, ExpressionLis
                         auto nklass = p.read_class_from_string(nk);
                         nklass->get_template_header()->set_template_flag(false);
                         klass->add_instance(nklass);
-                        nklass->get_scope()->set_parent(klass->get_scope()->get_parent());
+                        auto ns = nklass->get_scope();
+                        ns->set_parent(klass->get_scope()->get_parent());
+                        nklass->set_module(klass->get_module());
 
                         SemanticFirstPass fp;
                         fp.build_class(nklass);
@@ -966,7 +967,7 @@ SymbolDescriptor* SemanticSecondPass::find_best_match(Symbol* sym, ExpressionLis
                     }
                 } else {
                     std::cout << "found\n"; DBG; exit(0);
-                }
+                }*/
             }
 
             Symbol* ss = klass->get_scope()->resolve_field("init");

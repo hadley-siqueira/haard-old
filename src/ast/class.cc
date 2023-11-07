@@ -13,7 +13,6 @@ int class_counter = 0;
 Class::Class() {
     set_kind(DECL_CLASS);
     is_virtual_flag = false;
-    set_kind(DECL_CLASS);
     uid = class_counter++;
 }
 

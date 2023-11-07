@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sstream>
 #include "ast/module.h"
 #include "scope/scope.h"
@@ -87,9 +88,8 @@ void CompoundTypeDescriptor::add_method(Function* method) {
         method->set_destructor(true);
     }
 
-    method->set_method();
     method->set_compound(this);
-    method->set_module(this->get_module());
+    method->set_module(get_module());
     method->get_scope()->set_parent(get_scope());
 }
 

@@ -85,7 +85,7 @@ Union* Module::get_union(int idx) {
     return nullptr;
 }
 
-Declaration *Module::get_declaration(int idx) {
+Declaration* Module::get_declaration(int idx) {
     if (idx < declarations_count()) {
         return declarations[idx];
     }

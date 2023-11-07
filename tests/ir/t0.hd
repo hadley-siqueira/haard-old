@@ -15,7 +15,6 @@ class Vector<T>:
         esize = 0
 
 def main : void
-    var p : t::Vec3D
+    var p : Vec3D
     v = 0
-    vv = Vector<Vec3D>()
-    vv.init()
+    vv = Vector<int>()

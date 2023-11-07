@@ -6,6 +6,8 @@
 
 namespace haard {
     class Scope;
+    class Symbol;
+
     class Type {
         public:
             Type();

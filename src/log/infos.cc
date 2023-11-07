@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include "log/infos.h"
@@ -54,7 +55,7 @@ namespace haard {
         int line = method->get_line();
         int column = method->get_column();
         int count = method->get_name().size();
-        std::string path = method->get_module()->get_path();
+        std::string path = method->get_path();
 
         ss << "declaring method <white>" << method->get_qualified_name() << "</white>\n";
         ss << extract_line(path, line, column, count);

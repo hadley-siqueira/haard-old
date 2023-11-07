@@ -42,8 +42,6 @@ namespace haard {
         int get_uid();
         void set_uid(int uid);
 
-        void set_method(bool value=true);
-
         Type* get_self_type();
         void set_self_type(FunctionType* type);
 
@@ -67,15 +65,11 @@ namespace haard {
         void set_constructor(bool value);
         void set_destructor(bool value);
 
-        std::string get_path();
-
         CompoundTypeDescriptor* get_compound() const;
         void set_compound(CompoundTypeDescriptor* value);
 
     private:
         int uid;
-        int overloaded_index;
-        bool method_flag;
         bool constructor_flag;
         bool destructor_flag;
         bool virtual_flag;

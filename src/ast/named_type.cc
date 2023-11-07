@@ -1,6 +1,7 @@
 #include <iostream>
 #include "ast/ast.h"
 #include "ast/named_type.h"
+#include "scope/scope.h"
 
 using namespace haard;
 
@@ -63,7 +64,7 @@ void NamedType::set_template_header(TemplateHeader* header) {
     id->set_template_header(header);
 }
 
-TemplateHeader *NamedType::get_template_header() {
+TemplateHeader* NamedType::get_template_header() {
     return id->get_template_header();
 }
 

@@ -111,6 +111,7 @@ void SemanticFirstPass::build_import(Import* import) {
 
 void SemanticFirstPass::build_class(Class* decl) {
     enter_scope(decl->get_scope());
+    set_compound(decl);
 
     if (decl->is_template()) {
         leave_scope();
@@ -130,7 +131,7 @@ void SemanticFirstPass::build_class(Class* decl) {
 }
 
 void SemanticFirstPass::build_struct(Struct* decl) {
-    define_user_type(decl);
+    DBG; exit(0);
 }
 
 void SemanticFirstPass::build_function(Function* function) {
@@ -194,6 +195,7 @@ void SemanticFirstPass::build_method(Function* method) {
     Symbol* sym;
     set_function(method);
     enter_scope(method->get_scope());
+    method->set_module(get_compound()->get_module());
 
     build_template_header(method->get_template_header());
     build_parameters(method);

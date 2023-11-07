@@ -13,11 +13,11 @@ Function::Function() {
     return_type = nullptr;
     statements = nullptr;
     scope = new Scope();
-    method_flag = false;
     virtual_flag = false;
     self_type = nullptr;
     constructor_flag = false;
     destructor_flag = false;
+    compound = nullptr;
     uid = uid_counter++;
 }
 
@@ -140,10 +140,6 @@ void Function::set_from_token(Token& token) {
     set_name(token.get_lexeme());
 }
 
-void Function::set_method(bool value) {
-    method_flag = value;
-}
-
 bool Function::is_template() {
     if (get_template_header()) {
         return get_template_header()->is_template();
@@ -153,7 +149,7 @@ bool Function::is_template() {
 }
 
 bool Function::is_method() {
-    return method_flag;
+    return compound != nullptr;
 }
 
 bool Function::is_constructor() {
@@ -205,14 +201,6 @@ void Function::set_constructor(bool value) {
 
 void Function::set_destructor(bool value) {
     destructor_flag = value;
-}
-
-std::string Function::get_path() {
-    if (is_method()) {
-        return compound->get_full_filepath();
-    }
-
-    return get_module()->get_path();
 }
 
 CompoundTypeDescriptor* Function::get_compound() const {

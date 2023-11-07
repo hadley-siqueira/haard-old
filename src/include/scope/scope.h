@@ -55,6 +55,9 @@ namespace haard {
             std::string get_qualified() const;
             void set_qualified(const std::string& value);
 
+            Scope* get_template_scope() const;
+            void set_template_scope(Scope* value);
+
     private:
             std::map<std::string, Symbol*> symbols;
             Scope* parent;
