@@ -62,16 +62,11 @@ namespace haard {
         Function* get_parent_method() const;
         void set_parent_method(Function* value);
 
-        void set_constructor(bool value);
-        void set_destructor(bool value);
-
         CompoundTypeDescriptor* get_compound() const;
         void set_compound(CompoundTypeDescriptor* value);
 
     private:
         int uid;
-        bool constructor_flag;
-        bool destructor_flag;
         bool virtual_flag;
         Type* return_type;
         FunctionType* self_type;

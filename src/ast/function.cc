@@ -15,8 +15,6 @@ Function::Function() {
     scope = new Scope();
     virtual_flag = false;
     self_type = nullptr;
-    constructor_flag = false;
-    destructor_flag = false;
     compound = nullptr;
     uid = uid_counter++;
 }
@@ -153,11 +151,11 @@ bool Function::is_method() {
 }
 
 bool Function::is_constructor() {
-    return constructor_flag;
+    return is_method() && get_name() == "init";
 }
 
 bool Function::is_destructor() {
-    return destructor_flag;
+    return is_method() && get_name() == "destroy";
 }
 
 bool Function::is_virtual() {
@@ -193,14 +191,6 @@ Function* Function::get_parent_method() const {
 
 void Function::set_parent_method(Function* value) {
     parent_method = value;
-}
-
-void Function::set_constructor(bool value) {
-    constructor_flag = value;
-}
-
-void Function::set_destructor(bool value) {
-    destructor_flag = value;
 }
 
 CompoundTypeDescriptor* Function::get_compound() const {

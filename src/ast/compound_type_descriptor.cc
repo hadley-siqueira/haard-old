@@ -80,12 +80,10 @@ void CompoundTypeDescriptor::add_method(Function* method) {
 
     if (method->get_name() == "init") {
         constructors.push_back(method);
-        method->set_constructor(true);
     }
 
     if (method->get_name() == "destroy") {
         destructor = method;
-        method->set_destructor(true);
     }
 
     method->set_compound(this);
